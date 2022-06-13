@@ -12,6 +12,7 @@
     "@mdi/font": "5.9.55",
     "@types/axios": "^0.14.0",
     "@types/sha256": "^0.2.0",
+    "@vue/eslint-config-standard": "^5.1.0",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "register-service-worker": "^1.7.2",
@@ -21,6 +22,7 @@
     "vue-router": "^4.0.3",
     "vuetify": "^3.0.0-beta.0",
     "vuex": "^4.0.0",
+    "vuex-persistedstate": "^4.1.0",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
@@ -36,7 +38,6 @@
     "@vue/cli-plugin-unit-jest": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^9.1.0",
     "@vue/test-utils": "^2.0.0-0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
@@ -67,7 +68,9 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": {},
+    "rules": {
+      "no-console": 0
+    },
     "overrides": [
       {
         "files": [

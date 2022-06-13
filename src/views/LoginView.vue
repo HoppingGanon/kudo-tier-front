@@ -19,9 +19,10 @@
 </template>
 
 <script lang="ts">
-import { onMounted, computed, defineComponent } from 'vue'
-import store from '@/store/index'
-import restApi from '@/common/restapi'
+import { defineComponent } from 'vue'
+import { } from 'vue-router'
+import { useStore } from '@/store/index'
+import restApi, { } from '@/common/restapi'
 
 export default defineComponent({
   name: 'LoginView',
@@ -36,18 +37,21 @@ export default defineComponent({
   },
   setup () {
     // const authLink = computed(() => {
+    const store = useStore()
 
     const connectTemp = () => {
       restApi.getTempSession().then((response) => {
-        const session = response.data.Session
+        const session = response.data.code_challenge
         const base = 'https://twitter.com/i/oauth2/authorize'
         const code = 'response_type=code'
         const clientId = `client_id=${process.env.VUE_APP_CLIENT_ID}`
-        const redirectUri = 'redirect_uri=http://localhost:8200/login'
-        const state = 'state=' + 'abcdef'
+        const redirectUri = `redirect_uri=${process.env.VUE_APP_REDIRECT}`
+        const state = 'state=' + 'review-maker-twittwer'
         const codeChallenge = `code_challenge=${session}`
         const codeChallengeMethod = 'code_challenge_method=s256'
         const scope = 'scope=tweet.read%20users.read'
+
+        store.commit('setCodeVer', response.data.session_id)
 
         window.location.href = `${base}?${code}&${clientId}&${redirectUri}&${state}&${codeChallenge}&${codeChallengeMethod}&${scope}`
       }).catch(() => {

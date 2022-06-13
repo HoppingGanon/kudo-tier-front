@@ -1,5 +1,5 @@
 
 export type State = {
-  tCodeVer: string
+  tempSessionId: string
   jwt: string
 }
