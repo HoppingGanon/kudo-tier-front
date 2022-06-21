@@ -33,7 +33,7 @@ export default class RestApi {
 
   static getSession (code: string, tempSession: string) : Promise<AxiosResponse<Session>> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return this.get<Session, any>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {
+    return this.get<Session, any>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/token`, {
       params: {
         code: code,
         temp_session: tempSession
