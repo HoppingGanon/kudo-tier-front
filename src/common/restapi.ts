@@ -1,10 +1,11 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+import store from '@/store'
 
 export interface TempSession {
   // eslint-disable-next-line camelcase
-  session_id: string
+  sessionId: string
   // eslint-disable-next-line camelcase
-  code_challenge: string
+  codeChallenge: string
 }
 
 export interface TwitterAuthCode {
@@ -13,31 +14,59 @@ export interface TwitterAuthCode {
 }
 
 export interface Session {
-  jwt: string
+  sessionId: string
+  expiredTime: string
+  isNew: string
 }
 
 export default class RestApi {
-  static get <T, V> (uri: string, config?: AxiosRequestConfig<V> | undefined) : Promise<AxiosResponse<T>> {
-    return axios.get<T>(uri, config)
+  static get <T> (uri: string) : Promise<AxiosResponse<T>> {
+    const sessionId = store.state.sessionId
+    const config:AxiosRequestConfig = {
+      headers: {
+        sessionId: sessionId
+      }
+    }
+    return axios.get<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static getJwt () : Promise<AxiosResponse<any, any>> {
-    return this.get('http://')
+  static post <T> (uri: string) : Promise<AxiosResponse<T>> {
+    const sessionId = store.state.sessionId
+    const config:AxiosRequestConfig = {
+      headers: {
+        sessionId: sessionId
+      }
+    }
+    return axios.post<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
+  }
+
+  static del <T> (uri: string) : Promise<AxiosResponse<T>> {
+    const sessionId = store.state.sessionId
+    const config:AxiosRequestConfig = {
+      headers: {
+        sessionId: sessionId
+      }
+    }
+    return axios.delete<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
   }
 
   static getTempSession () : Promise<AxiosResponse<TempSession>> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return this.get<TempSession, any>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession`)
+    return axios.get<TempSession>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession`)
   }
 
-  static getSession (code: string, tempSession: string) : Promise<AxiosResponse<Session>> {
+  static getSession (code: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return this.get<Session, any>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/token`, {
-      params: {
+    return axios.get<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {
+      headers: {
         code: code,
-        temp_session: tempSession
+        tempSessionId: tempSessionId
       }
     })
+  }
+
+  static delSession () : Promise<AxiosResponse<Session>> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return this.del('/auth/session')
   }
 }

@@ -1,20 +1,52 @@
 import { createStore, useStore as baseUseStore } from 'vuex'
-import { State } from '@/store/types'
 import persist from 'vuex-persistedstate'
+
+export type State = {
+  tempSessionId: string
+  sessionId: string
+  expiredTime: Date
+  isNew: boolean
+}
 
 export default createStore<State>({
   state: {
     tempSessionId: '',
-    jwt: ''
+    sessionId: '',
+    expiredTime: new Date('1970/01/01'),
+    isNew: true
   },
   getters: {
-    getCodeVer (state) {
+    getTempSessionId (state) {
       return state.tempSessionId
+    },
+    getSessionId (state) {
+      return state.sessionId
+    },
+    getExpiredTime (state) {
+      return state.expiredTime
+    },
+    getIsNew (state) {
+      return state.isNew
     }
   },
   mutations: {
-    setCodeVer (state, val: string) {
+    setTempSessionId (state, val: string) {
       state.tempSessionId = val
+    },
+    setSessionId (state, val: string) {
+      state.sessionId = val
+    },
+    setExpiredTime (state, val: Date) {
+      state.expiredTime = val
+    },
+    setIsNew (state, val: boolean) {
+      state.isNew = val
+    },
+    initAllSession (state) {
+      state.tempSessionId = ''
+      state.sessionId = ''
+      state.expiredTime = new Date('1970/01/01')
+      state.isNew = false
     }
   },
   actions: {

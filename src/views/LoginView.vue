@@ -23,6 +23,7 @@ import { defineComponent } from 'vue'
 import { } from 'vue-router'
 import { useStore } from '@/store/index'
 import restApi, { } from '@/common/restapi'
+import router from '@/router'
 
 export default defineComponent({
   name: 'LoginView',
@@ -30,37 +31,41 @@ export default defineComponent({
   components: {
 
   },
-  data () {
-    return {
-      aaa: process.env.VUE_APP_TWITTERAPI
-    }
-  },
   setup () {
     // const authLink = computed(() => {
     const store = useStore()
 
-    const connectTemp = () => {
-      restApi.getTempSession().then((response) => {
-        const session = response.data.code_challenge
-        const base = 'https://twitter.com/i/oauth2/authorize'
-        const code = 'response_type=code'
-        const clientId = `client_id=${process.env.VUE_APP_CLIENT_ID}`
-        const redirectUri = `redirect_uri=${process.env.VUE_APP_REDIRECT}`
-        const state = 'state=' + 'review-maker-twittwer'
-        const codeChallenge = `code_challenge=${session}`
-        const codeChallengeMethod = 'code_challenge_method=s256'
-        const scope = 'scope=tweet.read%20users.read'
+    if (store.state.sessionId === '') {
+      const connectTemp = () => {
+        restApi.getTempSession().then((response) => {
+          const session = response.data.codeChallenge
+          const base = 'https://twitter.com/i/oauth2/authorize'
+          const code = 'response_type=code'
+          const clientId = `client_id=${process.env.VUE_APP_CLIENT_ID}`
+          const redirectUri = `redirect_uri=${process.env.VUE_APP_REDIRECT}`
+          const state = 'state=' + 'review-maker-twittwer'
+          const codeChallenge = `code_challenge=${session}`
+          const codeChallengeMethod = 'code_challenge_method=s256'
+          const scope = 'scope=tweet.read%20users.read'
 
-        store.commit('setCodeVer', response.data.session_id)
+          store.commit('setTempSessionId', response.data.sessionId)
 
-        window.location.href = `${base}?${code}&${clientId}&${redirectUri}&${state}&${codeChallenge}&${codeChallengeMethod}&${scope}`
-      }).catch(() => {
-        alert('認証失敗')
-      })
-    }
-
-    return {
-      connectTemp
+          window.location.href = `${base}?${code}&${clientId}&${redirectUri}&${state}&${codeChallenge}&${codeChallengeMethod}&${scope}`
+        }).catch(() => {
+          alert('認証失敗')
+        })
+      }
+      return {
+        connectTemp
+      }
+    } else {
+      router.push('/')
+      const connectTemp = () => {
+        alert('既にログイン済みです')
+      }
+      return {
+        connectTemp
+      }
     }
   }
 })

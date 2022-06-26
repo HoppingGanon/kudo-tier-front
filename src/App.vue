@@ -19,7 +19,7 @@
         <v-row>
           <v-divider />
         </v-row>
-        <v-row style="min-height: 100px;">
+        <v-row v-if="hasSession">
           <v-col cols="4">
             <v-avatar
               class="ma-3"
@@ -29,10 +29,20 @@
               <v-img src="https://placehold.jp/150x150.png" />
             </v-avatar>
           </v-col>
-          <v-col cols="8">
+        </v-row>
+        <v-row v-if="hasSession" style="min-height: 100px;" class="ml-2">
+          <v-col>
             <span><b>炎獄少年がのんくん</b></span><br />
             <span>
               社会人だってあばれたい
+            </span>
+          </v-col>
+        </v-row>
+        <v-row v-else style="min-height: 100px;" class="ml-2">
+          <v-col>
+            <span><b>ゲスト</b></span><br />
+            <span>
+              未ログイン
             </span>
           </v-col>
         </v-row>
@@ -41,16 +51,54 @@
         </v-row>
         <v-row style="min-height: 300px;">
           <v-list class="ma-3">
+            <v-list-item v-if="hasSession">
+              <v-list-item-icon class="mr-5">
+                mdi-home-account
+              </v-list-item-icon>
+              <v-list-item-title>
+                ホーム
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-else @click="goLogin">
+              <v-list-item-icon class="mr-5">
+                mdi-login
+              </v-list-item-icon>
+              <v-list-item-title>
+                ログイン/登録
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="hasSession">
+              <v-list-item-icon class="mr-5">
+                mdi-table-account
+              </v-list-item-icon>
+              <v-list-item-title>
+                レビュー一覧
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="hasSession">
+              <v-list-item-icon class="mr-5">
+                mdi-cog-outline
+              </v-list-item-icon>
+              <v-list-item-title>
+                設定
+              </v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-row>
-        <v-row>
-          <v-divider />
+        <v-row v-if="hasSession">
+          <v-divider class="mt-5 mb-5" />
         </v-row>
-        <v-row>
-          <p class="ma-3">
-            made by ほっぴんぐがのん<br />
-            2022.06.01
-          </p>
+        <v-row v-if="hasSession">
+          <v-list>
+            <v-list-item @click="() => {logoutDialog = true}">
+              <v-list-item-icon class="mr-5">
+                mdi-logout
+              </v-list-item-icon>
+              <v-list-item-title>
+                ログアウト
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
         </v-row>
       </v-container>
     </v-navigation-drawer>
@@ -62,6 +110,33 @@
       <v-toolbar-title></v-toolbar-title>
     </v-app-bar>
 
+    <v-dialog v-model="logoutDialog">
+      <v-card width="480px">
+        <v-card-title>確認</v-card-title>
+        <v-card-text>
+          本当にログアウトしますか？
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn @click="logout">はい</v-btn>
+          <v-btn @click="() => { logoutDialog = false }">いいえ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="forceDialog">
+      <v-card width="480px">
+        <v-card-title>確認</v-card-title>
+        <v-card-text>
+          ログアウトに失敗しました<br />
+          強制的にセッションを削除しますか？
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn @click="forceLogout">はい</v-btn>
+          <v-btn @click="() => { forceDialog = false }">いいえ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-main class="grad">
       <router-view/>
     </v-main>
@@ -70,30 +145,73 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
+import RestApi from '@/common/restapi'
+import router from '@/router'
+import store from '@/store'
+import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'App',
 
   setup () {
+    const toast = useToast()
+
     const isVisibleBar = ref(true)
     const drawer = ref(false)
     const barHeight = ref(60)
+    const logoutDialog = ref(false)
+    const forceDialog = ref(false)
 
     const clickHideBarIcon = () => {
       isVisibleBar.value = !isVisibleBar.value
-      drawer.value = false
+      drawer.value = true
     }
 
     const iconStyle = computed(() => isVisibleBar.value ? `top:${barHeight.value + 8}px;` : 'top: 0px;')
     const barStyle = computed(() => isVisibleBar.value ? `height:${barHeight.value}px;` : 'height: 0px;')
+    const hasSession = computed(() => store.state.sessionId !== '')
+    const isNew = computed(() => store.state.isNew)
+
+    const logout = () => {
+      if (store.state.sessionId !== '') {
+        RestApi.delSession().then(() => {
+          logoutDialog.value = false
+          store.commit('initAllSession', '')
+          toast.success('ログアウトしました')
+          router.push('/login')
+        }).catch(() => {
+          logoutDialog.value = false
+          forceDialog.value = true
+          toast.error('ログアウトに失敗しました')
+        })
+      }
+    }
+
+    const forceLogout = () => {
+      logoutDialog.value = false
+      store.commit('initAllSession', '')
+      toast.success('ログアウトしました')
+      router.push('/login')
+    }
+
+    const goLogin = () => {
+      router.push('/login')
+    }
 
     return {
+      logoutDialog,
       isVisibleBar,
       drawer,
       barHeight,
       iconStyle,
       barStyle,
-      clickHideBarIcon
+      hasSession,
+      isNew,
+      clickHideBarIcon,
+      logout,
+      forceLogout,
+      forceDialog,
+      goLogin
     }
   }
 })
