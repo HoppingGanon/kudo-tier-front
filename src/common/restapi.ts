@@ -15,8 +15,25 @@ export interface TwitterAuthCode {
 
 export interface Session {
   sessionId: string
+  userId: string
   expiredTime: string
+  twitterName: string
+  twitterUserName: string
+  iconUrl: string
   isNew: string
+}
+
+export interface InitUserData {
+  name: string
+  profile: string
+  accept: boolean
+}
+
+export interface UserData {
+  name: string
+  profile: string
+  twitterName: string
+  iconUrl: string
 }
 
 export default class RestApi {
@@ -30,14 +47,14 @@ export default class RestApi {
     return axios.get<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
   }
 
-  static post <T> (uri: string) : Promise<AxiosResponse<T>> {
+  static post <T> (uri: string, data?: object) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
       headers: {
         sessionId: sessionId
       }
     }
-    return axios.post<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
+    return axios.post<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
   }
 
   static del <T> (uri: string) : Promise<AxiosResponse<T>> {
@@ -66,7 +83,14 @@ export default class RestApi {
   }
 
   static delSession () : Promise<AxiosResponse<Session>> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return this.del('/auth/session')
+  }
+
+  static createUser (data: InitUserData) {
+    return this.post('/user', data)
+  }
+
+  static getUserData (userId: string) {
+    return this.get<UserData>('/user/' + userId)
   }
 }

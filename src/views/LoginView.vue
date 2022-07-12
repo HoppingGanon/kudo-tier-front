@@ -1,5 +1,9 @@
 <template>
   <v-card width="480px" class="center">
+
+    <!-- セッション有効期限をチェックする -->
+    <session-checker />
+
     <v-card-title class="text-subtitle-1">ログイン</v-card-title>
     <v-card-text>
       <v-container>
@@ -20,19 +24,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { } from 'vue-router'
 import { useStore } from '@/store/index'
-import restApi, { } from '@/common/restapi'
+import restApi from '@/common/restapi'
 import router from '@/router'
+import SessionChecker from '@/components/SessionChecker.vue'
 
 export default defineComponent({
   name: 'LoginView',
 
   components: {
-
+    SessionChecker
   },
   setup () {
-    // const authLink = computed(() => {
     const store = useStore()
 
     if (store.state.sessionId === '') {
@@ -59,7 +62,7 @@ export default defineComponent({
         connectTemp
       }
     } else {
-      router.push('/')
+      router.push('/home')
       const connectTemp = () => {
         alert('既にログイン済みです')
       }

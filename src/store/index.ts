@@ -4,7 +4,11 @@ import persist from 'vuex-persistedstate'
 export type State = {
   tempSessionId: string
   sessionId: string
-  expiredTime: Date
+  userId: string
+  twitterName: string
+  twitterUserName: string
+  iconUrl: string
+  expiredTime: string
   isNew: boolean
 }
 
@@ -12,23 +16,14 @@ export default createStore<State>({
   state: {
     tempSessionId: '',
     sessionId: '',
-    expiredTime: new Date('1970/01/01'),
+    userId: '',
+    twitterName: '',
+    twitterUserName: '',
+    iconUrl: '',
+    expiredTime: '',
     isNew: true
   },
-  getters: {
-    getTempSessionId (state) {
-      return state.tempSessionId
-    },
-    getSessionId (state) {
-      return state.sessionId
-    },
-    getExpiredTime (state) {
-      return state.expiredTime
-    },
-    getIsNew (state) {
-      return state.isNew
-    }
-  },
+  getters: {},
   mutations: {
     setTempSessionId (state, val: string) {
       state.tempSessionId = val
@@ -36,16 +31,30 @@ export default createStore<State>({
     setSessionId (state, val: string) {
       state.sessionId = val
     },
-    setExpiredTime (state, val: Date) {
+    setExpiredTime (state, val: string) {
       state.expiredTime = val
     },
     setIsNew (state, val: boolean) {
       state.isNew = val
     },
+    setUserId (state, val: string) {
+      state.userId = val
+    },
+    setTwitterName (state, val: string) {
+      state.twitterName = val
+    },
+    setTwitterUserName (state, val: string) {
+      state.twitterUserName = val
+    },
+    setIconUrl (state, val: string) {
+      state.iconUrl = val
+    },
     initAllSession (state) {
       state.tempSessionId = ''
       state.sessionId = ''
-      state.expiredTime = new Date('1970/01/01')
+      state.twitterName = ''
+      state.twitterUserName = ''
+      state.expiredTime = ''
       state.isNew = false
     }
   },

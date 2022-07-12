@@ -1,18 +1,120 @@
 <template>
-  <hello-world />
+  <!-- セッション有効期限をチェックする -->
+  <session-checker :is-going="false" />
+
+  <error-card
+    v-if="isNotFound"
+    class="ma-3"
+    comment="指定したIDのホーム画面は存在しません"
+  />
+
+  <v-container v-else>
+    <v-row>
+      <v-col>
+        <profile-component
+          :disp-name="dispName"
+          :icon-url="iconUrl"
+          :profile="profile"
+        />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="6">
+        <v-card>
+          <v-toolbar color="primary">
+            <v-card-title>
+              最近の投稿
+            </v-card-title>
+          </v-toolbar>
+          <v-card
+            class="scroll"
+            flat
+            min-height="360px"
+            max-height="100%"
+          >
+            <time-line
+              :disp-name="dispName"
+              :icon-url="iconUrl"
+              point-type="point100"
+              :reviews="reviews"
+            />
+          </v-card>
+        </v-card>
+      </v-col>
+    </v-row>
+
+  </v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-// Components
-import HelloWorld from '../components/HelloWorld.vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import restApi from '@/common/restapi'
+import SessionChecker from '@/components/SessionChecker.vue'
+import ProfileComponent from '@/components/ProfileComponent.vue'
+import TimeLine from '@/components/TimeLine.vue'
+import ErrorCard from '@/components/ErrorCard.vue'
+import { useRoute } from 'vue-router'
+import { Review, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'HomeView',
-
   components: {
-    HelloWorld
+    ProfileComponent,
+    SessionChecker,
+    ErrorCard,
+    TimeLine
+  },
+  setup () {
+    const route = useRoute()
+
+    const isNotFound = ref(false)
+    const dispName = ref('')
+    const profile = ref('')
+    const iconUrl = ref('')
+
+    onMounted(() => {
+      if (route.params.id && typeof route.params.id === 'string') {
+        // URIにIDが含まれている場合
+        restApi.getUserData(route.params.id).then((res) => {
+          dispName.value = res.data.name
+          profile.value = res.data.profile
+          iconUrl.value = res.data.iconUrl
+        }).catch(() => {
+          isNotFound.value = true
+        })
+      } else {
+        // URIにIDが含まれていないうえ、セッションを持っていない場合
+        isNotFound.value = true
+      }
+    })
+    const reviewsOrg: Review[] = [
+      {
+        title: 'review1',
+        sections: [],
+        createAt: new Date('2022/07/10')
+      },
+      {
+        title: 'review2',
+        sections: [],
+        createAt: new Date('2022/07/10')
+      }
+    ]
+    const reviews = ref(reviewsOrg)
+
+    return {
+      isNotFound,
+      dispName,
+      profile,
+      iconUrl,
+      reviews
+    }
   }
 })
 </script>
+
+<style Modules>
+.scroll {
+  overflow-y: scroll;
+}
+</style>

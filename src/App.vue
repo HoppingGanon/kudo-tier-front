@@ -51,7 +51,7 @@
         </v-row>
         <v-row style="min-height: 300px;">
           <v-list class="ma-3">
-            <v-list-item v-if="hasSession">
+            <v-list-item v-if="hasSession" @click="goHome">
               <v-list-item-icon class="mr-5">
                 mdi-home-account
               </v-list-item-icon>
@@ -176,7 +176,7 @@ export default defineComponent({
       if (store.state.sessionId !== '') {
         RestApi.delSession().then(() => {
           logoutDialog.value = false
-          store.commit('initAllSession', '')
+          store.commit('initAllSession')
           toast.success('ログアウトしました')
           router.push('/login')
         }).catch(() => {
@@ -187,9 +187,14 @@ export default defineComponent({
       }
     }
 
+    const goHome = () => {
+      router.push(`/home/${store.state.userId}`)
+    }
+
     const forceLogout = () => {
       logoutDialog.value = false
-      store.commit('initAllSession', '')
+      forceDialog.value = false
+      store.commit('initAllSession')
       toast.success('ログアウトしました')
       router.push('/login')
     }
@@ -200,6 +205,7 @@ export default defineComponent({
 
     return {
       logoutDialog,
+      forceDialog,
       isVisibleBar,
       drawer,
       barHeight,
@@ -208,9 +214,9 @@ export default defineComponent({
       hasSession,
       isNew,
       clickHideBarIcon,
+      goHome,
       logout,
       forceLogout,
-      forceDialog,
       goLogin
     }
   }
