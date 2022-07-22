@@ -2,29 +2,46 @@
   <v-card width="100%" min-height="160px" >
     <v-container>
       <v-row class="align-center">
-        <v-col cols="2">
-          <v-card flat>
-            <v-avatar>
-              <v-img :src="iconUrl" />
-            </v-avatar>
-          </v-card>
-        </v-col>
-        <v-col cols="10">
-          <v-card flat>
-            <p class="textBox">{{ createdTime }}<br />
-            {{ dispName }}</p>
-          </v-card>
+        <v-col>
+          <review-header
+            :icon-url="review.userIconUrl"
+            :disp-name="review.userName"
+            :last-write-time="lastWriteTime"
+          />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <v-card class="ma-3" flat>
-            {{ review.title }}
+          <v-card flat>
+            <p class="text-h6">{{ review.name }}</p>
+            <p class="text-subtitle-1"><b>{{ review.title }}</b></p>
           </v-card>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="displayType === 'simple'">
         <v-col>
+          <review-values
+            :factors="review.reviewFactors"
+            :display-type="displayType"
+            :point-display-type="pointDisplayType"
+            :point-type="review.pointType"
+            :review-factor-params="review.reviewFactorParams"
+          />
+        </v-col>
+      </v-row>
+      <v-row v-if="displayType === 'summary'">
+        <v-col>
+          <v-card class="ma-3" flat v-if="review.sections.length > 0">
+            <section-component :section="review.sections[0]" />
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-else-if="displayType === 'simple'">
+        <v-col>
+          <v-card class="ma-3" flat v-for="section,index in review.sections" :key="index">
+            <section-component :section="section" />
+            <v-divider v-if="index !== (review.sections.length - 1)" />
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -33,51 +50,45 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
-import { Review, ReviewPointType, ReviewDisplayType } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewFactorParam } from '@/common/review'
 import CommonApi from '@/common/commonapi'
+import SectionComponent from '@/components/SectionComponent.vue'
+import ReviewHeader from '@/components/ReviewHeader.vue'
+import ReviewValues from '@/components/ReviewValues.vue'
 
 export default defineComponent({
   name: 'ReviewCard',
-  components: { },
+  components: {
+    SectionComponent,
+    ReviewHeader,
+    ReviewValues
+  },
   props: {
-    dispName: {
-      type: String,
-      default: ''
-    },
-    iconUrl: {
-      type: String,
-      default: ''
-    },
     review: {
       type: Object as PropType<Review>,
       required: true
     },
-    pointType: {
-      type: Object as PropType<ReviewPointType>,
-      required: true
-    },
     displayType: {
       type: Object as PropType<ReviewDisplayType>,
-      default: () => 'summary' as ReviewDisplayType
+      required: true
+    },
+    pointDisplayType: {
+      type: Object as PropType<ReviewPointDisplayType>,
+      required: true
     }
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props) {
-    const createdTime = computed(() => {
-      return CommonApi.dateToString(props.review.createAt, true)
+    const lastWriteTime = computed(() => {
+      return CommonApi.dateToString(props.review.updateAt, true)
     })
 
     return {
-      createdTime
+      lastWriteTime
     }
   }
 })
 </script>
 
 <style scoped>
-.textBox {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+@import url("@/style/common-style.css");
 </style>

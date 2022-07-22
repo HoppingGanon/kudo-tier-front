@@ -1,0 +1,10 @@
+
+.no-break {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.break-word{
+  overflow-wrap: break-word;
+}

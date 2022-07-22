@@ -18,6 +18,7 @@ export interface Session {
   userId: string
   expiredTime: string
   twitterName: string
+  /** 俗にいうTeittwrのユーザーID */
   twitterUserName: string
   iconUrl: string
   isNew: string
@@ -32,6 +33,7 @@ export interface InitUserData {
 export interface UserData {
   name: string
   profile: string
+  /** Teittwrの表示名 */
   twitterName: string
   iconUrl: string
 }

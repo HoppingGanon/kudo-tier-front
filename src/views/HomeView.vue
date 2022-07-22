@@ -31,13 +31,11 @@
             class="scroll"
             flat
             min-height="360px"
-            max-height="100%"
+            max-height="400px"
           >
             <time-line
-              :disp-name="dispName"
-              :icon-url="iconUrl"
-              point-type="point100"
               :reviews="reviews"
+              :review-factor-params="group.reviewFactorParams"
             />
           </v-card>
         </v-card>
@@ -55,7 +53,7 @@ import ProfileComponent from '@/components/ProfileComponent.vue'
 import TimeLine from '@/components/TimeLine.vue'
 import ErrorCard from '@/components/ErrorCard.vue'
 import { useRoute } from 'vue-router'
-import { Review, ReviewPointType } from '@/common/review'
+import { Review, ReviewFactorParam, ReviewGroup } from '@/common/review'
 
 export default defineComponent({
   name: 'HomeView',
@@ -88,26 +86,194 @@ export default defineComponent({
         isNotFound.value = true
       }
     })
+
+    const groupOrg: ReviewGroup = {
+      title: '',
+      reviews: [],
+      reviewPointType: 'rank14',
+      reviewFactorParams: [
+        {
+          name: '年代',
+          isPoint: false,
+          weight: 0
+        },
+        {
+          name: '100',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '90',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '80',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '70',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '60',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '50',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '40',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '30',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '20',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '10',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '0',
+          isPoint: true,
+          weight: 0
+        },
+        {
+          name: '備考',
+          isPoint: false,
+          weight: 0
+        }
+      ],
+      createAt: new Date(),
+      updateAt: new Date()
+    }
+
     const reviewsOrg: Review[] = [
       {
+        userName: 'username',
+        userId: 'userid',
+        userIconUrl: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
         title: 'review1',
-        sections: [],
-        createAt: new Date('2022/07/10')
+        nameName: '作品名',
+        name: 'aaa',
+        reviewFactorParams: groupOrg.reviewFactorParams,
+        reviewFactors: [
+          {
+            info: 'これが作品名'
+          },
+          {
+            point: 100
+          },
+          {
+            point: 90
+          },
+          {
+            point: 80
+          },
+          {
+            point: 70
+          },
+          {
+            point: 60
+          },
+          {
+            point: 50
+          },
+          {
+            point: 40
+          },
+          {
+            point: 30
+          },
+          {
+            point: 20
+          },
+          {
+            point: 10
+          },
+          {
+            point: 0
+          },
+          {
+            info: 'これが尾行'
+          }
+        ],
+        pointType: groupOrg.reviewPointType,
+        sections: [
+          {
+            title: 'セクション1',
+            factors: [
+              {
+                type: 'text',
+                body: 'body1'
+              },
+              {
+                type: 'twitterLink',
+                body: 'link'
+              }
+            ]
+          },
+          {
+            title: 'セクション2',
+            factors: [
+              {
+                type: 'text',
+                body: 'body1'
+              },
+              {
+                type: 'text',
+                body: 'aaaaaaaaaaaaaaaaaaaaaaaasdfgsdfgafgadsfgadsfgdfgaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+              },
+              {
+                type: 'text',
+                body: 'aaaaaaaaaaaaaaaaaaaaaaaasdfgsdfgafgadsfgadsfgdfgaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+              }
+            ]
+          }
+        ],
+        createAt: new Date('2022/07/10'),
+        updateAt: new Date('2022/07/10')
       },
       {
+        userName: 'username',
+        userId: 'userid',
+        userIconUrl: '',
         title: 'review2',
+        nameName: '作品名',
+        name: 'bbb',
+        reviewFactorParams: groupOrg.reviewFactorParams,
+        reviewFactors: [],
+        pointType: groupOrg.reviewPointType,
         sections: [],
-        createAt: new Date('2022/07/10')
+        createAt: new Date('2022/07/10'),
+        updateAt: new Date('2022/07/10')
       }
     ]
+
     const reviews = ref(reviewsOrg)
+    const group = ref(groupOrg)
 
     return {
       isNotFound,
       dispName,
       profile,
       iconUrl,
-      reviews
+      reviews,
+      group
     }
   }
 })

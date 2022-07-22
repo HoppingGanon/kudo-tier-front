@@ -31,3 +31,12 @@ test('CommonApi.dateToString', () => {
   expect(CommonApi.dateToString(new Date('2020/01/02 13:14:15'), true)).toEqual('2020年1月2日 13:14:15')
   expect(CommonApi.dateToString(new Date('2020/01/02 03:04:05'), true)).toEqual('2020年1月2日 03:04:05')
 })
+
+test('CommonApi.shortenDate', () => {
+  expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.second), 1)).toEqual('10秒前')
+  expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.minute), 1)).toEqual('10分前')
+  expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.hour), 1)).toEqual('10時間前')
+  expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.day), 11)).toEqual('10日前')
+
+  expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.day * 2), 1)).toEqual(undefined)
+})

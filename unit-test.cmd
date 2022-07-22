@@ -1,1 +1,1 @@
-cmd /k "npm run test:unit"
+cmd /k "npm run test:unit" -- --coverage

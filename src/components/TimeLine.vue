@@ -1,12 +1,11 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-for="review,index in reviews" :key="index">
       <v-col>
         <review-card
-          :disp-name="dispName"
-          :icon-url="iconUrl"
-          :review="reviews[0]"
-          :point-type="pointType"
+          :review="review"
+          display-type="simple"
+          point-display-type="normal"
         />
       </v-col>
     </v-row>
@@ -16,7 +15,7 @@
 <script lang="ts">
 import { defineComponent, PropType, reactive, ref } from 'vue'
 import ReviewCard from '@/components/ReviewCard.vue'
-import { Review, ReviewPointType } from '@/common/review'
+import { Review, ReviewFactorParam } from '@/common/review'
 
 export default defineComponent({
   name: 'TimeLine',
@@ -24,21 +23,8 @@ export default defineComponent({
     ReviewCard
   },
   props: {
-    dispName: {
-      type: String,
-      default: ''
-    },
-    iconUrl: {
-      type: String,
-      default: ''
-    },
     reviews: {
-      type: Object as PropType<Review[]>,
-      required: true
-    },
-    pointType: {
-      type: Object as PropType<ReviewPointType>,
-      required: true
+      type: Object as PropType<Review[]>
     }
   },
   emits: {},
