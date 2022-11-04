@@ -6,6 +6,7 @@
           :review="review"
           display-type="simple"
           point-display-type="normal"
+          @update-point-type="updatePointTypeEm($event, index)"
         />
       </v-col>
     </v-row>
@@ -15,10 +16,10 @@
 <script lang="ts">
 import { defineComponent, PropType, reactive, ref } from 'vue'
 import ReviewCard from '@/components/ReviewCard.vue'
-import { Review, ReviewFactorParam } from '@/common/review'
+import { Review, ReviewFactorParam, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
-  name: 'TimeLine',
+  name: 'ReviewList',
   components: {
     ReviewCard
   },
@@ -27,9 +28,16 @@ export default defineComponent({
       type: Object as PropType<Review[]>
     }
   },
-  emits: {},
-  setup () {
-    return {}
+  emits: {
+    updatePointType: (value: ReviewPointType, index: number) => true
+  },
+  setup (props, { emit }) {
+    const updatePointTypeEm = (value: ReviewPointType, index: number) => {
+      emit('updatePointType', value, index)
+    }
+    return {
+      updatePointTypeEm
+    }
   }
 })
 

@@ -21,7 +21,7 @@
                 v-on="isActive"
                 class="cursor-pointer"
                 >
-                mdi-dots-vertical
+                mdi-message-alert-outline
               </v-icon>
             </template>
               <v-list>
@@ -29,12 +29,21 @@
                   v-model="displayTypes"
                   color="primary"
                 >
+                  <v-list-item>
+                    <v-list-item-title>
+                      表示形式
+                    </v-list-item-title>
+                  </v-list-item>
+
+                  <v-divider></v-divider>
+
                   <v-list-item
                     v-for="(item, i) in displayTypes"
                     :key="i"
                   >
-                    <v-list-item-content>
-                      <v-list-item-title v-text="item"></v-list-item-title>
+                    <v-list-item-content @click="updatePointTypeEm(item)">
+                      <v-list-item-title v-if="item===pointType" class="strong" v-text="item"></v-list-item-title>
+                      <v-list-item-title v-else v-text="item"></v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>
@@ -47,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import { reviewPointTypeArray, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
@@ -66,18 +75,22 @@ export default defineComponent({
       type: String,
       required: true
     },
-    modelValue: {
+    pointType: {
       type: Object as PropType<ReviewPointType>,
       required: true
     }
   },
-  emit: [
-    'update:modelValue'
-  ],
-  setup () {
+  emits: {
+    updatePointType: (value: ReviewPointType) => true
+  },
+  setup (props, { emit }) {
     const displayTypes = ref(reviewPointTypeArray)
+    const updatePointTypeEm = (pointType: ReviewPointType) => {
+      emit('updatePointType', pointType)
+    }
     return {
-      displayTypes
+      displayTypes,
+      updatePointTypeEm
     }
   }
 })

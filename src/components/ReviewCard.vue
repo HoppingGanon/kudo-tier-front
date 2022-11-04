@@ -7,6 +7,8 @@
             :icon-url="review.userIconUrl"
             :disp-name="review.userName"
             :last-write-time="lastWriteTime"
+            :pointType="review.pointType"
+            @updatePointType="updatePointTypeEm"
           />
         </v-col>
       </v-row>
@@ -62,7 +64,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
-import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewFactorParam } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewFactorParam, ReviewPointType } from '@/common/review'
 import CommonApi from '@/common/commonapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
@@ -91,7 +93,10 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props) {
+  emits: {
+    updatePointType: (value: ReviewPointType) => true
+  },
+  setup (props, { emit }) {
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.review.updateAt, true)
     })
@@ -115,9 +120,13 @@ export default defineComponent({
       return ave
     })
 
+    const updatePointTypeEm = (value: ReviewPointType) => {
+      emit('updatePointType', value)
+    }
     return {
       lastWriteTime,
-      average
+      average,
+      updatePointTypeEm
     }
   }
 })

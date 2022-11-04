@@ -24,7 +24,7 @@
         <v-card>
           <v-toolbar color="primary">
             <v-card-title>
-              最近の投稿
+              Review
             </v-card-title>
           </v-toolbar>
           <v-card
@@ -33,9 +33,31 @@
             min-height="360px"
             max-height="400px"
           >
-            <time-line
+            <review-list
               :reviews="reviews"
               :review-factor-params="group.reviewFactorParams"
+              @update-point-type="updatePointType"
+            />
+          </v-card>
+        </v-card>
+      </v-col>
+      <v-col cols="6">
+        <v-card>
+          <v-toolbar color="primary">
+            <v-card-title>
+              Tier
+            </v-card-title>
+          </v-toolbar>
+          <v-card
+            class="scroll"
+            flat
+            min-height="360px"
+            max-height="400px"
+          >
+            <review-list
+              :reviews="reviews"
+              :review-factor-params="group.reviewFactorParams"
+              @update-point-type="updatePointType"
             />
           </v-card>
         </v-card>
@@ -50,10 +72,10 @@ import { defineComponent, onMounted, ref } from 'vue'
 import restApi from '@/common/restapi'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
-import TimeLine from '@/components/TimeLine.vue'
+import ReviewList from '@/components/ReviewList.vue'
 import ErrorCard from '@/components/ErrorCard.vue'
 import { useRoute } from 'vue-router'
-import { Review, ReviewFactorParam, ReviewGroup } from '@/common/review'
+import { Review, ReviewFactorParam, ReviewGroup, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'HomeView',
@@ -61,7 +83,7 @@ export default defineComponent({
     ProfileComponent,
     SessionChecker,
     ErrorCard,
-    TimeLine
+    ReviewList
   },
   setup () {
     const route = useRoute()
@@ -267,13 +289,20 @@ export default defineComponent({
     const reviews = ref(reviewsOrg)
     const group = ref(groupOrg)
 
+    const updatePointType = (value: ReviewPointType, index: number) => {
+      if (index >= 0 && index < reviews.value.length) {
+        reviews.value[index].pointType = value
+      }
+    }
+
     return {
       isNotFound,
       dispName,
       profile,
       iconUrl,
       reviews,
-      group
+      group,
+      updatePointType
     }
   }
 })

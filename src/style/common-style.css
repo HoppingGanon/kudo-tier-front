@@ -12,3 +12,5 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.strong { font-weight: bold; }
