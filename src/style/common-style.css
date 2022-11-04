@@ -8,3 +8,7 @@
 .break-word{
   overflow-wrap: break-word;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

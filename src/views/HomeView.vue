@@ -90,7 +90,7 @@ export default defineComponent({
     const groupOrg: ReviewGroup = {
       title: '',
       reviews: [],
-      reviewPointType: 'rank14',
+      reviewPointType: 'score',
       reviewFactorParams: [
         {
           name: '年代',
@@ -100,57 +100,57 @@ export default defineComponent({
         {
           name: '100',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '90',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '80',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '70',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '60',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '50',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '40',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '30',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '20',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '10',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '0',
           isPoint: true,
-          weight: 0
+          weight: 3
         },
         {
           name: '備考',

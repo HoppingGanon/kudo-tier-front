@@ -20,9 +20,12 @@ export interface ReviewSection {
   /** このセクションの構成要素 */
   factors: ReviewParagraph[]
 }
+export const reviewPointTypeArray = [
+  'stars', 'rank7', 'rank14', 'score', 'point', 'unlimited'
+] as const
 
 /** レビューポイントの表現方法 */
-export type ReviewPointType = 'stars' | 'rank7' | 'rank14' | 'point' | 'detail' | 'unlimited'
+export type ReviewPointType = typeof reviewPointTypeArray[number]
 
 /** レビューの表示方法 */
 export type ReviewDisplayType = 'summary' | 'simple'
@@ -169,7 +172,7 @@ export class ReviewFunc {
         }
         */
         break
-      case 'point':
+      case 'score':
         if (point <= 0) {
           return 0
         } else if (point >= 100) {
@@ -177,7 +180,7 @@ export class ReviewFunc {
         } else {
           return Math.floor(point / 10)
         }
-      case 'detail':
+      case 'point':
         if (point <= 0) {
           return 0
         } else if (point >= 10) {

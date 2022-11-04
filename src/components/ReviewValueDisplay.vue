@@ -10,7 +10,7 @@
     <span v-else-if="point == 3" class="rank b">B</span>
     <span v-else-if="point == 4" class="rank a">A</span>
     <span v-else-if="point == 5" class="rank s">S</span>
-    <span v-else-if="point >= 6" class="rank ss">SS</span>
+    <span v-else-if="point > 5" class="rank ss">SS</span>
   </v-card>
   <v-card v-else-if="pointType == 'rank14'" fluid flat>
     <span v-if="point <= 0" class="rank e">E</span>
@@ -26,16 +26,16 @@
     <span v-else-if="point == 10" class="rank s">S</span>
     <span v-else-if="point == 11" class="rank s">S+</span>
     <span v-else-if="point == 12" class="rank ss">SS</span>
-    <span v-else-if="point >= 13" class="rank ss">SS+</span>
+    <span v-else-if="point > 12" class="rank ss">SS+</span>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" fluid flat>
-    point
+  <v-card v-else-if="pointType == 'score'" class="bar" :style="calcBarStyle(point, 10)" fluid flat>
+    <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'detail'" fluid flat>
-    detail
+  <v-card v-else-if="pointType == 'point'" class="bar" :style="calcBarStyle(point, 100)" fluid flat>
+    <span class="ml-1" v-text="point"></span>
   </v-card>
   <v-card v-else-if="pointType == 'unlimited'" fluid flat>
-    unlimited
+    <span class="ml-1" v-text="point"></span>
   </v-card>
 </template>
 
@@ -60,8 +60,19 @@ export default defineComponent({
     const point = computed(() => {
       return ReviewFunc.getReviewDisp(props.value, props.pointType)
     })
+
+    // スコアバーの表示色を決定する
+    const calcBarStyle = (p: number, max: number) => {
+      const percent = 100 * p / max
+      const r = percent < 50 ? percent < 10 ? 255 : 175 * (50 - percent) / 40 + 80 : 80
+      const g = percent < 25 ? percent < 10 ? 0 : 255 * percent / 25 : 255
+      const b = percent < 50 ? 0 : 255 * (percent - 50) / 50
+      return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 0.5) 0% ${percent}%, rgb(127, 127, 127, 0.5) ${percent}% 100%);`
+      // background-color: rgba(0, 255, 255, 0.5);
+    }
     return {
-      point
+      point,
+      calcBarStyle
     }
   }
 })
@@ -75,14 +86,14 @@ export default defineComponent({
 .ss{
   color: transparent;
   background: repeating-linear-gradient(
-    45deg,
-    rgb(255,0,0) 0px 0px,
-    rgb(255,160,0) 3px 3px,
-    rgb(0,160,0) 6px 6px,
-    rgb(0,160,255) 9px 9px,
-    rgb(0,0,255) 12px 12px,
-    rgb(255,0,255) 15px 15px,
-    rgb(255,0,0) 18px 18px
+    -45deg,
+    rgb(255,0,0) 0% 14.29%,
+    rgb(255,160,0) 28.57% 28.57%,
+    rgb(0,160,0) 42.86% 42.86%,
+    rgb(0,160,255) 57.14% 57.14%,
+    rgb(0,0,255) 71.43% 71.43%,
+    rgb(255,0,255) 85.71% 85.71%,
+    rgb(255,0,0) 100% 100%
   );
   background-clip: text;
 }
@@ -91,9 +102,9 @@ export default defineComponent({
   color: transparent;
   background: repeating-linear-gradient(
     -45deg,
-    rgb(255,150,0) 0px 6px,
-    rgb(255,240,80) 9px 9px,
-    rgb(255,150,0) 12px 18px
+    rgb(255,150,0) 0% 25%,
+    rgb(255,240,80) 50% 50%,
+    rgb(255,150,0) 75% 100%
   );
   background-clip: text;
 }
@@ -102,9 +113,9 @@ export default defineComponent({
   color: transparent;
   background: repeating-linear-gradient(
     -45deg,
-    rgb(80,180,255) 0px 6px,
-    rgb(200,240,255) 9px 9px,
-    rgb(80,180,255) 12px 18px
+    rgb(80,180,255) 0% 25%,
+    rgb(200,240,255) 50% 50%,
+    rgb(80,180,255) 75% 100%
   );
   background-clip: text;
 }
@@ -123,6 +134,11 @@ export default defineComponent({
 
 .e{
   color: rgb(255,0,0);
+}
+
+.bar{
+  background: linear-gradient(90deg, rgb(0, 255, 255, 0.5) 0% 0%, rgb(127, 127, 127, 0.5) 0% 100%);
+  transition: all 1s both;
 }
 
 </style>

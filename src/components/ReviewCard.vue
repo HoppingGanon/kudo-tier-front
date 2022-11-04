@@ -15,6 +15,18 @@
           <v-card flat>
             <p class="text-h6">{{ review.name }}</p>
             <p class="text-subtitle-1"><b>{{ review.title }}</b></p>
+            <p>
+              <v-span v-if="review.pointType == 'stars'">総合：</v-span>
+              <v-span v-else-if="review.pointType == 'rank7'">総合ランク：</v-span>
+              <v-span v-else-if="review.pointType == 'rank14'">総合ランク：</v-span>
+              <v-span v-else-if="review.pointType == 'score'">総合スコア：</v-span>
+              <v-span v-else-if="review.pointType == 'point'">総合点：</v-span>
+              <v-span v-else-if="review.pointType == 'unlimited'">合計：</v-span>
+            </p>
+            <review-value-display
+              :point-type="review.pointType"
+              :value="average"
+            />
           </v-card>
         </v-col>
       </v-row>
@@ -55,13 +67,15 @@ import CommonApi from '@/common/commonapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
+import ReviewValueDisplay from './ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'ReviewCard',
   components: {
     SectionComponent,
     ReviewHeader,
-    ReviewValues
+    ReviewValues,
+    ReviewValueDisplay
   },
   props: {
     review: {
@@ -82,8 +96,28 @@ export default defineComponent({
       return CommonApi.dateToString(props.review.updateAt, true)
     })
 
+    const average = computed(() => {
+      let ave = 0
+      let sumWeight = 0
+      props.review.reviewFactorParams.forEach((param, index) => {
+        if (param.isPoint && index < props.review.reviewFactors.length) {
+          sumWeight += param.weight
+        }
+      })
+      props.review.reviewFactorParams.forEach((param, index) => {
+        if (param.isPoint && index < props.review.reviewFactors.length) {
+          const factor = props.review.reviewFactors[index]
+          if (factor.point !== undefined) {
+            ave += factor.point * param.weight / sumWeight
+          }
+        }
+      })
+      return ave
+    })
+
     return {
-      lastWriteTime
+      lastWriteTime,
+      average
     }
   }
 })

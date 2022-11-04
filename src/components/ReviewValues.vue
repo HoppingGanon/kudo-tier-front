@@ -1,10 +1,5 @@
 <template>
   <v-card flat>
-    <v-card fluid flat>
-      <v-card v-if="pointType == 'stars'" fluid flat>
-        <review-value-display :value="100" :point-type="pointType" />
-      </v-card>
-    </v-card>
     <v-card v-if="displayType == 'simple'" fluid flat>
       <v-container fluid>
         <v-row v-for="factor, index in factors" :key="index">
