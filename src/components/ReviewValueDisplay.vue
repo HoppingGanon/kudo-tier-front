@@ -3,7 +3,7 @@
     <v-icon v-for="n of point" :key="n" color="orange" dark> mdi-star </v-icon>
     <v-icon v-for="n of (5 - point)" :key="n" color="black" dark> mdi-star </v-icon>
   </v-card>
-  <v-card v-else-if="pointType == 'rank7'" fluid flat>
+  <v-card v-else-if="pointType == 'rank7'" :style="larger ? 'font-size: larger;' : ''" fluid flat>
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank d">D</span>
     <span v-else-if="point == 2" class="rank c">C</span>
@@ -12,7 +12,7 @@
     <span v-else-if="point == 5" class="rank s">S</span>
     <span v-else-if="point > 5" class="rank ss">SS</span>
   </v-card>
-  <v-card v-else-if="pointType == 'rank14'" fluid flat>
+  <v-card v-else-if="pointType == 'rank14'" :style="larger ? 'font-size: larger;' : ''" fluid flat>
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank e">E+</span>
     <span v-else-if="point == 2" class="rank d">D</span>
@@ -54,6 +54,11 @@ export default defineComponent({
     pointType: {
       type: Object as PropType<ReviewPointType>,
       required: true
+    },
+    /// ランク表示の際に大きな文字で表示する
+    larger: {
+      type: Object as PropType<boolean>,
+      default: false as boolean
     }
   },
   setup (props) {
@@ -81,6 +86,7 @@ export default defineComponent({
 <style scoped>
 .rank {
   font-weight: bold;
+  font-size: larger;
 }
 
 .ss{

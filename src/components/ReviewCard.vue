@@ -4,8 +4,10 @@
       <v-row class="align-center">
         <v-col>
           <review-header
+            v-if="!noHeader"
             :icon-url="review.userIconUrl"
             :disp-name="review.userName"
+            :user-link="baseLink + review.userId"
             :last-write-time="lastWriteTime"
             :pointType="review.pointType"
             @updatePointType="updatePointTypeEm"
@@ -15,22 +17,26 @@
       <v-row>
         <v-col>
           <v-card flat>
-            <p class="text-h6">{{ review.name }}</p>
-            <p class="text-subtitle-1"><b>{{ review.title }}</b></p>
-            <p>
-              <v-span v-if="review.pointType == 'stars'">総合：</v-span>
-              <v-span v-else-if="review.pointType == 'rank7'">総合ランク：</v-span>
-              <v-span v-else-if="review.pointType == 'rank14'">総合ランク：</v-span>
-              <v-span v-else-if="review.pointType == 'score'">総合スコア：</v-span>
-              <v-span v-else-if="review.pointType == 'point'">総合点：</v-span>
-              <v-span v-else-if="review.pointType == 'unlimited'">合計：</v-span>
+            <p class="text-subtitle-1"><span v-text="review.name"></span></p>
+            <p class="text-h6"><b><span v-text="review.title"></span></b></p>
+            <p class="mt-2">
+              <span v-if="review.pointType == 'stars'">総合：</span>
+              <span v-else-if="review.pointType == 'rank7'">総合ランク：</span>
+              <span v-else-if="review.pointType == 'rank14'">総合ランク：</span>
+              <span v-else-if="review.pointType == 'score'">総合スコア：</span>
+              <span v-else-if="review.pointType == 'point'">総合点：</span>
+              <span v-else-if="review.pointType == 'unlimited'">合計：</span>
             </p>
             <review-value-display
               :point-type="review.pointType"
               :value="average"
+              :larger="true"
             />
           </v-card>
         </v-col>
+      </v-row>
+      <v-row>
+        <v-divider class="mt-3 mb-1 ml-1 mr-1" />
       </v-row>
       <v-row v-if="displayType === 'simple'">
         <v-col>
@@ -46,14 +52,14 @@
       <v-row v-if="displayType === 'summary'">
         <v-col>
           <v-card class="ma-3" flat v-if="review.sections.length > 0">
-            <section-component :section="review.sections[0]" />
+            <section-component :section="review.sections[0]" :display-type="displayType" />
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-else-if="displayType === 'simple'">
+      <v-row v-if="displayType === 'simple'">
         <v-col>
           <v-card class="ma-3" flat v-for="section,index in review.sections" :key="index">
-            <section-component :section="section" />
+            <section-component :section="section" :display-type="displayType" />
             <v-divider v-if="index !== (review.sections.length - 1)" />
           </v-card>
         </v-col>
@@ -91,10 +97,16 @@ export default defineComponent({
     pointDisplayType: {
       type: Object as PropType<ReviewPointDisplayType>,
       required: true
+    },
+    noHeader: {
+      type: Object as PropType<boolean>,
+      default: false as boolean
     }
   },
   emits: {
-    updatePointType: (value: ReviewPointType) => true
+    updatePointType: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: ReviewPointType) => true
   },
   setup (props, { emit }) {
     const lastWriteTime = computed(() => {
@@ -123,10 +135,14 @@ export default defineComponent({
     const updatePointTypeEm = (value: ReviewPointType) => {
       emit('updatePointType', value)
     }
+
+    const baseLink = (process.env.VUE_APP_BASE_URI as string) + '/home/'
+
     return {
       lastWriteTime,
       average,
-      updatePointTypeEm
+      updatePointTypeEm,
+      baseLink
     }
   }
 })

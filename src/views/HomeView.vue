@@ -24,7 +24,9 @@
         <v-card>
           <v-toolbar color="primary">
             <v-card-title>
-              Review
+              <b>
+                最新のReview
+              </b>
             </v-card-title>
           </v-toolbar>
           <v-card
@@ -45,7 +47,9 @@
         <v-card>
           <v-toolbar color="primary">
             <v-card-title>
-              Tier
+              <b>
+                ピックアップTier
+              </b>
             </v-card-title>
           </v-toolbar>
           <v-card
@@ -54,10 +58,7 @@
             min-height="360px"
             max-height="400px"
           >
-            <review-list
-              :reviews="reviews"
-              :review-factor-params="group.reviewFactorParams"
-              @update-point-type="updatePointType"
+            <tier-list
             />
           </v-card>
         </v-card>
@@ -73,9 +74,10 @@ import restApi from '@/common/restapi'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
+import TierList from '@/components/TierList.vue'
 import ErrorCard from '@/components/ErrorCard.vue'
 import { useRoute } from 'vue-router'
-import { Review, ReviewFactorParam, ReviewGroup, ReviewPointType } from '@/common/review'
+import { Review, ReviewGroup, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'HomeView',
@@ -83,7 +85,8 @@ export default defineComponent({
     ProfileComponent,
     SessionChecker,
     ErrorCard,
-    ReviewList
+    ReviewList,
+    TierList
   },
   setup () {
     const route = useRoute()
@@ -186,16 +189,16 @@ export default defineComponent({
 
     const reviewsOrg: Review[] = [
       {
-        userName: 'username',
-        userId: 'userid',
+        userName: 'usernameaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        userId: 'b15857216ec62d4f322a1dfa15df526a764d174ceddd0bff',
         userIconUrl: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
-        title: 'review1',
+        title: 'このテスト映画は素晴らしいです',
         nameName: '作品名',
-        name: 'aaa',
+        name: 'テストムービー',
         reviewFactorParams: groupOrg.reviewFactorParams,
         reviewFactors: [
           {
-            info: 'これが作品名'
+            info: '1990年'
           },
           {
             point: 100
@@ -231,21 +234,21 @@ export default defineComponent({
             point: 0
           },
           {
-            info: 'これが尾行'
+            info: '備考あああああああああ'
           }
         ],
         pointType: groupOrg.reviewPointType,
         sections: [
           {
-            title: 'セクション1',
+            title: '最高のシーン',
             factors: [
               {
                 type: 'text',
-                body: 'body1'
+                body: '冒頭30秒からすでに最高の一言ですあああああああああああああああああああああああああああああああああ'
               },
               {
                 type: 'twitterLink',
-                body: 'link'
+                body: 'https://twitter.com/hoppingganonapp/status/1589775062546415618'
               }
             ]
           },

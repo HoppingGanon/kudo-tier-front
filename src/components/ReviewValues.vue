@@ -2,13 +2,14 @@
   <v-card flat>
     <v-card v-if="displayType == 'simple'" fluid flat>
       <v-container fluid>
+        <!-- レビューの評点や文字列情報を表示 -->
         <v-row v-for="factor, index in factors" :key="index">
           <v-col v-if="index < reviewFactorParams.length">
             <span v-if="index < reviewFactorParams.length" v-text="reviewFactorParams[index].name"></span>
           </v-col>
           <v-col v-if="index < reviewFactorParams.length">
             <review-value-display v-if="reviewFactorParams[index].isPoint && factor.point !== undefined" :value="factor.point" :point-type="pointType" />
-            <span v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined" v-text="factor.info"></span>
+            <span v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined" class="break-word" v-text="factor.info"></span>
           </v-col>
         </v-row>
       </v-container>
@@ -50,7 +51,7 @@ export default defineComponent({
   },
   emits: {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup (props) {
+  setup () {
     const getReviewDisp = ReviewFunc.getReviewDisp
 
     return {

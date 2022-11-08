@@ -60,9 +60,11 @@ export interface Review {
   /** 投稿したユーザーのアイコンURL */
   userIconUrl: string
 
+  /** レビューの表示タイトル */
   title: string
   /** 「作品名」や「商品名」という名称の名称が入る */
   nameName: string
+  /** 作品名や商品名 */
   name: string
 
   /** レビュー評点に対する情報 */
@@ -183,8 +185,8 @@ export class ReviewFunc {
       case 'point':
         if (point <= 0) {
           return 0
-        } else if (point >= 10) {
-          return 10
+        } else if (point >= 100) {
+          return 100
         } else {
           return Math.floor(point)
         }

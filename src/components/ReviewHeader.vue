@@ -3,23 +3,29 @@
     <v-container fluid>
       <v-row>
         <v-col cols="2">
-          <v-avatar>
-            <v-img :src="iconUrl" />
-          </v-avatar>
+          <a :href="userLink">
+            <v-avatar>
+              <v-img :src="iconUrl" />
+            </v-avatar>
+          </a>
         </v-col>
-        <v-col>
-          <p class="no-break">
-            <span v-text="dispName"></span><br />
-            <span v-text="lastWriteTime"></span>に更新
-          </p>
+        <v-col cols="9">
+          <a :href="userLink">
+            <p class="no-break">
+              <span v-text="dispName"></span><br />
+              <span v-text="lastWriteTime"></span>に更新
+            </p>
+          </a>
         </v-col>
-        <v-col cols="1">
-          <v-menu>
-            <template v-slot:activator="{ isActive, props }">
+        <!-- Tierのヘッダに使用する場合は、undefinedとなる -->
+        <v-col v-if="pointType !== undefined" cols="1">
+          <v-menu v-model="menu">
+            <template v-slot:activator="{ isActive, props}">
               <v-icon
-                v-bind="props"
-                v-on="isActive"
+                @click="menu = true"
                 class="cursor-pointer"
+                v-on="isActive"
+                v-bind="props"
                 >
                 mdi-message-alert-outline
               </v-icon>
@@ -41,7 +47,7 @@
                     v-for="(item, i) in displayTypes"
                     :key="i"
                   >
-                    <v-list-item-content @click="updatePointTypeEm(item)">
+                    <v-list-item-content @click="updatePointTypeEm(item)" class="cursor-pointer">
                       <v-list-item-title v-if="item===pointType" class="strong" v-text="item"></v-list-item-title>
                       <v-list-item-title v-else v-text="item"></v-list-item-title>
                     </v-list-item-content>
@@ -67,6 +73,10 @@ export default defineComponent({
       type: String,
       required: true
     },
+    userLink: {
+      type: String,
+      required: true
+    },
     lastWriteTime: {
       type: String,
       required: true
@@ -76,8 +86,7 @@ export default defineComponent({
       required: true
     },
     pointType: {
-      type: Object as PropType<ReviewPointType>,
-      required: true
+      type: Object as PropType<ReviewPointType>
     }
   },
   emits: {
@@ -85,12 +94,16 @@ export default defineComponent({
   },
   setup (props, { emit }) {
     const displayTypes = ref(reviewPointTypeArray)
+    const menu = ref(false)
     const updatePointTypeEm = (pointType: ReviewPointType) => {
       emit('updatePointType', pointType)
+      menu.value = false
     }
     return {
       displayTypes,
-      updatePointTypeEm
+      menu,
+      updatePointTypeEm,
+      scroll
     }
   }
 })
@@ -98,4 +111,8 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+a{
+  color:inherit;
+  text-decoration: none;
+}
 </style>

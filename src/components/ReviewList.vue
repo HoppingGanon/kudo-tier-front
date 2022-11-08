@@ -4,7 +4,7 @@
       <v-col>
         <review-card
           :review="review"
-          display-type="simple"
+          display-type="summary"
           point-display-type="normal"
           @update-point-type="updatePointTypeEm($event, index)"
         />
@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, ref } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import ReviewCard from '@/components/ReviewCard.vue'
-import { Review, ReviewFactorParam, ReviewPointType } from '@/common/review'
+import { Review, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'ReviewList',
@@ -29,7 +29,9 @@ export default defineComponent({
     }
   },
   emits: {
-    updatePointType: (value: ReviewPointType, index: number) => true
+    updatePointType: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: ReviewPointType, index: number) => true
   },
   setup (props, { emit }) {
     const updatePointTypeEm = (value: ReviewPointType, index: number) => {
