@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="displayType === 'simple'" flat fluid>
+  <v-card v-if="displayType === 'all'" flat fluid>
     <span class="break-word text-subtitle-1">
       <span v-text="section.title"></span>
     </span>

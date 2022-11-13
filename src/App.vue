@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-avatar class="overlay anime baricon" color="pink" @click="clickHideBarIcon" :style="iconStyle">
+    <v-avatar class="overlay anime baricon" color="primary" @click="clickHideBarIcon" :style="iconStyle">
       <v-icon v-if="isVisibleBar" dark>mdi-overscan</v-icon>
       <v-icon v-else dark>mdi-page-layout-header</v-icon>
     </v-avatar>

@@ -3,10 +3,14 @@
     <v-row v-for="review,index in reviews" :key="index">
       <v-col>
         <review-card
+          :no-header="noHeader"
           :review="review"
-          display-type="summary"
+          min-height="200px"
+          width="100%"
+          :display-type="displayType"
           point-display-type="normal"
           @update-point-type="updatePointTypeEm($event, index)"
+          :no-change-point="noChangePoint"
         />
       </v-col>
     </v-row>
@@ -16,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import ReviewCard from '@/components/ReviewCard.vue'
-import { Review, ReviewPointType } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'ReviewList',
@@ -26,6 +30,18 @@ export default defineComponent({
   props: {
     reviews: {
       type: Object as PropType<Review[]>
+    },
+    noHeader: {
+      type: Object as PropType<boolean>,
+      default: false as boolean
+    },
+    noChangePoint: {
+      type: Object as PropType<boolean>,
+      default: false as boolean
+    },
+    displayType: {
+      type: Object as PropType<ReviewDisplayType>,
+      required: true
     }
   },
   emits: {

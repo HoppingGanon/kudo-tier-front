@@ -27,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/AuthView.vue')
   },
   {
+    path: '/tier',
+    name: 'tier',
+    component: () => import('../views/TierView.vue')
+  },
+  {
     path: '/regist',
     name: 'regist',
     component: () => import('../views/RegistrationView.vue')

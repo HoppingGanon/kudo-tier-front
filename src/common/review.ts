@@ -28,7 +28,7 @@ export const reviewPointTypeArray = [
 export type ReviewPointType = typeof reviewPointTypeArray[number]
 
 /** レビューの表示方法 */
-export type ReviewDisplayType = 'summary' | 'simple'
+export type ReviewDisplayType = 'summary' | 'all'
 
 /** レビューポイントの表示方法 */
 export type ReviewPointDisplayType = 'normal' | 'radar'
@@ -53,6 +53,9 @@ export interface ReviewFactor {
 
 /** レビュー全体 */
 export interface Review {
+  /** review識別ID */
+  reviewId: string
+
   /** 投稿したユーザーの表示名 */
   userName: string
   /** 投稿したユーザーのID */
@@ -62,8 +65,6 @@ export interface Review {
 
   /** レビューの表示タイトル */
   title: string
-  /** 「作品名」や「商品名」という名称の名称が入る */
-  nameName: string
   /** 作品名や商品名 */
   name: string
 
@@ -78,25 +79,54 @@ export interface Review {
   updateAt: Date
 }
 
-/** レビューグループの構成要素 */
-export interface ReviewGroupFactor {
-  review: Review
-  comments: ReviewParagraph[]
-}
-
 /** 複数のレビューをまとめたグループ */
-export interface ReviewGroup {
-  /** レビューグループのタイトル */
-  title: string
-  /** レビューグループの構成要素 */
+export interface Tier {
+  /** Tier識別ID */
+  tierId: string
+
+  /** 投稿したユーザーの表示名 */
+  userName: string
+  /** 投稿したユーザーのID */
+  userId: string
+  /** 投稿したユーザーのアイコンURL */
+  userIconUrl: string
+
+  /** Tierの名称 */
+  name: string
+
+  /** 本文 */
+  factors: ReviewParagraph[]
+
+  /** Tierの構成要素 */
   reviews: Review[]
   /** レビューポイントの表示方法 */
   reviewPointType :ReviewPointType
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
+
+  pointType: ReviewPointType
   createAt: Date
   updateAt: Date
 
+}
+
+// 連想配列、辞書てきなもの
+export type Dictionary<T> = { [name: string]: T }
+
+// v-data-tableのヘッダ
+export interface DataTableHeader {
+  text: string
+  value: string
+  align?: 'start' | 'center' | 'end'
+  sortable?: boolean
+  filterable?: boolean
+  groupable?: boolean
+  divider?: boolean
+  class?: string | string[]
+  cellClass?: string | string[]
+  width?: string | number
+  filter?: (value: any, search: string, item: any) => boolean
+  sort?: (a: any, b: any) => number
 }
 
 export class ReviewFunc {
@@ -105,74 +135,12 @@ export class ReviewFunc {
     switch (type) {
       case 'stars':
         p = 100 / 5
-        /*
-        if (point <= 0) {
-          return ''
-        } else if (point < p) {
-          return '★'
-        } else if (point < p) {
-          return '★★'
-        } else if (point < 2 * p) {
-          return '★★★'
-        } else if (point < 3 * p) {
-          return '★★★★'
-        } else {
-          return '★★★★★'
-          break
-        }
-        */
         break
       case 'rank7':
         p = 100 / 6
-        /*
-        if (point <= 0) {
-          return 'E'
-        } else if (point < p * 1) {
-          return 'D'
-        } else if (point < p * 2) {
-          return 'C'
-        } else if (point < p * 3) {
-          return 'B'
-        } else if (point < p * 4) {
-          return 'A'
-        } else if (point < p * 5) {
-          return 'S'
-        } else {
-          return 'SS'
-        }
-        */
         break
       case 'rank14':
         p = 100 / 13
-        /*
-        if (point <= 0) {
-          return 'E'
-        } else if (point < p * 1) {
-          return 'E+'
-        } else if (point < p * 2) {
-          return 'D'
-        } else if (point < p * 3) {
-          return 'D+'
-        } else if (point < p * 4) {
-          return 'C'
-        } else if (point < p * 5) {
-          return 'C+'
-        } else if (point < p * 6) {
-          return 'B'
-        } else if (point < p * 7) {
-          return 'B+'
-        } else if (point < p * 8) {
-          return 'A'
-        } else if (point < p * 9) {
-          return 'A+'
-        } else if (point < p * 10) {
-          return 'S'
-        } else if (point < p * 11) {
-          return 'S+'
-        } else {
-          return 'SS'
-        }
-        */
         break
       case 'score':
         if (point <= 0) {
@@ -194,5 +162,24 @@ export class ReviewFunc {
         return Math.floor(point)
     }
     return Math.ceil(point / p)
+  }
+
+  static calcAaverage (review: Review) {
+    let ave = 0
+    let sumWeight = 0
+    review.reviewFactorParams.forEach((param, index) => {
+      if (param.isPoint && index < review.reviewFactors.length) {
+        sumWeight += param.weight
+      }
+    })
+    review.reviewFactorParams.forEach((param, index) => {
+      if (param.isPoint && index < review.reviewFactors.length) {
+        const factor = review.reviewFactors[index]
+        if (factor.point !== undefined) {
+          ave += factor.point * param.weight / sumWeight
+        }
+      }
+    })
+    return ave
   }
 }
