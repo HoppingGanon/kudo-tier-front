@@ -1,11 +1,11 @@
 <template>
   <v-card width="100%" height="360px" >
-    <v-card-avatar>
-      <v-avatar size="80px">
-        <v-img :src="iconUrl" />
-      </v-avatar>
-    </v-card-avatar>
     <v-card-title>
+      <v-card-avatar>
+        <v-avatar size="80px">
+          <v-img :src="iconUrl" />
+        </v-avatar>
+      </v-card-avatar>
       {{ dispName }}
     </v-card-title>
     <v-card-text>

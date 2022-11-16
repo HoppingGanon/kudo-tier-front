@@ -5,7 +5,7 @@
       display-type="all"
       point-display-type="normal"
       width="100%"
-      min-height="200px"
+      min-height="720px"
       class="ma-3"
     />
   </v-container>

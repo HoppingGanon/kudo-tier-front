@@ -22,22 +22,22 @@ export const tier: Tier = {
       weight: 0
     },
     {
-      name: '100',
+      name: 'アクション要素',
       isPoint: true,
       weight: 3
     },
     {
-      name: '90',
+      name: 'コメディ要素',
       isPoint: true,
       weight: 3
     },
     {
-      name: '80',
+      name: '主人公の魅力',
       isPoint: true,
       weight: 3
     },
     {
-      name: '70',
+      name: '敵対組織の魅力',
       isPoint: true,
       weight: 3
     },

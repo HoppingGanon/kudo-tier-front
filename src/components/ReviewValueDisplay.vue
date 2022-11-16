@@ -1,9 +1,15 @@
 <template>
   <v-card v-if="pointType == 'stars'" fluid flat>
-    <v-icon v-for="n of point" :key="n" color="orange" dark> mdi-star </v-icon>
-    <v-icon v-for="n of (5 - point)" :key="n" color="black" dark> mdi-star </v-icon>
+    <span v-if="compact">
+      <v-icon color="orange" dark x-small> mdi-star </v-icon>
+      <span v-text="point"></span>
+    </span>
+    <span v-else>
+      <v-icon v-for="n of point" :key="n" color="orange" dark> mdi-star </v-icon>
+      <v-icon v-for="n of (5 - point)" :key="n" color="black" dark> mdi-star </v-icon>
+    </span>
   </v-card>
-  <v-card v-else-if="pointType == 'rank7'" :style="larger ? 'font-size: larger;' : ''" fluid flat>
+  <v-card v-else-if="pointType == 'rank7'" :class="'size-' + displaySize" fluid flat>
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank d">D</span>
     <span v-else-if="point == 2" class="rank c">C</span>
@@ -12,7 +18,7 @@
     <span v-else-if="point == 5" class="rank s">S</span>
     <span v-else-if="point > 5" class="rank ss">SS</span>
   </v-card>
-  <v-card v-else-if="pointType == 'rank14'" :style="larger ? 'font-size: larger;' : ''" fluid flat>
+  <v-card v-else-if="pointType == 'rank14'" :class="'size-' + displaySize" fluid flat>
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank e">E+</span>
     <span v-else-if="point == 2" class="rank d">D</span>
@@ -28,10 +34,10 @@
     <span v-else-if="point == 12" class="rank ss">SS</span>
     <span v-else-if="point > 12" class="rank ss">SS+</span>
   </v-card>
-  <v-card v-else-if="pointType == 'score'" class="bar" :style="calcBarStyle(point, 10)" fluid flat>
+  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 10)" fluid flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" class="bar" :style="calcBarStyle(point, 100)" fluid flat>
+  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 100)" fluid flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
   <v-card v-else-if="pointType == 'unlimited'" fluid flat>
@@ -40,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactor, ReviewPointType, ReviewPointDisplayType, ReviewDisplayType, ReviewFactorParam, ReviewFunc } from '@/common/review'
+import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
 
 export default defineComponent({
@@ -55,8 +61,13 @@ export default defineComponent({
       type: Object as PropType<ReviewPointType>,
       required: true
     },
-    /// ランク表示の際に大きな文字で表示する
-    larger: {
+    displaySize: {
+      /// ランク表示の際の表示サイズを変更
+      type: Object as PropType<PointDisplaySize>,
+      default: 'normal' as PointDisplaySize
+    },
+    compact: {
+      /// ランク表示をコンパクトに表示する
       type: Object as PropType<boolean>,
       default: false as boolean
     }
@@ -145,6 +156,14 @@ export default defineComponent({
 .bar{
   background: linear-gradient(90deg, rgb(0, 255, 255, 0.5) 0% 0%, rgb(127, 127, 127, 0.5) 0% 100%);
   transition: all 1s both;
+}
+
+.size-normal {}
+.size-larger {
+  font-size: larger;
+}
+.size-smaller {
+  font-size: smaller;
 }
 
 </style>

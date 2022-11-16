@@ -22,7 +22,8 @@
     "vue-axios": "^3.4.1",
     "vue-router": "^4.0.3",
     "vue-toast-notification": "3.0",
-    "vuetify": "^3.0.0-beta.0",
+    "vue3-easy-data-table": "^1.5.14",
+    "vuetify": "^3.0.1",
     "vuex": "^4.0.0",
     "vuex-persistedstate": "^4.1.0",
     "webfontloader": "^1.0.0"

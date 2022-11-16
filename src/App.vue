@@ -52,34 +52,26 @@
         <v-row style="min-height: 300px;">
           <v-list class="ma-3">
             <v-list-item v-if="hasSession" @click="goHome">
-              <v-list-item-icon class="mr-5">
-                mdi-home-account
-              </v-list-item-icon>
               <v-list-item-title>
+                <v-icon class="mr-3">mdi-home-account</v-icon>
                 ホーム
               </v-list-item-title>
             </v-list-item>
             <v-list-item v-else @click="goLogin">
-              <v-list-item-icon class="mr-5">
-                mdi-login
-              </v-list-item-icon>
               <v-list-item-title>
+                <v-icon class="mr-3">mdi-login</v-icon>
                 ログイン/登録
               </v-list-item-title>
             </v-list-item>
             <v-list-item v-if="hasSession">
-              <v-list-item-icon class="mr-5">
-                mdi-table-account
-              </v-list-item-icon>
               <v-list-item-title>
+                <v-icon class="mr-3">mdi-table-account</v-icon>
                 レビュー一覧
               </v-list-item-title>
             </v-list-item>
             <v-list-item v-if="hasSession">
-              <v-list-item-icon class="mr-5">
-                mdi-cog-outline
-              </v-list-item-icon>
               <v-list-item-title>
+                <v-icon class="mr-3">mdi-cog-outline</v-icon>
                 設定
               </v-list-item-title>
             </v-list-item>

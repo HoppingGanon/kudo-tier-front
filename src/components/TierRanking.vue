@@ -1,24 +1,49 @@
 <template>
-  <v-card>
-    <v-data-table
+  <v-card flat>
+    <EasyDataTable
       :headers="headers"
-      :items="[]"
+      :items="reviewValues"
       :items-per-page="50"
-      class="elevation-1"
-    ></v-data-table>
-    {{ headers }}<br /><br />
-    {{ reviewValues }}
+    >
+    <template v-slot:body="pageItems">
+      <tr v-for="row,i in pageItems" :key="i" class="text-caption">
+        <td v-for="col,j in row" :key="j">
+          <v-card v-if="'' + j == 'name'" v-text="col" flat></v-card>
+          <review-value-display
+            v-else-if="'' + j == 'ave'"
+            style="text-align: center;"
+            :compact="true"
+            :point-type="'rank7'"
+            :value="col"
+          />
+          <v-card v-else-if="propsDic['' + j]" style="text-align: center;" flat>
+            <v-card v-if="propsDic['' + j].isPoint" flat>
+              <review-value-display
+                :compact="true"
+                :point-type="'point'"
+                :value="col"
+              />
+            </v-card>
+            <span v-else v-text="col"></span>
+          </v-card>
+        </td>
+      </tr>
+    </template>
+  </EasyDataTable>
   </v-card>
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc } from '@/common/review'
 import { computed } from '@vue/reactivity'
 import { defineComponent, PropType } from 'vue'
+import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'TierRanking',
-  components: {},
+  components: {
+    ReviewValueDisplay
+  },
   props: {
     reviews: {
       type: Object as PropType<Review[]>,
@@ -39,17 +64,23 @@ export default defineComponent({
       const headersObj: DataTableHeader[] = [
         {
           text: '名称',
-          value: 'name'
+          value: 'name',
+          sortable: true
+        },
+        {
+          text: '総合',
+          value: 'ave',
+          sortable: true
         }
       ]
       props.params.forEach((header) => {
         headersObj.push({
           text: header.name,
-          value: 'h' + i
+          value: 'h' + i,
+          sortable: true
         })
         i++
       })
-      console.log(headersObj)
       return headersObj
     })
 
@@ -63,7 +94,8 @@ export default defineComponent({
         reviews.forEach((review) => {
           let i = 0
           const rankingRow: Dictionary<string | number> = {
-            name: review.name
+            name: review.name,
+            ave: ReviewFunc.calcAaverage(review)
           }
           review.reviewFactors.forEach((factor) => {
             // ヘッダの行列数と突合
@@ -78,14 +110,25 @@ export default defineComponent({
             i++
           })
           rankingTable.push(rankingRow)
-          console.log(rankingTable)
         })
       }
       return rankingTable
     })
+
+    const propsDic = computed(() => {
+      const list: Dictionary<ReviewFactorParam> = {}
+      let i = 0
+      props.params.forEach((param) => {
+        list['h' + i] = param
+        i++
+      })
+      return list
+    })
+
     return {
       headers,
-      reviewValues
+      reviewValues,
+      propsDic
     }
   }
 })

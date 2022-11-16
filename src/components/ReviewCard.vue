@@ -81,7 +81,7 @@
             <review-value-display
               :point-type="review.pointType"
               :value="average"
-              :larger="true"
+              display-size="larger"
             />
           </v-card>
         </v-col>
@@ -131,7 +131,7 @@ import CommonApi from '@/common/commonapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
-import ReviewValueDisplay from './ReviewValueDisplay.vue'
+import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'ReviewCard',

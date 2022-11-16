@@ -51,6 +51,9 @@ export interface ReviewFactor {
   point?: number
 }
 
+/** レビュー評点の表示サイズ */
+export type PointDisplaySize = 'smaller' | 'normal' | 'larger'
+
 /** レビュー全体 */
 export interface Review {
   /** review識別ID */
