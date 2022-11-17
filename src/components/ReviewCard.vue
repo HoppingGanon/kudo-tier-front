@@ -9,8 +9,6 @@
             :disp-name="review.userName"
             :user-link="baseLink + review.userId"
             :last-write-time="lastWriteTime"
-            :pointType="review.pointType"
-            @updatePointType="updatePointTypeEm"
           />
         </v-col>
       </v-row>
@@ -26,12 +24,12 @@
         <v-col cols="10">
           <v-card flat>
             <p class="mt-2">
-              <span v-if="review.pointType == 'stars'">総合：</span>
-              <span v-else-if="review.pointType == 'rank7'">総合ランク：</span>
-              <span v-else-if="review.pointType == 'rank14'">総合ランク：</span>
-              <span v-else-if="review.pointType == 'score'">総合スコア：</span>
-              <span v-else-if="review.pointType == 'point'">総合点：</span>
-              <span v-else-if="review.pointType == 'unlimited'">合計：</span>
+              <span v-if="getPointType() == 'stars'">総合：</span>
+              <span v-else-if="getPointType() == 'rank7'">総合ランク：</span>
+              <span v-else-if="getPointType() == 'rank14'">総合ランク：</span>
+              <span v-else-if="getPointType() == 'score'">総合スコア：</span>
+              <span v-else-if="getPointType() == 'point'">総合点：</span>
+              <span v-else-if="getPointType() == 'unlimited'">合計：</span>
             </p>
           </v-card>
         </v-col>
@@ -64,8 +62,8 @@
                     v-for="(item, i) in displayTypes"
                     :key="i"
                   >
-                    <v-list-item-content @click="updatePointTypeEm(item)" class="cursor-pointer">
-                      <v-list-item-title v-if="item===review.pointType" class="strong" v-text="item"></v-list-item-title>
+                    <v-list-item-content @click="updatePointTypeProxy(item)" class="cursor-pointer">
+                      <v-list-item-title v-if="item === getPointType()" class="strong" v-text="item"></v-list-item-title>
                       <v-list-item-title v-else v-text="item"></v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -79,7 +77,14 @@
         <v-col>
           <v-card flat>
             <review-value-display
-              :point-type="review.pointType"
+              v-if="getPointType() === 'unlimited'"
+              :point-type="getPointType()"
+              :value="sum"
+              display-size="larger"
+            />
+            <review-value-display
+              v-else
+              :point-type="getPointType()"
               :value="average"
               display-size="larger"
             />
@@ -99,9 +104,9 @@
             :factors="review.reviewFactors"
             :display-type="displayType"
             :point-display-type="pointDisplayType"
-            :point-type="review.pointType"
+            :point-type="getPointType()"
             :review-factor-params="review.reviewFactorParams"
-            @update-point-type="updatePointTypeEm"
+            @update-point-type="updatePointTypeProxy"
           />
         </v-col>
       </v-row>
@@ -169,6 +174,11 @@ export default defineComponent({
     minHeight: {
       type: String,
       default: '100%'
+    },
+    /** ポイント表示方法を上書きする場合はこのpropを指定する */
+    pointType: {
+      type: Object as PropType<ReviewPointType>,
+      required: true
     }
   },
   emits: {
@@ -184,9 +194,13 @@ export default defineComponent({
     const average = computed(() => {
       return ReviewFunc.calcAaverage(props.review)
     })
+
+    const sum = computed(() => {
+      return ReviewFunc.calcSum(props.review)
+    })
     const displayTypes = ref(reviewPointTypeArray)
     const menu = ref(false)
-    const updatePointTypeEm = (pointType: ReviewPointType) => {
+    const updatePointTypeProxy = (pointType: ReviewPointType) => {
       emit('updatePointType', pointType)
       menu.value = false
     }
@@ -195,14 +209,20 @@ export default defineComponent({
 
     const expansion = ref(false)
 
+    const getPointType = () => {
+      return (props.pointType === undefined ? props.review.pointType : props.pointType)
+    }
+
     return {
       lastWriteTime,
       average,
+      sum,
       baseLink,
       expansion,
       displayTypes,
       menu,
-      updatePointTypeEm
+      updatePointTypeProxy,
+      getPointType
     }
   }
 })

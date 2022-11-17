@@ -27,6 +27,13 @@ export const reviewPointTypeArray = [
 /** レビューポイントの表現方法 */
 export type ReviewPointType = typeof reviewPointTypeArray[number]
 
+export const TierTableTypeArray = [
+  'ranking', 'pivot'
+] as const
+
+/** レビューポイントの表現方法 */
+export type TierTableType = typeof TierTableTypeArray[number]
+
 /** レビューの表示方法 */
 export type ReviewDisplayType = 'summary' | 'all'
 
@@ -102,8 +109,8 @@ export interface Tier {
 
   /** Tierの構成要素 */
   reviews: Review[]
-  /** レビューポイントの表示方法 */
-  reviewPointType :ReviewPointType
+  /** レビューポイントの表示方法->Get時にのみこのプロパティを含める */
+  // reviewPointType :ReviewPointType
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
 
@@ -170,6 +177,8 @@ export class ReviewFunc {
   static calcAaverage (review: Review) {
     let ave = 0
     let sumWeight = 0
+
+    // 重みの合計を算出
     review.reviewFactorParams.forEach((param, index) => {
       if (param.isPoint && index < review.reviewFactors.length) {
         sumWeight += param.weight
@@ -184,5 +193,26 @@ export class ReviewFunc {
       }
     })
     return ave
+  }
+
+  static calcSum (review: Review) {
+    let sum = 0
+    review.reviewFactorParams.forEach((param, index) => {
+      if (param.isPoint && index < review.reviewFactors.length) {
+        const factor = review.reviewFactors[index]
+        if (factor.point !== undefined) {
+          sum += factor.point
+        }
+      }
+    })
+    return sum
+  }
+
+  static getPointTypes (reviews: Review[]) : ReviewPointType[] {
+    const pointTypes: ReviewPointType[] = []
+    reviews.forEach((review) => {
+      pointTypes.push(review.pointType)
+    })
+    return pointTypes
   }
 }

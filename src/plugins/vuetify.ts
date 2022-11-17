@@ -12,6 +12,7 @@ const myCustomLightTheme = {
   colors: {
     primary: '#E91E63',
     secondary: '#FFC0F0',
+    thirdry: '#FFF0F7',
     accent: '#82B1FF',
     error: '#FF5252',
     info: '#2196F3',

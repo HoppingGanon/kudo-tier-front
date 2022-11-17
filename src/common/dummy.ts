@@ -14,7 +14,6 @@ export const tier: Tier = {
     }
   ],
   reviews: [],
-  reviewPointType: 'score',
   reviewFactorParams: [
     {
       name: '年代',
@@ -136,7 +135,7 @@ export const reviews: Review[] = [
         info: '備考あああああああああ'
       }
     ],
-    pointType: tier.reviewPointType,
+    pointType: 'point',
     sections: [
       {
         title: '最高のシーン',
@@ -180,8 +179,48 @@ export const reviews: Review[] = [
     title: 'review2',
     name: 'bbb',
     reviewFactorParams: tier.reviewFactorParams,
-    reviewFactors: [],
-    pointType: tier.reviewPointType,
+    reviewFactors: [
+      {
+        info: '1991年'
+      },
+      {
+        point: 0
+      },
+      {
+        point: 10
+      },
+      {
+        point: 20
+      },
+      {
+        point: 30
+      },
+      {
+        point: 40
+      },
+      {
+        point: 50
+      },
+      {
+        point: 60
+      },
+      {
+        point: 70
+      },
+      {
+        point: 80
+      },
+      {
+        point: 90
+      },
+      {
+        point: 100
+      },
+      {
+        info: '備考あああああああああ'
+      }
+    ],
+    pointType: 'point',
     sections: [],
     createAt: new Date('2022/07/10'),
     updateAt: new Date('2022/07/10')

@@ -9,6 +9,7 @@
           width="100%"
           :display-type="displayType"
           point-display-type="normal"
+          :point-type="index < pointTypes.length ? pointTypes[index] : 'point'"
           @update-point-type="updatePointTypeEm($event, index)"
           :no-change-point="noChangePoint"
         />
@@ -41,6 +42,11 @@ export default defineComponent({
     },
     displayType: {
       type: Object as PropType<ReviewDisplayType>,
+      required: true
+    },
+    /** ポイント表示方法を上書きする場合はこのpropを指定する */
+    pointTypes: {
+      type: Object as PropType<ReviewPointType[]>,
       required: true
     }
   },

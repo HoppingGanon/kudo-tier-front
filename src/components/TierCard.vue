@@ -9,7 +9,6 @@
             :disp-name="tier.userName"
             :user-link="baseLink + tier.userId"
             :last-write-time="lastWriteTime"
-            @updatePointType="updatePointTypeEm"
           />
         </v-col>
       </v-row>
@@ -37,6 +36,8 @@
           <tier-ranking
             :reviews="tier.reviews"
             :params="tier.reviewFactorParams"
+            :point-type="pointType"
+            @updatePointType="$emit('updatePointType', $event)"
           />
         </v-col>
       </v-row>
@@ -46,6 +47,7 @@
             :reviews="tier.reviews"
             :no-header="true"
             :no-change-point="true"
+            :point-types="pointTypes"
             display-type="all"
           />
         </v-col>
@@ -89,6 +91,10 @@ export default defineComponent({
     minHeight: {
       type: String,
       default: '100%'
+    },
+    pointType: {
+      type: Object as PropType<ReviewPointType>,
+      default: 'point' as ReviewPointType
     }
   },
   emits: {
@@ -96,21 +102,23 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true
   },
-  setup (props, { emit }) {
+  setup (props) {
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.tier.updateAt, true)
     })
-
-    const updatePointTypeEm = (value: ReviewPointType) => {
-      emit('updatePointType', value)
-    }
-
     const baseLink = (process.env.VUE_APP_BASE_URI as string) + '/home/'
+    const pointTypes = computed(() => {
+      const objs: ReviewPointType[] = []
+      props.tier.reviews.forEach(() => {
+        objs.push(props.pointType)
+      })
+      return objs
+    })
 
     return {
       lastWriteTime,
-      updatePointTypeEm,
-      baseLink
+      baseLink,
+      pointTypes
     }
   }
 })

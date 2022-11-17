@@ -40,6 +40,7 @@
               :review-factor-params="tier.reviewFactorParams"
               @update-point-type="updatePointType"
               display-type="summary"
+              :point-types="pointTypes"
             />
           </v-card>
         </v-card>
@@ -79,7 +80,7 @@ import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
 import ErrorCard from '@/components/ErrorCard.vue'
 import { useRoute } from 'vue-router'
-import { ReviewPointType } from '@/common/review'
+import { ReviewFunc, ReviewPointType } from '@/common/review'
 import { reviews as reviewsOrg, tier as tierOrg, tiers as tiersOrg } from '@/common/dummy'
 
 export default defineComponent({
@@ -126,6 +127,7 @@ export default defineComponent({
         reviews.value[index].pointType = value
       }
     }
+    const pointTypes = ref(ReviewFunc.getPointTypes(reviews.value))
 
     return {
       isNotFound,
@@ -135,7 +137,8 @@ export default defineComponent({
       reviews,
       tier,
       tiers,
-      updatePointType
+      updatePointType,
+      pointTypes
     }
   }
 })

@@ -2,6 +2,8 @@
   <v-container class="justify-center">
     <tier-card
       :tier="tierTest"
+      :point-type="pointType"
+      @update-point-type="updatePointType"
       display-type="all"
       point-display-type="normal"
       width="100%"
@@ -22,18 +24,20 @@ export default defineComponent({
   components: {
     TierCard
   },
-  props: { },
-  emits: {
-    updatePointType: (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewPointType) => true
-  },
+  props: {},
+  emits: { },
   setup () {
     // test
     const tierTest = ref(tierOrg)
+    const pointType = ref('point' as ReviewPointType)
+    const updatePointType = (v: ReviewPointType) => {
+      pointType.value = v
+    }
 
     return {
-      tierTest
+      tierTest,
+      pointType,
+      updatePointType
     }
   }
 })

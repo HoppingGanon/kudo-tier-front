@@ -23,8 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from 'vue'
-import { reviewPointTypeArray, ReviewPointType } from '@/common/review'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ReviewHeader',
@@ -45,9 +44,6 @@ export default defineComponent({
     iconUrl: {
       type: String,
       required: true
-    },
-    pointType: {
-      type: Object as PropType<ReviewPointType>
     }
   },
   emits: { },
