@@ -139,6 +139,16 @@ export interface DataTableHeader {
   sort?: (a: any, b: any) => number
 }
 
+/** Tierにおけるレビュー評点の表示についての分割数 */
+export const poitnTypeTierCountDic = {
+  stars: 6,
+  rank7: 7,
+  rank14: 14,
+  score: 10,
+  point: 10,
+  unlimited: 100
+}
+
 export class ReviewFunc {
   static getReviewDisp (point: number, type :ReviewPointType) : number {
     let p = 100

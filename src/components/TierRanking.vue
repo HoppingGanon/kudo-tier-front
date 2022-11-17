@@ -4,12 +4,13 @@
       color="secondary"
       dark
     >
+      <!-- 表示形式を変更したりするためのメニューバー -->
       <v-toolbar-title>
-        <v-menu v-model="menu">
+        <v-menu v-model="pointTypeMenu">
           <template v-slot:activator="{ isActive, props}">
             <v-icon
-              @click="menu = true"
-              class="cursor-pointer"
+              @click="pointTypeMenu = true"
+              class="cursor-pointer ml-1 mr-1"
               v-on="isActive"
               v-bind="props"
               >
@@ -41,6 +42,18 @@
             </v-list-item-group>
           </v-list>
         </v-menu>
+        <v-menu v-model="weightMenu" class="ml-1 mr-1">
+          <template v-slot:activator="{ isActive, props}">
+            <v-icon
+              @click="weightMenu = true"
+              class="cursor-pointer ml-1 mr-1"
+              v-on="isActive"
+              v-bind="props"
+              >
+              mdi-weight
+            </v-icon>
+          </template>
+        </v-menu>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <template v-slot:extension>
@@ -50,18 +63,19 @@
           <v-tab>
             ランキング
           </v-tab>
-          <v-tab>
+          <v-tab v-if="pointType !== 'unlimited'">
             ピボットTier
           </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
 
+    <!-- Tierランキング -->
     <EasyDataTable
       v-if="tab === 0"
       :headers="headers"
       :items="reviewValues"
-      :items-per-page="50"
+      :items-per-page="25"
     >
       <template v-slot:body="pageItems">
         <tr v-for="row,i in pageItems" :key="i" class="text-caption" :style="i % 2 === 0 ? rowColor : ''">
@@ -93,24 +107,56 @@
         </tr>
       </template>
     </EasyDataTable>
-    <v-card
-      v-if="tab === 1"
+
+    <!-- ピボットしたTier -->
+    <table
+      v-if="tab === 1 && pointType === 'point'"
+      class="ml-3 mr-3 mt-1 mb-1"
+      border="1"
       fluid
     >
-      <v-row>
-        <v-col cols="">
+      <tr v-for="i of poitnTypeTierCountDic[pointType]" :key="i">
+        <td>
+          <v-card width="160px" flat>
+            {{ (i-1)*10 }}～{{ i*10 }}
+          </v-card>
+        </td>
+        <td>
           a
-        </v-col>
-        <v-col>
-          a
-        </v-col>
-      </v-row>
-    </v-card>
+        </td>
+      </tr>
+    </table>
+    <table
+      v-else-if="tab === 1"
+      class="mb-1"
+      border="1"
+      style="border-color: lightgray;"
+      fluid
+    >
+      <tr v-for="i of poitnTypeTierCountDic[pointType]" :key="i" >
+        <td>
+          <v-card width="160px" flat>
+            <review-value-display
+              :point-type="pointType"
+              :value="(poitnTypeTierCountDic[pointType] - i) * (100 / (poitnTypeTierCountDic[pointType] - 1))"
+              display-size="larger"
+            />
+          </v-card>
+        </td>
+        <td>
+          <div v-for="j of 12" :key="j" style="display: inline-block;">
+            <v-card class="ma-1" width="64px" height="64px">
+              {{ j }}
+            </v-card>
+          </div>
+        </td>
+      </tr>
+    </table>
   </v-card>
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, TierTableType } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, poitnTypeTierCountDic } from '@/common/review'
 import { defineComponent, PropType, computed, ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import vuetify from '@/plugins/vuetify'
@@ -213,11 +259,12 @@ export default defineComponent({
     const rowColor = 'background: ' + vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry + ';'
 
     const tab = ref(0)
-    const menu = ref(false)
+    const pointTypeMenu = ref(false)
+    const weightMenu = ref(false)
 
     const updatePointTypeProxy = (pointType: ReviewPointType) => {
       emit('updatePointType', pointType)
-      menu.value = false
+      pointTypeMenu.value = false
     }
 
     return {
@@ -227,8 +274,10 @@ export default defineComponent({
       reviewPointTypeArray,
       rowColor,
       tab,
-      menu,
-      updatePointTypeProxy
+      pointTypeMenu,
+      weightMenu,
+      updatePointTypeProxy,
+      poitnTypeTierCountDic
     }
   }
 })

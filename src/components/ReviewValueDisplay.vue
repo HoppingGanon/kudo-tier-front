@@ -34,10 +34,10 @@
     <span v-else-if="point == 12" class="rank ss">SS</span>
     <span v-else-if="point > 12" class="rank ss">SS+</span>
   </v-card>
-  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 10)" fluid flat>
+  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 10)" min-width="100px" fluid flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 100)" fluid flat>
+  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 100)" min-width="100px" fluid flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
   <v-card v-else-if="pointType == 'unlimited'" fluid flat>
