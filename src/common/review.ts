@@ -1,12 +1,14 @@
+import CommonApi from './commonapi'
+
 /** レビュー構成要素のタイプ */
-export type ReviewFactorType = 'text' | 'twitterLink' | 'imageLink'
+export type ReviewParagraphType = 'text' | 'twitterLink' | 'imageLink'
 
 /**
  * セクションの構成要素
  */
 export interface ReviewParagraph {
   /** 要素のタイプ */
-  type: ReviewFactorType
+  type: ReviewParagraphType
   /** 構成要素の内容 */
   body: string
 }
@@ -18,7 +20,7 @@ export interface ReviewSection {
   /** セクションの見出し */
   title: string
   /** このセクションの構成要素 */
-  factors: ReviewParagraph[]
+  parags: ReviewParagraph[]
 }
 export const reviewPointTypeArray = [
   'stars', 'rank7', 'rank14', 'score', 'point', 'unlimited'
@@ -73,17 +75,20 @@ export interface Review {
   /** 投稿したユーザーのアイコンURL */
   userIconUrl: string
 
+  /** 親tier識別ID */
+  tierId: string
+
   /** レビューの表示タイトル */
   title: string
   /** 作品名や商品名 */
   name: string
-
-  /** レビュー評点に対する情報 */
-  reviewFactorParams: ReviewFactorParam[]
+  /** レビューのアイコンURL */
+  iconUrl: string
   /** レビュー評点 */
   reviewFactors: ReviewFactor []
 
-  pointType: ReviewPointType
+  /** レビューポイントの表示方法 レビュー単品でGetする際にのみ参照される */
+  pointType?: ReviewPointType
   sections: ReviewSection[]
   createAt: Date
   updateAt: Date
@@ -105,16 +110,15 @@ export interface Tier {
   name: string
 
   /** 本文 */
-  factors: ReviewParagraph[]
+  parags: ReviewParagraph[]
 
   /** Tierの構成要素 */
   reviews: Review[]
-  /** レビューポイントの表示方法->Get時にのみこのプロパティを含める */
-  // reviewPointType :ReviewPointType
+  /** レビューポイントの表示方法 */
+  pointType: ReviewPointType
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
 
-  pointType: ReviewPointType
   createAt: Date
   updateAt: Date
 
@@ -135,40 +139,50 @@ export interface DataTableHeader {
   class?: string | string[]
   cellClass?: string | string[]
   width?: string | number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filter?: (value: any, search: string, item: any) => boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sort?: (a: any, b: any) => number
 }
 
 /** Tierにおけるレビュー評点の表示についての分割数 */
-export const poitnTypeTierCountDic = {
+export const pointTypeTierCountDic = {
   stars: 6,
   rank7: 7,
   rank14: 14,
-  score: 10,
+  score: 11,
   point: 10,
-  unlimited: 100
+  unlimited: 1
+}
+
+/** Tierをピボット表示する際の情報 */
+export interface TierPivotInfomation {
+  iconUrl: string
+  reviewId: string
+  point: number
 }
 
 export class ReviewFunc {
   static getReviewDisp (point: number, type :ReviewPointType) : number {
-    let p = 100
+    let div = 100
     switch (type) {
       case 'stars':
-        p = 100 / 5
-        break
+        div = 100 / (pointTypeTierCountDic.stars - 1)
+        return CommonApi.constrain(Math.ceil(point / div), 0, pointTypeTierCountDic.stars - 1)
       case 'rank7':
-        p = 100 / 6
-        break
+        div = 100 / (pointTypeTierCountDic.rank7 - 1)
+        return CommonApi.constrain(Math.ceil(point / div), 0, pointTypeTierCountDic.rank7 - 1)
       case 'rank14':
-        p = 100 / 13
+        div = 100 / (pointTypeTierCountDic.rank14 - 1)
+        return CommonApi.constrain(Math.ceil(point / div), 0, pointTypeTierCountDic.rank14 - 1)
         break
       case 'score':
         if (point <= 0) {
           return 0
         } else if (point >= 100) {
-          return 10
+          return pointTypeTierCountDic.point
         } else {
-          return Math.floor(point / 10)
+          return Math.round(point / 10)
         }
       case 'point':
         if (point <= 0) {
@@ -176,25 +190,24 @@ export class ReviewFunc {
         } else if (point >= 100) {
           return 100
         } else {
-          return Math.floor(point)
+          return Math.round(point)
         }
       case 'unlimited':
-        return Math.floor(point)
+        return Math.round(point)
     }
-    return Math.ceil(point / p)
   }
 
-  static calcAaverage (review: Review) {
+  static calcAaverage (review: Review, reviewFactorParams: ReviewFactorParam[]) {
     let ave = 0
     let sumWeight = 0
 
     // 重みの合計を算出
-    review.reviewFactorParams.forEach((param, index) => {
+    reviewFactorParams.forEach((param, index) => {
       if (param.isPoint && index < review.reviewFactors.length) {
         sumWeight += param.weight
       }
     })
-    review.reviewFactorParams.forEach((param, index) => {
+    reviewFactorParams.forEach((param, index) => {
       if (param.isPoint && index < review.reviewFactors.length) {
         const factor = review.reviewFactors[index]
         if (factor.point !== undefined) {
@@ -205,9 +218,9 @@ export class ReviewFunc {
     return ave
   }
 
-  static calcSum (review: Review) {
+  static calcSum (review: Review, reviewFactorParams: ReviewFactorParam[]) {
     let sum = 0
-    review.reviewFactorParams.forEach((param, index) => {
+    reviewFactorParams.forEach((param, index) => {
       if (param.isPoint && index < review.reviewFactors.length) {
         const factor = review.reviewFactors[index]
         if (factor.point !== undefined) {
@@ -221,8 +234,40 @@ export class ReviewFunc {
   static getPointTypes (reviews: Review[]) : ReviewPointType[] {
     const pointTypes: ReviewPointType[] = []
     reviews.forEach((review) => {
-      pointTypes.push(review.pointType)
+      pointTypes.push(review.pointType || 'point')
     })
     return pointTypes
+  }
+
+  static makeTierPivot (reviews: Review[], reviewFactorParams: ReviewFactorParam[], tierId: string, pointType: ReviewPointType) {
+    const len = pointTypeTierCountDic[pointType] as number | undefined
+    const list: TierPivotInfomation[][] = []
+    if (len) {
+      // 器を用意する
+      const step = 100 / (len - 1)
+      for (let i = 0; i < len; i++) {
+        list.push([])
+      }
+
+      // ポイントの段階ごとにグルーピングする
+      reviews.forEach((review) => {
+        const point = ReviewFunc.calcAaverage(review, reviewFactorParams)
+        const index = list.length - Math.round(point / step) - 1
+
+        if (index >= 0 && index < list.length) {
+          list[index].push({
+            reviewId: review.reviewId,
+            point: ReviewFunc.calcAaverage(review, reviewFactorParams),
+            iconUrl: review.iconUrl
+          })
+        }
+      })
+    }
+
+    // ソートを実行する
+    list.forEach((v, i) => {
+      list[i] = v.sort((a, b) => a.point - b.point)
+    })
+    return list
   }
 }

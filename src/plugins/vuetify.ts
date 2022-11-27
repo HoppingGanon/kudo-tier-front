@@ -27,5 +27,8 @@ export default createVuetify({
     themes: {
       myCustomLightTheme
     }
+  },
+  options: {
+    customProperties: true
   }
 })

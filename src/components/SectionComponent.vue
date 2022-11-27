@@ -1,26 +1,26 @@
 <template>
-  <v-card v-if="displayType === 'all'" flat fluid>
+  <v-card v-if="displayType === 'all'" flat>
     <span class="break-word text-subtitle-1">
       <span v-text="section.title"></span>
     </span>
     <br/>
-    <span class="break-word" v-for="factor,index in section.factors" :key="index">
+    <span class="break-word" v-for="factor,index in section.parags" :key="index">
       <span v-if="factor.type === 'text'" v-text="factor.body"></span>
       <span v-if="factor.type === 'twitterLink'">
         <twitter-component :link="factor.body" />
       </span>
-      <br v-if="index !== (section.factors.length - 1)" />
+      <br v-if="index !== (section.parags.length - 1)" />
     </span>
   </v-card>
-  <v-card v-else-if="displayType === 'summary'" class="no-break" flat fluid >
+  <v-card v-else-if="displayType === 'summary'" class="no-break" flat>
     <span class="text-subtitle-1">
       <span v-text="section.title"></span>
     </span>
     <br />
-    <span v-if="section.factors.length > 0">
-      <span v-if="section.factors[0].type === 'text'" v-text="section.factors[0].body"></span>
-      <span v-if="section.factors[0].type === 'twitterLink'">
-        <twitter-component :link="section.factors[0].body" />
+    <span v-if="section.parags.length > 0">
+      <span v-if="section.parags[0].type === 'text'" v-text="section.parags[0].body"></span>
+      <span v-if="section.parags[0].type === 'twitterLink'">
+        <twitter-component :link="section.parags[0].body" />
       </span>
     </span>
   </v-card>

@@ -40,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/test',
     name: 'test',
     component: () => import('../views/TestView.vue')
+  },
+  {
+    path: '/tier-settings',
+    name: 'tier-settings',
+    component: () => import('../views/TierSettingsView.vue')
   }
 ]
 

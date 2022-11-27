@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-card v-if="displayType == 'all'" fluid flat max-width="640px">
+    <v-card v-if="displayType == 'all'" flat max-width="640px">
       <v-container>
         <!-- レビューの評点や文字列情報を表示 -->
         <v-row v-for="factor, index in factors" :key="index">
@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactor, ReviewPointType, ReviewPointDisplayType, ReviewDisplayType, ReviewFactorParam, ReviewFunc, reviewPointTypeArray } from '@/common/review'
-import { defineComponent, PropType, computed, ref } from 'vue'
+import { ReviewFactor, ReviewPointType, ReviewPointDisplayType, ReviewDisplayType, ReviewFactorParam, ReviewFunc } from '@/common/review'
+import { defineComponent, PropType } from 'vue'
 import ReviewValueDisplay from './ReviewValueDisplay.vue'
 
 export default defineComponent({
@@ -50,9 +50,9 @@ export default defineComponent({
     }
   },
   emits: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     updatePointType: (value: ReviewPointType) => true
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
     const getReviewDisp = ReviewFunc.getReviewDisp
 

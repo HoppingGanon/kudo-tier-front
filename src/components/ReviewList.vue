@@ -1,10 +1,11 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row v-for="review,index in reviews" :key="index">
       <v-col>
         <review-card
           :no-header="noHeader"
           :review="review"
+          :review-factor-params="makeParams(index)"
           min-height="200px"
           width="100%"
           :display-type="displayType"
@@ -21,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import ReviewCard from '@/components/ReviewCard.vue'
-import { Review, ReviewDisplayType, ReviewPointType } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewFactorParam, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'ReviewList',
@@ -32,12 +33,16 @@ export default defineComponent({
     reviews: {
       type: Object as PropType<Review[]>
     },
+    reviewFactorParams: {
+      type: Object as PropType<ReviewFactorParam[] | ReviewFactorParam[][]>,
+      required: true
+    },
     noHeader: {
-      type: Object as PropType<boolean>,
+      type: Boolean,
       default: false as boolean
     },
     noChangePoint: {
-      type: Object as PropType<boolean>,
+      type: Boolean,
       default: false as boolean
     },
     displayType: {
@@ -59,8 +64,22 @@ export default defineComponent({
     const updatePointTypeEm = (value: ReviewPointType, index: number) => {
       emit('updatePointType', value, index)
     }
+
+    const makeParams = (index: number) => {
+      if (props.reviewFactorParams.length > 0) {
+        if (props.reviewFactorParams[0] instanceof Array) {
+          if (index < props.reviewFactorParams.length) {
+            return props.reviewFactorParams[index] as ReviewFactorParam[]
+          }
+        } else {
+          return props.reviewFactorParams as ReviewFactorParam[]
+        }
+      }
+      return [] as ReviewFactorParam[]
+    }
     return {
-      updatePointTypeEm
+      updatePointTypeEm,
+      makeParams
     }
   }
 })

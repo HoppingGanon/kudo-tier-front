@@ -34,43 +34,10 @@
           </v-card>
         </v-col>
         <v-col cols="2" v-if="!noChangePoint">
-          <v-menu v-model="menu">
-            <template v-slot:activator="{ isActive, props}">
-              <v-icon
-                @click="menu = true"
-                class="cursor-pointer"
-                v-on="isActive"
-                v-bind="props"
-                >
-                mdi-cached
-              </v-icon>
-            </template>
-              <v-list>
-                <v-list-item-group
-                  v-model="displayTypes"
-                  color="primary"
-                >
-                  <v-list-item>
-                    <v-list-item-title>
-                      表示形式
-                    </v-list-item-title>
-                  </v-list-item>
-
-                  <v-divider></v-divider>
-
-                  <v-list-item
-                    v-for="(item, i) in displayTypes"
-                    :key="i"
-                  >
-                    <v-list-item-content @click="updatePointTypeProxy(item)" class="cursor-pointer">
-                      <v-list-item-title v-if="item === getPointType()" class="strong" v-text="item"></v-list-item-title>
-                      <v-list-item-title v-else v-text="item"></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-          </v-menu>
-
+          <point-type-selector
+            :model-value="pointType"
+            @update="$emit('updatePointType', $event)"
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -105,8 +72,8 @@
             :display-type="displayType"
             :point-display-type="pointDisplayType"
             :point-type="getPointType()"
-            :review-factor-params="review.reviewFactorParams"
-            @update-point-type="updatePointTypeProxy"
+            :review-factor-params="reviewFactorParams"
+            @update-point-type="$emit('updatePointType', $event)"
           />
         </v-col>
       </v-row>
@@ -131,12 +98,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, ref } from 'vue'
-import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewPointType, reviewPointTypeArray, ReviewFunc } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam } from '@/common/review'
 import CommonApi from '@/common/commonapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
+import PointTypeSelector from '@/components/PointTypeSelector.vue'
 
 export default defineComponent({
   name: 'ReviewCard',
@@ -144,11 +112,16 @@ export default defineComponent({
     SectionComponent,
     ReviewHeader,
     ReviewValues,
-    ReviewValueDisplay
+    ReviewValueDisplay,
+    PointTypeSelector
   },
   props: {
     review: {
       type: Object as PropType<Review>,
+      required: true
+    },
+    reviewFactorParams: {
+      type: Object as PropType<ReviewFactorParam[]>,
       required: true
     },
     displayType: {
@@ -160,11 +133,11 @@ export default defineComponent({
       default: false as boolean
     },
     noHeader: {
-      type: Object as PropType<boolean>,
+      type: Boolean,
       default: false as boolean
     },
     noChangePoint: {
-      type: Object as PropType<boolean>,
+      type: Boolean,
       default: false as boolean
     },
     width: {
@@ -186,31 +159,25 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true
   },
-  setup (props, { emit }) {
+  setup (props) {
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.review.updateAt, true)
     })
 
     const average = computed(() => {
-      return ReviewFunc.calcAaverage(props.review)
+      return ReviewFunc.calcAaverage(props.review, props.reviewFactorParams)
     })
 
     const sum = computed(() => {
-      return ReviewFunc.calcSum(props.review)
+      return ReviewFunc.calcSum(props.review, props.reviewFactorParams)
     })
-    const displayTypes = ref(reviewPointTypeArray)
-    const menu = ref(false)
-    const updatePointTypeProxy = (pointType: ReviewPointType) => {
-      emit('updatePointType', pointType)
-      menu.value = false
-    }
 
     const baseLink = (process.env.VUE_APP_BASE_URI as string) + '/home/'
 
     const expansion = ref(false)
 
     const getPointType = () => {
-      return (props.pointType === undefined ? props.review.pointType : props.pointType)
+      return props.pointType || props.review.pointType || 'point'
     }
 
     return {
@@ -219,9 +186,6 @@ export default defineComponent({
       sum,
       baseLink,
       expansion,
-      displayTypes,
-      menu,
-      updatePointTypeProxy,
       getPointType
     }
   }

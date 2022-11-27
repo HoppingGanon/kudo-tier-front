@@ -1,13 +1,13 @@
 import { Tier, Review } from './review'
 
 export const tier: Tier = {
-  tierId: 'aaa',
+  tierId: 'bbb',
   userName: 'usernameaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   userId: 'b15857216ec62d4f322a1dfa15df526a764d174ceddd0bff',
   userIconUrl: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
   pointType: 'stars',
   name: '映画ランキング',
-  factors: [
+  parags: [
     {
       type: 'text',
       body: 'ティアの説明'
@@ -88,12 +88,13 @@ export const tier: Tier = {
 export const reviews: Review[] = [
   {
     reviewId: 'aaa',
+    tierId: 'bbb',
     userName: 'usernameaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     userId: 'b15857216ec62d4f322a1dfa15df526a764d174ceddd0bff',
     userIconUrl: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
     title: 'このテスト映画は素晴らしいです',
     name: 'テストムービー',
-    reviewFactorParams: tier.reviewFactorParams,
+    iconUrl: 'https://placehold.jp/256x256.png',
     reviewFactors: [
       {
         info: '1990年'
@@ -139,7 +140,7 @@ export const reviews: Review[] = [
     sections: [
       {
         title: '最高のシーン',
-        factors: [
+        parags: [
           {
             type: 'text',
             body: '冒頭30秒からすでに最高の一言ですあああああああああああああああああああああああああああああああああ'
@@ -152,7 +153,7 @@ export const reviews: Review[] = [
       },
       {
         title: 'セクション2',
-        factors: [
+        parags: [
           {
             type: 'text',
             body: 'body1'
@@ -173,12 +174,13 @@ export const reviews: Review[] = [
   },
   {
     reviewId: 'bbb',
+    tierId: 'bbb',
     userName: 'username',
     userId: 'userid',
     userIconUrl: '',
     title: 'review2',
     name: 'bbb',
-    reviewFactorParams: tier.reviewFactorParams,
+    iconUrl: 'https://placehold.jp/240x240.png',
     reviewFactors: [
       {
         info: '1991年'

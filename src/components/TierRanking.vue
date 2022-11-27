@@ -5,81 +5,124 @@
       dark
     >
       <!-- 表示形式を変更したりするためのメニューバー -->
-      <v-toolbar-title>
-        <v-menu v-model="pointTypeMenu">
+      <v-toolbar-title v-if="!noMenuIcon">
+        <point-type-selector
+          :model-value="pointType"
+          @update="updatePointTypeProxy"
+        />
+
+        <v-dialog v-model="weightMenu" class="ml-1 mr-1">
           <template v-slot:activator="{ isActive, props}">
-            <v-icon
-              @click="pointTypeMenu = true"
-              class="cursor-pointer ml-1 mr-1"
-              v-on="isActive"
-              v-bind="props"
-              >
-              mdi-cached
-            </v-icon>
+            <v-btn icon flat @click="weightMenu = true" v-on="isActive" v-bind="props">
+              <v-icon>
+                mdi-weight
+              </v-icon>
+            </v-btn>
+          </template>
+
+          <v-card class="block-center" min-width="720px" min-height="40%" width="80%" max-height="80%">
+            <v-toolbar
+              color="secondary"
+              dark
+            >
+              <v-toolbar-title>
+                評価の重み
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon @click="weightMenu = false">
+                <v-icon>mdi-close-thick</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card class="pa-3 scroll" flat>
+              <weight-settings :params="params" />
+            </v-card>
+          </v-card>
+
+        </v-dialog>
+        <v-menu>
+          <template v-slot:activator="{ isActive, props}">
+            <v-btn icon flat @click="iconSizeMenu = true" v-on="isActive" v-bind="props">
+              <v-icon>
+                mdi-image-size-select-small
+              </v-icon>
+            </v-btn>
           </template>
           <v-list>
-            <v-list-item-group
-              v-model="reviewPointTypeArray"
-              color="primary"
+            <v-list-item>
+              <v-list-item-title>
+                アイコンサイズ
+              </v-list-item-title>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-list-item
+              v-for="(item, i) in iconSizeList"
+              :key="i"
             >
-              <v-list-item>
-                <v-list-item-title>
-                  表示形式
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-divider></v-divider>
-
-              <v-list-item
-                v-for="(item, i) in reviewPointTypeArray"
-                :key="i"
-              >
-                <v-list-item-content @click="updatePointTypeProxy(item)" :items="reviewPointTypeArray" class="cursor-pointer">
-                  <v-list-item-title v-if="item === pointType" class="strong" v-text="item"></v-list-item-title>
-                  <v-list-item-title v-else v-text="item"></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
+              <v-list-item-content @click="iconSize = item.value" :items="reviewPointTypeArray" class="cursor-pointer">
+                <v-list-item-title v-if="iconSize === item.value" class="strong" v-text="item.text"></v-list-item-title>
+                <v-list-item-title v-else v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </v-list>
         </v-menu>
-        <v-menu v-model="weightMenu" class="ml-1 mr-1">
-          <template v-slot:activator="{ isActive, props}">
-            <v-icon
-              @click="weightMenu = true"
-              class="cursor-pointer ml-1 mr-1"
-              v-on="isActive"
-              v-bind="props"
-              >
-              mdi-weight
-            </v-icon>
-          </template>
-        </v-menu>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs
           v-model="tab"
         >
-          <v-tab>
-            ランキング
-          </v-tab>
           <v-tab v-if="pointType !== 'unlimited'">
             ピボットTier
+          </v-tab>
+          <v-tab>
+            評点一覧
           </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
 
-    <!-- Tierランキング -->
+    <!-- ピボットしたTier -->
+    <!-- スコアやランク表示 -->
+    <div v-if="tabDisp() === 0">
+      <table
+        width="100%"
+        border="1"
+      >
+        <tr v-for="items, i in tierPivotList" :key="i">
+          <td :style="pivotColor" style="width: 0;white-space: nowrap;">
+            <v-span v-if="pointType === 'point'" :style="pivotColor">
+              {{ (9 - i)*10 }}点～{{ (10 - i)*10 }}点
+            </v-span>
+            <v-card v-else flat>
+              <review-value-display
+                :point-type="pointType"
+                :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
+                display-size="larger"
+                bar-width="64px"
+              />
+            </v-card>
+          </td>
+          <td :style="pivotColor" style="min-width: 80%;">
+            <div v-for="item,j in items" :key="j" style="display: inline-block;">
+              <v-card class="ma-1" :width="iconSize" :height="iconSize">
+                <v-img :src="item.iconUrl" />
+              </v-card>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Tierランキングテーブル -->
     <EasyDataTable
-      v-if="tab === 0"
+      v-if="tabDisp() === 1"
+      border-cell
       :headers="headers"
       :items="reviewValues"
       :items-per-page="25"
     >
       <template v-slot:body="pageItems">
         <tr v-for="row,i in pageItems" :key="i" class="text-caption" :style="i % 2 === 0 ? rowColor : ''">
-          <td v-for="col,j in row" :key="j">
+          <td v-for="col,j,k in row" :key="j" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'">
             <v-card v-if="'' + j == 'name'" v-text="col" flat :style="i % 2 === 0 ? rowColor : ''"></v-card>
             <v-card v-else-if="'' + j == 'ave'" flat :style="i % 2 === 0 ? rowColor : ''">
               <review-value-display
@@ -107,66 +150,31 @@
         </tr>
       </template>
     </EasyDataTable>
-
-    <!-- ピボットしたTier -->
-    <table
-      v-if="tab === 1 && pointType === 'point'"
-      class="ml-3 mr-3 mt-1 mb-1"
-      border="1"
-      fluid
-    >
-      <tr v-for="i of poitnTypeTierCountDic[pointType]" :key="i">
-        <td>
-          <v-card width="160px" flat>
-            {{ (i-1)*10 }}～{{ i*10 }}
-          </v-card>
-        </td>
-        <td>
-          a
-        </td>
-      </tr>
-    </table>
-    <table
-      v-else-if="tab === 1"
-      class="mb-1"
-      border="1"
-      style="border-color: lightgray;"
-      fluid
-    >
-      <tr v-for="i of poitnTypeTierCountDic[pointType]" :key="i" >
-        <td>
-          <v-card width="160px" flat>
-            <review-value-display
-              :point-type="pointType"
-              :value="(poitnTypeTierCountDic[pointType] - i) * (100 / (poitnTypeTierCountDic[pointType] - 1))"
-              display-size="larger"
-            />
-          </v-card>
-        </td>
-        <td>
-          <div v-for="j of 12" :key="j" style="display: inline-block;">
-            <v-card class="ma-1" width="64px" height="64px">
-              {{ j }}
-            </v-card>
-          </div>
-        </td>
-      </tr>
-    </table>
   </v-card>
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, poitnTypeTierCountDic } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType } from '@/common/review'
 import { defineComponent, PropType, computed, ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
+import WeightSettings from '@/components/WeightSettings.vue'
+import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import vuetify from '@/plugins/vuetify'
+import { tier } from '@/common/dummy'
 
 export default defineComponent({
   name: 'TierRanking',
   components: {
-    ReviewValueDisplay
+    ReviewValueDisplay,
+    WeightSettings,
+    PointTypeSelector
   },
   props: {
+    tierId: {
+      type: String,
+      required: true,
+      default: ''
+    },
     reviews: {
       type: Object as PropType<Review[]>,
       required: true,
@@ -181,6 +189,10 @@ export default defineComponent({
       type: Object as PropType<ReviewPointType>,
       required: true,
       default: 'point' as ReviewPointType
+    },
+    noMenuIcon: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -226,7 +238,7 @@ export default defineComponent({
           let i = 0
           const rankingRow: Dictionary<string | number> = {
             name: review.name,
-            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review) : ReviewFunc.calcAaverage(review)
+            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, tier.reviewFactorParams) : ReviewFunc.calcAaverage(review, tier.reviewFactorParams)
           }
           review.reviewFactors.forEach((factor) => {
             // ヘッダの行列数と突合
@@ -257,28 +269,88 @@ export default defineComponent({
     })
 
     const rowColor = 'background: ' + vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry + ';'
+    const pivotColor = ''
 
     const tab = ref(0)
-    const pointTypeMenu = ref(false)
     const weightMenu = ref(false)
+    const iconSizeMenu = ref(false)
+
+    const tabDisp = () => {
+      return props.pointType !== 'unlimited' ? tab.value : 1
+    }
 
     const updatePointTypeProxy = (pointType: ReviewPointType) => {
       emit('updatePointType', pointType)
-      pointTypeMenu.value = false
+      if (pointType === 'unlimited') {
+        tab.value = 1
+      }
     }
 
+    const tierPivotList = computed(() => {
+      const val = ReviewFunc.makeTierPivot(tier.reviews, tier.reviewFactorParams, tier.tierId, props.pointType)
+      return val
+    })
+
+    const iconSize = ref('64px')
+    const iconSizeList = [
+      {
+        text: '最小',
+        value: '24px'
+      },
+      {
+        text: '小',
+        value: '32px'
+      },
+      {
+        text: '普通',
+        value: '48px'
+      },
+      {
+        text: '大',
+        value: '64px'
+      },
+      {
+        text: '特大',
+        value: '96px'
+      }
+    ]
+
     return {
+      /** ヘッダー情報を加工して列挙した配列 */
       headers,
+      /** 評価情報をヘッダーの項目名をキーに辞書としたものの配列 */
       reviewValues,
+      /** ヘッダー項目をヘッダー項目名をキーに辞書としたもの */
       propsDic,
+      /** レビュー評点表示方法を並べた配列 */
       reviewPointTypeArray,
+      /** 行の色を含んだスタイル */
       rowColor,
+      /** ピボットテーブルのスタイル */
+      pivotColor,
+      /** tabの表示情報(0...ピボットTier, 1...評点一覧) */
       tab,
-      pointTypeMenu,
+      /** unlimited状態を加味したtabの表示情報(0...ピボットTier, 1...評点一蘭) */
+      tabDisp,
+      /** 重み情報のダイアログ表示フラグ */
       weightMenu,
+      /** アイコンサイズ変更メニューの表示フラグ */
+      iconSizeMenu,
+      /** ポイント表示方法のイベント */
       updatePointTypeProxy,
-      poitnTypeTierCountDic
+      /** tierの情報からピボットテーブルを作成する関数(ポイント表示方法が変わる度に再計算する) */
+      tierPivotList,
+      /** tierピボットの表示サイズ */
+      iconSize,
+      /** tierピボットの表示サイズリスト */
+      iconSizeList
     }
   }
 })
 </script>
+
+<style scoped>
+.b-right {
+  border-right: 1px solid #D3D3D3;
+}
+</style>

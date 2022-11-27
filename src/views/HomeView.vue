@@ -121,13 +121,15 @@ export default defineComponent({
     const tier = ref(tierOrg)
     const tiers = ref(tiersOrg)
 
+    // ポイント表示方法のリスト
+    const pointTypes = ref(ReviewFunc.getPointTypes(reviews.value))
+
     // ポイント表示方法の切り替えを子コンポーネントに提供する
     const updatePointType = (value: ReviewPointType, index: number) => {
       if (index >= 0 && index < reviews.value.length) {
-        reviews.value[index].pointType = value
+        pointTypes.value[index] = value
       }
     }
-    const pointTypes = ref(ReviewFunc.getPointTypes(reviews.value))
 
     return {
       isNotFound,

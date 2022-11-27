@@ -1,6 +1,6 @@
 <template>
   <v-card :width="width" :min-height="minHeight">
-    <v-container>
+    <v-container fluid>
       <v-row class="align-center">
         <v-col>
           <review-header
@@ -20,7 +20,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-card v-for="factor, index in tier.factors" :key="index" flat  class="ma-3">
+        <v-card v-for="factor, index in tier.parags" :key="index" flat  class="ma-3">
           <span v-if="factor.type === 'text'" v-text="factor.body"></span>
         </v-card>
       </v-row>
@@ -34,9 +34,11 @@
       <v-row v-if="displayType === 'all'">
         <v-col>
           <tier-ranking
+            :tier-id="tier.tierId"
             :reviews="tier.reviews"
             :params="tier.reviewFactorParams"
             :point-type="pointType"
+            :no-menu-icon="noMenuIcon"
             @updatePointType="$emit('updatePointType', $event)"
           />
         </v-col>
@@ -45,6 +47,7 @@
         <v-col>
           <review-list
             :reviews="tier.reviews"
+            :review-factor-params="tier.reviewFactorParams"
             :no-header="true"
             :no-change-point="true"
             :point-types="pointTypes"
@@ -81,7 +84,11 @@ export default defineComponent({
       required: true
     },
     noHeader: {
-      type: Object as PropType<boolean>,
+      type: Boolean,
+      default: false as boolean
+    },
+    noMenuIcon: {
+      type: Boolean,
       default: false as boolean
     },
     width: {

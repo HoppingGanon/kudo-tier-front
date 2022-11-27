@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="pointType == 'stars'" fluid flat>
+  <v-card v-if="pointType == 'stars'" flat>
     <span v-if="compact">
       <v-icon color="orange" dark x-small> mdi-star </v-icon>
       <span v-text="point"></span>
@@ -9,7 +9,7 @@
       <v-icon v-for="n of (5 - point)" :key="n" color="black" dark> mdi-star </v-icon>
     </span>
   </v-card>
-  <v-card v-else-if="pointType == 'rank7'" :class="'size-' + displaySize" fluid flat>
+  <v-card v-else-if="pointType == 'rank7'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" flat>
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank d">D</span>
     <span v-else-if="point == 2" class="rank c">C</span>
@@ -18,7 +18,7 @@
     <span v-else-if="point == 5" class="rank s">S</span>
     <span v-else-if="point > 5" class="rank ss">SS</span>
   </v-card>
-  <v-card v-else-if="pointType == 'rank14'" :class="'size-' + displaySize" fluid flat>
+  <v-card v-else-if="pointType == 'rank14'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" flat>
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank e">E+</span>
     <span v-else-if="point == 2" class="rank d">D</span>
@@ -34,13 +34,13 @@
     <span v-else-if="point == 12" class="rank ss">SS</span>
     <span v-else-if="point > 12" class="rank ss">SS+</span>
   </v-card>
-  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 10)" min-width="100px" fluid flat>
+  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 10)" :width="barWidth" flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 100)" min-width="100px" fluid flat>
+  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 100)" :width="barWidth" flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'unlimited'" fluid flat>
+  <v-card v-else-if="pointType == 'unlimited'" :width="barWidth" flat>
     <span class="ml-1" v-text="point"></span>
   </v-card>
 </template>
@@ -53,6 +53,7 @@ export default defineComponent({
   name: 'ReviewValueStars',
   components: {},
   props: {
+    /** 評価ポイントを指定する(元の数値) */
     value: {
       type: Number,
       required: true
@@ -68,8 +69,12 @@ export default defineComponent({
     },
     compact: {
       /// ランク表示をコンパクトに表示する
-      type: Object as PropType<boolean>,
+      type: Boolean,
       default: false as boolean
+    },
+    barWidth: {
+      type: Object as PropType<number | string | undefined>,
+      default: undefined
     }
   },
   setup (props) {
@@ -158,7 +163,6 @@ export default defineComponent({
   transition: all 1s both;
 }
 
-.size-normal {}
 .size-larger {
   font-size: larger;
 }

@@ -60,13 +60,7 @@ export default class CommonApi {
    * @returns 範囲内におさまる数値
    */
   static constrain (n: number, low: number, high: number) : number {
-    if (n < low) {
-      return low
-    } else if (n > high) {
-      return high
-    } else {
-      return n
-    }
+    return Math.max(low, Math.min(high, n))
   }
 
   /**
