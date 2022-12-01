@@ -36,6 +36,7 @@ export default defineComponent({
       userIconUrl: '',
       pointType: 'stars',
       name: '',
+      imageUrl: 'https://placehold.jp/240x240.png',
       parags: [
         {
           type: 'text',
@@ -49,17 +50,27 @@ export default defineComponent({
           userName: '',
           userId: '',
           userIconUrl: '',
-          title: '',
-          name: 'サンプルレビュー1',
+          title: 'レビュー1',
+          name: 'サンプル',
           iconUrl: 'https://placehold.jp/256x256.png',
           reviewFactors: [
             {
               info: '',
-              point: 50
+              point: Math.round(Math.random() * 100)
             }
           ],
           pointType: undefined,
-          sections: [],
+          sections: [
+            {
+              title: 'これはサンプルです',
+              parags: [
+                {
+                  type: 'text',
+                  body: 'これはサンプルのレビューです。見た目の例として、各項目にランダムな評価がついています。'
+                }
+              ]
+            }
+          ],
           createAt: new Date('1970/01/01'),
           updateAt: new Date('1970/01/01')
         },
@@ -69,13 +80,13 @@ export default defineComponent({
           userName: '',
           userId: '',
           userIconUrl: '',
-          title: '',
-          name: 'サンプルレビュー2',
+          title: 'レビュー2',
+          name: 'サンプル',
           iconUrl: 'https://placehold.jp/256x256.png',
           reviewFactors: [
             {
               info: '',
-              point: 50
+              point: Math.round(Math.random() * 100)
             }
           ],
           pointType: undefined,
@@ -88,7 +99,7 @@ export default defineComponent({
         {
           name: '',
           isPoint: true,
-          weight: 0
+          weight: 50
         }
       ],
       createAt: new Date('1970/01/01'),
@@ -116,17 +127,29 @@ export default defineComponent({
         tier.value.reviewFactorParams[index].weight = value
       }
     }
+
     const addWeightItem = () => {
       tier.value.reviewFactorParams.push({
         name: '',
         isPoint: true,
         weight: 50
       })
+      tier.value.reviews.forEach((review) => {
+        review.reviewFactors.push({
+          point: Math.round(Math.random() * 100),
+          info: 'サンプル情報' + review.reviewFactors.length
+        })
+      })
     }
     const removeWeightItem = (index: number) => {
       if (index < tier.value.reviewFactorParams.length) {
         tier.value.reviewFactorParams.splice(index, 1)
       }
+      tier.value.reviews.forEach((review) => {
+        if (index < review.reviewFactors.length) {
+          review.reviewFactors.splice(index, 1)
+        }
+      })
     }
     const addParagItem = (type: ReviewParagraphType) => {
       tier.value.parags.push({

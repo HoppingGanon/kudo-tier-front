@@ -20,14 +20,22 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-card v-for="factor, index in tier.parags" :key="index" flat  class="ma-3">
-          <span v-if="factor.type === 'text'" v-text="factor.body"></span>
-        </v-card>
+        <v-col>
+          <v-img :src="tier.imageUrl" max-height="25vh" width="auto" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <section-component
+            :section="section"
+            display-type="all"
+          />
+        </v-col>
       </v-row>
       <v-row v-if="displayType === 'all'">
         <v-col>
           <v-card flat>
-            <v-divider/>
+            <v-divider />
           </v-card>
         </v-col>
       </v-row>
@@ -61,18 +69,20 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
-import { ReviewDisplayType, ReviewPointType, Tier } from '@/common/review'
+import { ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, Tier } from '@/common/review'
 import CommonApi from '@/common/commonapi'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewList from '@/components/ReviewList.vue'
-import TierRanking from './TierRanking.vue'
+import TierRanking from '@/components/TierRanking.vue'
+import SectionComponent from '@/components/SectionComponent.vue'
 
 export default defineComponent({
   name: 'TierCard',
   components: {
     ReviewHeader,
     ReviewList,
-    TierRanking
+    TierRanking,
+    SectionComponent
   },
   props: {
     tier: {
@@ -122,10 +132,27 @@ export default defineComponent({
       return objs
     })
 
+    const reviewFactorParamsList = computed(() => {
+      const objs: ReviewFactorParam[][] = []
+      props.tier.reviews.forEach(() => {
+        objs.push(props.tier.reviewFactorParams)
+      })
+      return objs
+    })
+
+    const section = computed(() => {
+      return {
+        title: '',
+        parags: props.tier.parags
+      } as ReviewSection
+    })
+
     return {
       lastWriteTime,
       baseLink,
-      pointTypes
+      pointTypes,
+      reviewFactorParamsList,
+      section
     }
   }
 })

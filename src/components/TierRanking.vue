@@ -115,6 +115,7 @@
     <!-- Tierランキングテーブル -->
     <EasyDataTable
       v-if="tabDisp() === 1"
+      header-text-direction="center"
       border-cell
       :headers="headers"
       :items="reviewValues"
@@ -160,7 +161,6 @@ import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import vuetify from '@/plugins/vuetify'
-import { tier } from '@/common/dummy'
 
 export default defineComponent({
   name: 'TierRanking',
@@ -238,7 +238,7 @@ export default defineComponent({
           let i = 0
           const rankingRow: Dictionary<string | number> = {
             name: review.name,
-            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, tier.reviewFactorParams) : ReviewFunc.calcAaverage(review, tier.reviewFactorParams)
+            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params)
           }
           review.reviewFactors.forEach((factor) => {
             // ヘッダの行列数と突合
@@ -287,7 +287,7 @@ export default defineComponent({
     }
 
     const tierPivotList = computed(() => {
-      const val = ReviewFunc.makeTierPivot(tier.reviews, tier.reviewFactorParams, tier.tierId, props.pointType)
+      const val = ReviewFunc.makeTierPivot(props.reviews, props.params, props.tierId, props.pointType)
       return val
     })
 

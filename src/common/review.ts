@@ -108,6 +108,8 @@ export interface Tier {
 
   /** Tierの名称 */
   name: string
+  /** TierのアイコンURL */
+  imageUrl: string
 
   /** 本文 */
   parags: ReviewParagraph[]
@@ -164,18 +166,20 @@ export interface TierPivotInfomation {
 
 export class ReviewFunc {
   static getReviewDisp (point: number, type :ReviewPointType) : number {
+    if (!point) {
+      return 0
+    }
     let div = 100
     switch (type) {
       case 'stars':
         div = 100 / (pointTypeTierCountDic.stars - 1)
-        return CommonApi.constrain(Math.ceil(point / div), 0, pointTypeTierCountDic.stars - 1)
+        return CommonApi.constrain(Math.round(point / div), 0, pointTypeTierCountDic.stars - 1)
       case 'rank7':
         div = 100 / (pointTypeTierCountDic.rank7 - 1)
-        return CommonApi.constrain(Math.ceil(point / div), 0, pointTypeTierCountDic.rank7 - 1)
+        return CommonApi.constrain(Math.round(point / div), 0, pointTypeTierCountDic.rank7 - 1)
       case 'rank14':
         div = 100 / (pointTypeTierCountDic.rank14 - 1)
-        return CommonApi.constrain(Math.ceil(point / div), 0, pointTypeTierCountDic.rank14 - 1)
-        break
+        return CommonApi.constrain(Math.round(point / div), 0, pointTypeTierCountDic.rank14 - 1)
       case 'score':
         if (point <= 0) {
           return 0
@@ -252,6 +256,7 @@ export class ReviewFunc {
       // ポイントの段階ごとにグルーピングする
       reviews.forEach((review) => {
         const point = ReviewFunc.calcAaverage(review, reviewFactorParams)
+        // rankやscoreについては、getReviewDisp()の機能と同様
         const index = list.length - Math.round(point / step) - 1
 
         if (index >= 0 && index < list.length) {

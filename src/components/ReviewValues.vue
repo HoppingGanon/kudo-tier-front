@@ -1,20 +1,32 @@
 <template>
-  <v-card flat>
-    <v-card v-if="displayType == 'all'" flat max-width="640px">
-      <v-container>
-        <!-- レビューの評点や文字列情報を表示 -->
-        <v-row v-for="factor, index in factors" :key="index">
-          <v-col v-if="index < reviewFactorParams.length" style="text-align: end;" class="no-break">
-            <span v-if="index < reviewFactorParams.length" v-text="reviewFactorParams[index].name"></span>
-          </v-col>
-          <v-col v-if="index < reviewFactorParams.length">
-            <review-value-display v-if="reviewFactorParams[index].isPoint && factor.point !== undefined" :value="factor.point" :point-type="pointType" />
-            <span v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined" class="break-word" v-text="factor.info"></span>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-  </v-card>
+  <v-container fluid>
+    <!-- レビューの評点や文字列情報を表示 -->
+    <v-row v-for="factor, index in factors" :key="index" dense>
+      <v-col
+        v-if="index < reviewFactorParams.length"
+        style="text-align: end;"
+        class="no-break"
+        cols="6"
+        sm="5"
+        md="4"
+        lg="3"
+        xl="2"
+      >
+        <span v-if="index < reviewFactorParams.length" v-text="reviewFactorParams[index].name"></span>
+      </v-col>
+      <v-col
+        v-if="index < reviewFactorParams.length"
+        cols="6"
+        sm="7"
+        md="8"
+        lg="9"
+        xl="10"
+      >
+        <review-value-display v-if="reviewFactorParams[index].isPoint && factor.point !== undefined" :value="factor.point" :point-type="pointType" />
+        <span v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined" class="break-word" v-text="factor.info"></span>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">

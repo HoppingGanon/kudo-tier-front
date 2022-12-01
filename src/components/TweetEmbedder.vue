@@ -3,19 +3,20 @@
     <v-row>
       <v-col cols="12" sm="5" md="4" lg="3" xl="3">
         <twitter-component
-          :link="modelValue"
+          :link="twitterLink"
         />
       </v-col>
-      <v-col col="10" sm="6" md="7" lg="6" xl="5">
+      <v-col col="10" sm="6" md="7" lg="8" xl="8">
         <v-text-field
           label="ツイートリンク"
           hint="埋め込みたいツイートのリンクを指定してください。"
           :model-value="modelValue"
-          @update:model-value="$emit('update', $event)"
+          @update:model-value="updateProxy"
+          :rules="rules ? rules.concat(linkrule) : linkrule"
         />
       </v-col>
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-btn icon flat>
+        <v-btn icon flat @click="$emit('remove')">
           <v-icon>
             mdi-close
           </v-icon>
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import TwitterComponent from '@/components/TwitterComponent.vue'
 
 export default defineComponent({
@@ -38,15 +39,44 @@ export default defineComponent({
     modelValue: {
       type: String,
       default: ''
+    },
+    rules: {
+      type: Object as PropType<((v: string) => string | boolean)[]>,
+      default: undefined
     }
   },
   emits: {
     update: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: string) => true
+      value: string) => true,
+    remove: () => true
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () { }
+  setup (props, { emit }) {
+    const twitterLink = ref(props.modelValue)
+
+    /*
+     * リンクを更新した際、2秒間入力がなかった場合にのみ、Twitterに対してGetを行うように調整
+     */
+    const updateProxy = (value: string) => {
+      const preLink = value
+      setTimeout(() => {
+        if (preLink === props.modelValue) {
+          twitterLink.value = props.modelValue
+        }
+      }, 2000)
+      emit('update', value)
+    }
+
+    const linkReg = /^https:\/\/twitter\.com\/.*/
+    const linkrule = [(v: string) => {
+      return linkReg.test(v) || '不正なリンクです'
+    }]
+    return {
+      twitterLink,
+      updateProxy,
+      linkrule
+    }
+  }
 })
 </script>
 

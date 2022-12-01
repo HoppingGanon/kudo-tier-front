@@ -1,9 +1,9 @@
 <template>
   <v-card v-if="displayType === 'all'" flat>
-    <span class="break-word text-subtitle-1">
+    <span v-if="section.title" class="break-word text-subtitle-1">
       <span v-text="section.title"></span>
     </span>
-    <br/>
+    <br v-if="section.title" />
     <span class="break-word" v-for="factor,index in section.parags" :key="index">
       <span v-if="factor.type === 'text'" v-text="factor.body"></span>
       <span v-if="factor.type === 'twitterLink'">
@@ -13,10 +13,10 @@
     </span>
   </v-card>
   <v-card v-else-if="displayType === 'summary'" class="no-break" flat>
-    <span class="text-subtitle-1">
+    <span v-if="section.title" class="text-subtitle-1">
       <span v-text="section.title"></span>
     </span>
-    <br />
+    <br v-if="section.title" />
     <span v-if="section.parags.length > 0">
       <span v-if="section.parags[0].type === 'text'" v-text="section.parags[0].body"></span>
       <span v-if="section.parags[0].type === 'twitterLink'">

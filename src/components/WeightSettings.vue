@@ -10,14 +10,19 @@
           v-else
           label="項目名"
           :model-value="param.name"
-          hint="短い名前を入力してください。"
+          @update:model-value="$emit('updateName', $event, i)"
+          hint="項目名には短い名前を入力してください"
+          dense
+          :rules="rules"
         />
       </v-col>
       <v-col cols="2">
         <v-select
           label="項目の種類"
           :model-value="param.isPoint ? 'ポイント' : '情報'"
+          @update:model-value="updateIsPointProxy($event, i)"
           :items="isPointSelection"
+          dense
         >
         </v-select>
       </v-col>
@@ -29,6 +34,8 @@
           @update:model-value="updateWeightProxy($event, i)"
           :min="5"
           :max="100"
+          :step="5"
+          dense
         />
       </v-col>
       <v-col v-if="param.isPoint" cols="2" class="mt-3">
@@ -47,6 +54,15 @@
         </v-btn>
       </v-col>
     </v-row>
+    <v-row v-if="requiredPoint && !hasPoint" class="justify-end">
+      <v-card flat >
+        <v-card-text>
+          <v-span class="error-style">
+            少なくとも一つの評価項目(種類: ポイント)が必要です。
+          </v-span>
+        </v-card-text>
+      </v-card>
+    </v-row>
     <v-row v-if="!readonly" class="justify-end pb-3">
       <v-card flat class="pa-3">
         <v-btn color="primary" dark @click="$emit('addItem')">
@@ -61,7 +77,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam } from '@/common/review'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 
 export default defineComponent({
   name: 'WeightSettings',
@@ -73,6 +89,14 @@ export default defineComponent({
       default: () => [] as PropType<ReviewFactorParam[]>
     },
     readonly: {
+      type: Boolean,
+      default: false
+    },
+    rules: {
+      type: Object as PropType<((v: string) => string | boolean)[]>,
+      default: undefined
+    },
+    requiredPoint: {
       type: Boolean,
       default: false
     }
@@ -105,6 +129,8 @@ export default defineComponent({
       '情報'
     ]
 
+    const hasPoint = computed(() => props.params.filter((value) => value.isPoint).length !== 0)
+
     const discriptions = [
       'かなり控えめ',
       '控えめ',
@@ -119,6 +145,7 @@ export default defineComponent({
       updateWeightProxy,
       updateIsPointProxy,
       isPointSelection,
+      hasPoint,
       discriptions
     }
   }
@@ -127,4 +154,7 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+.error-style {
+  color: red;
+}
 </style>

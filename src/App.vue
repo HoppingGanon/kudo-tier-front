@@ -83,10 +83,8 @@
         <v-row v-if="hasSession">
           <v-list>
             <v-list-item @click="() => {logoutDialog = true}">
-              <v-list-item-icon class="mr-5">
-                mdi-logout
-              </v-list-item-icon>
               <v-list-item-title>
+                <v-icon class="mr-3">mdi-logout</v-icon>
                 ログアウト
               </v-list-item-title>
             </v-list-item>

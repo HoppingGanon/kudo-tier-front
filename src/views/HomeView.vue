@@ -8,7 +8,7 @@
     comment="指定したIDのホーム画面は存在しません"
   />
 
-  <v-container v-else>
+  <v-container v-else fluid>
     <v-row>
       <v-col>
         <profile-component

@@ -35,7 +35,6 @@ export default defineComponent({
     const linkReg = /^https:\/\/twitter\.com\/.*/
 
     const isTw = (link: string) => {
-      console.log(link)
       return linkReg.test(link)
     }
 

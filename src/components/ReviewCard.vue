@@ -13,48 +13,53 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col>
+        <v-col cols="6" sm="3" md="2" lg="2" xl="1">
+          <v-card>
+            <v-img :src="review.iconUrl" />
+          </v-card>
+        </v-col>
+        <v-col cols="12" sm="9" md="10" lg="10" xl="11">
           <v-card flat>
             <p class="text-subtitle-1"><span v-text="review.name"></span></p>
             <p class="text-h6"><b><span v-text="review.title"></span></b></p>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="10">
-          <v-card flat>
-            <p class="mt-2">
-              <span v-if="getPointType() == 'stars'">総合：</span>
-              <span v-else-if="getPointType() == 'rank7'">総合ランク：</span>
-              <span v-else-if="getPointType() == 'rank14'">総合ランク：</span>
-              <span v-else-if="getPointType() == 'score'">総合スコア：</span>
-              <span v-else-if="getPointType() == 'point'">総合点：</span>
-              <span v-else-if="getPointType() == 'unlimited'">合計：</span>
-            </p>
-          </v-card>
-        </v-col>
-        <v-col cols="2" v-if="!noChangePoint">
-          <point-type-selector
-            :model-value="pointType"
-            @update="$emit('updatePointType', $event)"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-card flat>
-            <review-value-display
-              v-if="getPointType() === 'unlimited'"
-              :point-type="getPointType()"
-              :value="sum"
-              display-size="larger"
-            />
-            <review-value-display
-              v-else
-              :point-type="getPointType()"
-              :value="average"
-              display-size="larger"
-            />
+            <v-container>
+              <v-row v-if="!noChangePoint">
+                <point-type-selector
+                  :model-value="pointType"
+                  @update="$emit('updatePointType', $event)"
+                />
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="12" md="6" lg="4" xl="3">
+                  <v-card flat>
+                    <p class="mt-2">
+                      <span v-if="getPointType() == 'stars'">総合：</span>
+                      <span v-else-if="getPointType() == 'rank7'">総合ランク：</span>
+                      <span v-else-if="getPointType() == 'rank14'">総合ランク：</span>
+                      <span v-else-if="getPointType() == 'score'">総合スコア：</span>
+                      <span v-else-if="getPointType() == 'point'">総合点：</span>
+                      <span v-else-if="getPointType() == 'unlimited'">合計：</span>
+                    </p>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="12" md="6" lg="8" xl="9">
+                  <v-card flat>
+                    <review-value-display
+                      v-if="getPointType() === 'unlimited'"
+                      :point-type="getPointType()"
+                      :value="sum"
+                      display-size="larger"
+                    />
+                    <review-value-display
+                      v-else
+                      :point-type="getPointType()"
+                      :value="average"
+                      display-size="larger"
+                    />
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card>
         </v-col>
       </v-row>

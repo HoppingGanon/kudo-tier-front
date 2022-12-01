@@ -7,6 +7,7 @@ export const tier: Tier = {
   userIconUrl: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
   pointType: 'stars',
   name: '映画ランキング',
+  imageUrl: 'https://placehold.jp/800x240.png',
   parags: [
     {
       type: 'text',
