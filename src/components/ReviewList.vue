@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="ma-0 pa-0">
     <v-row v-for="review,index in reviews" :key="index">
       <v-col>
         <review-card

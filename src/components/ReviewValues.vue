@@ -4,26 +4,37 @@
     <v-row v-for="factor, index in factors" :key="index" dense>
       <v-col
         v-if="index < reviewFactorParams.length"
-        style="text-align: end;"
         class="no-break"
-        cols="6"
-        sm="5"
+        :class="$vuetify.display.xs ? 'text-caption' : ''"
+        style="text-align: end;"
+        cols="4"
+        sm="4"
         md="4"
         lg="3"
         xl="2"
       >
-        <span v-if="index < reviewFactorParams.length" v-text="reviewFactorParams[index].name"></span>
+        <span v-if="index < reviewFactorParams.length" v-text="`${reviewFactorParams[index].name} : `"></span>
       </v-col>
       <v-col
         v-if="index < reviewFactorParams.length"
-        cols="6"
-        sm="7"
+        cols="8"
+        sm="8"
         md="8"
         lg="9"
         xl="10"
       >
-        <review-value-display v-if="reviewFactorParams[index].isPoint && factor.point !== undefined" :value="factor.point" :point-type="pointType" />
-        <span v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined" class="break-word" v-text="factor.info"></span>
+        <review-value-display
+          v-if="reviewFactorParams[index].isPoint && factor.point !== undefined"
+          :display-size="$vuetify.display.xs ? 'smaller' : 'normal'"
+          :value="factor.point"
+          :point-type="pointType"
+        />
+        <span
+          v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined"
+          class="break-word"
+          v-text="factor.info"
+          :class="$vuetify.display.xs ? 'text-caption' : ''"
+        />
       </v-col>
     </v-row>
   </v-container>

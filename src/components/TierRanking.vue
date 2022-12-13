@@ -103,9 +103,13 @@
           </td>
           <td :style="pivotColor" style="min-width: 80%;">
             <div v-for="item,j in items" :key="j" style="display: inline-block;">
-              <v-card class="ma-1" :width="iconSize" :height="iconSize">
-                <v-img :src="item.iconUrl" />
-              </v-card>
+              <pivot-icon
+                class="ma-1"
+                :infomation="item"
+                :size="iconSize"
+                :point-type="pointType"
+                :review-factor-params="params"
+                />
             </div>
           </td>
         </tr>
@@ -156,10 +160,11 @@
 
 <script lang="ts">
 import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType } from '@/common/review'
-import { defineComponent, PropType, computed, ref } from 'vue'
+import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
+import PivotIcon from '@/components/PivotIcon.vue'
 import vuetify from '@/plugins/vuetify'
 
 export default defineComponent({
@@ -167,7 +172,8 @@ export default defineComponent({
   components: {
     ReviewValueDisplay,
     WeightSettings,
-    PointTypeSelector
+    PointTypeSelector,
+    PivotIcon
   },
   props: {
     tierId: {
@@ -291,7 +297,7 @@ export default defineComponent({
       return val
     })
 
-    const iconSize = ref('64px')
+    const iconSize = ref('48px' as string)
     const iconSizeList = [
       {
         text: '最小',

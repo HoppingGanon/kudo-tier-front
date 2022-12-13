@@ -5,13 +5,14 @@
         <v-file-input
           :modelValue="imgFiles"
           @update:modelValue="updateFile"
+          @click:clear="clearFile"
           :label="label"
           prepend-icon="mdi-camera"
           accept="image/png, image/jpeg"
         />
       </v-col>
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-dialog v-model="cropMenu" persistent>
+        <v-dialog v-model="cropMenu" persistent :fullscreen="$vuetify.display.mobile">
           <template v-slot:activator="{ isActive, props}">
             <v-btn :disabled="imageUrl === ''" icon flat @click="cropMenu = true" v-on="isActive" v-bind="props">
               <v-icon>
@@ -25,9 +26,14 @@
                 画像のクリッピング
               </v-card-title>
               <v-spacer />
-              <v-btn icon flat>
+              <v-btn icon flat @click="(cropMenu = false)">
                 <v-icon>
                   mdi-close
+                </v-icon>
+              </v-btn>
+              <v-btn icon flat @click="enterCrop">
+                <v-icon>
+                  mdi-check
                 </v-icon>
               </v-btn>
             </v-toolbar>
@@ -38,10 +44,12 @@
                     v-if="imageUrl !== ''"
                     class="ba-5"
                     ref="cropper"
-                    :aspect-ratio="16 / 9"
-                    :fixedBox="true"
+                    :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
                     :src="imageUrl"
                     containerStyle="height:75vh"
+                    dragMode="move"
+                    min-crop-box-width="64px"
+                    min-crop-box-height="64px"
                   />
                 </v-col>
               </v-row>
@@ -75,30 +83,53 @@ export default defineComponent({
     }
   },
   emits: {
-    updateBase64: (
+    updateFileUrl: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      v: string) => true,
+    updateCroppedUrl: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () {
+  setup (props, { emit }) {
     const cropMenu = ref(false)
     const imgFiles = ref([] as File[])
     const imageUrl = ref('')
 
     const updateFile = (v: File[]) => {
-      imgFiles.value = v
       if (v.length > 0) {
-        // 入力されたファイルをBase64変換する
+        imgFiles.value = v
+        // 入力されたファイルをのURLを取得する
         imageUrl.value = base64api.getFileUrl(v[0])
+        emit('updateFileUrl', imageUrl.value)
         cropMenu.value = true
       }
+    }
+
+    const clearFile = () => {
+      imgFiles.value.splice(0)
+      imageUrl.value = ''
+      emit('updateFileUrl', '')
+      emit('updateCroppedUrl', '')
+    }
+
+    const cropper = ref()
+
+    const enterCrop = () => {
+      cropMenu.value = false
+      const canvas = cropper.value.getCroppedCanvas() as HTMLCanvasElement
+      const url = canvas.toDataURL('image/jpeg')
+      emit('updateCroppedUrl', url)
     }
 
     return {
       cropMenu,
       imgFiles,
       imageUrl,
-      updateFile
+      updateFile,
+      clearFile,
+      enterCrop,
+      cropper
     }
   }
 })

@@ -13,24 +13,26 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="6" sm="3" md="2" lg="2" xl="1">
+        <v-col cols="6" sm="3" md="2" lg="2" xl="2">
           <v-card>
             <v-img :src="review.iconUrl" />
           </v-card>
         </v-col>
-        <v-col cols="12" sm="9" md="10" lg="10" xl="11">
+        <v-col cols="12" sm="9" md="10" lg="10" xl="10">
           <v-card flat>
             <p class="text-subtitle-1"><span v-text="review.name"></span></p>
             <p class="text-h6"><b><span v-text="review.title"></span></b></p>
-            <v-container>
-              <v-row v-if="!noChangePoint">
-                <point-type-selector
-                  :model-value="pointType"
-                  @update="$emit('updatePointType', $event)"
-                />
-              </v-row>
-              <v-row>
-                <v-col cols="12" sm="12" md="6" lg="4" xl="3">
+            <table style="width: 100%">
+              <tr v-if="!noChangePoint">
+                <td>
+                  <point-type-selector
+                    :model-value="pointType"
+                    @update="$emit('updatePointType', $event)"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td class="minimum">
                   <v-card flat>
                     <p class="mt-2">
                       <span v-if="getPointType() == 'stars'">総合：</span>
@@ -41,8 +43,8 @@
                       <span v-else-if="getPointType() == 'unlimited'">合計：</span>
                     </p>
                   </v-card>
-                </v-col>
-                <v-col cols="12" sm="12" md="6" lg="8" xl="9">
+                </td>
+                <td style="width:auto">
                   <v-card flat>
                     <review-value-display
                       v-if="getPointType() === 'unlimited'"
@@ -57,9 +59,9 @@
                       display-size="larger"
                     />
                   </v-card>
-                </v-col>
-              </v-row>
-            </v-container>
+                </td>
+              </tr>
+            </table>
           </v-card>
         </v-col>
       </v-row>

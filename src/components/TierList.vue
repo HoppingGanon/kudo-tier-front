@@ -2,7 +2,7 @@
   <v-container>
     <v-row v-for="tier,index in tiers" :key="index">
       <v-col>
-        <tier-card
+        <tier-component
           :tier="tier"
           min-height="200px"
           width="100%"
@@ -18,12 +18,12 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { Tier, ReviewPointType } from '@/common/review'
-import TierCard from '@/components/TierCard.vue'
+import TierComponent from '@/components/TierComponent.vue'
 
 export default defineComponent({
   name: 'TierList',
   components: {
-    TierCard
+    TierComponent
   },
   props: {
     tiers: {

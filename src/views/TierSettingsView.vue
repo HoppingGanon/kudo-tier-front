@@ -1,9 +1,10 @@
 <template>
-  <v-card class="ma-5">
+  <v-card class="ma-0" flat>
     <tier-settings
       :model-value="tier"
       :point-type="tier.pointType"
       @updateTierName="updateTierName"
+      @updateImageUrl="updateImageUrl"
       @updatePointType="updatePointType"
       @updateWeightName="updateWeightName"
       @updateWeightIsPoint="updateWeightIsPoint"
@@ -36,7 +37,7 @@ export default defineComponent({
       userIconUrl: '',
       pointType: 'stars',
       name: '',
-      imageUrl: 'https://placehold.jp/240x240.png',
+      imageUrl: '',
       parags: [
         {
           type: 'text',
@@ -59,7 +60,6 @@ export default defineComponent({
               point: Math.round(Math.random() * 100)
             }
           ],
-          pointType: undefined,
           sections: [
             {
               title: 'これはサンプルです',
@@ -89,7 +89,6 @@ export default defineComponent({
               point: Math.round(Math.random() * 100)
             }
           ],
-          pointType: undefined,
           sections: [],
           createAt: new Date('1970/01/01'),
           updateAt: new Date('1970/01/01')
@@ -108,6 +107,9 @@ export default defineComponent({
 
     const updateTierName = (value: string) => {
       tier.value.name = value
+    }
+    const updateImageUrl = (value: string) => {
+      tier.value.imageUrl = value
     }
     const updatePointType = (value: ReviewPointType) => {
       tier.value.pointType = value
@@ -176,6 +178,7 @@ export default defineComponent({
     return {
       tier,
       updateTierName,
+      updateImageUrl,
       updatePointType,
       updateWeightName,
       updateWeightIsPoint,

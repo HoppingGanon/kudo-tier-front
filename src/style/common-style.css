@@ -43,3 +43,10 @@ td.minimum {
   width: 0;
   white-space: nowrap;
 }
+
+.dahed-box {
+  border: 3px dashed;
+  border-color: lightgray;
+  text-align: center;
+  color: gray;
+}

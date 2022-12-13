@@ -1,17 +1,11 @@
 <template>
   <v-app id="inspire">
-    <v-avatar class="overlay anime baricon" color="primary" @click="clickHideBarIcon" :style="iconStyle">
-      <v-icon v-if="isVisibleBar" dark>mdi-overscan</v-icon>
-      <v-icon v-else dark>mdi-page-layout-header</v-icon>
-    </v-avatar>
 
     <v-navigation-drawer
       v-model="drawer"
       class="grad"
       app
     >
-      <template v-slot:prepend>
-      </template>
       <v-container>
         <v-row style="min-height: 64px;">
           <v-icon color="gray darken-1" class="ml-5" @click="drawer = !drawer"> mdi-arrow-left-bold-outline </v-icon>
@@ -66,7 +60,7 @@
             <v-list-item v-if="hasSession">
               <v-list-item-title>
                 <v-icon class="mr-3">mdi-table-account</v-icon>
-                レビュー一覧
+                Tier一覧
               </v-list-item-title>
             </v-list-item>
             <v-list-item v-if="hasSession">
@@ -82,12 +76,29 @@
         </v-row>
         <v-row v-if="hasSession">
           <v-list>
-            <v-list-item @click="() => {logoutDialog = true}">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-logout</v-icon>
-                ログアウト
-              </v-list-item-title>
-            </v-list-item>
+            <v-dialog v-model="logoutDialog">
+              <template v-slot:activator="{ isActive, props}">
+                <v-list-item @click="() => {logoutDialog = true}" v-on="isActive" v-bind="props">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-logout</v-icon>
+                    ログアウト
+                  </v-list-item-title>
+                </v-list-item>
+              </template>
+
+              <v-card>
+                <v-toolbar color="secondary" dark>
+                  <v-card-title>確認</v-card-title>
+                </v-toolbar>
+                <v-card-text>
+                  本当にログアウトしますか？
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn @click="logout">はい</v-btn>
+                  <v-btn @click="() => { logoutDialog = false }">いいえ</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-list>
         </v-row>
       </v-container>
@@ -96,39 +107,32 @@
     <v-app-bar app class="pink lighten-4 anime" :style="barStyle" v-if="isVisibleBar">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
-        abc
-      <v-toolbar-title></v-toolbar-title>
+      <v-toolbar-title>Tiereview</v-toolbar-title>
     </v-app-bar>
 
-    <v-dialog v-model="logoutDialog">
-      <v-card width="480px">
-        <v-card-title>確認</v-card-title>
-        <v-card-text>
-          本当にログアウトしますか？
-        </v-card-text>
-        <v-card-actions class="justify-end">
-          <v-btn @click="logout">はい</v-btn>
-          <v-btn @click="() => { logoutDialog = false }">いいえ</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <v-dialog v-model="forceDialog">
-      <v-card width="480px">
-        <v-card-title>確認</v-card-title>
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-card-title>確認</v-card-title>
+        </v-toolbar>
         <v-card-text>
           ログアウトに失敗しました<br />
           強制的にセッションを削除しますか？
         </v-card-text>
         <v-card-actions class="justify-end">
           <v-btn @click="forceLogout">はい</v-btn>
-          <v-btn @click="() => { forceDialog = false }">いいえ</v-btn>
+         <v-btn @click="() => { forceDialog = false }">いいえ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
+    <v-avatar class="overlay anime baricon" color="primary" @click="clickHideBarIcon" :style="iconStyle">
+      <v-icon v-if="isVisibleBar" dark>mdi-overscan</v-icon>
+      <v-icon v-else dark>mdi-page-layout-header</v-icon>
+    </v-avatar>
+
     <v-main class="grad">
-      <router-view/>
+      <router-view />
     </v-main>
   </v-app>
 </template>
@@ -214,13 +218,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@import url("@/style/common-style.css");
 
 .grad{
   background: linear-gradient(white, #FCE4EC);
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 10px;
   z-index: 100;

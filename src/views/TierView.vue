@@ -1,28 +1,28 @@
 <template>
-  <v-container class="justify-center">
-    <tier-card
-      :tier="tierTest"
-      :point-type="pointType"
-      @update-point-type="updatePointType"
-      display-type="all"
-      point-display-type="normal"
-      width="100%"
-      min-height="720px"
-      class="ma-3"
-    />
+  <!-- サイズ調整のためfluidは入れない -->
+  <v-container class="pa-0">
+    <v-card class="pa-1 block-center" max-width="1080px">
+      <tier-component
+        :tier="tierTest"
+        :point-type="pointType"
+        @update-point-type="updatePointType"
+        display-type="all"
+        point-display-type="normal"
+      />
+    </v-card>
   </v-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { ReviewPointType } from '@/common/review'
-import TierCard from '@/components/TierCard.vue'
+import TierComponent from '@/components/TierComponent.vue'
 import { tier as tierOrg } from '@/common/dummy'
 
 export default defineComponent({
   name: 'TierView',
   components: {
-    TierCard
+    TierComponent
   },
   props: {},
   emits: { },

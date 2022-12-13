@@ -1,6 +1,5 @@
 <template>
-  <v-card :width="width" :min-height="minHeight">
-    <v-container fluid>
+    <v-container fluid class="ma-0 pa-0">
       <v-row class="align-center">
         <v-col>
           <review-header
@@ -21,7 +20,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-img :src="tier.imageUrl" max-height="25vh" width="auto" />
+          <v-img :src="tier.imageUrl" width="100%" />
         </v-col>
       </v-row>
       <v-row>
@@ -64,7 +63,6 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-card>
 </template>
 
 <script lang="ts">
@@ -77,7 +75,7 @@ import TierRanking from '@/components/TierRanking.vue'
 import SectionComponent from '@/components/SectionComponent.vue'
 
 export default defineComponent({
-  name: 'TierCard',
+  name: 'TierComponent',
   components: {
     ReviewHeader,
     ReviewList,
@@ -100,14 +98,6 @@ export default defineComponent({
     noMenuIcon: {
       type: Boolean,
       default: false as boolean
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    minHeight: {
-      type: String,
-      default: '100%'
     },
     pointType: {
       type: Object as PropType<ReviewPointType>,

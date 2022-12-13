@@ -123,7 +123,24 @@ export interface Tier {
 
   createAt: Date
   updateAt: Date
+}
 
+export interface TierPostData {
+  /** Tier識別ID 新規作成の際は空文字 */
+  tierId: string
+
+  /** Tierの名称 */
+  name: string
+  /** TierのアイコンURL */
+  imageBase64: string
+
+  /** 本文 */
+  parags: ReviewParagraph[]
+
+  /** レビューポイントの表示方法 */
+  pointType: ReviewPointType
+  /** レビュー評点に対する情報 */
+  reviewFactorParams: ReviewFactorParam[]
 }
 
 // 連想配列、辞書てきなもの
@@ -159,8 +176,7 @@ export const pointTypeTierCountDic = {
 
 /** Tierをピボット表示する際の情報 */
 export interface TierPivotInfomation {
-  iconUrl: string
-  reviewId: string
+  review: Review
   point: number
 }
 
@@ -235,6 +251,11 @@ export class ReviewFunc {
     return sum
   }
 
+  /**
+   * レビュー配列から、ポイント表示形式のみを取り出して配列化する
+   * @param reviews レビュー配列
+   * @returns ポイント表示形式配列
+   */
   static getPointTypes (reviews: Review[]) : ReviewPointType[] {
     const pointTypes: ReviewPointType[] = []
     reviews.forEach((review) => {
@@ -261,9 +282,8 @@ export class ReviewFunc {
 
         if (index >= 0 && index < list.length) {
           list[index].push({
-            reviewId: review.reviewId,
-            point: ReviewFunc.calcAaverage(review, reviewFactorParams),
-            iconUrl: review.iconUrl
+            review: review,
+            point: ReviewFunc.calcAaverage(review, reviewFactorParams)
           })
         }
       })
@@ -274,5 +294,171 @@ export class ReviewFunc {
       list[i] = v.sort((a, b) => a.point - b.point)
     })
     return list
+  }
+
+  /**
+   * ReviewFactor[]をクローンする
+   * @param factors クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneFactors (factors: ReviewFactor[]) {
+    const clone = [] as ReviewFactor[]
+    factors.forEach((v) => {
+      const child = {} as ReviewFactor
+      // キーの有無も同一になるように複製する
+      Object.keys(v).forEach((key) => {
+        (child as Dictionary<string>)[key] = (v as Dictionary<string>)[key]
+      })
+      clone.push(child)
+    })
+    return clone
+  }
+
+  /**
+   * ReviewParagraph[]をクローンする
+   * @param org クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneParags (org: ReviewParagraph[]) : ReviewParagraph[] {
+    const clone = [] as ReviewParagraph[]
+    org.forEach((v) => {
+      clone.push({
+        type: v.type,
+        body: v.body
+      } as ReviewParagraph)
+    })
+
+    return clone
+  }
+
+  /**
+   * ReviewSection[]をクローンする
+   * @param org クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneSections (org: ReviewSection[]) : ReviewSection[] {
+    const clone = [] as ReviewSection[]
+    org.forEach((v) => {
+      clone.push({
+        title: v.title,
+        parags: ReviewFunc.cloneParags(v.parags)
+      } as ReviewSection)
+    })
+
+    return clone
+  }
+
+  /**
+   * Reviewをクローンする
+   * @param org クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneReview (org: Review) : Review {
+    const clone: Review = {
+      reviewId: org.reviewId,
+      userName: org.userName,
+      userId: org.userId,
+      userIconUrl: org.userIconUrl,
+      tierId: org.tierId,
+      title: org.title,
+      name: org.name,
+      iconUrl: org.iconUrl,
+      reviewFactors: ReviewFunc.cloneFactors(org.reviewFactors),
+      sections: ReviewFunc.cloneSections(org.sections),
+      createAt: org.createAt,
+      updateAt: org.updateAt
+    }
+
+    // ポイント表示形式のキー有無も同一にする
+    if ('pointType' in org) {
+      clone.pointType = org.pointType
+    }
+
+    return clone
+  }
+
+  /**
+   * Review[]をクローンする
+   * @param org クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneReviews (org: Review[]) : Review[] {
+    const clone = [] as Review[]
+    org.forEach((v) => {
+      clone.push(ReviewFunc.cloneReview(v))
+    })
+    return clone
+  }
+
+  /**
+   * ReviewFactorParam[]をクローンする
+   * @param org クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneFactorParams (org: ReviewFactorParam[]) : ReviewFactorParam[] {
+    const clone = [] as ReviewFactorParam[]
+    org.forEach((v) => {
+      clone.push({
+        name: v.name,
+        isPoint: v.isPoint,
+        weight: v.weight
+      })
+    })
+    return clone
+  }
+
+  /**
+   * Tierをクローンする
+   * @param org クローンしたいデータ
+   * @returns 別オブジェクトで内容が同一のクローン
+   */
+  static cloneTier (org: Tier) : Tier {
+    const clone: Tier = {
+      tierId: org.tierId,
+      userName: org.userName,
+      userId: org.userId,
+      userIconUrl: org.userIconUrl,
+      name: org.name,
+      imageUrl: org.imageUrl,
+      parags: ReviewFunc.cloneParags(org.parags),
+      reviews: ReviewFunc.cloneReviews(org.reviews),
+      pointType: org.pointType,
+      reviewFactorParams: ReviewFunc.cloneFactorParams(org.reviewFactorParams),
+      createAt: org.createAt,
+      updateAt: org.updateAt
+    }
+
+    return clone
+  }
+
+  /**
+   * DataURLからbase64形式のテキストのみ抜き出す DataURLがbase64形式出ない場合はエラー
+   * @param v DataURL
+   * @returns base64
+   */
+  static dataURLToBase64 (v: string) {
+    const splitedStr = v.split(',')
+    if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
+      return splitedStr[1]
+    } else {
+      throw new Error('データURLをbase64に変換できません')
+    }
+  }
+
+  /**
+   * Tierからリクエストデータを生成する
+   * @param tier 生成元Tier
+   * @param tierId Tierの固有ID (新規作成の際は空白)
+   * @returns リクエストデータ
+   */
+  static createTierRequestData (tier: Tier, tierId: string) : TierPostData {
+    return {
+      tierId: tierId,
+      name: tier.name,
+      imageBase64: tier.imageUrl,
+      parags: ReviewFunc.cloneParags(tier.parags),
+      pointType: tier.pointType,
+      reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)
+    }
   }
 }

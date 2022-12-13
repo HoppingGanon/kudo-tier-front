@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
+import { TierPostData } from './review'
 
 export interface TempSession {
   // eslint-disable-next-line camelcase
@@ -94,5 +95,9 @@ export default class RestApi {
 
   static getUserData (userId: string) {
     return this.get<UserData>('/user/' + userId)
+  }
+
+  static postTier (data: TierPostData) {
+    return this.post('/tier', data)
   }
 }
