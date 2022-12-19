@@ -125,6 +125,21 @@ export interface Tier {
   updateAt: Date
 }
 
+export const tierRules = {
+  /** Tier名の長さの上限 */
+  TierNameLenMax: 100,
+  /** 説明文やリンクの合計数の上限 */
+  ParagsLenMax: 16,
+  /** 説明文の文字数の上限 */
+  ParagTextLenMax: 400,
+  /** リンクの文字数の長さの上限 */
+  ParagLinkLenMax: 100,
+  /** 評価項目の合計数の上限 */
+  ParamsLenMax: 16,
+  /** 評価項目名の文字数の上限 */
+  ParamNameLenMax: 16
+}
+
 export interface TierPostData {
   /** Tier識別ID 新規作成の際は空文字 */
   tierId: string
@@ -455,7 +470,7 @@ export class ReviewFunc {
     return {
       tierId: tierId,
       name: tier.name,
-      imageBase64: tier.imageUrl,
+      imageBase64: ReviewFunc.dataURLToBase64(tier.imageUrl),
       parags: ReviewFunc.cloneParags(tier.parags),
       pointType: tier.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)

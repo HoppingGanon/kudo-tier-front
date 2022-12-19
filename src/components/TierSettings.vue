@@ -48,7 +48,7 @@
               hint="このTierを表す分かりやすい名前を設定してください。"
               :model-value="modelValue.name"
               @update:model-value="$emit('updateTierName', $event)"
-              :rules="[rulesFunc.required(), rulesFunc.maxLen(100)]"
+              :rules="[rulesFunc.required(), rulesFunc.maxLen(tierRules.TierNameLenMax)]"
             />
           </v-col>
         </v-row>
@@ -56,15 +56,15 @@
           <v-col cols="12" sm="12" md="7" lg="7" xl="7">
             <image-selector
               label="Tierのトップに表示する画像を選択してください"
-              :aspect-ratio="(16 / 9)"
+              :aspect-ratio="(10 / 3)"
               @update-cropped-url="$emit('updateImageUrl', $event)"
             />
           </v-col>
           <v-col cols="12" sm="6" md="5" lg="5" xl="5">
-            <v-card v-if="modelValue.imageUrl === ''" :width="`${16 * 2.5}vh`" :height="`${9 * 2.5}vh`" class="dahed-box" flat>
+            <v-card v-if="modelValue.imageUrl === ''" height="100%" class="dahed-box" flat>
               画像を選択するとここに表示されます
             </v-card>
-            <v-img v-else style="border: 1px solid" :width="`${16 * 2.5}vh`" :height="`${9 * 2.5}vh`" :src="modelValue.imageUrl" />
+            <v-img v-else style="border: 1px solid" height="100%" :src="modelValue.imageUrl" />
           </v-col>
         </v-row>
         <v-row>
@@ -77,7 +77,7 @@
               hint="Tierの説明文を入力してください。"
               :model-value="factor.body"
               @update:model-value="$emit('updateParagBody', $event, index)"
-              :rules="[rulesFunc.required(' 説明文が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(1000)]"
+              :rules="[rulesFunc.required(' 説明文が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.ParagTextLenMax)]"
             />
           </v-col>
           <v-col v-if="factor.type === 'text'" cols="1">
@@ -92,7 +92,7 @@
               :model-value="factor.body"
               @update="$emit('updateParagBody', $event, index)"
               @remove="$emit('removeParagItem', index)"
-              :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(100)]"
+              :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.ParagLinkLenMax)]"
             />
           </v-col>
         </v-row>
@@ -100,7 +100,7 @@
             <v-btn
             class="mt-3 mb-3 mr-1 ml-1"
               color="#00acee"
-              @click="$emit('addParagItem', 'twitterLink')"
+              @click="addParagItemProxy('twitterLink')"
             >
               <v-icon color="white"> mdi-twitter </v-icon>
               <b style="color: white;">埋め込みツイートを追加</b>
@@ -108,7 +108,7 @@
             <v-btn
               class="mt-3 mb-3 mr-1 ml-1"
               color="primary"
-              @click="$emit('addParagItem', 'text')"
+              @click="addParagItemProxy('text')"
             >
               <v-icon color="white"> mdi-plus </v-icon>
               <b style="color: white;">説明文を追加</b>
@@ -235,7 +235,8 @@
               @update-is-point="updateWeightIsPointProxy"
               @update-weight="updateWeightProxy"
               @remove-item="removeWeightItemProxy"
-              :rules="[rulesFunc.required(' 項目が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(20)]"
+              :max-len="tierRules.ParamsLenMax"
+              :rules="[rulesFunc.required(' 項目が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.ParamNameLenMax)]"
               :required-point="true"
             />
           </v-col>
@@ -279,7 +280,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFunc, ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
+import { ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierRules } from '@/common/review'
 import { defineComponent, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TweetEmbedder from '@/components/TweetEmbedder.vue'
@@ -392,10 +393,18 @@ export default defineComponent({
     }
 
     const addWeightItemProxy = () => {
-      if (props.modelValue.reviewFactorParams.length < 16) {
+      if (props.modelValue.reviewFactorParams.length < tierRules.ParamsLenMax) {
         emit('addWeightItem')
       } else {
-        toast.warning('追加できる項目は16個までです')
+        toast.warning(`追加できる項目は${tierRules.ParamsLenMax}個までです`)
+      }
+    }
+
+    const addParagItemProxy = (type: ReviewParagraphType) => {
+      if (props.modelValue.parags.length < tierRules.ParagsLenMax) {
+        emit('addParagItem', type)
+      } else {
+        toast.warning(`追加できる説明文/リンクは合計${tierRules.ParagsLenMax}個までです`)
       }
     }
 
@@ -485,7 +494,9 @@ export default defineComponent({
       updateWeightProxy,
       removeWeightItemProxy,
       addWeightItemProxy,
+      addParagItemProxy,
       rulesFunc: rules,
+      tierRules: tierRules,
       forms,
       tabValidation,
       next,

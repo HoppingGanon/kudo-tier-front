@@ -75,7 +75,7 @@
     </v-row>
     <v-row v-if="!readonly" class="justify-end pb-3">
       <v-card flat class="pa-3">
-        <v-btn color="primary" dark @click="$emit('addItem')">
+        <v-btn color="primary" dark @click="addItemProxy">
           <v-icon>
             mdi-plus
           </v-icon> アイテム追加
@@ -88,6 +88,7 @@
 <script lang="ts">
 import { ReviewFactorParam } from '@/common/review'
 import { computed, defineComponent, PropType } from 'vue'
+import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'WeightSettings',
@@ -109,6 +110,10 @@ export default defineComponent({
     requiredPoint: {
       type: Boolean,
       default: false
+    },
+    maxLen: {
+      type: Number,
+      default: 16
     }
   },
   emits: {
@@ -128,11 +133,20 @@ export default defineComponent({
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
+    const toast = useToast()
+
     const updateIsPointProxy = (v: string, i: number) => {
       emit('updateIsPoint', v === 'ポイント', i)
     }
     const updateWeightProxy = (v: number, i: number) => {
       emit('updateWeight', Math.floor(v / 5) * 5, i)
+    }
+    const addItemProxy = () => {
+      if (props.params.length < props.maxLen) {
+        emit('addItem')
+      } else {
+        toast.warning(`追加できる項目は${props.maxLen}個までです`)
+      }
     }
 
     const isPointSelection = [
@@ -155,6 +169,7 @@ export default defineComponent({
     return {
       updateWeightProxy,
       updateIsPointProxy,
+      addItemProxy,
       isPointSelection,
       hasPoint,
       discriptions

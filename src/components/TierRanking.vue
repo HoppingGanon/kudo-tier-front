@@ -160,7 +160,7 @@
 
 <script lang="ts">
 import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType } from '@/common/review'
-import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
+import { defineComponent, PropType, computed, ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
