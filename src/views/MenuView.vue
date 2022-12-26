@@ -2,7 +2,7 @@
   <div class="home">
 
     <!-- セッション有効期限をチェックする -->
-    <session-checker :is-going="true"/>
+    <session-checker :is-going="true" :no-session-error="true"/>
   </div>
 </template>
 

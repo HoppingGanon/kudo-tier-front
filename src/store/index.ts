@@ -53,6 +53,7 @@ export default createStore<State>({
       state.tempSessionId = ''
       state.sessionId = ''
       state.twitterName = ''
+      state.userId = ''
       state.twitterUserName = ''
       state.expiredTime = ''
       state.isNew = false

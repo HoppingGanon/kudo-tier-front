@@ -2,25 +2,19 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <error-card />
+  <error-component />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ErrorCard from '@/components/ErrorCard.vue'
+import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 
 export default defineComponent({
   name: 'NotFoundView',
   components: {
-    ErrorCard,
+    ErrorComponent,
     SessionChecker
-  },
-  props: {
-    comment: {
-      type: String,
-      default: ''
-    }
   }
 })
 </script>

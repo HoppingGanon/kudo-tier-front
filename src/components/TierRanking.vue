@@ -11,7 +11,7 @@
           @update="updatePointTypeProxy"
         />
 
-        <v-dialog v-model="weightMenu" class="ml-1 mr-1">
+        <v-dialog v-model="weightMenu" class="ml-1 mr-1" :fullscreen="$vuetify.display.mobile">
           <template v-slot:activator="{ isActive, props}">
             <v-btn icon flat @click="weightMenu = true" v-on="isActive" v-bind="props">
               <v-icon>
@@ -19,25 +19,25 @@
               </v-icon>
             </v-btn>
           </template>
-
-          <v-card class="block-center" min-width="720px" min-height="40%" width="80%" max-height="80%">
-            <v-toolbar
-              color="secondary"
-              dark
-            >
-              <v-toolbar-title>
-                評価の重み
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn icon @click="weightMenu = false">
-                <v-icon>mdi-close-thick</v-icon>
-              </v-btn>
-            </v-toolbar>
-            <v-card class="pa-3 scroll" flat>
-              <weight-settings :params="params" />
+          <v-container class="ma-0 pa-0">
+            <v-card class="block-center">
+              <v-toolbar
+                color="secondary"
+                dark
+              >
+                <v-toolbar-title>
+                  評価の重み
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon @click="weightMenu = false">
+                  <v-icon>mdi-close-thick</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-card class="pa-3 scroll" flat>
+                <weight-settings :params="params" :readonly="true" />
+              </v-card>
             </v-card>
-          </v-card>
-
+          </v-container>
         </v-dialog>
         <v-menu>
           <template v-slot:activator="{ isActive, props}">

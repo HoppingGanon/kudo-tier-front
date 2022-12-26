@@ -16,6 +16,10 @@ export default defineComponent({
     isGoing: {
       type: Boolean,
       default: false
+    },
+    noSessionError: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -24,6 +28,11 @@ export default defineComponent({
 
     onMounted(() => {
       try {
+        // noSessionErrorがあれば、セッションが無い場合に強制転送
+        if (props.noSessionError && store.state.sessionId === '') {
+          toast.warning('セッションがありません。ログインしてください。')
+          router.push('/login')
+        }
         if (store.state.sessionId !== '' && new Date(store.state.expiredTime) < new Date()) {
           RestApi.delSession().then(() => {
             store.commit('initAllSession')

@@ -1,5 +1,36 @@
 import { Tier, Review } from './review'
 
+export const emptyTier: Tier = {
+  tierId: '',
+  userName: '',
+  userId: '',
+  userIconUrl: '',
+  pointType: 'stars',
+  name: '',
+  imageUrl: '',
+  parags: [],
+  reviews: [],
+  reviewFactorParams: [],
+  createAt: new Date(),
+  updateAt: new Date()
+}
+
+export const emptyReviwew: Review = {
+  reviewId: '',
+  tierId: '',
+  userName: '',
+  userId: '',
+  userIconUrl: '',
+  title: '',
+  name: '',
+  iconUrl: '',
+  reviewFactors: [],
+  pointType: 'stars',
+  sections: [],
+  createAt: new Date(),
+  updateAt: new Date()
+}
+
 export const tier: Tier = {
   tierId: 'bbb',
   userName: 'usernameaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',

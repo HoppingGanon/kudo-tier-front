@@ -1,15 +1,17 @@
 <template>
-  <v-container>
+  <v-container class="pa-0 ma-0" fluid>
     <v-row v-for="tier,index in tiers" :key="index">
       <v-col>
-        <tier-component
-          :tier="tier"
-          min-height="200px"
-          width="100%"
-          display-type="summary"
-          point-display-type="normal"
-          @update-point-type="updatePointTypeEm($event, index)"
-        />
+        <v-card class="pa-2">
+          <tier-component
+            :tier="tier"
+            min-height="200px"
+            width="100%"
+            display-type="summary"
+            point-display-type="normal"
+            @update-point-type="updatePointTypeEm($event, index)"
+          />
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -27,7 +29,8 @@ export default defineComponent({
   },
   props: {
     tiers: {
-      type: Object as PropType<Tier[]>
+      type: Object as PropType<Tier[]>,
+      required: true
     }
   },
   emits: {

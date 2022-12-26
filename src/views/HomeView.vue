@@ -2,20 +2,35 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker :is-going="false" />
 
-  <error-card
-    v-if="isNotFound"
-    class="ma-3"
-    comment="指定したIDのホーム画面は存在しません"
-  />
-
-  <v-container v-else fluid>
+  <v-container v-if="isNotFound">
     <v-row>
       <v-col>
-        <profile-component
-          :disp-name="dispName"
-          :icon-url="iconUrl"
-          :profile="profile"
-        />
+        <v-card>
+          <error-component
+            comment="ユーザーが見つかりません"
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+
+  <v-container v-else>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-toolbar color="secondary" dark>
+            <v-card-title>
+              <b>
+                プロフィール
+              </b>
+            </v-card-title>
+          </v-toolbar>
+          <profile-component
+            :disp-name="dispName"
+            :icon-url="iconUrl"
+            :profile="profile"
+          />
+        </v-card>
       </v-col>
     </v-row>
 
@@ -30,10 +45,11 @@
             </v-card-title>
           </v-toolbar>
           <v-card
-            class="scroll"
+            class="scroll pa-1"
             flat
-            min-height="360px"
-            max-height="400px"
+            min-height="30vh"
+            max-height="50vh"
+            color="thirdry"
           >
             <review-list
               :reviews="reviews"
@@ -55,10 +71,11 @@
             </v-card-title>
           </v-toolbar>
           <v-card
-            class="scroll"
+            class="scroll pa-1"
             flat
-            min-height="360px"
-            max-height="400px"
+            min-height="30vh"
+            max-height="50vh"
+            color="thirdry"
           >
             <tier-list
               :tiers="tiers"
@@ -73,12 +90,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import restApi from '@/common/restapi'
+import RestApi from '@/common/restapi'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
-import ErrorCard from '@/components/ErrorCard.vue'
+import ErrorComponent from '@/components/ErrorComponent.vue'
 import { useRoute } from 'vue-router'
 import { ReviewFunc, ReviewPointType } from '@/common/review'
 import { reviews as reviewsOrg, tier as tierOrg, tiers as tiersOrg } from '@/common/dummy'
@@ -88,7 +105,7 @@ export default defineComponent({
   components: {
     ProfileComponent,
     SessionChecker,
-    ErrorCard,
+    ErrorComponent,
     ReviewList,
     TierList
   },
@@ -103,7 +120,7 @@ export default defineComponent({
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
         // URIにIDが含まれている場合
-        restApi.getUserData(route.params.id).then((res) => {
+        RestApi.getUserData(route.params.id).then((res) => {
           dispName.value = res.data.name
           profile.value = res.data.profile
           iconUrl.value = res.data.iconUrl

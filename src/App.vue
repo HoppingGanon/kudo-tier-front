@@ -146,7 +146,6 @@ import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'App',
-
   setup () {
     const toast = useToast()
 

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
-import { TierPostData } from './review'
+import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam } from './review'
+import { TierContentType, TierSortType } from './page'
 
 export interface TempSession {
   // eslint-disable-next-line camelcase
@@ -39,6 +40,71 @@ export interface UserData {
   iconUrl: string
 }
 
+export interface ReviewData {
+  /** review識別ID */
+  reviewId: string
+
+  /** 投稿したユーザーの表示名 */
+  userName: string
+  /** 投稿したユーザーのID */
+  userId: string
+  /** 投稿したユーザーのアイコンURL */
+  userIconUrl: string
+
+  /** 親tier識別ID */
+  tierId: string
+
+  /** レビューの表示タイトル */
+  title: string
+  /** 作品名や商品名 */
+  name: string
+  /** レビューのアイコンURL */
+  iconUrl: string
+  /** レビュー評点 */
+  reviewFactors: ReviewFactor []
+
+  /** レビューポイントの表示方法 レビュー単品でGetする際にのみ参照される */
+  pointType?: ReviewPointType
+  sections: ReviewSection[]
+  createAt: string
+  updateAt: string
+}
+
+export interface TierData {
+  /** Tier識別ID */
+  tierId: string
+
+  /** 投稿したユーザーの表示名 */
+  userName: string
+  /** 投稿したユーザーのID */
+  userId: string
+  /** 投稿したユーザーのアイコンURL */
+  userIconUrl: string
+
+  /** Tierの名称 */
+  name: string
+  /** TierのアイコンURL */
+  imageUrl: string
+
+  /** 本文 */
+  parags: ReviewParagraph[]
+
+  /** Tierの構成要素 */
+  reviews: ReviewData[]
+  /** レビューポイントの表示方法 */
+  pointType: ReviewPointType
+  /** レビュー評点に対する情報 */
+  reviewFactorParams: ReviewFactorParam[]
+
+  createAt: string
+  updateAt: string
+}
+
+export interface ErrorResponse {
+  code: number
+  message: string
+}
+
 export default class RestApi {
   static get <T> (uri: string) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
@@ -48,6 +114,16 @@ export default class RestApi {
       }
     }
     return axios.get<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
+  }
+
+  static update <T> (uri: string, data?: object) : Promise<AxiosResponse<T>> {
+    const sessionId = store.state.sessionId
+    const config:AxiosRequestConfig = {
+      headers: {
+        sessionId: sessionId
+      }
+    }
+    return axios.patch<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
   }
 
   static post <T> (uri: string, data?: object) : Promise<AxiosResponse<T>> {
@@ -97,7 +173,60 @@ export default class RestApi {
     return this.get<UserData>('/user/' + userId)
   }
 
-  static postTier (data: TierPostData) {
+  static postTier (data: TierEditingData) {
     return this.post('/tier', data)
+  }
+
+  static getTier (userId: string, tierId: string) {
+    return this.get<TierData>(`/tier/${userId}/${tierId}`)
+  }
+
+  static updateTier (data: TierEditingData) {
+    return this.update('/tier', data)
+  }
+
+  static getTierList (userId: string, word: string, contentType: TierContentType, sortType: TierSortType, page: number) {
+    return this.get<TierData[]>(encodeURI(`/tiers?userId=${userId}&word=${word}&contenttype=${contentType}&sorttype=${sortType}&page=${page}`))
+  }
+}
+
+export class Parser {
+  static parseTier (tierData: TierData) : Tier {
+    const reviews: Review[] = []
+    tierData.reviews.forEach((v) => {
+      reviews.push(Parser.parseReview(v))
+    })
+    return {
+      tierId: tierData.tierId,
+      userName: tierData.userName,
+      userId: tierData.userId,
+      userIconUrl: tierData.userIconUrl,
+      pointType: tierData.pointType,
+      name: tierData.name,
+      imageUrl: tierData.imageUrl,
+      parags: tierData.parags,
+      reviews: reviews,
+      reviewFactorParams: tierData.reviewFactorParams,
+      createAt: new Date(tierData.createAt),
+      updateAt: new Date(tierData.updateAt)
+    }
+  }
+
+  static parseReview (reviewData: ReviewData) : Review {
+    return {
+      reviewId: reviewData.reviewId,
+      tierId: reviewData.tierId,
+      userName: reviewData.userName,
+      userId: reviewData.userId,
+      userIconUrl: reviewData.userIconUrl,
+      title: reviewData.title,
+      name: reviewData.name,
+      iconUrl: reviewData.iconUrl,
+      reviewFactors: reviewData.reviewFactors,
+      pointType: reviewData.pointType,
+      sections: reviewData.sections,
+      createAt: new Date(reviewData.createAt),
+      updateAt: new Date(reviewData.updateAt)
+    }
   }
 }

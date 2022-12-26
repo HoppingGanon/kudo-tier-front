@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/AuthView.vue')
   },
   {
-    path: '/tier',
+    path: '/tier/:uid/:tid',
     name: 'tier',
     component: () => import('../views/TierView.vue')
   },
@@ -43,8 +43,18 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/tier-settings',
+    name: 'tier-settings-new',
+    component: () => import('../views/TierSettingsView.vue')
+  },
+  {
+    path: '/tier-settings/:uid/:tid',
     name: 'tier-settings',
     component: () => import('../views/TierSettingsView.vue')
+  },
+  {
+    path: '/tier-search/:id',
+    name: 'tier-search',
+    component: () => import('../views/TierSearchView.vue')
   }
 ]
 

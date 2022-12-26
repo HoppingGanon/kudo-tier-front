@@ -2,18 +2,18 @@
   <v-container fluid class="ma-0 pa-0">
     <v-row v-for="review,index in reviews" :key="index">
       <v-col>
-        <review-card
-          :no-header="noHeader"
-          :review="review"
-          :review-factor-params="makeParams(index)"
-          min-height="200px"
-          width="100%"
-          :display-type="displayType"
-          point-display-type="normal"
-          :point-type="index < pointTypes.length ? pointTypes[index] : 'point'"
-          @update-point-type="updatePointTypeEm($event, index)"
-          :no-change-point="noChangePoint"
-        />
+        <v-card class="pa-2">
+          <review-component
+            :no-header="noHeader"
+            :review="review"
+            :review-factor-params="makeParams(index)"
+            :display-type="displayType"
+            point-display-type="normal"
+            :point-type="index < pointTypes.length ? pointTypes[index] : 'point'"
+            @update-point-type="updatePointTypeEm($event, index)"
+            :no-change-point="noChangePoint"
+          />
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -21,13 +21,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import ReviewCard from '@/components/ReviewCard.vue'
+import ReviewComponent from '@/components/ReviewComponent.vue'
 import { Review, ReviewDisplayType, ReviewFactorParam, ReviewPointType } from '@/common/review'
 
 export default defineComponent({
   name: 'ReviewList',
   components: {
-    ReviewCard
+    ReviewComponent
   },
   props: {
     reviews: {

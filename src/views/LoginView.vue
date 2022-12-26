@@ -1,4 +1,6 @@
 <template>
+  <!-- セッション有効期限をチェックする -->
+  <session-checker />
   <v-card width="480px" class="center">
 
     <!-- セッション有効期限をチェックする -->
@@ -25,7 +27,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useStore } from '@/store/index'
-import restApi from '@/common/restapi'
+import RestApi from '@/common/restapi'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
 
@@ -40,7 +42,7 @@ export default defineComponent({
 
     if (store.state.sessionId === '') {
       const connectTemp = () => {
-        restApi.getTempSession().then((response) => {
+        RestApi.getTempSession().then((response) => {
           const session = response.data.codeChallenge
           const base = 'https://twitter.com/i/oauth2/authorize'
           const code = 'response_type=code'

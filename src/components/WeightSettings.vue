@@ -5,7 +5,7 @@
         <!-- 番号 -->
         <span v-text="(i+1)" />
       </v-col>
-      <v-col cols="9" sm="10" md="10" lg="10" xl="10">
+      <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
         <v-container fluid class="ma-0 pa-0">
           <v-row dense>
             <v-col cols="12" sm="6" md="4" lg="5" xl="6">
@@ -23,14 +23,15 @@
             </v-col>
             <v-col cols="12" sm="6" md="3" lg="2" xl="2">
               <!-- ポイントの説明欄 -->
+              <span v-if="readonly" v-text="param.isPoint ? 'ポイント' : '情報'"></span>
               <v-select
+                v-else
                 label="項目の種類"
                 :model-value="param.isPoint ? 'ポイント' : '情報'"
                 @update:model-value="updateIsPointProxy($event, i)"
                 :items="isPointSelection"
                 dense
-              >
-              </v-select>
+              />
             </v-col>
             <v-col v-if="param.isPoint" cols="12" sm="6" md="3" lg="3" xl="3">
               <!-- ポイントのスライダー -->
@@ -46,6 +47,7 @@
                 dense
                 persistent-hint
                 thumb-label="always"
+                :readonly="readonly"
               />
             </v-col>
             <v-col v-else cols="12" sm="10" md="5" lg="4" xl="4">
@@ -53,7 +55,7 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col cols="1" sm="1" md="1" lg="1" xl="1">
+      <v-col v-if="!readonly" cols="1" sm="1" md="1" lg="1" xl="1">
         <v-btn icon flat @click="$emit('removeItem', i)">
           <v-icon>
             mdi-window-close

@@ -8,7 +8,7 @@ import { defineComponent } from 'vue'
 import { useStore } from '@/store/index'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
-import restApi, { } from '@/common/restapi'
+import RestApi, { } from '@/common/restapi'
 
 export default defineComponent({
   name: 'AuthView',
@@ -22,7 +22,7 @@ export default defineComponent({
       router.push('/home')
     } else if (store.state.tempSessionId !== '') {
       // 一時セッションを持っている場合
-      restApi.getSession(code, store.state.tempSessionId).then((response) => {
+      RestApi.getSession(code, store.state.tempSessionId).then((response) => {
         store.commit('setTempSessionId', '')
         store.commit('setSessionId', response.data.sessionId)
         store.commit('setTwitterName', response.data.twitterName)

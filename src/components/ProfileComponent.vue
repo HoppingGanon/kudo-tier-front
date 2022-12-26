@@ -1,17 +1,35 @@
 <template>
-  <v-card width="100%" height="360px" >
-    <v-card-title>
-      <v-card-avatar>
-        <v-avatar size="80px">
-          <v-img :src="iconUrl" />
+  <v-container fluid>
+    <v-row>
+      <v-col cols="3" sm="2" md="2" lg="2" xl="2">
+        <v-avatar size="100%">
+          <v-img width="100%" :src="iconUrl" />
         </v-avatar>
-      </v-card-avatar>
-      {{ dispName }}
-    </v-card-title>
-    <v-card-text>
-      {{ profile }}
-    </v-card-text>
-  </v-card>
+      </v-col>
+      <v-col>
+        <v-container class="pa-0 ma-0" fluid>
+          <v-row>
+            <v-col>
+              <span class="text-h5" v-text="dispName"/>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <span class="text-subtitle-1">
+                Tier数: <v-span v-text="0" />
+                レビュー数: <v-span v-text="0" />
+              </span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card-text v-text="profile" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">

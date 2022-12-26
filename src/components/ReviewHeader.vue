@@ -2,14 +2,14 @@
   <v-card flat>
     <v-container fluid>
       <v-row>
-        <v-col cols="2">
+        <v-col cols="2" sm="2" md="1" lg="1" xl="1">
           <a :href="userLink">
             <v-avatar>
               <v-img :src="iconUrl" />
             </v-avatar>
           </a>
         </v-col>
-        <v-col cols="10">
+        <v-col cols="10" sm="10" md="9" lg="9" xl="9">
           <a :href="userLink">
             <p class="no-break">
               <span v-text="dispName"></span><br />

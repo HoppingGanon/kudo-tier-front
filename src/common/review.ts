@@ -127,27 +127,27 @@ export interface Tier {
 
 export const tierRules = {
   /** Tier名の長さの上限 */
-  TierNameLenMax: 100,
+  tierNameLenMax: 100,
   /** 説明文やリンクの合計数の上限 */
-  ParagsLenMax: 16,
+  paragsLenMax: 16,
   /** 説明文の文字数の上限 */
-  ParagTextLenMax: 400,
+  paragTextLenMax: 400,
   /** リンクの文字数の長さの上限 */
-  ParagLinkLenMax: 100,
+  paragLinkLenMax: 100,
   /** 評価項目の合計数の上限 */
-  ParamsLenMax: 16,
+  paramsLenMax: 16,
   /** 評価項目名の文字数の上限 */
-  ParamNameLenMax: 16
+  paramNameLenMax: 16
 }
 
-export interface TierPostData {
+export interface TierEditingData {
   /** Tier識別ID 新規作成の際は空文字 */
   tierId: string
 
   /** Tierの名称 */
   name: string
   /** TierのアイコンURL */
-  imageBase64: string
+  imageBase64: string | undefined
 
   /** 本文 */
   parags: ReviewParagraph[]
@@ -451,12 +451,15 @@ export class ReviewFunc {
    * @param v DataURL
    * @returns base64
    */
-  static dataURLToBase64 (v: string) {
+  static dataURLToBase64 (v: string) : string | undefined {
+    if (v === '') {
+      return v
+    }
     const splitedStr = v.split(',')
     if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
       return splitedStr[1]
     } else {
-      throw new Error('データURLをbase64に変換できません')
+      return 'nochange'
     }
   }
 
@@ -466,7 +469,7 @@ export class ReviewFunc {
    * @param tierId Tierの固有ID (新規作成の際は空白)
    * @returns リクエストデータ
    */
-  static createTierRequestData (tier: Tier, tierId: string) : TierPostData {
+  static createTierRequestData (tier: Tier, tierId: string) : TierEditingData {
     return {
       tierId: tierId,
       name: tier.name,

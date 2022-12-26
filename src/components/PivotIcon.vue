@@ -6,12 +6,11 @@
         </v-img>
       </v-card>
     </template>
-    <v-card>
-      <review-card
+    <v-card width="480px">
+      <review-component
         :no-header="true"
         :review="infomation.review"
         :review-factor-params="reviewFactorParams"
-        width="480px"
         display-type="summary"
         point-display-type="normal"
         :point-type="pointType"
@@ -23,13 +22,13 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
-import ReviewCard from '@/components/ReviewCard.vue'
+import ReviewComponent from '@/components/ReviewComponent.vue'
 import { defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
   name: 'PivotIcon',
   components: {
-    ReviewCard
+    ReviewComponent
   },
   props: {
     infomation: {

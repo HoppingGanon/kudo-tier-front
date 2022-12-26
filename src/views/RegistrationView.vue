@@ -3,7 +3,7 @@
     <v-card width="540px" min-height="320px" class="center">
 
     <!-- セッション有効期限をチェックする -->
-    <session-checker :is-going="true" />
+    <session-checker :is-going="true" :no-session-error="true" />
 
       <v-card-title>
         ユーザー登録
@@ -108,7 +108,7 @@
 import { defineComponent, computed, ref } from 'vue'
 import store from '@/store'
 import rules from '@/common/rules'
-import restApi, { } from '@/common/restapi'
+import RestApi, { } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
@@ -140,7 +140,7 @@ export default defineComponent({
     const submit = async () => {
       const validResult = await form.value.validate()
       if (validResult.valid) {
-        restApi.createUser({
+        RestApi.createUser({
           name: dispName.value,
           profile: profile.value,
           accept: isCheckedTerms.value

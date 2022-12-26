@@ -1,8 +1,11 @@
 <template>
   <v-toolbar color="secondary">
     <v-card-title>
-      <b>
+      <b v-if="isNew">
         Tier新規作成
+      </b>
+      <b v-else>
+        Tier編集
       </b>
     </v-card-title>
     <template v-slot:extension>
@@ -48,7 +51,7 @@
               hint="このTierを表す分かりやすい名前を設定してください。"
               :model-value="modelValue.name"
               @update:model-value="$emit('updateTierName', $event)"
-              :rules="[rulesFunc.required(), rulesFunc.maxLen(tierRules.TierNameLenMax)]"
+              :rules="[rulesFunc.required(), rulesFunc.maxLen(tierRules.tierNameLenMax)]"
             />
           </v-col>
         </v-row>
@@ -60,11 +63,18 @@
               @update-cropped-url="$emit('updateImageUrl', $event)"
             />
           </v-col>
-          <v-col cols="12" sm="6" md="5" lg="5" xl="5">
+          <v-col cols="10" sm="6" md="4" lg="4" xl="4">
             <v-card v-if="modelValue.imageUrl === ''" height="100%" class="dahed-box" flat>
               画像を選択するとここに表示されます
             </v-card>
             <v-img v-else style="border: 1px solid" height="100%" :src="modelValue.imageUrl" />
+          </v-col>
+          <v-col cols="2" sm="1" md="1" lg="1" xl="1">
+            <v-btn icon flat @click="$emit('updateImageUrl', '')">
+              <v-icon>
+                mdi-close
+              </v-icon>
+            </v-btn>
           </v-col>
         </v-row>
         <v-row>
@@ -77,7 +87,7 @@
               hint="Tierの説明文を入力してください。"
               :model-value="factor.body"
               @update:model-value="$emit('updateParagBody', $event, index)"
-              :rules="[rulesFunc.required(' 説明文が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.ParagTextLenMax)]"
+              :rules="[rulesFunc.required(' 説明文が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.paragTextLenMax)]"
             />
           </v-col>
           <v-col v-if="factor.type === 'text'" cols="1">
@@ -92,27 +102,27 @@
               :model-value="factor.body"
               @update="$emit('updateParagBody', $event, index)"
               @remove="$emit('removeParagItem', index)"
-              :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.ParagLinkLenMax)]"
+              :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.paragLinkLenMax)]"
             />
           </v-col>
         </v-row>
-        <v-row class="d-flex flex-row-reverse">
-            <v-btn
+        <v-row class="d-flex flex-row-reverse pr-3">
+          <v-btn
             class="mt-3 mb-3 mr-1 ml-1"
-              color="#00acee"
-              @click="addParagItemProxy('twitterLink')"
-            >
-              <v-icon color="white"> mdi-twitter </v-icon>
-              <b style="color: white;">埋め込みツイートを追加</b>
-            </v-btn>
-            <v-btn
-              class="mt-3 mb-3 mr-1 ml-1"
-              color="primary"
-              @click="addParagItemProxy('text')"
-            >
-              <v-icon color="white"> mdi-plus </v-icon>
-              <b style="color: white;">説明文を追加</b>
-            </v-btn>
+            color="#00acee"
+            @click="addParagItemProxy('twitterLink')"
+          >
+            <v-icon color="white"> mdi-twitter </v-icon>
+            <b style="color: white;">埋め込みツイートを追加</b>
+          </v-btn>
+          <v-btn
+            class="mt-3 mb-3 mr-1 ml-1"
+            color="primary"
+            @click="addParagItemProxy('text')"
+          >
+            <v-icon color="white"> mdi-plus </v-icon>
+            <b style="color: white;">説明文を追加</b>
+          </v-btn>
         </v-row>
       </v-form>
     </v-container>
@@ -235,8 +245,8 @@
               @update-is-point="updateWeightIsPointProxy"
               @update-weight="updateWeightProxy"
               @remove-item="removeWeightItemProxy"
-              :max-len="tierRules.ParamsLenMax"
-              :rules="[rulesFunc.required(' 項目が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.ParamNameLenMax)]"
+              :max-len="tierRules.paramsLenMax"
+              :rules="[rulesFunc.required(' 項目が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.paramNameLenMax)]"
               :required-point="true"
             />
           </v-col>
@@ -290,7 +300,9 @@ import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
-import RestApi from '@/common/restapi'
+import RestApi, { ErrorResponse } from '@/common/restapi'
+import router from '@/router'
+import { useStore } from '@/store'
 
 /**
  * バリデーション状態
@@ -319,6 +331,10 @@ export default defineComponent({
     pointType: {
       type: Object as PropType<ReviewPointType>,
       required: true
+    },
+    isNew: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -373,6 +389,7 @@ export default defineComponent({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const toast = useToast()
+    const store = useStore()
     const tab = ref(0)
     const tweetdialog = ref(false)
 
@@ -393,18 +410,18 @@ export default defineComponent({
     }
 
     const addWeightItemProxy = () => {
-      if (props.modelValue.reviewFactorParams.length < tierRules.ParamsLenMax) {
+      if (props.modelValue.reviewFactorParams.length < tierRules.paramsLenMax) {
         emit('addWeightItem')
       } else {
-        toast.warning(`追加できる項目は${tierRules.ParamsLenMax}個までです`)
+        toast.warning(`追加できる項目は${tierRules.paramsLenMax}個までです`)
       }
     }
 
     const addParagItemProxy = (type: ReviewParagraphType) => {
-      if (props.modelValue.parags.length < tierRules.ParagsLenMax) {
+      if (props.modelValue.parags.length < tierRules.paragsLenMax) {
         emit('addParagItem', type)
       } else {
-        toast.warning(`追加できる説明文/リンクは合計${tierRules.ParagsLenMax}個までです`)
+        toast.warning(`追加できる説明文/リンクは合計${tierRules.paragsLenMax}個までです`)
       }
     }
 
@@ -452,10 +469,7 @@ export default defineComponent({
         }
       } else {
         tabValidation.value[index] = 'error'
-        toast.warning('適切でない入力があります。', {
-          position: 'top',
-          duration: 5000
-        })
+        toast.warning('適切でない入力があります。')
       }
     }
     const back = async (index: number) => {
@@ -467,18 +481,29 @@ export default defineComponent({
       // 全タブでバリデーションチェックを行う
       for (let i = 0; i < 4; i++) {
         if (!await valid(i)) {
-          toast.warning('適切でない入力があります。', {
-            position: 'top',
-            duration: 5000
-          })
+          toast.warning('適切でない入力があります。')
           tab.value = i
           return
         }
       }
       const data = ReviewFunc.createTierRequestData(props.modelValue, props.modelValue.tierId)
-      RestApi.postTier(data).then().catch((v) => {
-        console.log(v)
-      })
+      if (props.isNew) {
+        RestApi.postTier(data).then((v) => {
+          toast.success('Tierを作成しました')
+          router.push(`/tier/${store.state.userId}/${v.data}`)
+        }).catch((e) => {
+          const v = e.response.data as ErrorResponse
+          toast.error(`${v.message}(${v.code})`)
+        })
+      } else {
+        RestApi.updateTier(data).then((v) => {
+          toast.success('Tierを更新しました')
+          router.push(`/tier/${store.state.userId}/${v.data}`)
+        }).catch((e) => {
+          const v = e.response.data as ErrorResponse
+          toast.error(`${v.message}(${v.code})`)
+        })
+      }
     }
 
     const updateTab = async (value: number) => {

@@ -1,68 +1,68 @@
 <template>
-    <v-container fluid class="ma-0 pa-0">
-      <v-row class="align-center">
-        <v-col>
-          <review-header
-            v-if="!noHeader"
-            :icon-url="tier.userIconUrl"
-            :disp-name="tier.userName"
-            :user-link="baseLink + tier.userId"
-            :last-write-time="lastWriteTime"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-card flat>
-            <p class="text-h6"><b><span v-text="tier.name"></span></b></p>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-img :src="tier.imageUrl" width="100%" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <section-component
-            :section="section"
-            display-type="all"
-          />
-        </v-col>
-      </v-row>
-      <v-row v-if="displayType === 'all'">
-        <v-col>
-          <v-card flat>
-            <v-divider />
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row v-if="displayType === 'all'">
-        <v-col>
-          <tier-ranking
-            :tier-id="tier.tierId"
-            :reviews="tier.reviews"
-            :params="tier.reviewFactorParams"
-            :point-type="pointType"
-            :no-menu-icon="noMenuIcon"
-            @updatePointType="$emit('updatePointType', $event)"
-          />
-        </v-col>
-      </v-row>
-      <v-row v-if="displayType === 'all'">
-        <v-col>
-          <review-list
-            :reviews="tier.reviews"
-            :review-factor-params="tier.reviewFactorParams"
-            :no-header="true"
-            :no-change-point="true"
-            :point-types="pointTypes"
-            display-type="all"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-container fluid class="ma-0 pa-0">
+    <v-row class="align-center">
+      <v-col>
+        <review-header
+          v-if="!noHeader"
+          :icon-url="tier.userIconUrl"
+          :disp-name="tier.userName"
+          :user-link="baseLink + tier.userId"
+          :last-write-time="lastWriteTime"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-card flat>
+          <p class="text-h6"><b><span v-text="tier.name"></span></b></p>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-img :src="tier.imageUrl" width="100%" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <section-component
+          :section="section"
+          display-type="all"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="displayType === 'all'">
+      <v-col>
+        <v-card flat>
+          <v-divider />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row v-if="displayType === 'all'">
+      <v-col>
+        <tier-ranking
+          :tier-id="tier.tierId"
+          :reviews="tier.reviews"
+          :params="tier.reviewFactorParams"
+          :point-type="pointType"
+          :no-menu-icon="noMenuIcon"
+          @updatePointType="$emit('updatePointType', $event)"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="displayType === 'all'">
+      <v-col>
+        <review-list
+          :reviews="tier.reviews"
+          :review-factor-params="tier.reviewFactorParams"
+          :no-header="true"
+          :no-change-point="true"
+          :point-types="pointTypes"
+          display-type="all"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
