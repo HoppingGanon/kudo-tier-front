@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
 import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam } from './review'
-import { TierContentType, TierSortType } from './page'
+import { TierSortType } from './page'
 
 export interface TempSession {
   // eslint-disable-next-line camelcase
@@ -185,8 +185,8 @@ export default class RestApi {
     return this.update('/tier', data)
   }
 
-  static getTierList (userId: string, word: string, contentType: TierContentType, sortType: TierSortType, page: number) {
-    return this.get<TierData[]>(encodeURI(`/tiers?userId=${userId}&word=${word}&contenttype=${contentType}&sorttype=${sortType}&page=${page}`))
+  static getTierList (userId: string, word: string, sortType: TierSortType, page: number) {
+    return this.get<TierData[]>(encodeURI(`/tiers?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
   }
 }
 

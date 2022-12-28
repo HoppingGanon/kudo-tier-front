@@ -50,3 +50,9 @@ td.minimum {
   text-align: center;
   color: gray;
 }
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

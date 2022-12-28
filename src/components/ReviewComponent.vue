@@ -6,7 +6,7 @@
           v-if="!noHeader"
           :icon-url="review.userIconUrl"
           :disp-name="review.userName"
-          :user-link="baseLink + review.userId"
+          :user-id="review.userId"
           :last-write-time="lastWriteTime"
         />
       </v-col>
@@ -177,8 +177,6 @@ export default defineComponent({
       return ReviewFunc.calcSum(props.review, props.reviewFactorParams)
     })
 
-    const baseLink = (process.env.VUE_APP_BASE_URI as string) + '/home/'
-
     const expansion = ref(false)
 
     const getPointType = () => {
@@ -189,7 +187,6 @@ export default defineComponent({
       lastWriteTime,
       average,
       sum,
-      baseLink,
       expansion,
       getPointType
     }

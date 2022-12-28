@@ -34,6 +34,6 @@ export const tierContentTypeList: SelectObject<TierContentType>[] = [
   },
   {
     value: 'review',
-    text: 'レビュー'
+    text: 'レビュー(実装予定)'
   }
 ]

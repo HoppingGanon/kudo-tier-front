@@ -2,9 +2,11 @@
   <v-container fluid>
     <v-row>
       <v-col cols="3" sm="2" md="2" lg="2" xl="2">
-        <v-avatar size="100%">
-          <v-img width="100%" :src="iconUrl" />
-        </v-avatar>
+        <div class="avatar-space">
+          <v-avatar size="100%">
+            <v-img :src="iconUrl" />
+          </v-avatar>
+        </div>
       </v-col>
       <v-col>
         <v-container class="pa-0 ma-0" fluid>
@@ -57,3 +59,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.avatar-space {
+  aspect-ratio: 1;
+  width: 100%;
+}
+</style>

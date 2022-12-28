@@ -63,11 +63,10 @@
       </v-col>
       <v-col cols="6">
         <v-card>
-          <v-toolbar color="secondary">
+          <v-toolbar color="secondary" @click="goTierSearch" class="cursor-pointer">
             <v-card-title>
-              <b>
-                ピックアップTier
-              </b>
+              <b>最新のTier</b>
+              <v-icon>mdi-magnify</v-icon>
             </v-card-title>
           </v-toolbar>
           <v-card
@@ -77,7 +76,15 @@
             max-height="50vh"
             color="thirdry"
           >
+            <v-card v-if="tiers.length == 0" height="40vh" class="flex-center">
+              <div style="text-align: center;">
+                Tierがありません<br />
+                初めてのTierを作成しましょう<br />
+                <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
+              </div>
+            </v-card>
             <tier-list
+              v-else
               :tiers="tiers"
             />
           </v-card>
@@ -90,15 +97,17 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import RestApi from '@/common/restapi'
+import RestApi, { Parser } from '@/common/restapi'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import { useRoute } from 'vue-router'
-import { ReviewFunc, ReviewPointType } from '@/common/review'
-import { reviews as reviewsOrg, tier as tierOrg, tiers as tiersOrg } from '@/common/dummy'
+import { ReviewFunc, ReviewPointType, Tier } from '@/common/review'
+import { reviews as reviewsOrg, tier as tierOrg } from '@/common/dummy'
+import { useToast } from 'vue-toast-notification'
+import router from '@/router'
 
 export default defineComponent({
   name: 'HomeView',
@@ -111,14 +120,23 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
+    const toast = useToast()
 
     const isNotFound = ref(false)
     const dispName = ref('')
     const profile = ref('')
     const iconUrl = ref('')
+    const userId = ref('')
+
+    // テストデータ
+    const reviews = ref(reviewsOrg)
+    const tier = ref(tierOrg)
+
+    const tiers = ref([] as Tier[])
 
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
+        userId.value = route.params.id
         // URIにIDが含まれている場合
         RestApi.getUserData(route.params.id).then((res) => {
           dispName.value = res.data.name
@@ -127,16 +145,23 @@ export default defineComponent({
         }).catch(() => {
           isNotFound.value = true
         })
+
+        // 並行してTierもダウンロードする
+        RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
+          const tierDataList = res.data
+          tiers.value.splice(0)
+          tierDataList.forEach((v) => {
+            tiers.value.push(Parser.parseTier(v))
+          })
+        }).catch((e) => {
+          const v = e.response.data
+          toast.error(`${v.message} (${v.code})`)
+        })
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
       }
     })
-
-    // テストデータ
-    const reviews = ref(reviewsOrg)
-    const tier = ref(tierOrg)
-    const tiers = ref(tiersOrg)
 
     // ポイント表示方法のリスト
     const pointTypes = ref(ReviewFunc.getPointTypes(reviews.value))
@@ -148,6 +173,14 @@ export default defineComponent({
       }
     }
 
+    const goTierSearch = () => {
+      router.push(`/tier-search/${userId.value}`)
+    }
+
+    const goTierSettings = () => {
+      router.push('/tier-settings')
+    }
+
     return {
       isNotFound,
       dispName,
@@ -157,13 +190,16 @@ export default defineComponent({
       tier,
       tiers,
       updatePointType,
-      pointTypes
+      pointTypes,
+      goTierSearch,
+      goTierSettings
     }
   }
 })
 </script>
 
 <style Modules>
+@import url("@/style/common-style.css");
 .scroll {
   overflow-y: scroll;
 }

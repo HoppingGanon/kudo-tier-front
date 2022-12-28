@@ -3,6 +3,8 @@
     <v-row>
       <v-col cols="12" sm="5" md="7" lg="6" xl="5">
         <v-text-field
+          :model-value="modelValue"
+          @update:model-value="$emit('update', $event)"
           label="検索"
           prepend-inner-icon="mdi-magnify"
           hint="検索ワードを指定してください"
@@ -11,7 +13,7 @@
       <v-col cols="4" sm="3" md="2" lg="2" xl="1">
         <v-select
           :model-value="targetItem"
-          @update="$emit('updateTargetItem', $event)"
+          @update:model-value="$emit('updateTargetItem', $event)"
           label="検索対象"
           :items="targetItems"
           item-title="text"
@@ -22,7 +24,7 @@
       <v-col cols="8" sm="4" md="3" lg="3" xl="2">
         <v-select
           :model-value="sortItem"
-          @update="$emit('updateSortItem', $event)"
+          @update:model-value="$emit('updateSortItem', $event)"
           label="ソート順"
           :items="sortItems"
           item-title="text"
