@@ -517,11 +517,15 @@ export default defineComponent({
 
     // ページを離れた時に警告する
     onBeforeRouteLeave(() => {
-      const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
-      if (!result) {
-        toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
+      if (props.isNew && props.modelValue.name === '' && (props.modelValue.parags.length === 1 && props.modelValue.parags[0].body === '' && props.modelValue.parags[0].type === 'text')) {
+      } else {
+        const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
+        if (!result) {
+          toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
+        }
+        return result
       }
-      return result
+      return true
     })
 
     return {
