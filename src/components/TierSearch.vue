@@ -44,6 +44,7 @@ import TierList from '@/components/TierList.vue'
 import SearchComponent from '@/components/SearchComponent.vue'
 import RestApi, { Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
+import { onBeforeRouteLeave } from 'vue-router'
 
 export default defineComponent({
   name: 'TierSearch',
@@ -175,6 +176,14 @@ export default defineComponent({
           add()
         }
       })
+    })
+
+    // これがないとイベントが設定できない
+    history.replaceState(null, '')
+
+    // ページを離れた時にイベントを削除するように予定する
+    onBeforeRouteLeave(() => {
+      window.addEventListener('scroll', () => true)
     })
 
     return {

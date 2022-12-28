@@ -57,10 +57,16 @@
                 ログイン/登録
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="hasSession">
+            <v-list-item v-if="hasSession"  @click="goTierSearch">
               <v-list-item-title>
                 <v-icon class="mr-3">mdi-table-account</v-icon>
                 Tier一覧
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="hasSession"  @click="goTierSettings">
+              <v-list-item-title>
+                <v-icon class="mr-3">mdi-table-plus</v-icon>
+                Tier追加
               </v-list-item-title>
             </v-list-item>
             <v-list-item v-if="hasSession">
@@ -196,6 +202,14 @@ export default defineComponent({
       router.push('/login')
     }
 
+    const goTierSearch = () => {
+      router.push(`/tier-search/${store.state.userId}`)
+    }
+
+    const goTierSettings = () => {
+      router.push('/tier-settings')
+    }
+
     return {
       logoutDialog,
       forceDialog,
@@ -210,7 +224,9 @@ export default defineComponent({
       goHome,
       logout,
       forceLogout,
-      goLogin
+      goLogin,
+      goTierSearch,
+      goTierSettings
     }
   }
 })

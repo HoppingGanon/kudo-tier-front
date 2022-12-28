@@ -1,23 +1,17 @@
 <template>
-  <v-card flat>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="3" sm="2" md="1" lg="1" xl="1">
-          <div class="avatar-space cursor-pointer" @click="goHome">
-            <v-avatar size="100%">
-              <v-img :src="iconUrl" />
-            </v-avatar>
-          </div>
-        </v-col>
-        <v-col cols="9" sm="10" md="10" lg="10" xl="10">
-          <p class="no-break cursor-pointer"  @click="goHome">
-            <span v-text="dispName"></span><br />
-            <span v-text="lastWriteTime"></span>に更新
-          </p>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+  <div style="display:flex">
+    <div class="avatar-space cursor-pointer" @click="goHome">
+      <v-avatar size="100%">
+        <v-img :src="iconUrl"/>
+      </v-avatar>
+    </div>
+    <v-card flat height="100%">
+      <p class="no-break cursor-pointer mt-1 ml-3"  @click="goHome">
+        <span v-text="dispName"></span><br />
+        <span v-text="lastWriteTime"></span>に更新
+      </p>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -65,6 +59,9 @@ a{
 }
 .avatar-space {
   aspect-ratio: 1;
-  width: 100%;
+  width: 25%;
+  height: auto;
+  max-width: 64px;
+  max-height: 64px;
 }
 </style>

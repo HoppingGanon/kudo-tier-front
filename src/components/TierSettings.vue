@@ -302,6 +302,7 @@ import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
 import RestApi, { ErrorResponse } from '@/common/restapi'
 import router from '@/router'
+import { onBeforeRouteLeave } from 'vue-router'
 import { useStore } from '@/store'
 
 /**
@@ -510,6 +511,18 @@ export default defineComponent({
       await valid(tab.value)
       tab.value = value
     }
+
+    // これがないとイベントが設定できない
+    history.replaceState(null, '')
+
+    // ページを離れた時に警告する
+    onBeforeRouteLeave(() => {
+      const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
+      if (!result) {
+        toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
+      }
+      return result
+    })
 
     return {
       tab,
