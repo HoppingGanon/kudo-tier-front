@@ -25,7 +25,7 @@
         </v-card-title>
         <v-spacer />
         <v-card-actions v-if="isSelf">
-          <v-btn class="mt-3 mr-3">
+          <v-btn class="mt-3 mr-3" @click="goReviewSettings">
             <v-icon>
               mdi-book-plus-outline
             </v-icon>
@@ -106,8 +106,12 @@ export default defineComponent({
 
     const edit = () => {
       if (!isNotFound.value && isSelf.value) {
-        router.push(`/tier-settings/${route.params.uid}/${route.params.tid}`)
+        router.push(`/tier-settings/${route.params.tid}`)
       }
+    }
+
+    const goReviewSettings = () => {
+      router.push(`/review-settings/${route.params.tid}`)
     }
 
     return {
@@ -116,7 +120,8 @@ export default defineComponent({
       isNotFound,
       isSelf,
       updatePointType,
-      edit
+      edit,
+      goReviewSettings
     }
   }
 })

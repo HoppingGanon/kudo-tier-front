@@ -34,6 +34,7 @@ import { ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -122,8 +123,8 @@ export default defineComponent({
 
     const isNew = ref(true)
     onMounted(() => {
-      if (route.params.uid && typeof route.params.uid === 'string' && route.params.tid && typeof route.params.tid === 'string') {
-        RestApi.getTier(route.params.uid, route.params.tid).then((res) => {
+      if (route.params.tid && typeof route.params.tid === 'string') {
+        RestApi.getTier(store.state.userId, route.params.tid).then((res) => {
           // 成功の場合
           tier.value = Parser.parseTier(res.data)
           isNew.value = false

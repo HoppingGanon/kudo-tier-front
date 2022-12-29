@@ -393,6 +393,7 @@ export default defineComponent({
     const store = useStore()
     const tab = ref(0)
     const tweetdialog = ref(false)
+    const isSended = ref(false)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -491,6 +492,7 @@ export default defineComponent({
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
+          isSended.value = true
           router.push(`/tier/${store.state.userId}/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
@@ -499,6 +501,7 @@ export default defineComponent({
       } else {
         RestApi.updateTier(data).then((v) => {
           toast.success('Tierを更新しました')
+          isSended.value = true
           router.push(`/tier/${store.state.userId}/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
@@ -517,7 +520,7 @@ export default defineComponent({
 
     // ページを離れた時に警告する
     onBeforeRouteLeave(() => {
-      if (props.isNew && props.modelValue.name === '' && (props.modelValue.parags.length === 1 && props.modelValue.parags[0].body === '' && props.modelValue.parags[0].type === 'text')) {
+      if (isSended.value || (props.isNew && props.modelValue.name === '' && (props.modelValue.parags.length === 1 && props.modelValue.parags[0].body === '' && props.modelValue.parags[0].type === 'text'))) {
       } else {
         const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
         if (!result) {
