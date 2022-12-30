@@ -4,16 +4,16 @@
       v-for="(item, i) in reviewPointTypeArray"
       :key="i"
       :style="listColor"
+      @click="updatePointTypeProxy(item)"
+      class="cursor-pointer"
     >
-      <v-list-item-content @click="updatePointTypeProxy(item)" class="cursor-pointer">
-        <v-list-item-title v-if="item === modelValue" class="strong" v-text="item"></v-list-item-title>
-        <v-list-item-title v-else v-text="item"></v-list-item-title>
-      </v-list-item-content>
+      <v-list-item-title v-if="item === modelValue" class="strong" v-text="item"></v-list-item-title>
+      <v-list-item-title v-else v-text="item"></v-list-item-title>
     </v-list-item>
   </v-list>
   <v-menu v-else v-model="menu">
-    <template v-slot:activator="{ isActive, props}">
-      <v-btn flat icon @click="menu = true" v-on="isActive" v-bind="props">
+    <template v-slot:activator="{ props}">
+      <v-btn flat icon @click="menu = true" v-bind="props">
         <v-icon>
           mdi-cached
         </v-icon>
@@ -31,11 +31,11 @@
         <v-list-item
           v-for="(item, i) in reviewPointTypeArray"
           :key="i"
+          @click="updatePointTypeProxy(item)"
+          class="cursor-pointer"
         >
-          <v-list-item-content @click="updatePointTypeProxy(item)" class="cursor-pointer">
-            <v-list-item-title v-if="item === modelValue" class="strong" v-text="item"></v-list-item-title>
-            <v-list-item-title v-else v-text="item"></v-list-item-title>
-          </v-list-item-content>
+          <v-list-item-title v-if="item === modelValue" class="strong" v-text="item"></v-list-item-title>
+          <v-list-item-title v-else v-text="item"></v-list-item-title>
         </v-list-item>
       </v-list>
   </v-menu>
@@ -51,7 +51,7 @@ export default defineComponent({
   components: {},
   props: {
     modelValue: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     },
     /** trueを指定すると、メニュー表示ではなく常に表示する */

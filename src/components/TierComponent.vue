@@ -92,7 +92,7 @@ export default defineComponent({
       required: true
     },
     displayType: {
-      type: Object as PropType<ReviewDisplayType>,
+      type: String as PropType<ReviewDisplayType>,
       required: true
     },
     noHeader: {
@@ -104,7 +104,7 @@ export default defineComponent({
       default: false as boolean
     },
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     }
   },

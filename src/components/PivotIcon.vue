@@ -1,7 +1,7 @@
 <template>
   <v-menu bottom v-model="isHover">
-    <template  v-slot:activator="{ isActive, props}">
-      <v-card class="ma-1" :width="size" :height="size" @mouseover="hover" @mouseleave="leave" v-on="isActive" v-bind="props">
+    <template  v-slot:activator="{ props }">
+      <v-card class="ma-1" :width="size" :height="size" @mouseover="hover" @mouseleave="leave" v-bind="props">
         <v-img :src="infomation.review.iconUrl">
         </v-img>
       </v-card>
@@ -36,7 +36,7 @@ export default defineComponent({
       required: true
     },
     size: {
-      type: Object as PropType<number | string>,
+      type: String as PropType<number | string>,
       default: '64px' as string
     },
     noHover: {
@@ -45,11 +45,11 @@ export default defineComponent({
     },
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       required: true
     },
     reviewFactorParams: {
-      type: Object as PropType<ReviewFactorParam[]>,
+      type: Array as PropType<ReviewFactorParam[]>,
       required: true
     }
   },

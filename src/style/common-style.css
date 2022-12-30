@@ -27,6 +27,10 @@
   cursor: pointer;
 }
 
+.cursor-grab {
+  cursor:grab;
+}
+
 .strong { font-weight: bold; }
 
 .block-center {

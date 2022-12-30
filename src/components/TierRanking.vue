@@ -12,8 +12,8 @@
         />
 
         <v-dialog v-model="weightMenu" class="ml-1 mr-1" :fullscreen="$vuetify.display.mobile">
-          <template v-slot:activator="{ isActive, props}">
-            <v-btn icon flat @click="weightMenu = true" v-on="isActive" v-bind="props">
+          <template v-slot:activator="{ props}">
+            <v-btn icon flat @click="weightMenu = true" v-bind="props">
               <v-icon>
                 mdi-weight
               </v-icon>
@@ -40,8 +40,8 @@
           </v-container>
         </v-dialog>
         <v-menu>
-          <template v-slot:activator="{ isActive, props}">
-            <v-btn icon flat @click="iconSizeMenu = true" v-on="isActive" v-bind="props">
+          <template v-slot:activator="{ props}">
+            <v-btn icon flat @click="iconSizeMenu = true" v-bind="props">
               <v-icon>
                 mdi-image-size-select-small
               </v-icon>
@@ -57,11 +57,12 @@
             <v-list-item
               v-for="(item, i) in iconSizeList"
               :key="i"
+              @click="iconSize = item.value"
+              :items="reviewPointTypeArray"
+              class="cursor-pointer"
             >
-              <v-list-item-content @click="iconSize = item.value" :items="reviewPointTypeArray" class="cursor-pointer">
-                <v-list-item-title v-if="iconSize === item.value" class="strong" v-text="item.text"></v-list-item-title>
-                <v-list-item-title v-else v-text="item.text"></v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title v-if="iconSize === item.value" class="strong" v-text="item.text"></v-list-item-title>
+              <v-list-item-title v-else v-text="item.text"></v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -89,9 +90,9 @@
       >
         <tr v-for="items, i in tierPivotList" :key="i">
           <td :style="pivotColor" style="width: 0;white-space: nowrap;">
-            <v-span v-if="pointType === 'point'" :style="pivotColor">
+            <span v-if="pointType === 'point'" :style="pivotColor">
               {{ (9 - i)*10 }}点～{{ (10 - i)*10 }}点
-            </v-span>
+            </span>
             <v-card v-else flat>
               <review-value-display
                 :point-type="pointType"
@@ -182,17 +183,17 @@ export default defineComponent({
       default: ''
     },
     reviews: {
-      type: Object as PropType<Review[]>,
+      type: Array as PropType<Review[]>,
       required: true,
       default: () => [] as PropType<Review[]>
     },
     params: {
-      type: Object as PropType<ReviewFactorParam[]>,
+      type: Array as PropType<ReviewFactorParam[]>,
       required: true,
       default: () => [] as PropType<ReviewFactorParam[]>
     },
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       required: true,
       default: 'point' as ReviewPointType
     },

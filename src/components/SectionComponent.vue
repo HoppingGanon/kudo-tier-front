@@ -42,7 +42,7 @@ export default defineComponent({
       required: true
     },
     displayType: {
-      type: Object as PropType<ReviewDisplayType>,
+      type: String as PropType<ReviewDisplayType>,
       required: true
     }
   },

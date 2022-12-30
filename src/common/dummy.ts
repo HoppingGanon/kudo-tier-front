@@ -50,67 +50,80 @@ export const tier: Tier = {
     {
       name: '年代',
       isPoint: false,
-      weight: 0
+      weight: 0,
+      index: 1
     },
     {
       name: 'アクション要素',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 2
     },
     {
       name: 'コメディ要素',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 3
     },
     {
       name: '主人公の魅力',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 4
     },
     {
       name: '敵対組織の魅力',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 5
     },
     {
       name: '60',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 6
     },
     {
       name: '50',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 7
     },
     {
       name: '40',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 8
     },
     {
       name: '30',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 9
     },
     {
       name: '20',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 10
     },
     {
       name: '10',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 11
     },
     {
       name: '0',
       isPoint: true,
-      weight: 3
+      weight: 3,
+      index: 12
     },
     {
       name: '備考',
       isPoint: false,
-      weight: 0
+      weight: 0,
+      index: 13
     }
   ],
   createAt: new Date(),

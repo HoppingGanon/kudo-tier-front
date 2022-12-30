@@ -1,83 +1,126 @@
 <template>
   <v-container class="pa-0 ma-0" fluid>
-    <v-row v-for="param,i in params" :key="i" dense>
-      <v-col cols="2" sm="1" md="1" lg="1" xl="1" class="mt-3">
-        <!-- 番号 -->
-        <span v-text="(i+1)" />
+    <v-row dense :style="'background-color:' + bgColor">
+      <v-col cols="2" sm="1" md="1" lg="1" xl="1">
+        <v-icon dense>mdi-swap-vertical</v-icon><b>移動</b>
       </v-col>
       <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
         <v-container fluid class="ma-0 pa-0">
           <v-row dense>
             <v-col cols="12" sm="6" md="4" lg="5" xl="6">
-              <!-- ポイントの説明欄 -->
-              <span v-if="readonly" v-text="param.name"></span>
-              <v-text-field
-                v-else
-                label="項目名"
-                :model-value="param.name"
-                @update:model-value="$emit('updateName', $event, i)"
-                hint="項目名には短い名前を入力してください"
-                dense
-                :rules="rules"
-              />
+              <b>項目名</b>
             </v-col>
             <v-col cols="12" sm="6" md="3" lg="2" xl="2">
-              <!-- ポイントの説明欄 -->
-              <span v-if="readonly" v-text="param.isPoint ? 'ポイント' : '情報'"></span>
-              <v-select
-                v-else
-                label="項目の種類"
-                :model-value="param.isPoint ? 'ポイント' : '情報'"
-                @update:model-value="updateIsPointProxy($event, i)"
-                :items="isPointSelection"
-                dense
-              />
+              <b>種類</b>
             </v-col>
-            <v-col v-if="param.isPoint" cols="12" sm="6" md="3" lg="3" xl="3">
-              <!-- ポイントのスライダー -->
-              <v-slider
-                class="mt-3"
-                color="primary"
-                :model-value="param.weight"
-                @update:model-value="updateWeightProxy($event, i)"
-                :min="5"
-                :max="100"
-                :step="5"
-                label="重要度"
-                dense
-                persistent-hint
-                thumb-label="always"
-                :readonly="readonly"
-              />
-            </v-col>
-            <v-col v-else cols="12" sm="10" md="5" lg="4" xl="4">
+            <v-col cols="12" sm="6" md="3" lg="3" xl="3">
+              <b>重要度</b>
             </v-col>
           </v-row>
         </v-container>
       </v-col>
       <v-col v-if="!readonly" cols="1" sm="1" md="1" lg="1" xl="1">
-        <v-btn icon flat @click="$emit('removeItem', i)">
-          <v-icon>
-            mdi-window-close
-          </v-icon>
-        </v-btn>
+        <b>削除</b>
       </v-col>
-      <v-col cols="12" sm="12" md="12" lg="12" xl="12">
+    </v-row>
+    <v-row dense>
+      <v-col>
         <v-divider />
       </v-col>
     </v-row>
+    <v-row dense>
+      <v-col>
+        <v-container class="pa-0 ma-0" fluid>
+          <draggable v-model="draggedParams" item-key="index" handle=".handle">
+            <template #item="{ element, index }">
+              <v-card class="mt-1 mb-1">
+                <v-container class="pa-0 ma-0" fluid>
+                  <v-row dense>
+                    <v-col cols="2" sm="1" md="1" lg="1" xl="1" class="mt-3">
+                      <!-- 番号 -->
+                      <v-container fluid class="cursor-grab fa fa-align-justify handle">
+                        <v-icon>
+                          mdi-drag-vertical-variant
+                        </v-icon>
+                      </v-container>
+                    </v-col>
+                    <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
+                      <v-container fluid class="ma-0 pa-0">
+                        <v-row dense>
+                          <v-col cols="12" sm="6" md="4" lg="5" xl="6">
+                            <!-- ポイントの説明欄 -->
+                            <span v-if="readonly" v-text="element.name"></span>
+                            <v-text-field
+                              v-else
+                              label="項目名"
+                              class="mt-1"
+                              :model-value="element.name"
+                              @update:model-value="$emit('updateName', $event, index)"
+                              hint="項目名には短い名前を入力してください"
+                              dense
+                              :rules="rules"
+                            />
+                          </v-col>
+                          <v-col cols="12" sm="6" md="3" lg="2" xl="2">
+                            <!-- ポイントの説明欄 -->
+                            <span v-if="readonly" v-text="element.isPoint ? 'ポイント' : '情報'"></span>
+                            <v-select
+                              v-else
+                              label="項目の種類"
+                              class="mt-1"
+                              :model-value="element.isPoint ? 'ポイント' : '情報'"
+                              @update:model-value="updateIsPointProxy($event, index)"
+                              :items="isPointSelection"
+                              dense
+                            />
+                          </v-col>
+                          <v-col v-if="element.isPoint" cols="12" sm="12" md="5" lg="5" xl="4">
+                            <!-- ポイントのスライダー -->
+                            <v-slider
+                              class="mt-4 pt-4"
+                              color="primary"
+                              :model-value="element.weight"
+                              @update:model-value="updateWeightProxy($event, index)"
+                              :min="5"
+                              :max="100"
+                              :step="5"
+                              label="重要度"
+                              dense
+                              persistent-hint
+                              thumb-label="always"
+                              :readonly="readonly"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-col>
+                    <v-col v-if="!readonly" cols="1" sm="1" md="1" lg="1" xl="1">
+                      <v-btn class="mt-2" icon flat @click="$emit('removeItem', index)">
+                        <v-icon>
+                          mdi-window-close
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card>
+            </template>
+          </draggable>
+        </v-container>
+      </v-col>
+    </v-row>
     <v-row class="justify-end">
-      <v-card flat>
+      <div>
         <v-card-text>
-          <v-span class="error-transition" :class="requiredPoint && !hasPoint ? 'error-transition-1' : 'error-transition-0'">
+          <span class="error-transition" :class="requiredPoint && !hasPoint ? 'error-transition-1' : 'error-transition-0'">
             少なくとも一つの評価項目(種類: ポイント)が必要です。
-          </v-span>
+          </span>
         </v-card-text>
-      </v-card>
+      </div>
     </v-row>
     <v-row v-if="!readonly" class="justify-end pb-3">
-      <v-card flat class="pa-3">
-        <v-btn color="primary" dark @click="addItemProxy">
+      <v-card flat class="ma-3">
+        <v-btn color="primary" @click="addItemProxy">
           <v-icon>
             mdi-plus
           </v-icon> アイテム追加
@@ -89,15 +132,19 @@
 
 <script lang="ts">
 import { ReviewFactorParam } from '@/common/review'
-import { computed, defineComponent, PropType } from 'vue'
+import vuetify from '@/plugins/vuetify'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
+import draggable from 'vuedraggable'
 
 export default defineComponent({
   name: 'WeightSettings',
-  components: {},
+  components: {
+    draggable
+  },
   props: {
     params: {
-      type: Object as PropType<ReviewFactorParam[]>,
+      type: Array as PropType<ReviewFactorParam[]>,
       required: true,
       default: () => [] as PropType<ReviewFactorParam[]>
     },
@@ -106,7 +153,7 @@ export default defineComponent({
       default: false
     },
     rules: {
-      type: Object as PropType<((v: string) => string | boolean)[]>,
+      type: Array as PropType<((v: string) => string | boolean)[]>,
       default: undefined
     },
     requiredPoint: {
@@ -119,6 +166,9 @@ export default defineComponent({
     }
   },
   emits: {
+    updateParams: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: ReviewFactorParam[]) => true,
     updateName: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string, index: number) => true,
@@ -133,9 +183,20 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true
   },
+  computed: {
+    draggedParams: {
+      get () : ReviewFactorParam[] {
+        return this.params
+      },
+      set (v: ReviewFactorParam[]) {
+        this.$emit('updateParams', v)
+      }
+    }
+  },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const toast = useToast()
+    const bgColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry
 
     const updateIsPointProxy = (v: string, i: number) => {
       emit('updateIsPoint', v === 'ポイント', i)
@@ -168,13 +229,21 @@ export default defineComponent({
       'かなり重視'
     ]
 
+    const sortDialog = ref(false)
+    const openSortDialog = () => {
+      sortDialog.value = true
+    }
+
     return {
       updateWeightProxy,
       updateIsPointProxy,
       addItemProxy,
       isPointSelection,
       hasPoint,
-      discriptions
+      discriptions,
+      sortDialog,
+      openSortDialog,
+      bgColor
     }
   }
 })

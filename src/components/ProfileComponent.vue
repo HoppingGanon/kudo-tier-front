@@ -18,8 +18,8 @@
           <v-row>
             <v-col>
               <span class="text-subtitle-1">
-                Tier数: <v-span v-text="0" />
-                レビュー数: <v-span v-text="0" />
+                Tier数: <span v-text="0" />
+                レビュー数: <span v-text="0" />
               </span>
             </v-col>
           </v-row>

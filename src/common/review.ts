@@ -50,6 +50,8 @@ export interface ReviewFactorParam {
   isPoint: boolean
   /** 評点の重み */
   weight: number
+  /** 項目番号、使用するのはTierをUpdateする場合のParams並び替え */
+  index: number
 }
 
 /** レビュー評点や情報 どちらか一つを持つ */
@@ -416,7 +418,8 @@ export class ReviewFunc {
       clone.push({
         name: v.name,
         isPoint: v.isPoint,
-        weight: v.weight
+        weight: v.weight,
+        index: v.index
       })
     })
     return clone

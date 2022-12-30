@@ -126,15 +126,15 @@ export default defineComponent({
       required: true
     },
     reviewFactorParams: {
-      type: Object as PropType<ReviewFactorParam[]>,
+      type: Array as PropType<ReviewFactorParam[]>,
       required: true
     },
     displayType: {
-      type: Object as PropType<ReviewDisplayType>,
+      type: String as PropType<ReviewDisplayType>,
       required: true
     },
     pointDisplayType: {
-      type: Object as PropType<ReviewPointDisplayType>,
+      type: String as PropType<ReviewPointDisplayType>,
       default: false as boolean
     },
     noHeader: {
@@ -155,7 +155,7 @@ export default defineComponent({
     },
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       required: true
     }
   },

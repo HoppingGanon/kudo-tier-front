@@ -240,6 +240,7 @@
           <v-col>
             <weight-settings
               :params="modelValue.reviewFactorParams"
+              @update-params="updateParams"
               @add-item="addWeightItemProxy"
               @update-name="updateWeightNameProxy"
               @update-is-point="updateWeightIsPointProxy"
@@ -290,7 +291,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierRules } from '@/common/review'
+import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierRules } from '@/common/review'
 import { defineComponent, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TweetEmbedder from '@/components/TweetEmbedder.vue'
@@ -330,7 +331,7 @@ export default defineComponent({
       required: true
     },
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       required: true
     },
     isNew: {
@@ -385,7 +386,10 @@ export default defineComponent({
     /** Tier説明文の変更 */
     updateParagBody: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: string, index: number) => true
+      value: string, index: number) => true,
+    updateParams: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: ReviewFactorParam[]) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
@@ -393,7 +397,7 @@ export default defineComponent({
     const store = useStore()
     const tab = ref(0)
     const tweetdialog = ref(false)
-    const isSended = ref(false)
+    const isSubmitting = ref(false)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -492,7 +496,7 @@ export default defineComponent({
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
-          isSended.value = true
+          isSubmitting.value = true
           router.push(`/tier/${store.state.userId}/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
@@ -501,7 +505,7 @@ export default defineComponent({
       } else {
         RestApi.updateTier(data).then((v) => {
           toast.success('Tierを更新しました')
-          isSended.value = true
+          isSubmitting.value = true
           router.push(`/tier/${store.state.userId}/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
@@ -520,16 +524,25 @@ export default defineComponent({
 
     // ページを離れた時に警告する
     onBeforeRouteLeave(() => {
-      if (isSended.value || (props.isNew && props.modelValue.name === '' && (props.modelValue.parags.length === 1 && props.modelValue.parags[0].body === '' && props.modelValue.parags[0].type === 'text'))) {
-      } else {
-        const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
-        if (!result) {
-          toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
+      if (!isSubmitting.value) {
+        if (props.isNew &&
+          props.modelValue.name === '' &&
+          props.modelValue.parags.length === 1 &&
+          props.modelValue.parags[0].body === '' &&
+          props.modelValue.parags[0].type === 'text') {
+        } else {
+          const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
+          if (!result) {
+            toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
+          }
+          return result
         }
-        return result
       }
       return true
     })
+    const updateParams = (value: ReviewFactorParam[]) => {
+      emit('updateParams', value)
+    }
 
     return {
       tab,
@@ -548,7 +561,8 @@ export default defineComponent({
       back,
       submit,
       valid,
-      updateTab
+      updateTab,
+      updateParams
     }
   }
 })
