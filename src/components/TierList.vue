@@ -29,7 +29,7 @@ export default defineComponent({
   },
   props: {
     tiers: {
-      type: Object as PropType<Tier[]>,
+      type: Array as PropType<Tier[]>,
       required: true
     }
   },

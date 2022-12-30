@@ -41,7 +41,7 @@ export default defineComponent({
       default: ''
     },
     rules: {
-      type: Object as PropType<((v: string) => string | boolean)[]>,
+      type: Array as PropType<((v: string) => string | boolean)[]>,
       default: undefined
     }
   },

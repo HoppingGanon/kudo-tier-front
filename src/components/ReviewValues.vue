@@ -52,23 +52,23 @@ export default defineComponent({
   },
   props: {
     factors: {
-      type: Object as PropType<ReviewFactor[]>,
+      type: Array as PropType<ReviewFactor[]>,
       required: true
     },
     displayType: {
-      type: Object as PropType<ReviewDisplayType>,
+      type: String as PropType<ReviewDisplayType>,
       required: true
     },
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       required: true
     },
     pointDisplayType: {
-      type: Object as PropType<ReviewPointDisplayType>,
+      type: String as PropType<ReviewPointDisplayType>,
       default: 'normal' as ReviewPointDisplayType
     },
     reviewFactorParams: {
-      type: Object as PropType<ReviewFactorParam[]>,
+      type: Array as PropType<ReviewFactorParam[]>,
       required: true
     }
   },

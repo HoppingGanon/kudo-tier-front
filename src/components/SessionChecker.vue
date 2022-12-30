@@ -1,6 +1,6 @@
 <template>
-  <div>
-  </div>
+  <v-card v-if="false">
+  </v-card>
 </template>
 
 <script lang="ts">

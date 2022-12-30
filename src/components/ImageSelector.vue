@@ -13,8 +13,8 @@
       </v-col>
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
         <v-dialog v-model="cropMenu" persistent :fullscreen="$vuetify.display.mobile">
-          <template v-slot:activator="{ isActive, props}">
-            <v-btn :disabled="imageUrl === ''" icon flat @click="cropMenu = true" v-on="isActive" v-bind="props">
+          <template v-slot:activator>
+            <v-btn :disabled="imageUrl === ''" icon flat @click="cropMenu = true">
               <v-icon>
                 mdi-crop
               </v-icon>

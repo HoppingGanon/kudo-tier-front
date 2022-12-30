@@ -26,6 +26,7 @@
     "vue-toast-notification": "3.0",
     "vue-tweet": "^2.0.2",
     "vue3-easy-data-table": "^1.5.14",
+    "vuedraggable": "^4.1.0",
     "vuetify": "^3.0.1",
     "vuex": "^4.0.0",
     "vuex-persistedstate": "^4.1.0",

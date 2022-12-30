@@ -49,11 +49,11 @@ export default defineComponent({
       required: true
     },
     sortItems: {
-      type: Object as PropType<SelectObject[]>,
+      type: Array as PropType<SelectObject[]>,
       required: true
     },
     targetItems: {
-      type: Object as PropType<SelectObject[]>,
+      type: Array as PropType<SelectObject[]>,
       required: true
     },
     sortItem: {

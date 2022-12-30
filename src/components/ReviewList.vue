@@ -31,10 +31,10 @@ export default defineComponent({
   },
   props: {
     reviews: {
-      type: Object as PropType<Review[]>
+      type: Array as PropType<Review[]>
     },
     reviewFactorParams: {
-      type: Object as PropType<ReviewFactorParam[] | ReviewFactorParam[][]>,
+      type: Array as PropType<ReviewFactorParam[] | ReviewFactorParam[][]>,
       required: true
     },
     noHeader: {
@@ -46,12 +46,12 @@ export default defineComponent({
       default: false as boolean
     },
     displayType: {
-      type: Object as PropType<ReviewDisplayType>,
+      type: String as PropType<ReviewDisplayType>,
       required: true
     },
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointTypes: {
-      type: Object as PropType<ReviewPointType[]>,
+      type: Array as PropType<ReviewPointType[]>,
       required: true
     }
   },

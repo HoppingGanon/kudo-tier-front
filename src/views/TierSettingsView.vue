@@ -21,6 +21,7 @@
         @removeParagItem="removeParagItem"
         @updateParagType="updateParagType"
         @updateParagBody="updateParagBody"
+        @update-params="updateParams"
       />
     </v-card>
   </v-container>
@@ -30,7 +31,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
-import { ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
+import { ReviewFactorParam, ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
@@ -165,7 +166,9 @@ export default defineComponent({
       tier.value.reviewFactorParams.push({
         name: '',
         isPoint: true,
-        weight: 50
+        weight: 50,
+        // indexをユニークにするため、0未満のindexのうち最小値より1少ない値を付加する
+        index: tier.value.reviewFactorParams.reduce((min, v) => Math.min(min, v.index), 0)
       })
       tier.value.reviews.forEach((review) => {
         review.reviewFactors.push({
@@ -205,6 +208,10 @@ export default defineComponent({
         tier.value.parags[index].body = value
       }
     }
+    const updateParams = (value: ReviewFactorParam[]) => {
+      tier.value.reviewFactorParams.splice(0)
+      tier.value.reviewFactorParams = value
+    }
 
     return {
       tier,
@@ -220,7 +227,8 @@ export default defineComponent({
       addParagItem,
       removeParagItem,
       updateParagType,
-      updateParagBody
+      updateParagBody,
+      updateParams
     }
   }
 })

@@ -59,12 +59,12 @@ export default defineComponent({
       required: true
     },
     pointType: {
-      type: Object as PropType<ReviewPointType>,
+      type: String as PropType<ReviewPointType>,
       required: true
     },
     displaySize: {
       /// ランク表示の際の表示サイズを変更
-      type: Object as PropType<PointDisplaySize>,
+      type: String as PropType<PointDisplaySize>,
       default: 'normal' as PointDisplaySize
     },
     compact: {
@@ -73,7 +73,7 @@ export default defineComponent({
       default: false as boolean
     },
     barWidth: {
-      type: Object as PropType<number | string | undefined>,
+      type: String as PropType<number | string | undefined>,
       default: undefined
     }
   },
