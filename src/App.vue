@@ -118,7 +118,7 @@
 
     <v-dialog v-model="forceDialog">
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar color="primary">
           <v-card-title>確認</v-card-title>
         </v-toolbar>
         <v-card-text>

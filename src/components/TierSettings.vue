@@ -69,7 +69,7 @@
             </v-card>
             <v-img v-else style="border: 1px solid" height="100%" :src="modelValue.imageUrl" />
           </v-col>
-          <v-col cols="2" sm="1" md="1" lg="1" xl="1">
+          <v-col v-if="!isNew" cols="2" sm="1" md="1" lg="1" xl="1">
             <v-btn icon flat @click="$emit('updateImageUrl', '')">
               <v-icon>
                 mdi-close
@@ -84,7 +84,7 @@
           <v-col v-if="factor.type === 'text'" cols="11">
             <v-textarea
               label="説明文"
-              hint="Tierの説明文を入力してください。"
+              hint="Tierの説明文を入力してください"
               :model-value="factor.body"
               @update:model-value="$emit('updateParagBody', $event, index)"
               :rules="[rulesFunc.required(' 説明文が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.paragTextLenMax)]"
@@ -100,6 +100,7 @@
           <v-col v-else-if="factor.type === 'twitterLink'" cols="12">
             <tweet-embedder
               :model-value="factor.body"
+              :removable="true"
               @update="$emit('updateParagBody', $event, index)"
               @remove="$emit('removeParagItem', index)"
               :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.paragLinkLenMax)]"

@@ -142,6 +142,19 @@ export const tierRules = {
   paramNameLenMax: 16
 }
 
+export const reviewRules = {
+  /** Tier名の長さの上限 */
+  reviewNameLenMax: 100,
+  /** 説明文やリンクの合計数の上限 */
+  paragsLenMax: 16,
+  /** 説明文の文字数の上限 */
+  paragTextLenMax: 400,
+  /** リンクの文字数の長さの上限 */
+  paragLinkLenMax: 100,
+  /** 評価項目名の文字数の上限 */
+  paramNameLenMax: 16
+}
+
 export interface TierEditingData {
   /** Tier識別ID 新規作成の際は空文字 */
   tierId: string

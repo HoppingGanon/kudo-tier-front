@@ -1,12 +1,18 @@
 <template>
   <v-container class="ma-0 pa-0" fluid>
     <v-row>
-      <v-col cols="12" sm="5" md="4" lg="3" xl="3">
+      <v-col cols="12" sm="7" md="6" lg="5" xl="5">
         <twitter-component
           :link="twitterLink"
         />
       </v-col>
-      <v-col col="10" sm="6" md="7" lg="8" xl="8">
+      <v-col
+        :col="removable ? 10 : 12"
+        :sm="removable ? 4 : 5"
+        :md="removable ? 5 : 6"
+        :lg="removable ? 6 : 7"
+        :xl="removable ? 6 : 7"
+      >
         <v-text-field
           label="ツイートリンク"
           hint="埋め込みたいツイートのリンクを指定してください。"
@@ -15,7 +21,7 @@
           :rules="rules ? rules.concat(linkrule) : linkrule"
         />
       </v-col>
-      <v-col cols="2" sm="1" md="1" lg="1" xl="1">
+      <v-col v-if="removable" cols="2" sm="1" md="1" lg="1" xl="1">
         <v-btn icon flat @click="$emit('remove')">
           <v-icon>
             mdi-close
@@ -43,6 +49,10 @@ export default defineComponent({
     rules: {
       type: Array as PropType<((v: string) => string | boolean)[]>,
       default: undefined
+    },
+    removable: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
