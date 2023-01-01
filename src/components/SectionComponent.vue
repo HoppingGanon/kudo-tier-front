@@ -1,5 +1,8 @@
 <template>
-  <v-card v-if="displayType === 'all'" flat>
+  <v-card v-if="editable" flat>
+    aaa
+  </v-card>
+  <v-card v-else-if="displayType === 'all'" flat>
     <span v-if="section.title" class="break-word text-subtitle-1">
       <span v-text="section.title"></span>
     </span>
@@ -43,10 +46,21 @@ export default defineComponent({
     },
     displayType: {
       type: String as PropType<ReviewDisplayType>,
-      required: true
+      default: 'all'
+    },
+    editable: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: {}
+  emits: {
+    updateTitle: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      v: string) => true,
+    updateParag: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      v: string, i: number) => true
+  }
 })
 </script>
 

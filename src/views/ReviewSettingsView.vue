@@ -41,13 +41,55 @@
           <v-col>
             <v-text-field
               label="レビュー名"
-              hint="このTierを表す分かりやすい名前を設定してください。"
+              hint="このレビューを表す分かりやすい名前を設定してください"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field
+              label="レビュータイトル"
+              hint="レビューの文章を一言で表したタイトルを設定してください"
             />
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <review-values-settings />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex flex-row-reverse">
+            <menu-button :items="additionalItems" @select="addObject($event, 0)">
+              <template v-slot:button="{ open, props }">
+                <v-btn @click="open" v-bind="props" color="primary">
+                  <v-icon>mdi-plus-thick</v-icon>追加
+                </v-btn>
+              </template>
+            </menu-button>
+
+          </v-col>
+        </v-row>
+        <v-row v-for="section, i in review.sections" :key="i">
+          <v-col>
+            <v-container class="ma-0 pa-0" fluid>
+              <v-row>
+                <v-col>
+                  <section-component :section="section" :editable="true" />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="d-flex flex-row-reverse">
+                  <menu-button :items="additionalItems" @select="addObject($event, i)">
+                    <template v-slot:button="{ open, props }">
+                      <v-btn @click="open" v-bind="props" color="primary">
+                        <v-icon>mdi-plus-thick</v-icon>追加
+                      </v-btn>
+                    </template>
+                  </menu-button>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-col>
         </v-row>
       </v-container>
@@ -60,16 +102,22 @@ import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
 import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
+import SectionComponent from '@/components/SectionComponent.vue'
+import MenuButton from '@/components/MenuButton.vue'
 import { ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
+import { emptyReviwew } from '@/common/dummy'
+import { SelectObject } from '@/common/page'
 
 export default defineComponent({
   name: 'TierSettingsView',
   components: {
     SessionChecker,
-    ReviewValuesSettings
+    ReviewValuesSettings,
+    SectionComponent,
+    MenuButton
   },
   setup () {
     const route = useRoute()
@@ -80,9 +128,66 @@ export default defineComponent({
       tab.value = v
     }
 
+    const review = ref(emptyReviwew)
+
+    const additionalItems: SelectObject<ReviewParagraphType | 'section', string>[] = [
+      {
+        text: 'セクション区切り',
+        value: 'section'
+      },
+      {
+        text: '説明文',
+        value: 'text'
+      },
+      {
+        text: 'Twitterリンク',
+        value: 'twitterLink'
+      }
+    ]
+
+    const addObject = (value: ReviewParagraphType | 'section', index: number) => {
+      console.log(value)
+      switch (value) {
+        case 'section' :
+          review.value.sections.splice(index, 0,
+            {
+              title: '',
+              parags: [
+                {
+                  type: 'text',
+                  body: ''
+                }
+              ]
+            }
+          )
+          break
+        case 'text' :
+          review.value.sections[index].parags.push({
+            type: 'text',
+            body: ''
+          })
+          break
+        case 'twitterLink' :
+          review.value.sections[index].parags.push({
+            type: 'twitterLink',
+            body: ''
+          })
+          break
+        case 'imageLink' :
+          review.value.sections[index].parags.push({
+            type: 'imageLink',
+            body: ''
+          })
+          break
+      }
+    }
+
     return {
       tab,
-      updateTab
+      updateTab,
+      review,
+      additionalItems,
+      addObject
     }
   }
 })

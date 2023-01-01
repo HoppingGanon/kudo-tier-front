@@ -106,23 +106,25 @@
             />
           </v-col>
         </v-row>
-        <v-row class="d-flex flex-row-reverse pr-3">
-          <v-btn
-            class="mt-3 mb-3 mr-1 ml-1"
-            color="#00acee"
-            @click="addParagItemProxy('twitterLink')"
-          >
-            <v-icon color="white"> mdi-twitter </v-icon>
-            <b style="color: white;">埋め込みツイートを追加</b>
-          </v-btn>
-          <v-btn
-            class="mt-3 mb-3 mr-1 ml-1"
-            color="primary"
-            @click="addParagItemProxy('text')"
-          >
-            <v-icon color="white"> mdi-plus </v-icon>
-            <b style="color: white;">説明文を追加</b>
-          </v-btn>
+        <v-row>
+          <v-col class="d-flex flex-row-reverse pr-3">
+            <v-btn
+              class="mt-3 mb-3 mr-1 ml-1"
+              color="#00acee"
+              @click="addParagItemProxy('twitterLink')"
+            >
+              <v-icon color="white"> mdi-twitter </v-icon>
+              <b style="color: white;">埋め込みツイートを追加</b>
+            </v-btn>
+            <v-btn
+              class="mt-3 mb-3 mr-1 ml-1"
+              color="primary"
+              @click="addParagItemProxy('text')"
+            >
+              <v-icon color="white"> mdi-plus </v-icon>
+              <b style="color: white;">説明文を追加</b>
+            </v-btn>
+          </v-col>
         </v-row>
       </v-form>
     </v-container>

@@ -58,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/review-settings/:tid',
-    name: 'tier-settings',
+    name: 'review-settings-new',
     component: () => import('../views/ReviewSettingsView.vue')
   }
 ]

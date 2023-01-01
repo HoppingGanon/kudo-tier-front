@@ -1,6 +1,6 @@
 <template>
   <v-menu bottom v-model="isHover">
-    <template  v-slot:activator="{ props }">
+    <template v-slot:activator="{ props }">
       <v-card class="ma-1" :width="size" :height="size" @mouseover="hover" @mouseleave="leave" v-bind="props">
         <v-img :src="infomation.review.iconUrl">
         </v-img>
