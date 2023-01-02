@@ -1,5 +1,6 @@
 <template>
-  <v-card v-if="pointType == 'stars'" flat>
+  <div v-if="pointType == 'stars'">
+    <!-- starsの評価表示 -->
     <span v-if="compact">
       <v-icon color="orange" dark  :small="displaySize === 'smaller'" :large="displaySize === 'larger'"> mdi-star </v-icon>
       <span v-text="point"></span>
@@ -8,8 +9,9 @@
       <v-icon v-for="n of point" :key="n" color="orange" dark :small="displaySize === 'smaller'" :large="displaySize === 'larger'"> mdi-star </v-icon>
       <v-icon v-for="n of (5 - point)" :key="n" color="black" dark :small="displaySize === 'smaller'" :large="displaySize === 'larger'"> mdi-star </v-icon>
     </span>
-  </v-card>
-  <v-card v-else-if="pointType == 'rank7'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" flat>
+  </div>
+  <div v-else-if="pointType == 'rank7'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" >
+    <!--rank7の評価表示 -->
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank d">D</span>
     <span v-else-if="point == 2" class="rank c">C</span>
@@ -17,8 +19,9 @@
     <span v-else-if="point == 4" class="rank a">A</span>
     <span v-else-if="point == 5" class="rank s">S</span>
     <span v-else-if="point > 5" class="rank ss">SS</span>
-  </v-card>
-  <v-card v-else-if="pointType == 'rank14'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" flat>
+  </div>
+  <div v-else-if="pointType == 'rank14'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" >
+    <!-- rank14の評価表示 -->
     <span v-if="point <= 0" class="rank e">E</span>
     <span v-else-if="point == 1" class="rank e">E+</span>
     <span v-else-if="point == 2" class="rank d">D</span>
@@ -33,16 +36,23 @@
     <span v-else-if="point == 11" class="rank s">S+</span>
     <span v-else-if="point == 12" class="rank ss">SS</span>
     <span v-else-if="point > 12" class="rank ss">SS+</span>
-  </v-card>
-  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 10)" :width="barWidth" flat>
+  </div>
+  <div v-else-if="compact">
+    <!-- score, point, unlimitedのコンパクト評価表示 -->
+    <span class="ml-1" v-text="point"></span>
+  </div>
+  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 10)" :width="barWidth" >
+    <!-- scoreの評価表示 -->
     <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="compact ? '' : calcBarStyle(point, 100)" :width="barWidth" flat>
+  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 100)" :width="barWidth" >
+    <!-- pointの評価表示 -->
     <span class="ml-1" v-text="point"></span>
   </v-card>
-  <v-card v-else-if="pointType == 'unlimited'" :width="barWidth" flat>
-    <span class="ml-1" v-text="point"></span>
-  </v-card>
+  <div v-else-if="pointType == 'unlimited'" :width="barWidth" >
+    <!-- unlimitedの評価表示 -->
+    <b><span class="ml-1" v-text="point"></span></b>
+  </div>
 </template>
 
 <script lang="ts">

@@ -308,15 +308,7 @@ import RestApi, { ErrorResponse } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useStore } from '@/store'
-
-/**
- * バリデーション状態
- * none...一度も開いていない
- * unknown...開いたが、検証していない
- * checked...検証済み
- * error...検証の結果、入力エラー
- */
-type ValidState = 'none' | 'unknown' | 'checked' | 'error'
+import { ValidState } from '@/common/page'
 
 export default defineComponent({
   name: 'TierSettings',

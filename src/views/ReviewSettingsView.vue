@@ -7,7 +7,7 @@
     <v-card class="ma-0">
       <v-toolbar color="secondary">
         <v-card-title>
-          Review新規作成
+          レビュー新規作成
         </v-card-title>
         <template v-slot:extension>
           <v-tabs :model-value="tab" @update:model-value="updateTab" centered slider-color="primary">
@@ -84,14 +84,6 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row>
-          <v-divider class="mt-3 mb-3"></v-divider>
-        </v-row>
-        <v-row>
-          <v-col>
-            <review-values-settings />
-          </v-col>
-        </v-row>
       </v-container>
 
       <v-container v-show="tab === 1" flat class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
@@ -101,11 +93,25 @@
               2. 評点
             </v-card-title>
             <v-card-text>
-              このレビューの評点を設定してください
+              このレビューの評点を設定してください<br />
+              項目に評点を設定すると、自動的に総合ランクが計算されます
             </v-card-text>
           </v-col>
         </v-row>
-
+        <v-row>
+          <v-divider class="mt-3 mb-3"></v-divider>
+        </v-row>
+        <v-row>
+          <v-col>
+            <review-values-settings
+              :review="review"
+              :params="tier.reviewFactorParams"
+              :point-type="tier.pointType"
+              @update-point="updatePoint"
+              @update-info="updateInfo"
+            />
+          </v-col>
+        </v-row>
       </v-container>
 
       <v-container v-show="tab === 2" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
@@ -166,6 +172,33 @@
           </v-col>
         </v-row>
       </v-container>
+
+      <v-container v-show="tab === 3" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
+        <v-row>
+          <v-col>
+            <v-card-title>
+              4. プレビュー
+            </v-card-title>
+            <v-card-text>
+              レビューの最終確認です<br />
+              問題がなければ右下の「完了」を押してください
+            </v-card-text>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <review-component
+              :review="review"
+              :point-type="tier.pointType"
+              display-type="all"
+              :no-header="true"
+              :review-factor-params="tier.reviewFactorParams"
+              :no-change-point="true"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+
     </v-card>
   </v-container>
 
@@ -202,12 +235,14 @@ import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
 import SectionComponent, { additionalItems } from '@/components/SectionComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
-import { ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
+import ReviewComponent from '@/components/ReviewComponent.vue'
+import { ReviewParagraphType, ReviewPointType, Tier, ReviewFunc } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
-import { emptyReviwew } from '@/common/dummy'
-import { SelectObject } from '@/common/page'
+import { emptyReviwew, emptyTier } from '@/common/dummy'
+import { SelectObject, ValidState } from '@/common/page'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -216,7 +251,8 @@ export default defineComponent({
     ReviewValuesSettings,
     SectionComponent,
     MenuButton,
-    ImageSelector
+    ImageSelector,
+    ReviewComponent
   },
   setup () {
     const route = useRoute()
@@ -225,12 +261,96 @@ export default defineComponent({
     const isNew = ref(true)
 
     const tab = ref(0)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateTab = (v: any) => {
       tab.value = v
     }
     const confirmdialog = ref(false)
 
-    const review = ref(emptyReviwew)
+    const tier = ref(ReviewFunc.cloneTier(emptyTier))
+    const review = ref(ReviewFunc.cloneReview(emptyReviwew))
+
+    onMounted(() => {
+      if (route.params.tid && typeof route.params.tid === 'string') {
+        RestApi.getTier(store.state.userId, route.params.tid).then((res) => {
+          // 成功の場合
+          tier.value = Parser.parseTier(res.data)
+          tier.value.reviewFactorParams.forEach((v) => {
+            if (v.isPoint) {
+              review.value.reviewFactors.push({
+                point: 0
+              })
+            } else {
+              review.value.reviewFactors.push({
+                info: ''
+              })
+            }
+          })
+        }).catch((e) => {
+          // 失敗の場合は通知を表示して、新規作成
+          const v = e.response.data as ErrorResponse
+          toast.warning(`${v.message}(${v.code}) Tierが存在しません`)
+        })
+      }
+    })
+
+    const tabValidation = ref([
+      'none',
+      'none',
+      'none',
+      'none'
+    ] as ValidState[])
+
+    const forms = ref([
+      ref(),
+      ref(),
+      ref(),
+      ref()
+    ])
+
+    const valid = async (index: number) => {
+      let result = false
+      const validResult = await forms.value[index].value.validate()
+
+      result = validResult.valid
+
+      if (result) {
+        tabValidation.value[index] = 'checked'
+      } else {
+        tabValidation.value[index] = 'error'
+      }
+      return result
+    }
+
+    const next = async (index: number) => {
+      const result: boolean = await valid(index)
+      if (result) {
+        if (index + 1 < 4) {
+          tab.value++
+          if (tabValidation.value[index + 1] === 'none') {
+            tabValidation.value[index + 1] = 'unknown'
+          }
+        }
+      } else {
+        tabValidation.value[index] = 'error'
+        toast.warning('適切でない入力があります。')
+      }
+    }
+    const back = async (index: number) => {
+      await valid(index)
+      tab.value--
+    }
+
+    const updatePoint = (v: number, i: number) => {
+      if (i < review.value.reviewFactors.length && i < tier.value.reviewFactorParams.length && tier.value.reviewFactorParams[i].isPoint) {
+        review.value.reviewFactors[i].point = v
+      }
+    }
+    const updateInfo = (v: string, i: number) => {
+      if (i < review.value.reviewFactors.length && i < tier.value.reviewFactorParams.length && !tier.value.reviewFactorParams[i].isPoint) {
+        review.value.reviewFactors[i].info = v
+      }
+    }
 
     const addObject = (value: ReviewParagraphType | 'section', sectionIndex: number, paragIndex: number, isFirst: boolean) => {
       switch (value) {
@@ -313,7 +433,10 @@ export default defineComponent({
       tab,
       updateTab,
       confirmdialog,
+      tier,
       review,
+      updatePoint,
+      updateInfo,
       additionalItems,
       addObject,
       updateSectionTitle,

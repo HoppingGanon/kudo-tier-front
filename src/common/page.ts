@@ -37,3 +37,12 @@ export const tierContentTypeList: SelectObject<TierContentType>[] = [
     text: 'レビュー(実装予定)'
   }
 ]
+
+/**
+ * バリデーション状態
+ * none...一度も開いていない
+ * unknown...開いたが、検証していない
+ * checked...検証済み
+ * error...検証の結果、入力エラー
+ */
+export type ValidState = 'none' | 'unknown' | 'checked' | 'error'

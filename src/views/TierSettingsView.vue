@@ -31,11 +31,12 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
-import { ReviewFactorParam, ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
+import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import store from '@/store'
+import { emptyReviwew, emptyTier } from '@/common/dummy'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -47,80 +48,43 @@ export default defineComponent({
     const route = useRoute()
     const toast = useToast()
 
-    const tier = ref({
-      tierId: '',
-      userName: '',
-      userId: '',
-      userIconUrl: '',
-      pointType: 'stars',
+    const tier = ref(ReviewFunc.cloneTier(emptyTier))
+    tier.value.reviewFactorParams.push({
       name: '',
-      imageUrl: '',
+      weight: 50,
+      isPoint: true,
+      index: -1
+    })
+    tier.value.parags.push({
+      type: 'text',
+      body: ''
+    })
+    let review = ReviewFunc.cloneReview(emptyReviwew)
+    review.name = 'サンプル用レビュー1'
+    review.title = 'これはサンプルレビューです'
+    review.sections.push({
+      title: '',
       parags: [
         {
           type: 'text',
-          body: ''
+          body: 'サンプルレビューの説明文です\n実際はTier作成後に手動でレビューを追加する必要があります\nまた、このサンプルでは評価項目の評価情報をランダムで設定しています'
         }
-      ],
-      reviews: [
-        {
-          reviewId: '',
-          tierId: '',
-          userName: '',
-          userId: '',
-          userIconUrl: '',
-          title: 'レビュー1',
-          name: 'サンプル',
-          iconUrl: 'https://placehold.jp/256x256.png',
-          reviewFactors: [
-            {
-              info: '',
-              point: Math.round(Math.random() * 100)
-            }
-          ],
-          sections: [
-            {
-              title: 'これはサンプルです',
-              parags: [
-                {
-                  type: 'text',
-                  body: 'これはサンプルのレビューです。見た目の例として、各項目にランダムな評価がついています。'
-                }
-              ]
-            }
-          ],
-          createAt: new Date('1970/01/01'),
-          updateAt: new Date('1970/01/01')
-        },
-        {
-          reviewId: '',
-          tierId: '',
-          userName: '',
-          userId: '',
-          userIconUrl: '',
-          title: 'レビュー2',
-          name: 'サンプル',
-          iconUrl: 'https://placehold.jp/256x256.png',
-          reviewFactors: [
-            {
-              info: '',
-              point: Math.round(Math.random() * 100)
-            }
-          ],
-          sections: [],
-          createAt: new Date('1970/01/01'),
-          updateAt: new Date('1970/01/01')
-        }
-      ],
-      reviewFactorParams: [
-        {
-          name: '',
-          isPoint: true,
-          weight: 50
-        }
-      ],
-      createAt: new Date('1970/01/01'),
-      updateAt: new Date('1970/01/01')
-    } as Tier)
+      ]
+    })
+    review.reviewFactors.push({
+      point: Math.round(Math.random() * 100)
+    })
+    tier.value.reviews.push(review)
+
+    review = ReviewFunc.cloneReview(review)
+    review.name = 'サンプル用レビュー2'
+    review.reviewFactors[0].point = Math.round(Math.random() * 100)
+    tier.value.reviews.push(review)
+
+    review = ReviewFunc.cloneReview(review)
+    review.name = 'サンプル用レビュー3'
+    review.reviewFactors[0].point = Math.round(Math.random() * 100)
+    tier.value.reviews.push(review)
 
     const isNew = ref(true)
     onMounted(() => {

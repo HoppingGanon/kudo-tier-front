@@ -33,7 +33,7 @@
         <v-container class="pa-0 ma-0" fluid>
           <draggable v-model="draggedParams" item-key="index" handle=".handle">
             <template #item="{ element, index }">
-              <v-card class="mt-1 mb-1">
+              <v-card class="mt-1 mb-1" flat>
                 <v-container class="pa-0 ma-0" fluid>
                   <v-row dense>
                     <v-col cols="2" sm="1" md="1" lg="1" xl="1" class="mt-3">

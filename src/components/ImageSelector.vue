@@ -46,10 +46,7 @@
                     ref="cropper"
                     :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
                     :src="imageUrl"
-                    containerStyle="height:75vh"
                     dragMode="move"
-                    min-crop-box-width="64px"
-                    min-crop-box-height="64px"
                   />
                 </v-col>
               </v-row>

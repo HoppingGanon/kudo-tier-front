@@ -247,6 +247,7 @@ export class ReviewFunc {
     }
   }
 
+  /** 重みを考慮した評点の総合評価を算出する */
   static calcAaverage (review: Review, reviewFactorParams: ReviewFactorParam[]) {
     let ave = 0
     let sumWeight = 0
@@ -268,6 +269,7 @@ export class ReviewFunc {
     return ave
   }
 
+  /** 重みを考慮した評点の単純合計を算出する(unlimitedのみ) */
   static calcSum (review: Review, reviewFactorParams: ReviewFactorParam[]) {
     let sum = 0
     reviewFactorParams.forEach((param, index) => {

@@ -1,12 +1,12 @@
 <template>
   <v-menu bottom v-model="isHover">
     <template v-slot:activator="{ props }">
-      <v-card class="ma-1" :width="size" :height="size" @mouseover="hover" @mouseleave="leave" v-bind="props">
+      <v-card class="ma-1" :width="size" :height="size" @click="click" v-bind="props">
         <v-img :src="infomation.review.iconUrl">
         </v-img>
       </v-card>
     </template>
-    <v-card width="480px">
+    <v-card width="480px" class="no-scroll">
       <review-component
         :no-header="true"
         :review="infomation.review"
@@ -55,16 +55,12 @@ export default defineComponent({
   },
   setup () {
     const isHover = ref(false)
-    const hover = () => {
-      isHover.value = true
-    }
-    const leave = () => {
-      isHover.value = false
+    const click = () => {
+      isHover.value = !isHover.value
     }
     return {
       isHover,
-      hover,
-      leave
+      click
     }
   }
 })
@@ -80,5 +76,15 @@ export default defineComponent({
 .hover-1 {
   opacity: 1;
   background-color: rgba(255, 255, 255, 0.5);
+}
+.no-scroll {
+  /*IE(Internet Explorer)・Microsoft Edgeへの対応*/
+  -ms-overflow-style: none;
+  /*Firefoxへの対応*/
+  scrollbar-width: none;
+}
+ /*Google Chrome、Safariへの対応*/
+.no-scroll::-webkit-scrollbar{
+  display: none;
 }
 </style>

@@ -53,6 +53,7 @@
                   />
                   <review-value-display
                     v-else
+                    :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''"
                     :point-type="getPointType()"
                     :value="average"
                     display-size="larger"
@@ -135,7 +136,7 @@ export default defineComponent({
     },
     pointDisplayType: {
       type: String as PropType<ReviewPointDisplayType>,
-      default: false as boolean
+      default: 'normal'
     },
     noHeader: {
       type: Boolean,

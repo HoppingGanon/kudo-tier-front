@@ -98,7 +98,7 @@
                 :point-type="pointType"
                 :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
                 display-size="larger"
-                bar-width="64px"
+                bar-width="100px"
               />
             </v-card>
           </td>
