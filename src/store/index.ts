@@ -10,6 +10,7 @@ export type State = {
   iconUrl: string
   expiredTime: string
   isNew: boolean
+  barIsVisible: boolean
 }
 
 export default createStore<State>({
@@ -21,7 +22,8 @@ export default createStore<State>({
     twitterUserName: '',
     iconUrl: '',
     expiredTime: '',
-    isNew: true
+    isNew: true,
+    barIsVisible: true
   },
   getters: {},
   mutations: {
@@ -57,6 +59,9 @@ export default createStore<State>({
       state.twitterUserName = ''
       state.expiredTime = ''
       state.isNew = false
+    },
+    setBarIsVisible (state, val: boolean) {
+      state.barIsVisible = val
     }
   },
   actions: {

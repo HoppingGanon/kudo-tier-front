@@ -31,8 +31,6 @@
   cursor:grab;
 }
 
-.strong { font-weight: bold; }
-
 .block-center {
   display: block;
   margin-left: auto;
@@ -59,4 +57,17 @@ td.minimum {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.limit-bottom-no-bar {
+  height: 97vh
+}
+
+.limit-bottom-with-bar {
+  /* バーの高さを変更する場合はApp.vueを編集 */
+  height: -webkit-calc(97vh - 60px - 4px)
+}
+
+.error-style {
+  color: red;
 }

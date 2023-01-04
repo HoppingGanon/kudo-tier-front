@@ -26,12 +26,7 @@ export const emptyReviwew: Review = {
   iconUrl: '',
   reviewFactors: [],
   pointType: 'stars',
-  sections: [
-    {
-      title: '',
-      parags: []
-    }
-  ],
+  sections: [],
   createAt: new Date(),
   updateAt: new Date()
 }

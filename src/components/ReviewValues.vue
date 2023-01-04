@@ -6,35 +6,39 @@
         v-if="index < reviewFactorParams.length"
         class="no-break"
         :class="$vuetify.display.xs ? 'text-caption' : ''"
-        style="text-align: end;"
+        style="text-align: start;"
         cols="4"
         sm="4"
         md="4"
         lg="3"
         xl="2"
       >
-        <span v-if="index < reviewFactorParams.length" v-text="`${reviewFactorParams[index].name} : `"></span>
+        <span v-if="index < reviewFactorParams.length" v-text="reviewFactorParams[index].name"></span>
       </v-col>
       <v-col
         v-if="index < reviewFactorParams.length"
+        class="d-flex"
         cols="8"
         sm="8"
         md="8"
         lg="9"
         xl="10"
       >
-        <review-value-display
-          v-if="reviewFactorParams[index].isPoint && factor.point !== undefined"
-          :display-size="$vuetify.display.xs ? 'smaller' : 'normal'"
-          :value="factor.point"
-          :point-type="pointType"
-        />
-        <span
-          v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined"
-          class="break-word"
-          v-text="factor.info"
-          :class="$vuetify.display.xs ? 'text-caption' : ''"
-        />
+        <div class="ml-1 mr-2">:</div>
+        <div>
+          <review-value-display
+            v-if="reviewFactorParams[index].isPoint && factor.point !== undefined"
+            :display-size="$vuetify.display.xs ? 'smaller' : 'normal'"
+            :value="factor.point"
+            :point-type="pointType"
+          />
+          <span
+            v-else-if="!reviewFactorParams[index].isPoint && factor.info !== undefined"
+            class="break-word"
+            v-text="factor.info"
+            :class="$vuetify.display.xs ? 'text-caption' : ''"
+          />
+        </div>
       </v-col>
     </v-row>
   </v-container>

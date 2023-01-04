@@ -7,7 +7,7 @@
       @click="updatePointTypeProxy(item)"
       class="cursor-pointer"
     >
-      <v-list-item-title v-if="item === modelValue" class="strong" v-text="item"></v-list-item-title>
+      <v-list-item-title v-if="item === modelValue" class="font-weight-bold" v-text="item"></v-list-item-title>
       <v-list-item-title v-else v-text="item"></v-list-item-title>
     </v-list-item>
   </v-list>
@@ -34,7 +34,7 @@
           @click="updatePointTypeProxy(item)"
           class="cursor-pointer"
         >
-          <v-list-item-title v-if="item === modelValue" class="strong" v-text="item"></v-list-item-title>
+          <v-list-item-title v-if="item === modelValue" class="font-weight-bold" v-text="item"></v-list-item-title>
           <v-list-item-title v-else v-text="item"></v-list-item-title>
         </v-list-item>
       </v-list>

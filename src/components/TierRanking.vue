@@ -61,7 +61,7 @@
               :items="reviewPointTypeArray"
               class="cursor-pointer"
             >
-              <v-list-item-title v-if="iconSize === item.value" class="strong" v-text="item.text"></v-list-item-title>
+              <v-list-item-title v-if="iconSize === item.value" class="font-weight-bold" v-text="item.text"></v-list-item-title>
               <v-list-item-title v-else v-text="item.text"></v-list-item-title>
             </v-list-item>
           </v-list>

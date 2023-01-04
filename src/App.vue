@@ -110,7 +110,7 @@
       </v-container>
     </v-navigation-drawer>
 
-    <v-app-bar app class="pink lighten-4 anime" :style="barStyle" v-if="isVisibleBar">
+    <v-app-bar app class="pink lighten-4 anime" :style="barStyle" v-if="getBarIsVisible()">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
       <v-toolbar-title>Tiereview</v-toolbar-title>
@@ -133,11 +133,11 @@
     </v-dialog>
 
     <v-avatar class="overlay anime baricon" color="primary" @click="clickHideBarIcon" :style="iconStyle">
-      <v-icon v-if="isVisibleBar" dark>mdi-overscan</v-icon>
+      <v-icon v-if="getBarIsVisible()" dark>mdi-overscan</v-icon>
       <v-icon v-else dark>mdi-page-layout-header</v-icon>
     </v-avatar>
 
-    <v-main class="grad">
+    <v-main>
       <router-view />
     </v-main>
   </v-app>
@@ -155,19 +155,25 @@ export default defineComponent({
   setup () {
     const toast = useToast()
 
-    const isVisibleBar = ref(true)
     const drawer = ref(false)
+    // app-barの幅
     const barHeight = ref(60)
     const logoutDialog = ref(false)
     const forceDialog = ref(false)
 
+    const setBarIsVisible = (v: boolean) => {
+      store.commit('setBarIsVisible', v)
+    }
+
+    const getBarIsVisible = () => store.state.barIsVisible
+
     const clickHideBarIcon = () => {
-      isVisibleBar.value = !isVisibleBar.value
+      setBarIsVisible(!getBarIsVisible())
       drawer.value = true
     }
 
-    const iconStyle = computed(() => isVisibleBar.value ? `top:${barHeight.value + 8}px;` : 'top: 0px;')
-    const barStyle = computed(() => isVisibleBar.value ? `height:${barHeight.value}px;` : 'height: 0px;')
+    const iconStyle = computed(() => getBarIsVisible() ? `top:${barHeight.value + 8}px;` : 'top: 0px;')
+    const barStyle = computed(() => getBarIsVisible() ? `height:${barHeight.value}px;` : 'height: 0px;')
     const hasSession = computed(() => store.state.sessionId !== '')
     const isNew = computed(() => store.state.isNew)
 
@@ -213,7 +219,7 @@ export default defineComponent({
     return {
       logoutDialog,
       forceDialog,
-      isVisibleBar,
+      getBarIsVisible,
       drawer,
       barHeight,
       iconStyle,

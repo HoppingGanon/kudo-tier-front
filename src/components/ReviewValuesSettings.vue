@@ -36,7 +36,7 @@
         <v-card>
           <v-container class="ma-0 pa-1" fluid>
             <v-row :style="`background-color: ${secondaryColor};`">
-              <v-col cols="4" :style="`border-right: 1px solid ${borderColor}50`">
+              <v-col cols="4" :style="`border-right: 1px solid ${primaryColor}50`">
                 項目名
               </v-col>
               <v-col>
@@ -44,7 +44,7 @@
               </v-col>
             </v-row>
             <v-row v-for="factor, index in review.reviewFactors" :key="index" class="mt-3" :style="index % 2 == 1 ? `background-color: ${thirdryColor};` : ''">
-              <v-col v-if="index < params.length" cols="4" :style="`border-right: 1px solid ${borderColor}50`">
+              <v-col v-if="index < params.length" cols="4" :style="`border-right: 1px solid ${primaryColor}50`">
                 <v-container class="pa-0 ma-0" fluid>
                   <v-row>
                     <v-col>
@@ -150,15 +150,15 @@ export default defineComponent({
   },
   setup (props) {
     const ave = () => ReviewFunc.calcAaverage(props.review, props.params)
+    const primaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
     const secondaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.secondary
     const thirdryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry
-    const borderColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
 
     const step = () => 100 / (pointTypeTierCountDic[props.pointType] - 1)
 
     return {
       ave,
-      borderColor,
+      primaryColor,
       secondaryColor,
       thirdryColor,
       step

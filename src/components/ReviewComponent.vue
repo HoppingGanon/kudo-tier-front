@@ -12,56 +12,91 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6" sm="3" md="2" lg="2" xl="2">
-        <v-card>
-          <v-img :src="review.iconUrl" />
+      <v-col cols="4" sm="3" md="3" lg="2" xl="2">
+        <v-card :style="`border: 1px solid ${primaryColor}`">
+          <v-img v-if="review.iconUrl" :src="review.iconUrl" />
+          <v-img v-else src="@/assets/common/noimage256.png"/>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="9" md="10" lg="10" xl="10">
+      <v-col>
+        <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
+        <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h5' : 'text-h6'"><b><span v-text="review.title"></span></b></p>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <v-card flat>
-          <p class="text-subtitle-1"><span v-text="review.name"></span></p>
-          <p class="text-h6"><b><span v-text="review.title"></span></b></p>
-          <table style="width: 100%">
-            <tr v-if="!noChangePoint">
-              <td>
+          <v-container class="ma-0 pa-0" fluid>
+            <v-row v-if="!noChangePoint">
+              <v-col>
                 <point-type-selector
                   :model-value="pointType"
                   @update="$emit('updatePointType', $event)"
                 />
-              </td>
-            </tr>
-            <tr>
-              <td class="minimum">
-                <v-card flat>
-                  <p class="mt-2">
-                    <span v-if="getPointType() == 'stars'">総合：</span>
-                    <span v-else-if="getPointType() == 'rank7'">総合ランク：</span>
-                    <span v-else-if="getPointType() == 'rank14'">総合ランク：</span>
-                    <span v-else-if="getPointType() == 'score'">総合スコア：</span>
-                    <span v-else-if="getPointType() == 'point'">総合点：</span>
-                    <span v-else-if="getPointType() == 'unlimited'">合計：</span>
-                  </p>
-                </v-card>
-              </td>
-              <td style="width:auto">
-                <v-card flat>
-                  <review-value-display
-                    v-if="getPointType() === 'unlimited'"
-                    :point-type="getPointType()"
-                    :value="sum"
-                    display-size="larger"
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                v-if="displayType === 'all' && getPointType() !== 'unlimited' && getLabels().length > 2"
+                cols="12" sm="6" md="6" lg="5" xl="5"
+              >
+                <div>
+                  <radar-chart
+                    :labels="getLabels()"
+                    :dataList="getDataList()"
+                    :min="0"
+                    :max="100"
+                    :step="100 / getStep()"
+                    :show-legend="false"
                   />
-                  <review-value-display
-                    v-else
-                    :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''"
-                    :point-type="getPointType()"
-                    :value="average"
-                    display-size="larger"
-                  />
-                </v-card>
-              </td>
-            </tr>
-          </table>
+                </div>
+              </v-col>
+              <v-col>
+                <table style="width: 100%">
+                  <tr>
+                    <td class="minimum">
+                      <v-card flat>
+                        <p class="mt-2">
+                          <span v-if="getPointType() == 'stars'">総合：</span>
+                          <span v-else-if="getPointType() == 'rank7'">総合ランク：</span>
+                          <span v-else-if="getPointType() == 'rank14'">総合ランク：</span>
+                          <span v-else-if="getPointType() == 'score'">総合スコア：</span>
+                          <span v-else-if="getPointType() == 'point'">総合点：</span>
+                          <span v-else-if="getPointType() == 'unlimited'">合計：</span>
+                        </p>
+                      </v-card>
+                    </td>
+                    <td style="width:auto">
+                      <v-card flat>
+                        <review-value-display
+                          v-if="getPointType() === 'unlimited'"
+                          :point-type="getPointType()"
+                          :value="sum"
+                          display-size="larger"
+                        />
+                        <review-value-display
+                          v-else
+                          :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''"
+                          :point-type="getPointType()"
+                          :value="average"
+                          display-size="larger"
+                        />
+                      </v-card>
+                    </td>
+                  </tr>
+                </table>
+                <review-values
+                  v-if="displayType === 'all'"
+                  :factors="review.reviewFactors"
+                  :display-type="displayType"
+                  :point-display-type="pointDisplayType"
+                  :point-type="getPointType()"
+                  :review-factor-params="reviewFactorParams"
+                  @update-point-type="$emit('updatePointType', $event)"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -70,18 +105,6 @@
         <v-card flat>
           <v-divider/>
         </v-card>
-      </v-col>
-    </v-row>
-    <v-row v-if="displayType === 'all'">
-      <v-col>
-        <review-values
-          :factors="review.reviewFactors"
-          :display-type="displayType"
-          :point-display-type="pointDisplayType"
-          :point-type="getPointType()"
-          :review-factor-params="reviewFactorParams"
-          @update-point-type="$emit('updatePointType', $event)"
-        />
       </v-col>
     </v-row>
     <v-row v-if="displayType === 'summary'">
@@ -104,13 +127,15 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, ref } from 'vue'
-import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam, pointTypeTierCountDic } from '@/common/review'
 import CommonApi from '@/common/commonapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
+import RadarChart, { RadarChartData } from '@/components/RadarChart.vue'
+import vuetify from '@/plugins/vuetify'
 
 export default defineComponent({
   name: 'ReviewComponent',
@@ -119,7 +144,8 @@ export default defineComponent({
     ReviewHeader,
     ReviewValues,
     ReviewValueDisplay,
-    PointTypeSelector
+    PointTypeSelector,
+    RadarChart
   },
   props: {
     review: {
@@ -166,6 +192,7 @@ export default defineComponent({
       value: ReviewPointType) => true
   },
   setup (props) {
+    const primaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.review.updateAt, true)
     })
@@ -184,12 +211,29 @@ export default defineComponent({
       return props.pointType || props.review.pointType || 'point'
     }
 
+    const getStep = () => 100 / (pointTypeTierCountDic[getPointType()] - 1)
+
+    const getLabels = () => props.reviewFactorParams.filter(v => v.isPoint).map(v => v.name)
+
+    const getDataList: () => RadarChartData[] = () => {
+      return [
+        {
+          name: props.review.name,
+          values: props.review.reviewFactors.filter((v, i) => props.reviewFactorParams[i].isPoint && v.point !== undefined).map(v => v.point)
+        }
+      ] as RadarChartData[]
+    }
+
     return {
+      primaryColor,
       lastWriteTime,
       average,
       sum,
       expansion,
-      getPointType
+      getPointType,
+      getStep,
+      getLabels,
+      getDataList
     }
   }
 })

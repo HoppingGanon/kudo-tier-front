@@ -13,14 +13,14 @@
         <v-tab>
           <span :class="tabValidation[0] === 'error' ? 'error-style' : ''">1. Tier概要</span>
         </v-tab>
-        <v-tab :disabled="tabValidation[1] === 'none'" :class="tabValidation[1] === 'error' ? 'error-style' : ''">
-          2. 表示方法
+        <v-tab :disabled="tabValidation[1] === 'none'">
+          <span :class="tabValidation[1] === 'error' ? 'error-style' : ''">2. 表示方法</span>
         </v-tab>
-        <v-tab :disabled="tabValidation[2] === 'none'" :class="tabValidation[2] === 'error' ? 'error-style' : ''">
-          3. 評価項目
+        <v-tab :disabled="tabValidation[2] === 'none'">
+          <span :class="tabValidation[2] === 'error' ? 'error-style' : ''">3. 評価項目</span>
         </v-tab>
-        <v-tab :disabled="tabValidation[3] === 'none'" :class="tabValidation[3] === 'error' ? 'error-style' : ''">
-          4. プレビュー
+        <v-tab :disabled="tabValidation[3] === 'none'">
+          <span :class="tabValidation[3] === 'error' ? 'error-style' : ''">4. プレビュー</span>
         </v-tab>
       </v-tabs>
     </template>
@@ -103,7 +103,7 @@
               :removable="true"
               @update="$emit('updateParagBody', $event, index)"
               @remove="$emit('removeParagItem', index)"
-              :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierRules.paragLinkLenMax)]"
+              :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(paragLinkLenMax)]"
             />
           </v-col>
         </v-row>
@@ -294,7 +294,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierRules } from '@/common/review'
+import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierRules, paragLinkLenMax } from '@/common/review'
 import { defineComponent, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TweetEmbedder from '@/components/TweetEmbedder.vue'
@@ -540,6 +540,9 @@ export default defineComponent({
     }
 
     return {
+      rulesFunc: rules,
+      tierRules: tierRules,
+      paragLinkLenMax,
       tab,
       tweetdialog,
       updateWeightNameProxy,
@@ -548,8 +551,6 @@ export default defineComponent({
       removeWeightItemProxy,
       addWeightItemProxy,
       addParagItemProxy,
-      rulesFunc: rules,
-      tierRules: tierRules,
       forms,
       tabValidation,
       next,
@@ -565,8 +566,4 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
-
-.error-style {
-  color: red;
-}
 </style>

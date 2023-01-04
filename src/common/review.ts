@@ -127,6 +127,9 @@ export interface Tier {
   updateAt: Date
 }
 
+/** リンクの文字数の長さの上限 */
+export const paragLinkLenMax = 100
+
 export const tierRules = {
   /** Tier名の長さの上限 */
   tierNameLenMax: 100,
@@ -134,8 +137,6 @@ export const tierRules = {
   paragsLenMax: 16,
   /** 説明文の文字数の上限 */
   paragTextLenMax: 400,
-  /** リンクの文字数の長さの上限 */
-  paragLinkLenMax: 100,
   /** 評価項目の合計数の上限 */
   paramsLenMax: 16,
   /** 評価項目名の文字数の上限 */
@@ -144,13 +145,15 @@ export const tierRules = {
 
 export const reviewRules = {
   /** Tier名の長さの上限 */
-  reviewNameLenMax: 100,
+  reviewNameLenMax: 50,
+  /** Tier名の長さの上限 */
+  reviewTitleLenMax: 100,
+  /** セクションタイトルの文字数の上限 */
+  sectionTitleLen: 100,
   /** 説明文やリンクの合計数の上限 */
   paragsLenMax: 16,
   /** 説明文の文字数の上限 */
   paragTextLenMax: 400,
-  /** リンクの文字数の長さの上限 */
-  paragLinkLenMax: 100,
   /** 評価項目名の文字数の上限 */
   paramNameLenMax: 16
 }

@@ -8,6 +8,7 @@
             label="見出し"
             hint="レビュー説明の見出しを設定してください"
             class="font-weight-bold"
+            :rules="[rulesFunc.maxLen(reviewRules.sectionTitleLen)]"
           />
         </v-col>
         <v-col cols="4" sm="3" md="2" lg="2" xl="2">
@@ -36,12 +37,13 @@
             @update:model-value="$emit('updateParagBody', $event, index)"
             label="説明文"
             hint="Tierの説明文を入力してください"
+            :rules="[rulesFunc.maxLen(reviewRules.paragTextLenMax)]"
           />
           <tweet-embedder
             v-else-if="parag.type === 'twitterLink'"
             :model-value="parag.body"
             @update="$emit('updateParagBody', $event, index)"
-            :rules="[rulesFunc.required(' 埋め込みツイートが不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(reviewRules.paragLinkLenMax)]"
+            :rules="[rulesFunc.maxLen(paragLinkLenMax)]"
           />
         </v-col>
         <v-col cols="4" sm="3" md="2" lg="2" xl="2">
@@ -60,17 +62,20 @@
     </v-container>
   </v-card>
   <v-card v-else-if="displayType === 'all'" flat>
-    <span v-if="section.title" class="break-word text-subtitle-1">
-      <span v-text="section.title"></span>
+    <span v-if="section.title" class="break-word text-subtitle-1 font-weight-bold" v-text="section.title">
     </span>
     <br v-if="section.title" />
-    <span class="break-word" v-for="factor,index in section.parags" :key="index">
-      <span v-if="factor.type === 'text'" v-text="factor.body"></span>
-      <span v-if="factor.type === 'twitterLink'">
-        <twitter-component :link="factor.body" />
+    <div class="mt-1" v-for="parag,index in section.parags" :key="index">
+      <span v-if="parag.type === 'text'">
+        <span v-for="str, index2 of parag.body.split('\n')" :key="index2">
+          <span class="break-word" v-text="str"></span>
+          <br />
+        </span>
       </span>
-      <br v-if="index !== (section.parags.length - 1)" />
-    </span>
+      <span v-if="parag.type === 'twitterLink'">
+        <twitter-component :link="parag.body" />
+      </span>
+    </div>
   </v-card>
   <v-card v-else-if="displayType === 'summary'" class="no-break" flat>
     <span v-if="section.title" class="text-subtitle-1">
@@ -88,7 +93,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewRules } from '@/common/review'
+import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewRules, paragLinkLenMax } from '@/common/review'
 import TwitterComponent from '@/components/TwitterComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import TweetEmbedder from '@/components/TweetEmbedder.vue'
@@ -158,9 +163,10 @@ export default defineComponent({
   },
   setup () {
     return {
-      additionalItems,
       rulesFunc: rules,
-      reviewRules: reviewRules
+      reviewRules,
+      paragLinkLenMax,
+      additionalItems
     }
   }
 })
