@@ -66,7 +66,7 @@
                 v-model="review.name"
                 label="レビュー名 (必須)"
                 hint="このレビュー対象を表す短い名前を設定してください (例: 劇場版〇〇)"
-                :rules="[rulesFunc.required(), rulesFunc.maxLen(reviewRules.reviewNameLenMax)]"
+                :rules="[rulesFunc.required(), rulesFunc.maxLen(reviewValidation.nameLenMax)]"
               />
             </v-col>
           </v-row>
@@ -78,7 +78,7 @@
                 v-model="review.title"
                 label="レビュータイトル"
                 hint="レビューのタイトルを設定してください (例: 作中最高クラスの傑作映画)"
-                :rules="[rulesFunc.maxLen(reviewRules.reviewTitleLenMax)]"
+                :rules="[rulesFunc.maxLen(reviewValidation.titleLenMax)]"
               />
             </v-col>
           </v-row>
@@ -275,8 +275,8 @@ import SectionComponent, { additionalItems } from '@/components/SectionComponent
 import MenuButton from '@/components/MenuButton.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
-import { ReviewParagraphType, ReviewPointType, Tier, ReviewFunc, reviewRules } from '@/common/review'
-import { useRoute } from 'vue-router'
+import { ReviewParagraphType, ReviewPointType, Tier, ReviewFunc, reviewValidation, ReviewEditingData, sectionValidation } from '@/common/review'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
@@ -302,6 +302,7 @@ export default defineComponent({
 
     const tab = ref(0)
     const confirmdialog = ref(false)
+    const isSubmitting = ref(false)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -337,6 +338,27 @@ export default defineComponent({
           toast.warning(`${v.message}(${v.code}) Tierが存在しません`)
         })
       }
+    })
+
+    // これがないとイベントが設定できない
+    history.replaceState(null, '')
+
+    // ページを離れた時に警告する
+    onBeforeRouteLeave(() => {
+      if (!isSubmitting.value) {
+        if (isNew.value &&
+          review.value.name === '' &&
+          review.value.title === '' &&
+          review.value.iconUrl === '') {
+        } else {
+          const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
+          if (!result) {
+            toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
+          }
+          return result
+        }
+      }
+      return true
     })
 
     const tabValidation = ref([
@@ -400,6 +422,17 @@ export default defineComponent({
           return
         }
       }
+      if (route.params.tid && typeof route.params.tid === 'string') {
+        const data = ReviewFunc.createReviewRequestData(review.value, route.params.tid, '')
+        RestApi.postReview(data).then(() => {
+          toast.success('レビューを作成しました')
+          isSubmitting.value = true
+          // router.push(`/tier/${store.state.userId}/${v.data}`)
+        }).catch((e) => {
+          const v = e.response.data as ErrorResponse
+          toast.error(`${v.message}(${v.code})`)
+        })
+      }
     }
 
     const updatePoint = (v: number, i: number) => {
@@ -416,6 +449,10 @@ export default defineComponent({
     const addObject = (value: ReviewParagraphType | 'section', sectionIndex: number, paragIndex: number, isFirst: boolean) => {
       switch (value) {
         case 'section' :
+          if (review.value.sections.length >= sectionValidation.paragsLenMax) {
+            toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
+            break
+          }
           review.value.sections.splice(sectionIndex + (isFirst ? 0 : 1), 0,
             {
               title: '',
@@ -426,6 +463,10 @@ export default defineComponent({
         case 'text' :
         case 'twitterLink' :
         case 'imageLink' :
+          if (review.value.sections[sectionIndex].parags.length >= reviewValidation.sectionLenMax) {
+            toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
+            break
+          }
           if (review.value.sections.length === 0) {
             toast.warning('説明文の最上部は見出しを設定する必要があります')
             review.value.sections.push({
@@ -491,7 +532,7 @@ export default defineComponent({
 
     return {
       rulesFunc: rules,
-      reviewRules,
+      reviewValidation,
       isNew,
       tab,
       updateTab,

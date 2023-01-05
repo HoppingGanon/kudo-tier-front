@@ -2,8 +2,8 @@
   <v-menu bottom v-model="isHover">
     <template v-slot:activator="{ props }">
       <v-card class="ma-1" :width="size" :height="size" @click="click" v-bind="props">
-        <v-img :src="infomation.review.iconUrl">
-        </v-img>
+        <v-img v-if="infomation.review.iconUrl" :src="infomation.review.iconUrl" />
+        <v-img v-else src="@/assets/common/noimage256.png"/>
       </v-card>
     </template>
     <v-card width="480px" class="no-scroll">

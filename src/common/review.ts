@@ -127,35 +127,35 @@ export interface Tier {
   updateAt: Date
 }
 
-/** リンクの文字数の長さの上限 */
-export const paragLinkLenMax = 100
-
-export const tierRules = {
+export const tierValidation = {
   /** Tier名の長さの上限 */
   tierNameLenMax: 100,
-  /** 説明文やリンクの合計数の上限 */
-  paragsLenMax: 16,
-  /** 説明文の文字数の上限 */
-  paragTextLenMax: 400,
   /** 評価項目の合計数の上限 */
   paramsLenMax: 16,
   /** 評価項目名の文字数の上限 */
   paramNameLenMax: 16
 }
 
-export const reviewRules = {
+export const reviewValidation = {
   /** Tier名の長さの上限 */
-  reviewNameLenMax: 50,
+  nameLenMax: 50,
   /** Tier名の長さの上限 */
-  reviewTitleLenMax: 100,
+  titleLenMax: 100,
+  /** 評価項目名の文字数の上限 */
+  factorInfoLenMax: 16,
+  /** セクションの最大数 */
+  sectionLenMax: 8
+}
+
+export const sectionValidation = {
   /** セクションタイトルの文字数の上限 */
   sectionTitleLen: 100,
-  /** 説明文やリンクの合計数の上限 */
-  paragsLenMax: 16,
   /** 説明文の文字数の上限 */
-  paragTextLenMax: 400,
-  /** 評価項目名の文字数の上限 */
-  paramNameLenMax: 16
+  paragTextLenMax: 16,
+  /** 説明文やリンクの合計数の上限 */
+  paragsLenMax: 400,
+  /** リンクの文字数の長さの上限 */
+  paragLinkLenMax: 100
 }
 
 export interface TierEditingData {
@@ -174,6 +174,23 @@ export interface TierEditingData {
   pointType: ReviewPointType
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
+}
+
+export interface ReviewEditingData {
+  /** review識別ID 新規作成の際は空文字 */
+  reviewId: string
+  /** Tier識別ID */
+  tierId: string
+
+  /** レビューの表示タイトル */
+  title: string
+  /** 作品名や商品名 */
+  name: string
+  /** レビューのアイコンURL */
+  iconBase64: string
+  /** レビュー評点 */
+  reviewFactors: ReviewFactor[]
+  sections: ReviewSection[]
 }
 
 // 連想配列、辞書てきなもの
@@ -472,7 +489,7 @@ export class ReviewFunc {
    * @param v DataURL
    * @returns base64
    */
-  static dataURLToBase64 (v: string) : string | undefined {
+  static dataURLToBase64 (v: string) : string {
     if (v === '') {
       return v
     }
@@ -487,7 +504,7 @@ export class ReviewFunc {
   /**
    * Tierからリクエストデータを生成する
    * @param tier 生成元Tier
-   * @param tierId Tierの固有ID (新規作成の際は空白)
+   * @param tierId Tierの固有ID (新規作成の際は空文字)
    * @returns リクエストデータ
    */
   static createTierRequestData (tier: Tier, tierId: string) : TierEditingData {
@@ -498,6 +515,24 @@ export class ReviewFunc {
       parags: ReviewFunc.cloneParags(tier.parags),
       pointType: tier.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)
+    }
+  }
+
+  /**
+   * レビューからリクエストデータを生成する
+   * @param review 生成元Tier
+   * @param reviewId レビューの固有ID (新規作成の際は空文字)
+   * @returns リクエストデータ
+   */
+  static createReviewRequestData (review: Review, tierId: string, reviewId: string) : ReviewEditingData {
+    return {
+      reviewId: reviewId,
+      tierId: tierId,
+      title: review.title,
+      name: review.name,
+      iconBase64: ReviewFunc.dataURLToBase64(review.iconUrl),
+      reviewFactors: ReviewFunc.cloneFactors(review.reviewFactors),
+      sections: ReviewFunc.cloneSections(review.sections)
     }
   }
 }

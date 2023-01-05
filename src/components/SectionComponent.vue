@@ -1,14 +1,14 @@
 <template>
   <v-card v-if="editable" flat>
     <v-container flat class="ma-0 pa-0">
-      <v-row>
+      <v-row v-if="!hideSectionTitle">
         <v-col cols="8" sm="9" md="10" lg="10" xl="10">
           <v-text-field
             v-model="title"
             label="見出し"
             hint="レビュー説明の見出しを設定してください"
             class="font-weight-bold"
-            :rules="[rulesFunc.maxLen(reviewRules.sectionTitleLen)]"
+            :rules="[rulesFunc.maxLen(sectionValidation.sectionTitleLen)]"
           />
         </v-col>
         <v-col cols="4" sm="3" md="2" lg="2" xl="2">
@@ -37,17 +37,17 @@
             @update:model-value="$emit('updateParagBody', $event, index)"
             label="説明文"
             hint="Tierの説明文を入力してください"
-            :rules="[rulesFunc.maxLen(reviewRules.paragTextLenMax)]"
+            :rules="[rulesFunc.maxLen(sectionValidation.paragTextLenMax)]"
           />
           <tweet-embedder
             v-else-if="parag.type === 'twitterLink'"
             :model-value="parag.body"
             @update="$emit('updateParagBody', $event, index)"
-            :rules="[rulesFunc.maxLen(paragLinkLenMax)]"
+            :rules="[rulesFunc.maxLen(sectionValidation.paragLinkLenMax)]"
           />
         </v-col>
         <v-col cols="4" sm="3" md="2" lg="2" xl="2">
-          <menu-button :items="additionalItems" @select="(v) => $emit('addObject', v, index + 1)">
+          <menu-button :items="hideSectionTitle ? additionalItems2 : additionalItems" @select="(v) => $emit('addObject', v, index + 1)">
             <template v-slot:button="{ open, props }">
               <v-btn @click="open" v-bind="props" icon flat>
                 <v-icon>mdi-plus</v-icon>
@@ -93,7 +93,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewRules, paragLinkLenMax } from '@/common/review'
+import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewValidation, sectionValidation } from '@/common/review'
 import TwitterComponent from '@/components/TwitterComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import TweetEmbedder from '@/components/TweetEmbedder.vue'
@@ -105,6 +105,17 @@ export const additionalItems: SelectObject<ReviewParagraphType | 'section', stri
     text: '見出し',
     value: 'section'
   },
+  {
+    text: '説明文',
+    value: 'text'
+  },
+  {
+    text: 'Twitterリンク',
+    value: 'twitterLink'
+  }
+]
+
+export const additionalItems2: SelectObject<ReviewParagraphType | 'section', string>[] = [
   {
     text: '説明文',
     value: 'text'
@@ -134,6 +145,10 @@ export default defineComponent({
     editable: {
       type: Boolean,
       default: false
+    },
+    hideSectionTitle: {
+      type: Boolean,
+      dafault: false
     }
   },
   emits: {
@@ -163,10 +178,11 @@ export default defineComponent({
   },
   setup () {
     return {
+      sectionValidation,
       rulesFunc: rules,
-      reviewRules,
-      paragLinkLenMax,
-      additionalItems
+      reviewValidation,
+      additionalItems,
+      additionalItems2
     }
   }
 })

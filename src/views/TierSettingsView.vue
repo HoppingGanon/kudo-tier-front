@@ -152,11 +152,13 @@ export default defineComponent({
         }
       })
     }
-    const addParagItem = (type: ReviewParagraphType) => {
-      tier.value.parags.push({
-        body: '',
-        type: type
-      })
+    const addParagItem = (type: ReviewParagraphType | 'section', index: number) => {
+      if (type !== 'section') {
+        tier.value.parags.splice(index, 0, {
+          body: '',
+          type: type
+        })
+      }
     }
     const removeParagItem = (index: number) => {
       if (index < tier.value.parags.length) {

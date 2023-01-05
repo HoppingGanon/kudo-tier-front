@@ -25,7 +25,7 @@
         xl="10"
       >
         <div class="ml-1 mr-2">:</div>
-        <div>
+        <div style="width: 100%">
           <review-value-display
             v-if="reviewFactorParams[index].isPoint && factor.point !== undefined"
             :display-size="$vuetify.display.xs ? 'smaller' : 'normal'"

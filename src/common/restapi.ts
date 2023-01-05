@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
-import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam } from './review'
+import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData } from './review'
 import { TierSortType } from './page'
 
 export interface TempSession {
@@ -187,6 +187,10 @@ export default class RestApi {
 
   static getTierList (userId: string, word: string, sortType: TierSortType, page: number) {
     return this.get<TierData[]>(encodeURI(`/tiers?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
+  }
+
+  static postReview (data: ReviewEditingData) {
+    return this.post('/review', data)
   }
 }
 
