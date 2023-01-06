@@ -61,7 +61,7 @@
       </v-row>
     </v-container>
   </v-card>
-  <v-card v-else-if="displayType === 'all'" flat>
+  <v-card v-else-if="displayType === 'list' || displayType === 'all'" flat>
     <span v-if="section.title" class="break-word text-subtitle-1 font-weight-bold" v-text="section.title">
     </span>
     <br v-if="section.title" />

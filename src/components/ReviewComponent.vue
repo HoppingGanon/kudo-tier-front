@@ -19,8 +19,57 @@
         </v-card>
       </v-col>
       <v-col>
-        <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
-        <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h5' : 'text-h6'"><b><span v-text="review.title"></span></b></p>
+        <v-container fluid class="ma-0 pa-0">
+          <v-row>
+            <v-col>
+              <a :id="review.reviewId">
+                <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
+              </a>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h5' : 'text-h6'"><b><span v-text="review.title"></span></b></p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <review-large-value
+                :average="average"
+                :sum="sum"
+                :point-type="getPointType()"
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            v-if="displayType === 'list' && getPointType() !== 'unlimited' && getLabels().length > 2"
+          >
+            <v-col
+              cols="12" sm="6" md="5" lg="4" xl="4"
+            >
+              <div>
+                <radar-chart
+                  :labels="getLabels()"
+                  :dataList="getDataList()"
+                  :min="0"
+                  :max="100"
+                  :step="100 / getStep()"
+                  :show-legend="false"
+                />
+              </div>
+            </v-col>
+            <v-col v-if="!$vuetify.display.xs" cols="0" sm="6" md="7" lg="8" xl="8">
+              <review-values
+                :factors="review.reviewFactors"
+                :display-type="displayType"
+                :point-display-type="pointDisplayType"
+                :point-type="getPointType()"
+                :review-factor-params="reviewFactorParams"
+                @update-point-type="$emit('updatePointType', $event)"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
     </v-row>
     <v-row>
@@ -52,39 +101,6 @@
                 </div>
               </v-col>
               <v-col>
-                <table style="width: 100%">
-                  <tr>
-                    <td class="minimum">
-                      <v-card flat>
-                        <p class="mt-2">
-                          <span v-if="getPointType() == 'stars'">総合：</span>
-                          <span v-else-if="getPointType() == 'rank7'">総合ランク：</span>
-                          <span v-else-if="getPointType() == 'rank14'">総合ランク：</span>
-                          <span v-else-if="getPointType() == 'score'">総合スコア：</span>
-                          <span v-else-if="getPointType() == 'point'">総合点：</span>
-                          <span v-else-if="getPointType() == 'unlimited'">合計：</span>
-                        </p>
-                      </v-card>
-                    </td>
-                    <td style="width:auto">
-                      <v-card flat>
-                        <review-value-display
-                          v-if="getPointType() === 'unlimited'"
-                          :point-type="getPointType()"
-                          :value="sum"
-                          display-size="larger"
-                        />
-                        <review-value-display
-                          v-else
-                          :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''"
-                          :point-type="getPointType()"
-                          :value="average"
-                          display-size="larger"
-                        />
-                      </v-card>
-                    </td>
-                  </tr>
-                </table>
                 <review-values
                   v-if="displayType === 'all'"
                   :factors="review.reviewFactors"
@@ -114,12 +130,19 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if="displayType === 'all'">
+    <v-row v-else-if="displayType === 'all' || displayType === 'list'">
       <v-col>
         <v-card class="ma-3" flat v-for="section,index in review.sections" :key="index">
           <section-component :section="section" :display-type="displayType" />
           <v-divider v-if="index !== (review.sections.length - 1)" />
         </v-card>
+      </v-col>
+    </v-row>
+    <v-row v-if="displayType === 'list'">
+      <v-col class="d-flex flex-row-reverse">
+        <v-btn flat >
+          (続きを見る)
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -132,9 +155,9 @@ import CommonApi from '@/common/commonapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
-import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import RadarChart, { RadarChartData } from '@/components/RadarChart.vue'
+import ReviewLargeValue from '@/components/ReviewLargeValue.vue'
 import vuetify from '@/plugins/vuetify'
 
 export default defineComponent({
@@ -143,9 +166,9 @@ export default defineComponent({
     SectionComponent,
     ReviewHeader,
     ReviewValues,
-    ReviewValueDisplay,
     PointTypeSelector,
-    RadarChart
+    RadarChart,
+    ReviewLargeValue
   },
   props: {
     review: {

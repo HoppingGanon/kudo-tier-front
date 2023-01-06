@@ -37,7 +37,7 @@ export const TierTableTypeArray = [
 export type TierTableType = typeof TierTableTypeArray[number]
 
 /** レビューの表示方法 */
-export type ReviewDisplayType = 'summary' | 'all'
+export type ReviewDisplayType = 'summary' | 'list' | 'all'
 
 /** レビューポイントの表示方法 */
 export type ReviewPointDisplayType = 'normal' | 'radar'

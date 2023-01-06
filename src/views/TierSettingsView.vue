@@ -62,8 +62,9 @@ export default defineComponent({
     let review = ReviewFunc.cloneReview(emptyReviwew)
     review.name = 'サンプル用レビュー1'
     review.title = 'これはサンプルレビューです'
+    review.reviewId = 'sample1'
     review.sections.push({
-      title: '',
+      title: 'サンプルのセクション',
       parags: [
         {
           type: 'text',
@@ -78,11 +79,13 @@ export default defineComponent({
 
     review = ReviewFunc.cloneReview(review)
     review.name = 'サンプル用レビュー2'
+    review.reviewId = 'sample2'
     review.reviewFactors[0].point = Math.round(Math.random() * 100)
     tier.value.reviews.push(review)
 
     review = ReviewFunc.cloneReview(review)
     review.name = 'サンプル用レビュー3'
+    review.reviewId = 'sample3'
     review.reviewFactors[0].point = Math.round(Math.random() * 100)
     tier.value.reviews.push(review)
 

@@ -60,7 +60,7 @@
             :no-header="true"
             :no-change-point="true"
             :point-types="pointTypes"
-            display-type="all"
+            display-type="list"
           />
         </v-col>
       </v-row>
@@ -117,7 +117,6 @@ export default defineComponent({
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.tier.updateAt, true)
     })
-    const baseLink = (process.env.VUE_APP_BASE_URI as string) + '/home/'
     const pointTypes = computed(() => {
       const objs: ReviewPointType[] = []
       props.tier.reviews.forEach(() => {
