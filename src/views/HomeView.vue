@@ -14,100 +14,97 @@
     </v-row>
   </v-container>
 
-  <v-container v-else class="pa-0">
-    <v-row>
-      <v-col cols="0" sm="0" md="1" lg="2" xl="3" />
-      <v-col cols="12" sm="12" md="10" lg="8" xl="6">
-        <v-container fluid class="ma-0 pa-0">
-          <v-row>
-            <v-col>
-              <v-card>
-                <v-toolbar color="secondary" dark>
-                  <v-card-title>
-                    <b>
-                      プロフィール
-                    </b>
-                  </v-card-title>
-                </v-toolbar>
-                <profile-component
-                  :disp-name="dispName"
-                  :icon-url="iconUrl"
-                  :profile="profile"
-                />
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card>
-                <v-toolbar color="secondary">
-                  <v-card-title>
-                    投稿
-                  </v-card-title>
-                  <div class="d-flex flex-row-reverse" style="width: 100%">
-                    <v-btn @click="goTierSearch">
-                      <v-icon>mdi-magnify</v-icon>投稿の検索
-                    </v-btn>
-                  </div>
-                  <template v-slot:extension>
-                    <v-tabs v-model="tab">
-                      <v-tab>
-                        最新のレビュー
-                      </v-tab>
-                      <v-tab>
-                        最新のTier
-                      </v-tab>
-                    </v-tabs>
-                  </template>
-                </v-toolbar>
-                <v-card v-if="tab === 0">
-                  <v-card
-                    id="reviewsWindow"
-                    class="scroll"
-                    flat
-                    height="55vh"
-                    color="thirdry"
-                  >
-                    <review-list
-                      class="pa-1"
-                      :reviews="reviews"
-                      :review-factor-params="tier.reviewFactorParams"
-                      @update-point-type="updatePointType"
-                      :is-link="true"
-                      display-type="summary"
-                      :point-types="pointTypes"
-                    />
-                  </v-card>
+  <v-container v-else class="pa-0 ma-0" fluid>
+    <padding-component>
+      <v-container fluid class="ma-0 pa-0">
+        <v-row>
+          <v-col>
+            <v-card>
+              <v-toolbar color="secondary" dark>
+                <v-card-title>
+                  <b>
+                    プロフィール
+                  </b>
+                </v-card-title>
+              </v-toolbar>
+              <profile-component
+                :disp-name="dispName"
+                :icon-url="iconUrl"
+                :profile="profile"
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card>
+              <v-toolbar color="secondary">
+                <v-card-title>
+                  投稿
+                </v-card-title>
+                <div class="d-flex flex-row-reverse" style="width: 100%">
+                  <v-btn @click="goTierSearch">
+                    <v-icon>mdi-magnify</v-icon>もっと投稿を見る
+                  </v-btn>
+                </div>
+                <template v-slot:extension>
+                  <v-tabs v-model="tab">
+                    <v-tab>
+                      最新のレビュー
+                    </v-tab>
+                    <v-tab>
+                      最新のTier
+                    </v-tab>
+                  </v-tabs>
+                </template>
+              </v-toolbar>
+              <v-card v-show="tab === 0">
+                <v-card
+                  id="reviewsWindow"
+                  class="scroll"
+                  flat
+                  height="55vh"
+                  color="thirdry"
+                >
+                  <review-list
+                    class="pa-1"
+                    :reviews="reviews"
+                    :review-factor-params="tier.reviewFactorParams"
+                    @update-point-type="updatePointType"
+                    :is-link="true"
+                    display-type="summary"
+                    :point-types="pointTypes"
+                  />
                 </v-card>
+              </v-card>
 
-                <v-card v-if="tab === 1">
-                  <v-card
-                    class="scroll"
-                    flat
-                    height="55vh"
-                    color="thirdry"
-                  >
-                    <v-card v-if="tiers.length == 0" height="40vh" class="flex-center pa-1">
-                      <div style="text-align: center;">
-                        Tierがありません<br />
-                        初めてのTierを作成しましょう<br />
-                        <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
-                      </div>
-                    </v-card>
-                    <tier-list
-                      v-else
-                      class="pa-1"
-                      :tiers="tiers"
-                      :is-link="true"
-                    />
+              <v-card v-show="tab === 1">
+                <v-card
+                  class="scroll"
+                  flat
+                  height="55vh"
+                  color="thirdry"
+                >
+                  <v-card v-if="tiers.length == 0" height="40vh" class="flex-center pa-1">
+                    <div style="text-align: center;">
+                      Tierがありません<br />
+                      初めてのTierを作成しましょう<br />
+                      <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
+                    </div>
                   </v-card>
+                  <tier-list
+                    v-else
+                    class="pa-1"
+                    :tiers="tiers"
+                    :is-link="true"
+                  />
                 </v-card>
               </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-col>
-    </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </padding-component>
   </v-container>
 </template>
 
@@ -119,6 +116,7 @@ import ProfileComponent from '@/components/ProfileComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
+import PaddingComponent from '@/components/PaddingComponent.vue'
 import { useRoute } from 'vue-router'
 import { ReviewFunc, ReviewPointType, Tier } from '@/common/review'
 import { reviews as reviewsOrg, tier as tierOrg } from '@/common/dummy'
@@ -132,7 +130,8 @@ export default defineComponent({
     SessionChecker,
     ErrorComponent,
     ReviewList,
-    TierList
+    TierList,
+    PaddingComponent
   },
   setup () {
     const route = useRoute()
