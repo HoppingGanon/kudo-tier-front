@@ -45,16 +45,17 @@
             </v-card-title>
           </v-toolbar>
           <v-card
+            id="reviewsWindow"
             class="scroll pa-1"
             flat
-            min-height="30vh"
-            max-height="50vh"
+            :style="reviewWindowsStyle"
             color="thirdry"
           >
             <review-list
               :reviews="reviews"
               :review-factor-params="tier.reviewFactorParams"
               @update-point-type="updatePointType"
+              :is-link="true"
               display-type="summary"
               :point-types="pointTypes"
             />
@@ -72,8 +73,7 @@
           <v-card
             class="scroll pa-1"
             flat
-            min-height="30vh"
-            max-height="50vh"
+            :style="reviewWindowsStyle"
             color="thirdry"
           >
             <v-card v-if="tiers.length == 0" height="40vh" class="flex-center">
@@ -86,6 +86,7 @@
             <tier-list
               v-else
               :tiers="tiers"
+              :is-link="true"
             />
           </v-card>
         </v-card>
@@ -103,7 +104,7 @@ import ProfileComponent from '@/components/ProfileComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import { ReviewFunc, ReviewPointType, Tier } from '@/common/review'
 import { reviews as reviewsOrg, tier as tierOrg } from '@/common/dummy'
 import { useToast } from 'vue-toast-notification'
@@ -127,12 +128,20 @@ export default defineComponent({
     const profile = ref('')
     const iconUrl = ref('')
     const userId = ref('')
+    const reviewsWindow = ref(null as HTMLElement | null)
+    const reviewWindowsStyle = ref('height: 50vh')
 
     // テストデータ
     const reviews = ref(reviewsOrg)
     const tier = ref(tierOrg)
 
     const tiers = ref([] as Tier[])
+
+    const onResize = () => {
+      if (reviewsWindow.value) {
+        reviewWindowsStyle.value = `height: -webkit-calc(100vh - ${reviewsWindow.value.getBoundingClientRect().top + 10}px)`
+      }
+    }
 
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
@@ -161,6 +170,19 @@ export default defineComponent({
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
       }
+
+      reviewsWindow.value = document.getElementById('reviewsWindow')
+      onResize()
+    })
+
+    window.onresize = onResize
+
+    // これがないとイベントが設定できない
+    history.replaceState(null, '')
+
+    // 去り際にイベントを削除
+    onBeforeRouteLeave(() => {
+      window.onresize = null
     })
 
     // ポイント表示方法のリスト
@@ -187,6 +209,7 @@ export default defineComponent({
       profile,
       iconUrl,
       reviews,
+      reviewWindowsStyle,
       tier,
       tiers,
       updatePointType,

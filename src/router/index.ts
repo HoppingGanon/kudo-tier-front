@@ -57,6 +57,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/TierSearchView.vue')
   },
   {
+    path: '/review/:rid',
+    name: 'review',
+    component: () => import('../views/ReviewView.vue')
+  },
+  {
     path: '/review-settings/:tid',
     name: 'review-settings-new',
     component: () => import('../views/ReviewSettingsView.vue')

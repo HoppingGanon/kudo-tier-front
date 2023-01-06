@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { ReviewPointType } from '@/common/review'
+import { ReviewFunc, ReviewPointType } from '@/common/review'
 import TierComponent from '@/components/TierComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
@@ -80,7 +80,7 @@ export default defineComponent({
     const isNotFound = ref(false)
     const isSelf = ref(false)
 
-    const tier = ref(emptyTier)
+    const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const pointType = ref('stars' as ReviewPointType)
     const updatePointType = (v: ReviewPointType) => {
       pointType.value = v

@@ -7,6 +7,8 @@
             :no-header="noHeader"
             :review="review"
             :review-factor-params="makeParams(index)"
+            :is-sample="isSample"
+            :is-link="isLink"
             :display-type="displayType"
             point-display-type="normal"
             :point-type="index < pointTypes.length ? pointTypes[index] : 'point'"
@@ -44,6 +46,14 @@ export default defineComponent({
     noChangePoint: {
       type: Boolean,
       default: false as boolean
+    },
+    isSample: {
+      type: Boolean,
+      default: false
+    },
+    isLink: {
+      type: Boolean,
+      default: false
     },
     displayType: {
       type: String as PropType<ReviewDisplayType>,

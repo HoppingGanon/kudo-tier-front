@@ -252,6 +252,7 @@
           <v-col>
             <tier-component
               :tier="modelValue"
+              :is-sample="true"
               :point-type="pointType"
               display-type="all"
               :no-header="true"

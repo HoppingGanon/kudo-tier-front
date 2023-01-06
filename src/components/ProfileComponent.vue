@@ -12,7 +12,7 @@
         <v-container class="pa-0 ma-0" fluid>
           <v-row>
             <v-col>
-              <span class="text-h5" v-text="dispName"/>
+              <span class="text-h5 font-weight-bold" v-text="dispName"/>
             </v-col>
           </v-row>
           <v-row>
@@ -24,8 +24,8 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
-              <v-card-text v-text="profile" />
+            <v-col class="mt-3">
+              <span v-text="profile" />
             </v-col>
           </v-row>
         </v-container>

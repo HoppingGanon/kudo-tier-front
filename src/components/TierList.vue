@@ -5,6 +5,7 @@
         <v-card class="pa-2">
           <tier-component
             :tier="tier"
+            :is-link="isLink"
             min-height="200px"
             width="100%"
             display-type="summary"
@@ -31,6 +32,10 @@ export default defineComponent({
     tiers: {
       type: Array as PropType<Tier[]>,
       required: true
+    },
+    isLink: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {

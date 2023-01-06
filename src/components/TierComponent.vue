@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
 
-    <v-row><v-col><v-container fluid class="ma-0 pa-0" :class="displayType === 'summary' ?'cursor-pointer' : ''" @click="goTier">
+    <v-row><v-col><v-container fluid class="ma-0 pa-0" :class="isLink ? 'cursor-pointer' : ''" @click="goTier">
       <v-row>
         <v-col>
           <v-card flat>
@@ -57,6 +57,7 @@
           <review-list
             :reviews="tier.reviews"
             :review-factor-params="tier.reviewFactorParams"
+            :is-sample="isSample"
             :no-header="true"
             :no-change-point="true"
             :point-types="pointTypes"
@@ -90,6 +91,14 @@ export default defineComponent({
     tier: {
       type: Object as PropType<Tier>,
       required: true
+    },
+    isSample: {
+      type: Boolean,
+      default: false
+    },
+    isLink: {
+      type: Boolean,
+      default: false
     },
     displayType: {
       type: String as PropType<ReviewDisplayType>,
@@ -141,7 +150,7 @@ export default defineComponent({
     })
 
     const goTier = () => {
-      if (props.displayType === 'summary') {
+      if (props.isLink) {
         router.push(`/tier/${props.tier.tierId}`)
       }
     }

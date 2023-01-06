@@ -70,6 +70,11 @@ export interface ReviewData {
   updatedAt: string
 }
 
+export interface ReviewDataWithParams {
+  review: ReviewData
+  params: ReviewFactorParam[]
+}
+
 export interface TierData {
   /** Tier識別ID */
   tierId: string
@@ -191,6 +196,10 @@ export default class RestApi {
 
   static postReview (data: ReviewEditingData) {
     return this.post('/review', data)
+  }
+
+  static getReview (reviewId: string) {
+    return this.get<ReviewDataWithParams>(`/review/${reviewId}`)
   }
 }
 
