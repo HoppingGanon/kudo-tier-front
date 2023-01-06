@@ -66,8 +66,8 @@ export interface ReviewData {
   /** レビューポイントの表示方法 レビュー単品でGetする際にのみ参照される */
   pointType?: ReviewPointType
   sections: ReviewSection[]
-  createAt: string
-  updateAt: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface TierData {
@@ -96,8 +96,8 @@ export interface TierData {
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
 
-  createAt: string
-  updateAt: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface ErrorResponse {
@@ -211,8 +211,8 @@ export class Parser {
       parags: tierData.parags,
       reviews: reviews,
       reviewFactorParams: tierData.reviewFactorParams,
-      createAt: new Date(tierData.createAt),
-      updateAt: new Date(tierData.updateAt)
+      createdAt: new Date(tierData.createdAt),
+      updatedAt: new Date(tierData.updatedAt)
     }
   }
 
@@ -229,8 +229,8 @@ export class Parser {
       reviewFactors: reviewData.reviewFactors,
       pointType: reviewData.pointType,
       sections: reviewData.sections,
-      createAt: new Date(reviewData.createAt),
-      updateAt: new Date(reviewData.updateAt)
+      createdAt: new Date(reviewData.createdAt),
+      updatedAt: new Date(reviewData.updatedAt)
     }
   }
 }

@@ -11,8 +11,8 @@ export const emptyTier: Tier = {
   parags: [],
   reviews: [],
   reviewFactorParams: [],
-  createAt: new Date(),
-  updateAt: new Date()
+  createdAt: new Date(),
+  updatedAt: new Date()
 }
 
 export const emptyReviwew: Review = {
@@ -27,8 +27,8 @@ export const emptyReviwew: Review = {
   reviewFactors: [],
   pointType: 'stars',
   sections: [],
-  createAt: new Date(),
-  updateAt: new Date()
+  createdAt: new Date(),
+  updatedAt: new Date()
 }
 
 export const tier: Tier = {
@@ -126,8 +126,8 @@ export const tier: Tier = {
       index: 13
     }
   ],
-  createAt: new Date(),
-  updateAt: new Date()
+  createdAt: new Date(),
+  updatedAt: new Date()
 }
 
 export const reviews: Review[] = [
@@ -214,8 +214,8 @@ export const reviews: Review[] = [
         ]
       }
     ],
-    createAt: new Date('2022/07/10'),
-    updateAt: new Date('2022/07/10')
+    createdAt: new Date('2022/07/10'),
+    updatedAt: new Date('2022/07/10')
   },
   {
     reviewId: 'bbb',
@@ -269,8 +269,8 @@ export const reviews: Review[] = [
     ],
     pointType: 'point',
     sections: [],
-    createAt: new Date('2022/07/10'),
-    updateAt: new Date('2022/07/10')
+    createdAt: new Date('2022/07/10'),
+    updatedAt: new Date('2022/07/10')
   }
 ]
 

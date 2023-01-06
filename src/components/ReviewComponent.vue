@@ -217,7 +217,7 @@ export default defineComponent({
   setup (props) {
     const primaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
     const lastWriteTime = computed(() => {
-      return CommonApi.dateToString(props.review.updateAt, true)
+      return CommonApi.dateToString(props.review.updatedAt, true)
     })
 
     const average = computed(() => {

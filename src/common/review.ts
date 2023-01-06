@@ -92,8 +92,8 @@ export interface Review {
   /** レビューポイントの表示方法 レビュー単品でGetする際にのみ参照される */
   pointType?: ReviewPointType
   sections: ReviewSection[]
-  createAt: Date
-  updateAt: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 /** 複数のレビューをまとめたグループ */
@@ -123,8 +123,8 @@ export interface Tier {
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
 
-  createAt: Date
-  updateAt: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 export const tierValidation = {
@@ -417,8 +417,8 @@ export class ReviewFunc {
       iconUrl: org.iconUrl,
       reviewFactors: ReviewFunc.cloneFactors(org.reviewFactors),
       sections: ReviewFunc.cloneSections(org.sections),
-      createAt: org.createAt,
-      updateAt: org.updateAt
+      createdAt: org.createdAt,
+      updatedAt: org.updatedAt
     }
 
     // ポイント表示形式のキー有無も同一にする
@@ -477,8 +477,8 @@ export class ReviewFunc {
       reviews: ReviewFunc.cloneReviews(org.reviews),
       pointType: org.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(org.reviewFactorParams),
-      createAt: org.createAt,
-      updateAt: org.updateAt
+      createdAt: org.createdAt,
+      updatedAt: org.updatedAt
     }
 
     return clone

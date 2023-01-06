@@ -115,7 +115,7 @@ export default defineComponent({
   },
   setup (props) {
     const lastWriteTime = computed(() => {
-      return CommonApi.dateToString(props.tier.updateAt, true)
+      return CommonApi.dateToString(props.tier.updatedAt, true)
     })
     const pointTypes = computed(() => {
       const objs: ReviewPointType[] = []
