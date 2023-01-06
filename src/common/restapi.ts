@@ -177,8 +177,8 @@ export default class RestApi {
     return this.post('/tier', data)
   }
 
-  static getTier (userId: string, tierId: string) {
-    return this.get<TierData>(`/tier/${userId}/${tierId}`)
+  static getTier (tierId: string) {
+    return this.get<TierData>(`/tier/${tierId}`)
   }
 
   static updateTier (data: TierEditingData) {

@@ -488,7 +488,7 @@ export default defineComponent({
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
           isSubmitting.value = true
-          router.push(`/tier/${store.state.userId}/${v.data}`)
+          router.push(`/tier/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
           toast.error(`${v.message}(${v.code})`)
@@ -497,7 +497,7 @@ export default defineComponent({
         RestApi.updateTier(data).then((v) => {
           toast.success('Tierを更新しました')
           isSubmitting.value = true
-          router.push(`/tier/${store.state.userId}/${v.data}`)
+          router.push(`/tier/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
           toast.error(`${v.message}(${v.code})`)

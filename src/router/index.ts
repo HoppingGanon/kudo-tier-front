@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/AuthView.vue')
   },
   {
-    path: '/tier/:uid/:tid',
+    path: '/tier/:tid',
     name: 'tier',
     component: () => import('../views/TierView.vue')
   },

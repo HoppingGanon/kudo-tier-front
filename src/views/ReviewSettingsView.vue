@@ -318,7 +318,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (route.params.tid && typeof route.params.tid === 'string') {
-        RestApi.getTier(store.state.userId, route.params.tid).then((res) => {
+        RestApi.getTier(route.params.tid).then((res) => {
           // 成功の場合
           tier.value = Parser.parseTier(res.data)
           tier.value.reviewFactorParams.forEach((v) => {

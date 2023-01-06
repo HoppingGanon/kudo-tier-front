@@ -88,9 +88,9 @@ export default defineComponent({
 
     // tierの初期値を設定
     onMounted(() => {
-      if (route.params.uid && typeof route.params.uid === 'string' && route.params.tid && typeof route.params.tid === 'string') {
+      if (route.params.tid && typeof route.params.tid === 'string') {
         // URIにIDが含まれている場合
-        RestApi.getTier(route.params.uid, route.params.tid).then((res) => {
+        RestApi.getTier(route.params.tid).then((res) => {
           tier.value = Parser.parseTier(res.data)
           pointType.value = tier.value.pointType
           isNotFound.value = false

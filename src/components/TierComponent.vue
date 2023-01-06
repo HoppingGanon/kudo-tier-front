@@ -142,7 +142,7 @@ export default defineComponent({
 
     const goTier = () => {
       if (props.displayType === 'summary') {
-        router.push(`/tier/${props.tier.userId}/${props.tier.tierId}`)
+        router.push(`/tier/${props.tier.tierId}`)
       }
     }
 
