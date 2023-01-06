@@ -37,7 +37,6 @@ export default defineComponent({
   },
   props: {},
   emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
     const route = useRoute()
     const toast = useToast()

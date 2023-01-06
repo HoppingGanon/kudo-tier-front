@@ -151,11 +151,11 @@ export const sectionValidation = {
   /** セクションタイトルの文字数の上限 */
   sectionTitleLen: 100,
   /** 説明文の文字数の上限 */
-  paragTextLenMax: 16,
-  /** 説明文やリンクの合計数の上限 */
-  paragsLenMax: 400,
+  paragTextLenMax: 400,
   /** リンクの文字数の長さの上限 */
-  paragLinkLenMax: 100
+  paragLinkLenMax: 100,
+  /** 説明文やリンクの合計数の上限 */
+  paragsLenMax: 16
 }
 
 export interface TierEditingData {

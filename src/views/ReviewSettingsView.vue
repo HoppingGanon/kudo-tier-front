@@ -269,20 +269,19 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
-import TierSettings from '@/components/TierSettings.vue'
 import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
 import SectionComponent, { additionalItems } from '@/components/SectionComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
-import { ReviewParagraphType, ReviewPointType, Tier, ReviewFunc, reviewValidation, ReviewEditingData, sectionValidation } from '@/common/review'
+import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
-import { SelectObject, ValidState } from '@/common/page'
-import store from '@/store'
+import { ValidState } from '@/common/page'
 import rules from '@/common/rules'
+import router from '@/router'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -424,10 +423,10 @@ export default defineComponent({
       }
       if (route.params.tid && typeof route.params.tid === 'string') {
         const data = ReviewFunc.createReviewRequestData(review.value, route.params.tid, '')
-        RestApi.postReview(data).then(() => {
+        RestApi.postReview(data).then((v) => {
           toast.success('レビューを作成しました')
           isSubmitting.value = true
-          // router.push(`/tier/${store.state.userId}/${v.data}`)
+          router.push(`/review/${v.data}`)
         }).catch((e) => {
           const v = e.response.data as ErrorResponse
           toast.error(`${v.message}(${v.code})`)
@@ -449,8 +448,8 @@ export default defineComponent({
     const addObject = (value: ReviewParagraphType | 'section', sectionIndex: number, paragIndex: number, isFirst: boolean) => {
       switch (value) {
         case 'section' :
-          if (review.value.sections.length >= sectionValidation.paragsLenMax) {
-            toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
+          if (review.value.sections.length >= reviewValidation.sectionLenMax) {
+            toast.warning(`追加できる説明文/リンクは合計${reviewValidation.sectionLenMax}個までです`)
             break
           }
           review.value.sections.splice(sectionIndex + (isFirst ? 0 : 1), 0,
@@ -463,7 +462,7 @@ export default defineComponent({
         case 'text' :
         case 'twitterLink' :
         case 'imageLink' :
-          if (review.value.sections[sectionIndex].parags.length >= reviewValidation.sectionLenMax) {
+          if (review.value.sections[sectionIndex].parags.length >= sectionValidation.paragsLenMax) {
             toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
             break
           }

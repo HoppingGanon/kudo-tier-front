@@ -21,7 +21,7 @@
     <v-card class="block-center" max-width="1080px">
       <v-toolbar color="secondary" dark>
         <v-card-title>
-          Tier
+          レビュー
         </v-card-title>
         <v-spacer />
         <v-card-actions v-if="isSelf">

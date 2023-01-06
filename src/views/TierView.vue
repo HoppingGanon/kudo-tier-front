@@ -94,13 +94,13 @@ export default defineComponent({
           tier.value = Parser.parseTier(res.data)
           pointType.value = tier.value.pointType
           isNotFound.value = false
+          // 自身のTierを表示している場合
+          isSelf.value = tier.value.userId === store.state.userId
         }).catch((e) => {
           const v = e.response.data
           toast.warning(`${v.message} (${v.code})`)
           isNotFound.value = true
         })
-        // 自身のTierを表示している場合
-        isSelf.value = route.params.uid === store.state.userId
       }
     })
 

@@ -14,85 +14,100 @@
     </v-row>
   </v-container>
 
-  <v-container v-else>
+  <v-container v-else class="pa-0">
     <v-row>
-      <v-col>
-        <v-card>
-          <v-toolbar color="secondary" dark>
-            <v-card-title>
-              <b>
-                プロフィール
-              </b>
-            </v-card-title>
-          </v-toolbar>
-          <profile-component
-            :disp-name="dispName"
-            :icon-url="iconUrl"
-            :profile="profile"
-          />
-        </v-card>
+      <v-col cols="0" sm="0" md="1" lg="2" xl="3" />
+      <v-col cols="12" sm="12" md="10" lg="8" xl="6">
+        <v-container fluid class="ma-0 pa-0">
+          <v-row>
+            <v-col>
+              <v-card>
+                <v-toolbar color="secondary" dark>
+                  <v-card-title>
+                    <b>
+                      プロフィール
+                    </b>
+                  </v-card-title>
+                </v-toolbar>
+                <profile-component
+                  :disp-name="dispName"
+                  :icon-url="iconUrl"
+                  :profile="profile"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card>
+                <v-toolbar color="secondary">
+                  <v-card-title>
+                    投稿
+                  </v-card-title>
+                  <div class="d-flex flex-row-reverse" style="width: 100%">
+                    <v-btn @click="goTierSearch">
+                      <v-icon>mdi-magnify</v-icon>投稿の検索
+                    </v-btn>
+                  </div>
+                  <template v-slot:extension>
+                    <v-tabs v-model="tab">
+                      <v-tab>
+                        最新のレビュー
+                      </v-tab>
+                      <v-tab>
+                        最新のTier
+                      </v-tab>
+                    </v-tabs>
+                  </template>
+                </v-toolbar>
+                <v-card v-if="tab === 0">
+                  <v-card
+                    id="reviewsWindow"
+                    class="scroll"
+                    flat
+                    height="55vh"
+                    color="thirdry"
+                  >
+                    <review-list
+                      class="pa-1"
+                      :reviews="reviews"
+                      :review-factor-params="tier.reviewFactorParams"
+                      @update-point-type="updatePointType"
+                      :is-link="true"
+                      display-type="summary"
+                      :point-types="pointTypes"
+                    />
+                  </v-card>
+                </v-card>
+
+                <v-card v-if="tab === 1">
+                  <v-card
+                    class="scroll"
+                    flat
+                    height="55vh"
+                    color="thirdry"
+                  >
+                    <v-card v-if="tiers.length == 0" height="40vh" class="flex-center pa-1">
+                      <div style="text-align: center;">
+                        Tierがありません<br />
+                        初めてのTierを作成しましょう<br />
+                        <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
+                      </div>
+                    </v-card>
+                    <tier-list
+                      v-else
+                      class="pa-1"
+                      :tiers="tiers"
+                      :is-link="true"
+                    />
+                  </v-card>
+                </v-card>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
     </v-row>
-
-    <v-row>
-      <v-col cols="6">
-        <v-card>
-          <v-toolbar color="secondary">
-            <v-card-title>
-              <b>
-                最新のレビュー
-              </b>
-            </v-card-title>
-          </v-toolbar>
-          <v-card
-            id="reviewsWindow"
-            class="scroll pa-1"
-            flat
-            :style="reviewWindowsStyle"
-            color="thirdry"
-          >
-            <review-list
-              :reviews="reviews"
-              :review-factor-params="tier.reviewFactorParams"
-              @update-point-type="updatePointType"
-              :is-link="true"
-              display-type="summary"
-              :point-types="pointTypes"
-            />
-          </v-card>
-        </v-card>
-      </v-col>
-      <v-col cols="6">
-        <v-card>
-          <v-toolbar color="secondary" @click="goTierSearch" class="cursor-pointer">
-            <v-card-title>
-              <b>最新のTier</b>
-              <v-icon>mdi-magnify</v-icon>
-            </v-card-title>
-          </v-toolbar>
-          <v-card
-            class="scroll pa-1"
-            flat
-            :style="reviewWindowsStyle"
-            color="thirdry"
-          >
-            <v-card v-if="tiers.length == 0" height="40vh" class="flex-center">
-              <div style="text-align: center;">
-                Tierがありません<br />
-                初めてのTierを作成しましょう<br />
-                <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
-              </div>
-            </v-card>
-            <tier-list
-              v-else
-              :tiers="tiers"
-              :is-link="true"
-            />
-          </v-card>
-        </v-card>
-      </v-col>
-    </v-row>
-
   </v-container>
 </template>
 
@@ -104,7 +119,7 @@ import ProfileComponent from '@/components/ProfileComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { ReviewFunc, ReviewPointType, Tier } from '@/common/review'
 import { reviews as reviewsOrg, tier as tierOrg } from '@/common/dummy'
 import { useToast } from 'vue-toast-notification'
@@ -129,7 +144,6 @@ export default defineComponent({
     const iconUrl = ref('')
     const userId = ref('')
     const reviewsWindow = ref(null as HTMLElement | null)
-    const reviewWindowsStyle = ref('height: 50vh')
 
     // テストデータ
     const reviews = ref(reviewsOrg)
@@ -137,11 +151,7 @@ export default defineComponent({
 
     const tiers = ref([] as Tier[])
 
-    const onResize = () => {
-      if (reviewsWindow.value) {
-        reviewWindowsStyle.value = `height: -webkit-calc(100vh - ${reviewsWindow.value.getBoundingClientRect().top + 10}px)`
-      }
-    }
+    const tab = ref(0)
 
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
@@ -172,17 +182,6 @@ export default defineComponent({
       }
 
       reviewsWindow.value = document.getElementById('reviewsWindow')
-      onResize()
-    })
-
-    window.onresize = onResize
-
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
-
-    // 去り際にイベントを削除
-    onBeforeRouteLeave(() => {
-      window.onresize = null
     })
 
     // ポイント表示方法のリスト
@@ -209,9 +208,9 @@ export default defineComponent({
       profile,
       iconUrl,
       reviews,
-      reviewWindowsStyle,
       tier,
       tiers,
+      tab,
       updatePointType,
       pointTypes,
       goTierSearch,

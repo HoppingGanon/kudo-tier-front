@@ -3,8 +3,7 @@
 
     <v-navigation-drawer
       v-model="drawer"
-      class="grad"
-      app
+      temporary
     >
       <v-container>
         <v-row style="min-height: 64px;">
@@ -240,10 +239,6 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
-
-.grad{
-  background: linear-gradient(white, #FCE4EC);
-}
 
 .overlay {
   position: fixed;

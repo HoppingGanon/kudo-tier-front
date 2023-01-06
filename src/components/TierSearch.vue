@@ -30,7 +30,7 @@
     </v-row>
     <v-row v-else>
       <v-col>
-        <tier-list :tiers="tiers" />
+        <tier-list :tiers="tiers" :is-link="true" />
       </v-col>
     </v-row>
   </v-container>
