@@ -99,6 +99,15 @@ export default defineComponent({
           isNotFound.value = false
           // 自身のTierを表示している場合
           isSelf.value = tier.value.userId === store.state.userId
+          if (pointType.value === 'unlimited') {
+            tier.value.reviews.sort((review1, review2) => {
+              return ReviewFunc.calcSum(review2, tier.value.reviewFactorParams) - ReviewFunc.calcSum(review1, tier.value.reviewFactorParams)
+            })
+          } else {
+            tier.value.reviews.sort((review1, review2) => {
+              return ReviewFunc.calcAaverage(review2, tier.value.reviewFactorParams) - ReviewFunc.calcAaverage(review1, tier.value.reviewFactorParams)
+            })
+          }
         }).catch((e) => {
           const v = e.response.data
           toast.warning(`${v.message} (${v.code})`)

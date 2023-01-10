@@ -16,18 +16,23 @@
         <v-divider />
       </v-col>
     </v-row>
-    <v-row v-if="tiers.length == 0">
+    <v-row v-if="reviews.length == 0">
       <v-col>
         <v-card flat>
           <span>
-            Tierが存在しません
+            レビューが存在しません
           </span>
         </v-card>
       </v-col>
     </v-row>
     <v-row v-else>
       <v-col>
-        <tier-list :tiers="tiers" :is-link="true" />
+        <review-list
+          :reviews="reviews"
+          :is-link="true"
+          display-type="summary"
+          :review-factor-params="paramsList"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -35,10 +40,10 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
-import { Tier } from '@/common/review'
+import { Review, ReviewFactorParam } from '@/common/review'
 import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
-import TierList from '@/components/TierList.vue'
 import SearchComponent from '@/components/SearchComponent.vue'
+import ReviewList from '@/components/ReviewList.vue'
 import RestApi, { Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -47,11 +52,15 @@ export default defineComponent({
   name: 'TierSearch',
   components: {
     SearchComponent,
-    TierList
+    ReviewList
   },
   props: {
-    tiers: {
-      type: Array as PropType<Tier[]>,
+    reviews: {
+      type: Array as PropType<Review[]>,
+      required: true
+    },
+    paramsList: {
+      type: Array as PropType<ReviewFactorParam[][]>,
       required: true
     },
     userId: {
@@ -60,13 +69,13 @@ export default defineComponent({
     }
   },
   emits: {
-    clearTiers: () => true,
-    addTiers: (
+    clearReviewsPair: () => true,
+    addReviewsPair: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      tiers: Tier[]) => true,
-    updateTiers: (
+      tiers: Review[], params: ReviewFactorParam[][]) => true,
+    updateReviewsPair: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      tiers: Tier[]) => true
+      tiers: Review[], params: ReviewFactorParam[][]) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
@@ -89,21 +98,23 @@ export default defineComponent({
         // ユーザーID取得前に読み込まれた場合は処理終了
         return
       }
-      RestApi.getTierList(props.userId, text.value, sortItem.value.value, 1).then((res) => {
+      RestApi.getReviewPairs(props.userId, text.value, sortItem.value.value, 1).then((res) => {
         if (res.data.length !== 0) {
           // 取得件数1件以上
-          const tiers: Tier[] = []
+          const reviews: Review[] = []
+          const params: ReviewFactorParam[][] = []
           res.data.forEach((v) => {
-            tiers.push(Parser.parseTier(v))
+            reviews.push(Parser.parseReview(v.review))
+            params.push(v.params)
           })
-          emit('updateTiers', tiers)
+          emit('updateReviewsPair', reviews, params)
           // データ追加を可能に
           isStop.value = false
           page.value = 1
         } else {
           // 取得件数が0ならデータ追加を不能に
           isStop.value = true
-          emit('clearTiers')
+          emit('clearReviewsPair')
         }
         if (isInputed) {
           isInputing.value = false
@@ -128,14 +139,16 @@ export default defineComponent({
       if (!isWaiting.value && !isStop.value && !isInputing.value) {
         // データ追加待ち状態にする
         isWaiting.value = true
-        RestApi.getTierList(props.userId, text.value, sortItem.value.value, page.value + 1).then((res) => {
+        RestApi.getReviewPairs(props.userId, text.value, sortItem.value.value, page.value + 1).then((res) => {
           if (res.data.length !== 0) {
-            // 取得件数1件以上
-            const tiers: Tier[] = []
+          // 取得件数1件以上
+            const reviews: Review[] = []
+            const params: ReviewFactorParam[][] = []
             res.data.forEach((v) => {
-              tiers.push(Parser.parseTier(v))
+              reviews.push(Parser.parseReview(v.review))
+              params.push(v.params)
             })
-            emit('addTiers', tiers)
+            emit('addReviewsPair', reviews, params)
             page.value++
           } else {
             // 取得件数が0ならデータ追加を不能に

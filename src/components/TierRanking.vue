@@ -70,6 +70,7 @@
       <template v-slot:extension>
         <v-tabs
           v-model="tab"
+          grow
         >
           <v-tab v-if="pointType !== 'unlimited'">
             ピボットTier

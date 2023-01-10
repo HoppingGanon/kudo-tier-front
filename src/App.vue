@@ -13,22 +13,16 @@
           <v-divider />
         </v-row>
         <v-row v-if="hasSession">
-          <v-col cols="4">
-            <v-avatar
-              class="ma-3"
-              size="56"
-              color="purple"
-            >
-              <v-img src="https://placehold.jp/150x150.png" />
-            </v-avatar>
-          </v-col>
-        </v-row>
-        <v-row v-if="hasSession" style="min-height: 100px;" class="ml-2">
           <v-col>
-            <span><b>炎獄少年がのんくん</b></span><br />
-            <span>
-              社会人だってあばれたい
-            </span>
+            <profile-component
+              :disp-name="user.name"
+              :profile="user.profile"
+              :icon-url="user.iconUrl"
+              :tier-count="user.tierCount"
+              :review-count="user.reviewCount"
+              :is-summary="true"
+              :user-id="getUserId() || ''"
+            />
           </v-col>
         </v-row>
         <v-row v-else style="min-height: 100px;" class="ml-2">
@@ -143,14 +137,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-import RestApi from '@/common/restapi'
+import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
+import ProfileComponent from '@/components/ProfileComponent.vue'
+import RestApi, { toastError } from '@/common/restapi'
 import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
+import { emptyUser } from './common/dummy'
 
 export default defineComponent({
   name: 'App',
+  components: {
+    ProfileComponent
+  },
   setup () {
     const toast = useToast()
 
@@ -159,6 +158,9 @@ export default defineComponent({
     const barHeight = ref(60)
     const logoutDialog = ref(false)
     const forceDialog = ref(false)
+
+    const user = ref(emptyUser)
+    const getUserId = () => store.state.userId
 
     const setBarIsVisible = (v: boolean) => {
       store.commit('setBarIsVisible', v)
@@ -215,9 +217,29 @@ export default defineComponent({
       router.push('/tier-settings')
     }
 
+    const getUser = () => {
+      if (store.state.userId) {
+        RestApi.getUserData(store.state.userId).then((res) => {
+          user.value = res.data
+        }).catch((e) => {
+          toastError(e, toast)
+        })
+      }
+    }
+
+    const { userId } = toRefs(store.state)
+
+    watch(userId, () => {
+      getUser()
+    })
+
+    onMounted(getUser)
+
     return {
       logoutDialog,
       forceDialog,
+      user,
+      getUserId,
       getBarIsVisible,
       drawer,
       barHeight,
@@ -231,7 +253,8 @@ export default defineComponent({
       forceLogout,
       goLogin,
       goTierSearch,
-      goTierSettings
+      goTierSettings,
+      store
     }
   }
 })

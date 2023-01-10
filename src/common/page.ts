@@ -4,7 +4,7 @@ export interface SelectObject <T = string | number, D = string | number> {
 }
 
 export type TierSortType = 'updatedAtDesc' | 'updatedAtAsc' | 'createdAtDesc' | 'createdAtAsc'
-export type TierContentType = 'tier' | 'review'
+export type TierContentType = 'review' | 'tier'
 
 // Tierの表示ソート順
 export const tierSortTypeList: SelectObject<TierSortType>[] = [

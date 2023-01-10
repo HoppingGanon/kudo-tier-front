@@ -227,6 +227,10 @@ export default class RestApi {
   static getReview (reviewId: string) {
     return this.get<ReviewDataWithParams>(`/review/${reviewId}`)
   }
+
+  static getReviewPairs (userId: string, word: string, sortType: TierSortType, page: number) {
+    return this.get<ReviewDataWithParams[]>(encodeURI(`/review-pairs?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
+  }
 }
 
 export class Parser {

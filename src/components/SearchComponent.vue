@@ -1,24 +1,13 @@
 <template>
   <v-container class="ma-0 pa-0" fluid>
     <v-row>
-      <v-col cols="12" sm="5" md="7" lg="6" xl="5">
+      <v-col cols="12" sm="8" md="9" lg="9" xl="10">
         <v-text-field
           :model-value="modelValue"
           @update:model-value="$emit('update', $event)"
           label="検索"
           prepend-inner-icon="mdi-magnify"
           hint="検索ワードを指定してください"
-        />
-      </v-col>
-      <v-col cols="4" sm="3" md="2" lg="2" xl="1">
-        <v-select
-          :model-value="targetItem"
-          @update:model-value="$emit('updateTargetItem', $event)"
-          label="検索対象"
-          :items="targetItems"
-          item-title="text"
-          item-value="value"
-          return-object
         />
       </v-col>
       <v-col cols="8" sm="4" md="3" lg="3" xl="2">
@@ -38,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { SelectObject, TierContentType, TierSortType } from '@/common/page'
+import { SelectObject, TierSortType } from '@/common/page'
 
 export default defineComponent({
   name: 'SearchComponent',
@@ -52,15 +41,7 @@ export default defineComponent({
       type: Array as PropType<SelectObject[]>,
       required: true
     },
-    targetItems: {
-      type: Array as PropType<SelectObject[]>,
-      required: true
-    },
     sortItem: {
-      type: Object as PropType<SelectObject>,
-      required: true
-    },
-    targetItem: {
       type: Object as PropType<SelectObject>,
       required: true
     }
@@ -71,10 +52,7 @@ export default defineComponent({
       v: string) => true,
     updateSortItem: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: SelectObject<TierSortType>) => true,
-    updateTargetItem: (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: SelectObject<TierContentType>) => true
+      v: SelectObject<TierSortType>) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () { }

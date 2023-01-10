@@ -4,7 +4,7 @@
   <session-checker :is-going="true" :no-session-error="true" />
 
   <v-container class="pa-0">
-    <v-card class="ma-0" flat>
+    <v-card class="ma-0">
       <tier-settings
         :model-value="tier"
         :point-type="tier.pointType"
@@ -31,7 +31,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
-import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier } from '@/common/review'
+import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'

@@ -32,6 +32,7 @@
               :profile="user.profile"
               :tier-count="user.tierCount"
               :review-count="user.reviewCount"
+              :user-id="userId"
             />
           </v-card>
         </v-col>
@@ -44,12 +45,12 @@
                 投稿
               </v-card-title>
               <div class="d-flex flex-row-reverse" style="width: 100%">
-                <v-btn @click="goSearch">
+                <v-btn @click="goSearch(tab === 0 ? 'tier' : 'review')">
                   <v-icon>mdi-magnify</v-icon>検索
                 </v-btn>
               </div>
               <template v-slot:extension>
-                <v-tabs v-model="tab">
+                <v-tabs v-model="tab" centered slider-color="primary" grow>
                   <v-tab>
                     最新のTier
                   </v-tab>
@@ -61,26 +62,6 @@
             </v-toolbar>
 
             <v-card v-show="tab === 0">
-              <v-card
-                id="reviewsWindow"
-                flat
-              >
-                <review-list
-                  class="pa-1"
-                  :reviews="reviews"
-                  :review-factor-params="tier.reviewFactorParams"
-                  @update-point-type="updatePointType"
-                  :is-link="true"
-                  display-type="summary"
-                  :point-types="pointTypes"
-                />
-                <v-card flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch">
-                  もっと投稿を見る
-                </v-card>
-              </v-card>
-            </v-card>
-
-            <v-card v-show="tab === 1">
               <v-card
                 flat
               >
@@ -97,8 +78,30 @@
                   :tiers="tiers"
                   :is-link="true"
                 />
+                <v-card flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('tier')">
+                  もっと投稿を見る
+                </v-card>
               </v-card>
             </v-card>
+
+            <v-card v-show="tab === 1">
+              <v-card
+                id="reviewsWindow"
+                flat
+              >
+                <review-list
+                  class="pa-1"
+                  :reviews="reviews"
+                  :review-factor-params="params"
+                  :is-link="true"
+                  display-type="summary"
+                />
+                <v-card flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
+                  もっと投稿を見る
+                </v-card>
+              </v-card>
+            </v-card>
+
           </v-card>
         </v-col>
       </v-row>
@@ -116,10 +119,11 @@ import TierList from '@/components/TierList.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import { useRoute } from 'vue-router'
-import { ReviewFunc, ReviewPointType, Tier } from '@/common/review'
-import { emptyUser, reviews as reviewsOrg, tier as tierOrg } from '@/common/dummy'
+import { Tier, Review, ReviewFactorParam } from '@/common/review'
+import { emptyUser } from '@/common/dummy'
 import { useToast } from 'vue-toast-notification'
 import router from '@/router'
+import { TierContentType } from '@/common/page'
 
 export default defineComponent({
   name: 'HomeView',
@@ -141,10 +145,10 @@ export default defineComponent({
     const reviewsWindow = ref(null as HTMLElement | null)
 
     // テストデータ
-    const reviews = ref(reviewsOrg)
-    const tier = ref(tierOrg)
+    const reviews = ref([] as Review[])
 
     const tiers = ref([] as Tier[])
+    const params = ref([] as ReviewFactorParam[][])
 
     const tab = ref(0)
 
@@ -173,6 +177,19 @@ export default defineComponent({
             tiers.value.push(Parser.parseTier(v))
           })
         }).catch((e) => toastError(e, toast))
+
+        // 並行してレビューもダウンロードする
+        RestApi.getReviewPairs(route.params.id, '', 'updatedAtDesc', 1).then((res) => {
+          reviews.value.splice(0)
+          params.value.splice(0)
+          res.data.forEach((v) => {
+            reviews.value.push(Parser.parseReview(v.review))
+            params.value.push(v.params)
+          })
+        }).catch((e) => {
+          const v = e.response.data
+          toast.error(`${v.message} (${v.code})`)
+        })
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
@@ -181,18 +198,8 @@ export default defineComponent({
       reviewsWindow.value = document.getElementById('reviewsWindow')
     })
 
-    // ポイント表示方法のリスト
-    const pointTypes = ref(ReviewFunc.getPointTypes(reviews.value))
-
-    // ポイント表示方法の切り替えを子コンポーネントに提供する
-    const updatePointType = (value: ReviewPointType, index: number) => {
-      if (index >= 0 && index < reviews.value.length) {
-        pointTypes.value[index] = value
-      }
-    }
-
-    const goSearch = () => {
-      router.push(`/tier-search/${userId.value}`)
+    const goSearch = (tab: TierContentType) => {
+      router.push(`/tier-search/${userId.value}?tab=${tab}`)
     }
 
     const goTierSettings = () => {
@@ -204,11 +211,9 @@ export default defineComponent({
       user,
       userId,
       reviews,
-      tier,
+      params,
       tiers,
       tab,
-      updatePointType,
-      pointTypes,
       goSearch,
       goTierSettings
     }

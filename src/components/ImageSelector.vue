@@ -12,7 +12,7 @@
         />
       </v-col>
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-dialog v-model="cropMenu" persistent :fullscreen="$vuetify.display.mobile">
+        <v-dialog v-model="cropMenu" persistent :fullscreen="true">
           <template v-slot:activator>
             <v-btn :disabled="imageUrl === ''" icon flat @click="cropMenu = true">
               <v-icon>

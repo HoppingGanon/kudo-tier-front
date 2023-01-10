@@ -50,16 +50,20 @@ export default defineComponent({
 
     const getValue = (index: number) => {
       if (props.itemValue !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (props.items[index] as { [name: string | number]: any})[props.itemValue]
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (props.items[index] as { [name: string | number]: any}).value
       }
     }
 
     const getTitle = (index: number) => {
       if (props.itemTitle !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (props.items[index] as { [name: string | number]: any})[props.itemTitle]
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (props.items[index] as { [name: string | number]: any}).text
       }
     }

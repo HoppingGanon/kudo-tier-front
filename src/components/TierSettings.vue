@@ -9,7 +9,7 @@
       </b>
     </v-card-title>
     <template v-slot:extension>
-      <v-tabs :model-value="tab" @update:model-value="updateTab($event as number)" centered slider-color="primary">
+      <v-tabs :model-value="tab" @update:model-value="updateTab($event as number)" centered slider-color="primary" grow>
         <v-tab>
           <span :class="tabValidation[0] === 'error' ? 'error-style' : ''">1. Tier概要</span>
         </v-tab>
@@ -297,7 +297,6 @@ import { useToast } from 'vue-toast-notification'
 import RestApi, { ErrorResponse } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
-import { useStore } from '@/store'
 import { ValidState } from '@/common/page'
 
 export default defineComponent({
@@ -379,7 +378,6 @@ export default defineComponent({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const toast = useToast()
-    const store = useStore()
     const tab = ref(0)
     const tweetdialog = ref(false)
     const isSubmitting = ref(false)

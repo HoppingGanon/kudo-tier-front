@@ -11,7 +11,7 @@
             :is-link="isLink"
             :display-type="displayType"
             point-display-type="normal"
-            :point-type="index < pointTypes.length ? pointTypes[index] : 'point'"
+            :point-type="pointTypes === undefined ? undefined : (index < pointTypes.length ? pointTypes[index] : 'point')"
             @update-point-type="updatePointTypeEm($event, index)"
             :no-change-point="noChangePoint"
           />
@@ -33,7 +33,8 @@ export default defineComponent({
   },
   props: {
     reviews: {
-      type: Array as PropType<Review[]>
+      type: Array as PropType<Review[]>,
+      required: true
     },
     reviewFactorParams: {
       type: Array as PropType<ReviewFactorParam[] | ReviewFactorParam[][]>,
@@ -61,8 +62,7 @@ export default defineComponent({
     },
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointTypes: {
-      type: Array as PropType<ReviewPointType[]>,
-      required: true
+      type: Array as PropType<ReviewPointType[]>
     }
   },
   emits: {

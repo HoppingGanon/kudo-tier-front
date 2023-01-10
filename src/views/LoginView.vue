@@ -27,9 +27,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useStore } from '@/store/index'
-import RestApi from '@/common/restapi'
+import RestApi, { toastError } from '@/common/restapi'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
+import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'LoginView',
@@ -39,6 +40,7 @@ export default defineComponent({
   },
   setup () {
     const store = useStore()
+    const toast = useToast()
 
     if (store.state.sessionId === '') {
       const connectTemp = () => {
@@ -56,8 +58,8 @@ export default defineComponent({
           store.commit('setTempSessionId', response.data.sessionId)
 
           window.location.href = `${base}?${code}&${clientId}&${redirectUri}&${state}&${codeChallenge}&${codeChallengeMethod}&${scope}`
-        }).catch(() => {
-          alert('認証失敗')
+        }).catch((e) => {
+          toastError(e, toast)
         })
       }
       return {
@@ -66,7 +68,7 @@ export default defineComponent({
     } else {
       router.push('/home')
       const connectTemp = () => {
-        alert('既にログイン済みです')
+        toast.error('すでにログイン済みです')
       }
       return {
         connectTemp

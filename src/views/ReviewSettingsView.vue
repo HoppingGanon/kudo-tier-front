@@ -26,7 +26,7 @@
           </v-btn>
         </div>
         <template v-slot:extension>
-          <v-tabs :model-value="tab" @update:model-value="updateTab" centered slider-color="primary">
+          <v-tabs :model-value="tab" @update:model-value="updateTab" centered slider-color="primary" grow>
             <v-tab>
               <span :class="tabValidation[0] === 'error' ? 'error-style' : ''">1. 概要</span>
             </v-tab>

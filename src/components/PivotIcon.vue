@@ -19,9 +19,12 @@
       <v-card-actions class="d-flex flex-row-reverse">
         <a :href="`#${infomation.review.reviewId}`" class="no-link">
           <v-btn flat>
-            レビューに移動
+            移動
           </v-btn>
         </a>
+        <v-btn flat @click="goReview">
+          レビューを開く
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>
@@ -30,6 +33,7 @@
 <script lang="ts">
 import { ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
 import ReviewComponent from '@/components/ReviewComponent.vue'
+import router from '@/router'
 import { defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
@@ -60,14 +64,18 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const isHover = ref(false)
     const click = () => {
       isHover.value = !isHover.value
     }
+    const goReview = () => {
+      router.push(`/review/${props.infomation.review.reviewId}`)
+    }
     return {
       isHover,
-      click
+      click,
+      goReview
     }
   }
 })

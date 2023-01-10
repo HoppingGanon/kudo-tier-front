@@ -1,7 +1,7 @@
 <template>
   <v-container class="ma-0 pa-1" fluid>
     <v-row>
-      <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm && !$vuetify.display.md" cols="0" sm="0" md="0" lg="3" xl="3">
+      <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm && !$vuetify.display.md" cols="0" sm="0" md="0" lg="2" xl="3">
         <v-container v-if="userId" fluid class="ma-0 pa-0">
           <v-row>
             <v-col>
@@ -22,12 +22,12 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col cols="12" sm="12" md="9" lg="6" xl="5">
+      <v-col cols="12" sm="12" md="9" lg="8" xl="6">
         <slot>
           コンポーネントがありません
         </slot>
       </v-col>
-      <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm" cols="0" sm="0" md="3" lg="3" xl="2">
+      <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm" cols="0" sm="0" md="3" lg="2" xl="2">
         <v-container v-if="targetUserId" fluid class="ma-0 pa-0">
           <v-row>
             <v-col>
@@ -43,6 +43,7 @@
                   :tier-count="targetUser.tierCount"
                   :review-count="targetUser.reviewCount"
                   :is-summary="true"
+                  :user-id="targetUserId || ''"
                 />
               </v-card>
             </v-col>
@@ -63,7 +64,7 @@
                     </div>
                   </v-list-item>
                   <v-list-item>
-                    <v-btn flat @click="goTierSearch">もっと見る</v-btn>
+                    <v-btn flat @click="goTierSearch('tier')">もっと見る</v-btn>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -85,7 +86,7 @@
                     </div>
                   </v-list-item>
                   <v-list-item>
-                    <v-btn flat @click="goTierSearch">もっと見る</v-btn>
+                    <v-btn flat @click="goTierSearch('review')">もっと見る</v-btn>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -104,6 +105,7 @@ import RestApi, { toastError, PostListItem } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyUser } from '@/common/dummy'
 import router from '@/router'
+import { TierContentType } from '@/common/page'
 
 export default defineComponent({
   name: 'PaddingComponent',
@@ -119,7 +121,8 @@ export default defineComponent({
       type: String
     },
     targetUserId: {
-      type: String
+      type: String,
+      required: true
     }
   },
   setup (props) {
@@ -131,7 +134,7 @@ export default defineComponent({
 
     const { targetUserId } = toRefs(props)
     watch(targetUserId, () => {
-      if (targetUserId.value) {
+      if (targetUserId.value !== '') {
         RestApi.getUserData(targetUserId.value).then((res) => {
           targetUser.value = {
             name: res.data.name,
@@ -153,8 +156,8 @@ export default defineComponent({
       }
     })
 
-    const goTierSearch = () => {
-      router.push(`/tier-search/${targetUserId.value}`)
+    const goTierSearch = (tab: TierContentType) => {
+      router.push(`/tier-search/${targetUserId.value}?tab=${tab}`)
     }
 
     const goTier = (id: string) => {

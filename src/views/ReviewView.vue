@@ -8,7 +8,7 @@
       <v-col>
         <v-card>
           <error-component
-            comment="Tierが見つかりません"
+            comment="レビューが見つかりません"
           />
         </v-card>
       </v-col>
@@ -60,7 +60,7 @@ import ReviewComponent from '@/components/ReviewComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
-import { emptyReviwew, emptyTier } from '@/common/dummy'
+import { emptyReviwew } from '@/common/dummy'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'

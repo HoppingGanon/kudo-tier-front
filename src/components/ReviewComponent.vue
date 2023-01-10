@@ -81,6 +81,7 @@
               <v-row v-if="!noChangePoint">
                 <v-col>
                   <point-type-selector
+                    v-if="pointType"
                     :model-value="pointType"
                     @update="$emit('updatePointType', $event)"
                   />
@@ -217,8 +218,7 @@ export default defineComponent({
     },
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointType: {
-      type: String as PropType<ReviewPointType>,
-      required: true
+      type: String as PropType<ReviewPointType>
     }
   },
   emits: {

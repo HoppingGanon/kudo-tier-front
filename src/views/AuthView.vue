@@ -9,6 +9,7 @@ import { useStore } from '@/store/index'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
 import RestApi, { } from '@/common/restapi'
+import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'AuthView',
@@ -16,6 +17,7 @@ export default defineComponent({
   setup () {
     const route = useRoute()
     const store = useStore()
+    const toast = useToast()
     const code = route.query.code as string
 
     if (store.state.sessionId !== '') {
@@ -37,7 +39,7 @@ export default defineComponent({
           router.push(`/home/${response.data.userId}`)
         }
       }).catch((err) => {
-        alert('認証失敗:' + err.response.data)
+        toast.error(`認証失敗:${err.response.data}`)
         store.commit('setTempSessionId', '')
         router.push('/login')
       })

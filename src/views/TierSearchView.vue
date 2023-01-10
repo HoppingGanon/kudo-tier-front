@@ -3,39 +3,71 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <v-container class="pa-0">
-    <v-card class="ma-0">
-      <v-toolbar color="secondary" dark>
-        <div class="no-break-box">
-          <v-card-title>
-            <span v-text="`Tier一覧(${dispName})`" />
-          </v-card-title>
-        </div>
-      </v-toolbar>
-      <v-card v-if="isNotFound" flat>
-        <span>
-          ユーザーが存在しません
-        </span>
+  <padding-component :target-user-id="userId">
+    <v-container class="pa-0 ma-0" fluid>
+      <v-card class="ma-0" flat>
+        <v-toolbar color="secondary" dark>
+          <div class="no-break-box">
+            <v-card-title class="font-weight-bold">
+              <span v-text="`${dispName} さんの投稿`" />
+            </v-card-title>
+          </div>
+          <template v-slot:extension>
+            <v-tabs v-model="tab" centered slider-color="primary" grow>
+              <v-tab>
+                Tier
+              </v-tab>
+              <v-tab>
+                レビュー
+              </v-tab>
+            </v-tabs>
+          </template>
+        </v-toolbar>
+        <v-card v-if="isNotFound" flat>
+          <span>
+            ユーザーが存在しません
+          </span>
+        </v-card>
+        <tier-search
+          v-show="!isNotFound && tab === 0"
+          :tiers="tiers"
+          :user-id="userId"
+          @clear-tiers="clearTiers"
+          @update-tiers="updateTiers"
+          @add-tiers="addTiers"
+        />
+        <review-search
+          v-show="!isNotFound && tab === 1"
+          :reviews="reviews"
+          :user-id="userId"
+          :params-list="paramsList"
+          @clear-reviews-pair="clearReviewsPair"
+          @update-reviews-pair="updateReviewsPair"
+          @add-reviews-pair="addReviewsPair"
+        />
       </v-card>
-      <tier-search v-else :tiers="tiers" :user-id="userId" @clear-tiers="clearTiers" @update-tiers="updateTiers" @add-tiers="addTiers" />
-    </v-card>
-  </v-container>
+    </v-container>
+  </padding-component>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSearch from '@/components/TierSearch.vue'
+import ReviewSearch from '@/components/ReviewSearch.vue'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
-import { Tier } from '@/common/review'
+import { Review, ReviewFactorParam, Tier } from '@/common/review'
+import PaddingComponent from '@/components/PaddingComponent.vue'
 
 export default defineComponent({
   name: 'TierSearchView',
   components: {
     SessionChecker,
-    TierSearch
+    TierSearch,
+    ReviewSearch,
+    PaddingComponent
   },
   props: {},
   emits: {},
@@ -45,8 +77,11 @@ export default defineComponent({
     const isNotFound = ref(true)
     const dispName = ref('')
     const userId = ref('')
+    const tab = ref(0)
 
     const tiers = ref([] as Tier[])
+    const reviews = ref([] as Review[])
+    const paramsList = ref([] as ReviewFactorParam[][])
 
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
@@ -66,6 +101,22 @@ export default defineComponent({
             const v = e.response.data
             toast.error(`${v.message} (${v.code})`)
           })
+
+          // ユーザーが存在する場合は、レビューの検索(初動)
+          RestApi.getReviewPairs(id, '', 'updatedAtDesc', 1).then((res) => {
+            if (res.data.length !== 0) {
+              // 取得件数1件以上
+              reviews.value.splice(0)
+              paramsList.value.splice(0)
+              res.data.forEach((v) => {
+                reviews.value.push(Parser.parseReview(v.review))
+                paramsList.value.push(v.params)
+              })
+            }
+          }).catch((e) => {
+            const v = e.response.data
+            toast.error(`${v.message} (${v.code})`)
+          })
           isNotFound.value = false
         }).catch(() => {
           isNotFound.value = true
@@ -73,6 +124,14 @@ export default defineComponent({
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
+      }
+      switch (route.query.tab) {
+        case 'tier':
+          tab.value = 0
+          break
+        case 'review':
+          tab.value = 1
+          break
       }
     })
 
@@ -91,14 +150,38 @@ export default defineComponent({
       tiers.value = tiers.value.concat(v)
     }
 
+    const clearReviewsPair = () => {
+      reviews.value.splice(0)
+      paramsList.value.splice(0)
+    }
+
+    const updateReviewsPair = (r: Review[], p: ReviewFactorParam[][]) => {
+      clearReviewsPair()
+      setTimeout(() => {
+        reviews.value = r
+        paramsList.value = p
+      }, 0)
+    }
+
+    const addReviewsPair = (r: Review[], p: ReviewFactorParam[][]) => {
+      reviews.value = reviews.value.concat(r)
+      paramsList.value = paramsList.value.concat(p)
+    }
+
     return {
       tiers,
+      reviews,
+      paramsList,
       isNotFound,
       dispName,
       userId,
+      tab,
       clearTiers,
       updateTiers,
-      addTiers
+      addTiers,
+      clearReviewsPair,
+      updateReviewsPair,
+      addReviewsPair
     }
   }
 })
