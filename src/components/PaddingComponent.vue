@@ -2,7 +2,7 @@
   <v-container class="ma-0 pa-1" fluid>
     <v-row>
       <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm && !$vuetify.display.md" cols="0" sm="0" md="0" lg="3" xl="3">
-        <v-container fluid class="ma-0 pa-0">
+        <v-container v-if="userId" fluid class="ma-0 pa-0">
           <v-row>
             <v-col>
               <v-card>
@@ -28,27 +28,64 @@
         </slot>
       </v-col>
       <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm" cols="0" sm="0" md="3" lg="3" xl="2">
-        <v-container fluid class="ma-0 pa-0">
+        <v-container v-if="targetUserId" fluid class="ma-0 pa-0">
           <v-row>
             <v-col>
               <v-card>
-                <v-toolbar class="pl-2">
-                  このユーザーの他の投稿を見る
+                <v-toolbar class="pl-2" color="thirdry">
+                  <b v-text="title">
+                  </b>
+                </v-toolbar>
+                <profile-component
+                  :disp-name="targetUser.name"
+                  :profile="targetUser.profile"
+                  :icon-url="targetUser.iconUrl"
+                  :tier-count="targetUser.tierCount"
+                  :review-count="targetUser.reviewCount"
+                  :is-summary="true"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card>
+                <v-toolbar class="pl-2" color="thirdry">
+                  <span class="font-weight-bold no-break-box" v-text="`最新のTier(${targetUser.name})`"></span>
                 </v-toolbar>
                 <v-list>
+                  <v-list-item v-for="tier, i of tiers" :key="i" class="mb-1">
+                    <template v-slot:prepend>
+                      <b v-text="'・'"></b>
+                    </template>
+                    <div class="no-break-box-2 cursor-pointer" @click="goTier(tier.id)">
+                      <span v-text="tier.name"></span>
+                    </div>
+                  </v-list-item>
                   <v-list-item>
-                    レビュー
-                    <v-list-item>
-                      ここにレビュー一覧を10件表示
-                    </v-list-item>
+                    <v-btn flat @click="goTierSearch">もっと見る</v-btn>
                   </v-list-item>
                 </v-list>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card>
+                <v-toolbar class="pl-2" color="thirdry">
+                  <span class="font-weight-bold no-break-box" v-text="`最新のレビュー(${targetUser.name})`"></span>
+                </v-toolbar>
                 <v-list>
+                  <v-list-item v-for="review, i of reviews" :key="i" class="mb-1">
+                    <template v-slot:prepend>
+                      <b v-text="'・'"></b>
+                    </template>
+                    <div class="no-break-box-2 cursor-pointer" @click="goReview(review.id)">
+                      <span v-text="review.name"></span>
+                    </div>
+                  </v-list-item>
                   <v-list-item>
-                    Tier
-                    <v-list-item>
-                      ここにTier一覧を10件表示
-                    </v-list-item>
+                    <v-btn flat @click="goTierSearch">もっと見る</v-btn>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -61,10 +98,83 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, toRefs, watch } from 'vue'
+import ProfileComponent from '@/components/ProfileComponent.vue'
+import RestApi, { toastError, PostListItem } from '@/common/restapi'
+import { useToast } from 'vue-toast-notification'
+import { emptyUser } from '@/common/dummy'
+import router from '@/router'
 
 export default defineComponent({
-  name: 'PaddingComponent'
+  name: 'PaddingComponent',
+  components: {
+    ProfileComponent
+  },
+  props: {
+    title: {
+      type: String,
+      default: 'ユーザーの情報'
+    },
+    userId: {
+      type: String
+    },
+    targetUserId: {
+      type: String
+    }
+  },
+  setup (props) {
+    const toast = useToast()
+    const tiers = ref([] as PostListItem[])
+    const reviews = ref([] as PostListItem[])
+    const isNotFound = ref(true)
+    const targetUser = ref(emptyUser)
+
+    const { targetUserId } = toRefs(props)
+    watch(targetUserId, () => {
+      if (targetUserId.value) {
+        RestApi.getUserData(targetUserId.value).then((res) => {
+          targetUser.value = {
+            name: res.data.name,
+            profile: res.data.profile,
+            iconUrl: res.data.iconUrl,
+            twitterName: res.data.twitterName,
+            tierCount: res.data.tierCount,
+            reviewCount: res.data.reviewCount
+          }
+          isNotFound.value = false
+        }).catch(() => {
+          isNotFound.value = true
+        })
+        // 投稿リストを取得
+        RestApi.getLatestPostLists(targetUserId.value, 5).then((res) => {
+          tiers.value = res.data.tiers
+          reviews.value = res.data.reviews
+        }).catch((e) => toastError(e, toast))
+      }
+    })
+
+    const goTierSearch = () => {
+      router.push(`/tier-search/${targetUserId.value}`)
+    }
+
+    const goTier = (id: string) => {
+      router.push(`/tier/${id}`)
+    }
+
+    const goReview = (id: string) => {
+      router.push(`/review/${id}`)
+    }
+
+    return {
+      tiers,
+      reviews,
+      targetUser,
+      isNotFound,
+      goTierSearch,
+      goTier,
+      goReview
+    }
+  }
 })
 </script>
 

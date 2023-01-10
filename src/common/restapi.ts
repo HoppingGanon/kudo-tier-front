@@ -2,6 +2,7 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
 import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData } from './review'
 import { TierSortType } from './page'
+import { ToastPluginApi } from 'vue-toast-notification'
 
 export interface TempSession {
   // eslint-disable-next-line camelcase
@@ -38,6 +39,8 @@ export interface UserData {
   /** Teittwrの表示名 */
   twitterName: string
   iconUrl: string
+  reviewCount: number
+  tierCount: number
 }
 
 export interface ReviewData {
@@ -105,9 +108,28 @@ export interface TierData {
   updatedAt: string
 }
 
+export interface PostListItem {
+  id: string
+  name: string
+}
+
+export interface PostListsData {
+  tiers: PostListItem[]
+  reviews: PostListItem[]
+}
+
 export interface ErrorResponse {
   code: number
   message: string
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
+  const v = err.response.data
+  toast.error(`${v.message} (${v.code})`)
+  if (func) {
+    func(err)
+  }
 }
 
 export default class RestApi {
@@ -178,6 +200,10 @@ export default class RestApi {
     return this.get<UserData>('/user/' + userId)
   }
 
+  static getLatestPostLists (userId: string, length: number) {
+    return this.get<PostListsData>(`/latest-post-lists/${userId}?length=${length}`)
+  }
+
   static postTier (data: TierEditingData) {
     return this.post('/tier', data)
   }
@@ -186,8 +212,8 @@ export default class RestApi {
     return this.get<TierData>(`/tier/${tierId}`)
   }
 
-  static updateTier (data: TierEditingData) {
-    return this.update('/tier', data)
+  static updateTier (data: TierEditingData, tierId: string) {
+    return this.update(`/tier/${tierId}`, data)
   }
 
   static getTierList (userId: string, word: string, sortType: TierSortType, page: number) {

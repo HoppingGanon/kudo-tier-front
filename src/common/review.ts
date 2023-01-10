@@ -159,9 +159,6 @@ export const sectionValidation = {
 }
 
 export interface TierEditingData {
-  /** Tier識別ID 新規作成の際は空文字 */
-  tierId: string
-
   /** Tierの名称 */
   name: string
   /** TierのアイコンURL */
@@ -177,8 +174,6 @@ export interface TierEditingData {
 }
 
 export interface ReviewEditingData {
-  /** review識別ID 新規作成の際は空文字 */
-  reviewId: string
   /** Tier識別ID */
   tierId: string
 
@@ -507,9 +502,8 @@ export class ReviewFunc {
    * @param tierId Tierの固有ID (新規作成の際は空文字)
    * @returns リクエストデータ
    */
-  static createTierRequestData (tier: Tier, tierId: string) : TierEditingData {
+  static createTierRequestData (tier: Tier) : TierEditingData {
     return {
-      tierId: tierId,
       name: tier.name,
       imageBase64: ReviewFunc.dataURLToBase64(tier.imageUrl),
       parags: ReviewFunc.cloneParags(tier.parags),
@@ -524,9 +518,8 @@ export class ReviewFunc {
    * @param reviewId レビューの固有ID (新規作成の際は空文字)
    * @returns リクエストデータ
    */
-  static createReviewRequestData (review: Review, tierId: string, reviewId: string) : ReviewEditingData {
+  static createReviewRequestData (review: Review, tierId: string) : ReviewEditingData {
     return {
-      reviewId: reviewId,
       tierId: tierId,
       title: review.title,
       name: review.name,

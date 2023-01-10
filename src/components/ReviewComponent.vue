@@ -12,10 +12,10 @@
       </v-col>
     </v-row>
 
-    <v-row><v-col><v-container class="pa-0 ma-0" fluid :class="isLink ? 'cursor-pointer' : ''" @click="goReview">
+    <v-row><v-col><v-container class="pa-0 ma-0" fluid :class="isLink ? 'cursor-pointer' : ''" @click="goReview(isLink)">
       <v-row>
         <v-col cols="4" sm="3" md="3" lg="2" xl="2">
-          <v-card :style="`border: 1px solid ${primaryColor}`">
+          <v-card>
             <v-img v-if="review.iconUrl" :src="review.iconUrl" />
             <v-img v-else src="@/assets/common/noimage256.png"/>
           </v-card>
@@ -142,7 +142,7 @@
       </v-row>
       <v-row v-if="displayType === 'list'">
         <v-col class="d-flex flex-row-reverse">
-          <v-btn flat :disabled="isSample">
+          <v-btn flat :disabled="isSample" @click="goReview(true)">
             (続きを見る)
           </v-btn>
         </v-col>
@@ -259,8 +259,8 @@ export default defineComponent({
       ] as RadarChartData[]
     }
 
-    const goReview = () => {
-      if (props.isLink) {
+    const goReview = (enable: boolean) => {
+      if (enable) {
         router.push(`/review/${props.review.reviewId}`)
       }
     }

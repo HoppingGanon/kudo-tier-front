@@ -484,7 +484,7 @@ export default defineComponent({
           return
         }
       }
-      const data = ReviewFunc.createTierRequestData(props.modelValue, props.modelValue.tierId)
+      const data = ReviewFunc.createTierRequestData(props.modelValue)
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
@@ -495,7 +495,7 @@ export default defineComponent({
           toast.error(`${v.message}(${v.code})`)
         })
       } else {
-        RestApi.updateTier(data).then((v) => {
+        RestApi.updateTier(data, props.modelValue.tierId).then((v) => {
           toast.success('Tierを更新しました')
           isSubmitting.value = true
           router.push(`/tier/${v.data}`)

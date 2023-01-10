@@ -16,40 +16,41 @@
     </v-row>
   </v-container>
 
-  <!-- サイズ調整のためfluidは入れない -->
-  <v-container v-else class="pa-0">
-    <v-card class="block-center" max-width="1080px">
-      <v-toolbar color="secondary" dark>
-        <v-card-title>
-          Tier
-        </v-card-title>
-        <v-spacer />
-        <v-card-actions v-if="isSelf">
-          <v-btn class="mt-3 mr-3" @click="goReviewSettings">
-            <v-icon>
-              mdi-book-plus-outline
-            </v-icon>
-            レビューを追加する
-          </v-btn>
-          <v-btn class="mt-3 mr-3" @click="edit">
-            <v-icon>
-              mdi-pencil-box-outline
-            </v-icon>
-            Tierを編集する
-          </v-btn>
-        </v-card-actions>
-      </v-toolbar>
+  <padding-component v-else :target-user-id="tier.userId">
+    <v-container fluid class="pa-0 ma-0">
+      <v-card class="block-center" max-width="1080px">
+        <v-toolbar color="secondary" dark>
+          <v-card-title>
+            Tier
+          </v-card-title>
+          <v-spacer />
+          <v-card-actions v-if="isSelf">
+            <v-btn class="mt-3 mr-3" @click="goReviewSettings">
+              <v-icon>
+                mdi-book-plus-outline
+              </v-icon>
+              レビューを追加する
+            </v-btn>
+            <v-btn class="mt-3 mr-3" @click="edit">
+              <v-icon>
+                mdi-pencil-box-outline
+              </v-icon>
+              Tierを編集する
+            </v-btn>
+          </v-card-actions>
+        </v-toolbar>
 
-      <tier-component
-        class="pa-1"
-        :tier="tier"
-        :point-type="pointType"
-        @update-point-type="updatePointType"
-        display-type="all"
-        point-display-type="normal"
-      />
-    </v-card>
-  </v-container>
+        <tier-component
+          class="pa-1"
+          :tier="tier"
+          :point-type="pointType"
+          @update-point-type="updatePointType"
+          display-type="all"
+          point-display-type="normal"
+        />
+      </v-card>
+    </v-container>
+  </padding-component>
 </template>
 
 <script lang="ts">
@@ -58,6 +59,7 @@ import { ReviewFunc, ReviewPointType } from '@/common/review'
 import TierComponent from '@/components/TierComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
+import PaddingComponent from '@/components/PaddingComponent.vue'
 import { emptyTier } from '@/common/dummy'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser } from '@/common/restapi'
@@ -70,7 +72,8 @@ export default defineComponent({
   components: {
     TierComponent,
     ErrorComponent,
-    SessionChecker
+    SessionChecker,
+    PaddingComponent
   },
   props: {},
   emits: {},

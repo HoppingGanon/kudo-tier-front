@@ -422,7 +422,7 @@ export default defineComponent({
         }
       }
       if (route.params.tid && typeof route.params.tid === 'string') {
-        const data = ReviewFunc.createReviewRequestData(review.value, route.params.tid, '')
+        const data = ReviewFunc.createReviewRequestData(review.value, route.params.tid)
         RestApi.postReview(data).then((v) => {
           toast.success('レビューを作成しました')
           isSubmitting.value = true

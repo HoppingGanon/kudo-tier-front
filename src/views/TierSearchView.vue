@@ -10,7 +10,7 @@
           <v-card-title>
             <span v-text="`Tier一覧(${dispName})`" />
           </v-card-title>
-      </div>
+        </div>
       </v-toolbar>
       <v-card v-if="isNotFound" flat>
         <span>
@@ -24,6 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
+import SessionChecker from '@/components/SessionChecker.vue'
 import TierSearch from '@/components/TierSearch.vue'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser } from '@/common/restapi'
@@ -33,6 +34,7 @@ import { Tier } from '@/common/review'
 export default defineComponent({
   name: 'TierSearchView',
   components: {
+    SessionChecker,
     TierSearch
   },
   props: {},

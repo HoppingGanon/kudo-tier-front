@@ -1,3 +1,4 @@
+import { UserData } from './restapi'
 import { Tier, Review } from './review'
 
 export const emptyTier: Tier = {
@@ -29,6 +30,15 @@ export const emptyReviwew: Review = {
   sections: [],
   createdAt: new Date(),
   updatedAt: new Date()
+}
+
+export const emptyUser: UserData = {
+  name: '',
+  profile: '',
+  iconUrl: '',
+  twitterName: '',
+  tierCount: 0,
+  reviewCount: 0
 }
 
 export const tier: Tier = {

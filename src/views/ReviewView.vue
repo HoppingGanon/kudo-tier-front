@@ -3,7 +3,6 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <!-- サイズ調整のためfluidは入れない -->
   <v-container v-if="isNotFound" class="pa-0">
     <v-row>
       <v-col>
@@ -16,41 +15,42 @@
     </v-row>
   </v-container>
 
-  <!-- サイズ調整のためfluidは入れない -->
-  <v-container v-else class="pa-0">
-    <v-card class="block-center" max-width="1080px">
-      <v-toolbar color="secondary" dark>
-        <v-card-title>
-          レビュー
-        </v-card-title>
-        <v-spacer />
-        <v-card-actions v-if="isSelf">
-          <v-btn class="mt-3 mr-3" @click="goTier">
-            <v-icon>
-              mdi-book-plus-outline
-            </v-icon>
-            レビューを追加する
-          </v-btn>
-          <v-btn class="mt-3 mr-3" @click="edit">
-            <v-icon>
-              mdi-pencil-box-outline
-            </v-icon>
-            Tierを編集する
-          </v-btn>
-        </v-card-actions>
-      </v-toolbar>
+  <padding-component v-else :target-user-id="userId">
+    <v-container class="pa-0">
+      <v-card class="block-center" max-width="1080px">
+        <v-toolbar color="secondary" dark>
+          <v-card-title>
+            レビュー
+          </v-card-title>
+          <v-spacer />
+          <v-card-actions v-if="isSelf">
+            <v-btn class="mt-3 mr-3" @click="goTier">
+              <v-icon>
+                mdi-book-plus-outline
+              </v-icon>
+              レビューを追加する
+            </v-btn>
+            <v-btn class="mt-3 mr-3" @click="edit">
+              <v-icon>
+                mdi-pencil-box-outline
+              </v-icon>
+              Tierを編集する
+            </v-btn>
+          </v-card-actions>
+        </v-toolbar>
 
-      <review-component
-        class="pa-1"
-        :review="review"
-        :review-factor-params="params"
-        :point-type="pointType"
-        @update-point-type="updatePointType"
-        display-type="all"
-        point-display-type="normal"
-      />
-    </v-card>
-  </v-container>
+        <review-component
+          class="pa-1"
+          :review="review"
+          :review-factor-params="params"
+          :point-type="pointType"
+          @update-point-type="updatePointType"
+          display-type="all"
+          point-display-type="normal"
+        />
+      </v-card>
+    </v-container>
+  </padding-component>
 </template>
 
 <script lang="ts">
@@ -59,6 +59,7 @@ import { ReviewFactorParam, ReviewFunc, ReviewPointType } from '@/common/review'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
+import PaddingComponent from '@/components/PaddingComponent.vue'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser } from '@/common/restapi'
@@ -71,7 +72,8 @@ export default defineComponent({
   components: {
     ReviewComponent,
     ErrorComponent,
-    SessionChecker
+    SessionChecker,
+    PaddingComponent
   },
   props: {},
   emits: {},
@@ -81,6 +83,7 @@ export default defineComponent({
     const toast = useToast()
     const isNotFound = ref(false)
     const isSelf = ref(false)
+    const userId = ref('')
 
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
     const params = ref([] as ReviewFactorParam[])
@@ -97,6 +100,7 @@ export default defineComponent({
           review.value = Parser.parseReview(res.data.review)
           params.value = res.data.params
           pointType.value = review.value.pointType || 'point'
+          userId.value = review.value.userId
           isNotFound.value = false
         }).catch((e) => {
           const v = e.response.data
@@ -122,6 +126,7 @@ export default defineComponent({
       review,
       params,
       pointType,
+      userId,
       isNotFound,
       isSelf,
       updatePointType,

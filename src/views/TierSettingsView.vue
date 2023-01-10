@@ -35,7 +35,6 @@ import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Ti
 import { useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
-import store from '@/store'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 
 export default defineComponent({

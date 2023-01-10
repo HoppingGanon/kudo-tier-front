@@ -16,7 +16,7 @@
       <v-row>
         <v-col>
           <v-card flat>
-            <p class="text-h6"><b><span v-text="tier.name"></span></b></p>
+            <p class="text-h6" :class="displayType === 'summary' ? 'no-break' : ''"><b><span v-text="tier.name"></span></b></p>
           </v-card>
         </v-col>
       </v-row>
@@ -29,7 +29,7 @@
         <v-col>
           <section-component
             :section="section"
-            display-type="all"
+            :display-type="displayType"
           />
         </v-col>
       </v-row>

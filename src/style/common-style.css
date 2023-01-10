@@ -12,6 +12,13 @@
   overflow: hidden;
 }
 
+.no-break-box-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .no-break-box-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
