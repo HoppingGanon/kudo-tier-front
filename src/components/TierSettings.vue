@@ -8,6 +8,23 @@
         Tier編集
       </b>
     </v-card-title>
+    <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
+      <v-btn v-if="tab === 3" icon @click="submit">
+        <v-icon>
+          mdi-send
+        </v-icon>
+      </v-btn>
+      <v-btn v-else icon @click="next(tab)">
+        <v-icon>
+          mdi-arrow-right-drop-circle-outline
+        </v-icon>
+      </v-btn>
+      <v-btn v-if="tab > 0" icon @click="back(tab)">
+        <v-icon>
+          mdi-arrow-left-drop-circle-outline
+        </v-icon>
+      </v-btn>
+    </div>
     <template v-slot:extension>
       <v-tabs :model-value="tab" @update:model-value="updateTab($event as number)" centered slider-color="primary" grow>
         <v-tab>
@@ -284,7 +301,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierValidation, sectionValidation, ReviewSection } from '@/common/review'
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref, toRefs, watch } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TierComponent from '@/components/TierComponent.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
@@ -427,6 +444,17 @@ export default defineComponent({
       'none',
       'none'
     ] as ValidState[])
+
+    // 仕方ないのでisNewを監視して、falseになったらバリデーションをcheckedにすることで更新時には食べの変更ができるようにする
+    const { isNew } = toRefs(props)
+    watch(isNew, () => {
+      if (!isNew.value) {
+        tabValidation.value[0] = 'checked'
+        tabValidation.value[1] = 'checked'
+        tabValidation.value[2] = 'checked'
+        tabValidation.value[3] = 'checked'
+      }
+    })
 
     const forms = ref([
       ref(),

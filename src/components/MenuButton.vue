@@ -11,7 +11,7 @@
     <v-card>
       <v-list>
         <v-list-item v-for="item,index in items" :key="index" @click="selectItem(index)">
-          {{ getTitle(index) }}
+          <v-icon small class="mr-2">{{ getIcon(index) }}</v-icon>{{ getTitle(index) }}
         </v-list-item>
       </v-list>
     </v-card>
@@ -33,6 +33,9 @@ export default defineComponent({
       type: String as PropType<string | number>
     },
     itemValue: {
+      type: String as PropType<string | number>
+    },
+    itemIcon: {
       type: String as PropType<string | number>
     },
     returnObject: {
@@ -68,6 +71,16 @@ export default defineComponent({
       }
     }
 
+    const getIcon = (index: number) => {
+      if (props.itemIcon !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (props.items[index] as { [name: string | number]: any})[props.itemIcon]
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (props.items[index] as { [name: string | number]: any}).icon
+      }
+    }
+
     const selectItem = (index: number) => {
       if (props.returnObject) {
         emit('select', props.items[index])
@@ -82,6 +95,7 @@ export default defineComponent({
       },
       getValue,
       getTitle,
+      getIcon,
       selectItem
     }
   }

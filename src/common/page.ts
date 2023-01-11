@@ -1,6 +1,7 @@
 export interface SelectObject <T = string | number, D = string | number> {
   value: T,
-  text: D
+  text: D,
+  icon?: string
 }
 
 export type TierSortType = 'updatedAtDesc' | 'updatedAtAsc' | 'createdAtDesc' | 'createdAtAsc'

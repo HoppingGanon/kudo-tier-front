@@ -44,6 +44,7 @@
                   :review-count="targetUser.reviewCount"
                   :is-summary="true"
                   :user-id="targetUserId || ''"
+                  :is-vertical="true"
                 />
               </v-card>
             </v-col>

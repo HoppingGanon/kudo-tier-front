@@ -65,7 +65,7 @@
               <v-card
                 flat
               >
-                <v-card v-if="tiers.length == 0" height="40vh" class="flex-center pa-1">
+                <v-card v-if="tiers.length === 0" height="40vh" class="flex-center pa-1">
                   <div style="text-align: center;">
                     Tierがありません<br />
                     初めてのTierを作成しましょう<br />
@@ -78,7 +78,7 @@
                   :tiers="tiers"
                   :is-link="true"
                 />
-                <v-card flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('tier')">
+                <v-card v-if="tiers.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('tier')">
                   もっと投稿を見る
                 </v-card>
               </v-card>
@@ -89,6 +89,20 @@
                 id="reviewsWindow"
                 flat
               >
+                <v-card v-if="tiers.length === 0 && reviews.length === 0" height="40vh" class="flex-center pa-1">
+                  <div style="text-align: center;">
+                    レビューがありません<br />
+                    レビューを作成するにはまずはTierを作成しましょう<br />
+                    <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
+                  </div>
+                </v-card>
+                <v-card v-else-if="tiers.length !== 0 && reviews.length === 0" height="40vh" class="flex-center pa-1">
+                  <div style="text-align: center;">
+                    レビューがありません<br />
+                    Tierからレビューを追加しましょう<br />
+                    <v-btn color="primary" @click="goSearch('tier')">Tierを表示する</v-btn>
+                  </div>
+                </v-card>
                 <review-list
                   class="pa-1"
                   :reviews="reviews"
@@ -96,7 +110,7 @@
                   :is-link="true"
                   display-type="summary"
                 />
-                <v-card flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
+                <v-card v-if="reviews.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
                   もっと投稿を見る
                 </v-card>
               </v-card>
@@ -203,7 +217,7 @@ export default defineComponent({
     }
 
     const goTierSettings = () => {
-      router.push('/tier-settings')
+      router.push('/tier-settings-new')
     }
 
     return {

@@ -23,20 +23,13 @@
             レビュー
           </v-card-title>
           <v-spacer />
-          <v-card-actions v-if="isSelf">
-            <v-btn class="mt-3 mr-3" @click="goTier">
-              <v-icon>
-                mdi-book-plus-outline
-              </v-icon>
-              レビューを追加する
-            </v-btn>
-            <v-btn class="mt-3 mr-3" @click="edit">
-              <v-icon>
-                mdi-pencil-box-outline
-              </v-icon>
-              Tierを編集する
-            </v-btn>
-          </v-card-actions>
+          <menu-button :items="menuItems" @select="goThere" :return-object="true">
+            <template v-slot:button="{ open, props }">
+              <v-btn @click="open" v-bind="props" icon flat>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+          </menu-button>
         </v-toolbar>
 
         <review-component
@@ -50,6 +43,13 @@
         />
       </v-card>
     </v-container>
+    <simple-dialog
+      v-model="delDialog"
+      title="レビューの削除"
+      text="本当にレビューを削除しますか？"
+      submit-button-text="削除"
+      @submit="deleteReview"
+    />
   </padding-component>
 </template>
 
@@ -60,12 +60,15 @@ import ReviewComponent from '@/components/ReviewComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
+import MenuButton from '@/components/MenuButton.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import { emptyReviwew } from '@/common/dummy'
 import { useRoute } from 'vue-router'
-import RestApi, { Parser } from '@/common/restapi'
+import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import store from '@/store'
 import router from '@/router'
+import { SelectObject } from '@/common/page'
 
 export default defineComponent({
   name: 'ReviewView',
@@ -73,7 +76,9 @@ export default defineComponent({
     ReviewComponent,
     ErrorComponent,
     SessionChecker,
-    PaddingComponent
+    PaddingComponent,
+    MenuButton,
+    SimpleDialog
   },
   props: {},
   emits: {},
@@ -112,15 +117,48 @@ export default defineComponent({
       }
     })
 
-    const edit = () => {
-      if (!isNotFound.value && isSelf.value) {
-        router.push(`/review-settings/${route.params.rid}`)
+    const menuItems: SelectObject[] = [
+      {
+        value: 'original',
+        text: '元のTierを開く',
+        icon: 'mdi-book-plus-outline'
+      },
+      {
+        value: 'edit',
+        text: 'レビューを編集',
+        icon: 'mdi-pencil-box-outline'
+      },
+      {
+        value: 'delete',
+        text: 'レビューを削除',
+        icon: 'mdi-trash-can'
+      }
+    ]
+
+    const goThere = (page: SelectObject) => {
+      switch (page.value) {
+        case 'original':
+          router.push(`/tier/${review.value.tierId}`)
+          break
+        case 'edit':
+          router.push(`/review-settings-new/${review.value.reviewId}`)
+          break
+        case 'delete':
+          delDialog.value = true
+          break
       }
     }
 
-    const goTier = () => {
-      router.push(`/review/${review.value.tierId}`)
+    const deleteReview = () => {
+      RestApi.deleteReview(review.value.reviewId).then(() => {
+        toast.success('レビューを削除しました')
+        router.push(`/tier/${review.value.tierId}`)
+      }).catch((e) => {
+        toastError(e, toast)
+      })
     }
+
+    const delDialog = ref(false)
 
     return {
       review,
@@ -130,8 +168,10 @@ export default defineComponent({
       isNotFound,
       isSelf,
       updatePointType,
-      edit,
-      goTier
+      menuItems,
+      goThere,
+      delDialog,
+      deleteReview
     }
   }
 })

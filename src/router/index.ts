@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/TestView.vue')
   },
   {
-    path: '/tier-settings',
+    path: '/tier-settings-new',
     name: 'tier-settings-new',
     component: () => import('../views/TierSettingsView.vue')
   },
@@ -62,8 +62,13 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/ReviewView.vue')
   },
   {
-    path: '/review-settings/:tid',
+    path: '/review-settings-new/:tid',
     name: 'review-settings-new',
+    component: () => import('../views/ReviewSettingsView.vue')
+  },
+  {
+    path: '/review-settings/:tid/:rid',
+    name: 'review-settings',
     component: () => import('../views/ReviewSettingsView.vue')
   }
 ]

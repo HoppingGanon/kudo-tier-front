@@ -22,6 +22,7 @@
               :review-count="user.reviewCount"
               :is-summary="true"
               :user-id="getUserId() || ''"
+              :is-vertical="true"
             />
           </v-col>
         </v-row>
@@ -103,7 +104,7 @@
       </v-container>
     </v-navigation-drawer>
 
-    <v-app-bar app class="pink lighten-4 anime" :style="barStyle" v-if="getBarIsVisible()">
+    <v-app-bar app class="pink lighten-4 anime" :style="barStyle" v-if="barIsVisible">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
       <v-toolbar-title>Tiereview</v-toolbar-title>
@@ -126,12 +127,12 @@
     </v-dialog>
 
     <v-avatar class="overlay anime baricon" color="primary" @click="clickHideBarIcon" :style="iconStyle">
-      <v-icon v-if="getBarIsVisible()" dark>mdi-overscan</v-icon>
+      <v-icon v-if="barIsVisible" dark>mdi-overscan</v-icon>
       <v-icon v-else dark>mdi-page-layout-header</v-icon>
     </v-avatar>
 
     <v-main>
-      <router-view />
+      <router-view :key="routeWatcher($route)" />
     </v-main>
   </v-app>
 </template>
@@ -144,6 +145,7 @@ import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
 import { emptyUser } from './common/dummy'
+import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
@@ -162,19 +164,15 @@ export default defineComponent({
     const user = ref(emptyUser)
     const getUserId = () => store.state.userId
 
-    const setBarIsVisible = (v: boolean) => {
-      store.commit('setBarIsVisible', v)
-    }
-
-    const getBarIsVisible = () => store.state.barIsVisible
+    const barIsVisible = ref(true)
 
     const clickHideBarIcon = () => {
-      setBarIsVisible(!getBarIsVisible())
+      barIsVisible.value = !barIsVisible.value
       drawer.value = true
     }
 
-    const iconStyle = computed(() => getBarIsVisible() ? `top:${barHeight.value + 8}px;` : 'top: 0px;')
-    const barStyle = computed(() => getBarIsVisible() ? `height:${barHeight.value}px;` : 'height: 0px;')
+    const iconStyle = computed(() => barIsVisible.value ? `top:${barHeight.value + 8}px;` : 'top: 0px;')
+    const barStyle = computed(() => barIsVisible.value ? `height:${barHeight.value}px;` : 'height: 0px;')
     const hasSession = computed(() => store.state.sessionId !== '')
     const isNew = computed(() => store.state.isNew)
 
@@ -214,7 +212,7 @@ export default defineComponent({
     }
 
     const goTierSettings = () => {
-      router.push('/tier-settings')
+      router.push('/tier-settings-new')
     }
 
     const getUser = () => {
@@ -233,6 +231,20 @@ export default defineComponent({
       getUser()
     })
 
+    // routerがページ内リンクによる変化には反応しないように制御
+    const routeWatcher = (route: RouteLocationNormalizedLoaded) => {
+      const len = route.fullPath.length
+      const paramStart = route.fullPath.indexOf('?')
+      const idStart = route.fullPath.indexOf('#')
+      if (idStart === -1) {
+        return route.fullPath
+      } else if (paramStart === -1) {
+        return route.fullPath.substring(0, idStart)
+      } else {
+        return route.fullPath.substring(0, idStart) + route.fullPath.substring(paramStart, len)
+      }
+    }
+
     onMounted(getUser)
 
     return {
@@ -240,7 +252,7 @@ export default defineComponent({
       forceDialog,
       user,
       getUserId,
-      getBarIsVisible,
+      barIsVisible,
       drawer,
       barHeight,
       iconStyle,
@@ -254,7 +266,7 @@ export default defineComponent({
       goLogin,
       goTierSearch,
       goTierSettings,
-      store
+      routeWatcher
     }
   }
 })

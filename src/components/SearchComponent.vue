@@ -1,7 +1,7 @@
 <template>
   <v-container class="ma-0 pa-0" fluid>
     <v-row>
-      <v-col cols="12" sm="8" md="9" lg="9" xl="10">
+      <v-col cols="12" sm="7" md="7" lg="8" xl="9">
         <v-text-field
           :model-value="modelValue"
           @update:model-value="$emit('update', $event)"
@@ -10,7 +10,7 @@
           hint="検索ワードを指定してください"
         />
       </v-col>
-      <v-col cols="8" sm="4" md="3" lg="3" xl="2">
+      <v-col cols="8" sm="5" md="5" lg="4" xl="3">
         <v-select
           :model-value="sortItem"
           @update:model-value="$emit('updateSortItem', $event)"

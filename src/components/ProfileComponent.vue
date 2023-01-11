@@ -3,13 +3,13 @@
     <v-row>
       <v-col v-if="isVertical" cols="12" sm="12" md="12" lg="12" xl="12">
         <div class="avatar-space">
-          <v-avatar size="48px" @click="goHome" class="cursor-pointer">
+          <v-avatar size="100%" @click="goHome" class="cursor-pointer">
             <v-img :src="iconUrl" />
           </v-avatar>
         </div>
       </v-col>
       <v-col v-else cols="3" sm="2" md="2" lg="2" xl="2">
-        <div class="avatar-space">
+        <div>
           <v-avatar size="100%" @click="goHome" class="cursor-pointer">
             <v-img :src="iconUrl" />
           </v-avatar>
@@ -106,6 +106,6 @@ export default defineComponent({
 <style scoped>
 .avatar-space {
   aspect-ratio: 1;
-  width: 100%;
+  width: 64px;
 }
 </style>

@@ -8,7 +8,7 @@ import { defineComponent } from 'vue'
 import { useStore } from '@/store/index'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
-import RestApi, { } from '@/common/restapi'
+import RestApi, { toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
@@ -39,7 +39,7 @@ export default defineComponent({
           router.push(`/home/${response.data.userId}`)
         }
       }).catch((err) => {
-        toast.error(`認証失敗:${err.response.data}`)
+        toastError(err, toast)
         store.commit('setTempSessionId', '')
         router.push('/login')
       })

@@ -24,7 +24,7 @@
           <v-container fluid class="ma-0 pa-0">
             <v-row>
               <v-col>
-                <a :id="review.reviewId">
+                <a :id="`rev${review.reviewId}`">
                   <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
                 </a>
               </v-col>
@@ -79,12 +79,14 @@
           <v-card flat>
             <v-container class="ma-0 pa-0" fluid>
               <v-row v-if="!noChangePoint">
-                <v-col>
-                  <point-type-selector
-                    v-if="pointType"
-                    :model-value="pointType"
-                    @update="$emit('updatePointType', $event)"
-                  />
+                <v-col class="d-flex flex-row-reverse">
+                  <div>
+                    <point-type-selector
+                      v-if="pointType"
+                      :model-value="pointType"
+                      @update="$emit('updatePointType', $event)"
+                    />
+                  </div>
                 </v-col>
               </v-row>
               <v-row>

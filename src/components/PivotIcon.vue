@@ -17,7 +17,7 @@
         :no-change-point="true"
       />
       <v-card-actions class="d-flex flex-row-reverse">
-        <a :href="`#${infomation.review.reviewId}`" class="no-link">
+        <a :href="`#rev${infomation.review.reviewId}`" class="no-link">
           <v-btn flat>
             移動
           </v-btn>

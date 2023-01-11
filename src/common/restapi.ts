@@ -163,7 +163,7 @@ export default class RestApi {
     return axios.post<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
   }
 
-  static del <T> (uri: string) : Promise<AxiosResponse<T>> {
+  static delete <T> (uri: string) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
       headers: {
@@ -189,7 +189,7 @@ export default class RestApi {
   }
 
   static delSession () : Promise<AxiosResponse<Session>> {
-    return this.del('/auth/session')
+    return this.delete('/auth/session')
   }
 
   static createUser (data: InitUserData) {
@@ -220,6 +220,10 @@ export default class RestApi {
     return this.get<TierData[]>(encodeURI(`/tiers?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
   }
 
+  static deleteTier (tierId: string) {
+    return this.delete(`/tier/${tierId}`)
+  }
+
   static postReview (data: ReviewEditingData) {
     return this.post('/review', data)
   }
@@ -230,6 +234,10 @@ export default class RestApi {
 
   static getReviewPairs (userId: string, word: string, sortType: TierSortType, page: number) {
     return this.get<ReviewDataWithParams[]>(encodeURI(`/review-pairs?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
+  }
+
+  static deleteReview (reviewId: string) {
+    return this.delete(`/review/${reviewId}`)
   }
 }
 

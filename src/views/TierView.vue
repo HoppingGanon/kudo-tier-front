@@ -25,18 +25,13 @@
           </v-card-title>
           <v-spacer />
           <v-card-actions v-if="isSelf">
-            <v-btn class="mt-3 mr-3" @click="goReviewSettings">
-              <v-icon>
-                mdi-book-plus-outline
-              </v-icon>
-              レビューを追加する
-            </v-btn>
-            <v-btn class="mt-3 mr-3" @click="edit">
-              <v-icon>
-                mdi-pencil-box-outline
-              </v-icon>
-              Tierを編集する
-            </v-btn>
+            <menu-button :items="menuItems" @select="goThere" :return-object="true">
+              <template v-slot:button="{ open, props }">
+                <v-btn @click="open" v-bind="props" icon flat>
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+            </menu-button>
           </v-card-actions>
         </v-toolbar>
 
@@ -51,6 +46,13 @@
       </v-card>
     </v-container>
   </padding-component>
+  <simple-dialog
+    v-model="delDialog"
+    title="Tierの削除"
+    text="本当にTierを削除しますか？"
+    submit-button-text="削除"
+    @submit="deleteTier"
+  />
 </template>
 
 <script lang="ts">
@@ -60,12 +62,15 @@ import TierComponent from '@/components/TierComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
+import MenuButton from '@/components/MenuButton.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import { emptyTier } from '@/common/dummy'
 import { useRoute } from 'vue-router'
-import RestApi, { Parser } from '@/common/restapi'
+import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import store from '@/store'
 import router from '@/router'
+import { SelectObject } from '@/common/page'
 
 export default defineComponent({
   name: 'TierView',
@@ -73,7 +78,9 @@ export default defineComponent({
     TierComponent,
     ErrorComponent,
     SessionChecker,
-    PaddingComponent
+    PaddingComponent,
+    MenuButton,
+    SimpleDialog
   },
   props: {},
   emits: {},
@@ -123,7 +130,50 @@ export default defineComponent({
     }
 
     const goReviewSettings = () => {
-      router.push(`/review-settings/${route.params.tid}`)
+      router.push(`/review-settings-new/${route.params.tid}`)
+    }
+
+    const menuItems: SelectObject[] = [
+      {
+        value: 'add',
+        text: 'レビューを追加',
+        icon: 'mdi-book-plus-outline'
+      },
+      {
+        value: 'edit',
+        text: 'Tierを編集',
+        icon: 'mdi-pencil-box-outline'
+      },
+      {
+        value: 'delete',
+        text: 'Tierを削除',
+        icon: 'mdi-trash-can'
+      }
+    ]
+
+    const deleteTier = () => {
+      RestApi.deleteTier(tier.value.tierId).then(() => {
+        toast.success('レビューを削除しました')
+        router.push(`/home/${tier.value.userId}`)
+      }).catch((e) => {
+        toastError(e, toast)
+      })
+    }
+
+    const delDialog = ref(false)
+
+    const goThere = (page: SelectObject) => {
+      switch (page.value) {
+        case 'add':
+          router.push(`/review-settings-new/${route.params.tid}`)
+          break
+        case 'edit':
+          router.push(`/tier-settings/${route.params.tid}`)
+          break
+        case 'delete':
+          delDialog.value = true
+          break
+      }
     }
 
     return {
@@ -133,7 +183,11 @@ export default defineComponent({
       isSelf,
       updatePointType,
       edit,
-      goReviewSettings
+      goReviewSettings,
+      menuItems,
+      deleteTier,
+      delDialog,
+      goThere
     }
   }
 })
