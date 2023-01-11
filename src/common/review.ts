@@ -284,7 +284,10 @@ export class ReviewFunc {
     return ave
   }
 
-  /** 重みを考慮した評点の単純合計を算出する(unlimitedのみ) */
+  /**
+   * 重みを考慮した評点の単純合計を算出する(unlimitedのみ)
+   * ただし、単純にソートするだけの場合であればこちらを用いる
+   */
   static calcSum (review: Review, reviewFactorParams: ReviewFactorParam[]) {
     let sum = 0
     reviewFactorParams.forEach((param, index) => {

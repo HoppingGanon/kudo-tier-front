@@ -11,7 +11,7 @@
     <v-card>
       <v-list>
         <v-list-item v-for="item,index in items" :key="index" @click="selectItem(index)">
-          <v-icon small class="mr-2">{{ getIcon(index) }}</v-icon>{{ getTitle(index) }}
+          <v-icon v-if="getIcon(index)" small class="mr-2">{{ getIcon(index) }}</v-icon>{{ getTitle(index) }}
         </v-list-item>
       </v-list>
     </v-card>

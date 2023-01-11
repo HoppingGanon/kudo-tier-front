@@ -1,36 +1,23 @@
 <template>
   <v-container class="ma-0 pa-1" fluid>
     <v-row>
-      <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm && !$vuetify.display.md" cols="0" sm="0" md="0" lg="2" xl="3">
-        <v-container v-if="userId" fluid class="ma-0 pa-0">
-          <v-row>
-            <v-col>
-              <v-card>
-                <v-toolbar class="pl-2">
-                  ユーザーの情報
-                </v-toolbar>
-                <v-list>
-                  <v-list-item>
-                    投稿
-                    <v-list-item>
-                      a
-                    </v-list-item>
-                  </v-list-item>
-                </v-list>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+      <v-col v-if="$vuetify.display.lg || $vuetify.display.xl" cols="0" sm="0" md="0" lg="3" xl="3">
+        <slot name="left">
+        </slot>
       </v-col>
-      <v-col cols="12" sm="12" md="9" lg="8" xl="6">
+      <v-col cols="12" sm="12" md="9" lg="6" xl="6">
         <slot>
           コンポーネントがありません
         </slot>
       </v-col>
-      <v-col v-if="!$vuetify.display.xs && !$vuetify.display.sm" cols="0" sm="0" md="3" lg="2" xl="2">
+      <v-col v-if="$vuetify.display.xs || $vuetify.display.sm" cols="12" sm="12" md="0" lg="0" xl="0">
+        <slot name="left">
+        </slot>
+      </v-col>
+      <v-col cols="12" sm="12" md="3" lg="3" xl="3">
         <v-container v-if="targetUserId" fluid class="ma-0 pa-0">
           <v-row>
-            <v-col>
+            <v-col cols="12" sm="12" md="12" lg="12" xl="12">
               <v-card>
                 <v-toolbar class="pl-2" color="thirdry">
                   <b v-text="title">
@@ -44,16 +31,14 @@
                   :review-count="targetUser.reviewCount"
                   :is-summary="true"
                   :user-id="targetUserId || ''"
-                  :is-vertical="true"
+                  :is-vertical="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl"
                 />
               </v-card>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card>
+            <v-col cols="6" sm="6" md="12" lg="12" xl="12">
+              <v-card height="100%">
                 <v-toolbar class="pl-2" color="thirdry">
-                  <span class="font-weight-bold no-break-box" v-text="`最新のTier(${targetUser.name})`"></span>
+                  <span class="font-weight-bold no-break-box" v-text="'最近投稿したTier'"></span>
                 </v-toolbar>
                 <v-list>
                   <v-list-item v-for="tier, i of tiers" :key="i" class="mb-1">
@@ -70,12 +55,10 @@
                 </v-list>
               </v-card>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card>
+            <v-col cols="6" sm="6" md="12" lg="12" xl="12">
+              <v-card height="100%">
                 <v-toolbar class="pl-2" color="thirdry">
-                  <span class="font-weight-bold no-break-box" v-text="`最新のレビュー(${targetUser.name})`"></span>
+                  <span class="font-weight-bold no-break-box" v-text="'最近投稿したレビュー'"></span>
                 </v-toolbar>
                 <v-list>
                   <v-list-item v-for="review, i of reviews" :key="i" class="mb-1">
@@ -94,6 +77,10 @@
             </v-col>
           </v-row>
         </v-container>
+      </v-col>
+      <v-col v-if="$vuetify.display.md" cols="0" sm="0" md="12" lg="0" xl="0">
+        <slot name="left">
+        </slot>
       </v-col>
     </v-row>
   </v-container>
@@ -116,10 +103,7 @@ export default defineComponent({
   props: {
     title: {
       type: String,
-      default: 'ユーザーの情報'
-    },
-    userId: {
-      type: String
+      default: 'この投稿を作成したユーザー'
     },
     targetUserId: {
       type: String,

@@ -14,7 +14,7 @@
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
         <v-dialog v-model="cropMenu" persistent :fullscreen="true">
           <template v-slot:activator>
-            <v-btn :disabled="imageUrl === ''" icon flat @click="cropMenu = true">
+            <v-btn :disabled="imageUrl === ''" icon flat @click="openCropMenu">
               <v-icon>
                 mdi-crop
               </v-icon>
@@ -39,15 +39,18 @@
             </v-toolbar>
             <v-container>
               <v-row>
-                <v-col>
-                  <vue-cropper
-                    v-if="imageUrl !== ''"
-                    class="ba-5"
-                    ref="cropper"
-                    :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
-                    :src="imageUrl"
-                    dragMode="move"
-                  />
+                <v-col class="d-flex justify-center">
+                  <div :style="getCanvasSize()">
+                    <vue-cropper
+                      v-if="imageUrl !== ''"
+                      class="ba-5"
+                      ref="cropper"
+                      :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
+                      :src="imageUrl"
+                      dragMode="move"
+                      :class="getCanvasSize()"
+                    />
+                  </div>
                 </v-col>
               </v-row>
             </v-container>
@@ -59,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 import base64api from '@/common/base64api'
@@ -93,13 +96,19 @@ export default defineComponent({
     const imgFiles = ref([] as File[])
     const imageUrl = ref('')
 
+    const cropper = ref()
+
+    const openCropMenu = () => {
+      cropMenu.value = true
+    }
+
     const updateFile = (v: File[]) => {
       if (v.length > 0) {
         imgFiles.value = v
         // 入力されたファイルをのURLを取得する
         imageUrl.value = base64api.getFileUrl(v[0])
         emit('updateFileUrl', imageUrl.value)
-        cropMenu.value = true
+        openCropMenu()
       }
     }
 
@@ -110,8 +119,6 @@ export default defineComponent({
       emit('updateCroppedUrl', '')
     }
 
-    const cropper = ref()
-
     const enterCrop = () => {
       cropMenu.value = false
       const canvas = cropper.value.getCroppedCanvas() as HTMLCanvasElement
@@ -119,14 +126,24 @@ export default defineComponent({
       emit('updateCroppedUrl', url)
     }
 
+    const getCanvasSize = () => {
+      if (window.innerWidth < window.innerHeight - 100) {
+        return 'canvas-size-w'
+      } else {
+        return 'canvas-size-h'
+      }
+    }
+
     return {
       cropMenu,
       imgFiles,
       imageUrl,
+      openCropMenu,
       updateFile,
       clearFile,
       enterCrop,
-      cropper
+      cropper,
+      getCanvasSize
     }
   }
 })
@@ -134,4 +151,15 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+
+.canvas-size-w {
+  width: 100vw;
+  height: 100vw;
+}
+
+.canvas-size-h {
+  width: -webkit-calc(100vh - 100px);
+  height: -webkit-calc(100vh - 100px);
+}
+
 </style>

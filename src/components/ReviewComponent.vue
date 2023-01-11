@@ -43,34 +43,6 @@
                 />
               </v-col>
             </v-row>
-            <v-row
-              v-if="displayType === 'list' && getPointType() !== 'unlimited' && getLabels().length > 2"
-            >
-              <v-col
-                cols="12" sm="6" md="5" lg="4" xl="4"
-              >
-                <div>
-                  <radar-chart
-                    :labels="getLabels()"
-                    :dataList="getDataList()"
-                    :min="0"
-                    :max="100"
-                    :step="getStep()"
-                    :show-legend="false"
-                  />
-                </div>
-              </v-col>
-              <v-col v-if="!$vuetify.display.xs" cols="0" sm="6" md="7" lg="8" xl="8">
-                <review-values
-                  :factors="review.reviewFactors"
-                  :display-type="displayType"
-                  :point-display-type="pointDisplayType"
-                  :point-type="getPointType()"
-                  :review-factor-params="reviewFactorParams"
-                  @update-point-type="$emit('updatePointType', $event)"
-                />
-              </v-col>
-            </v-row>
           </v-container>
         </v-col>
       </v-row>
@@ -91,7 +63,7 @@
               </v-row>
               <v-row>
                 <v-col
-                  v-if="displayType === 'all' && getPointType() !== 'unlimited' && getLabels().length > 2"
+                  v-if="displayType === 'all' || displayType === 'list' && getPointType() !== 'unlimited' && getLabels().length > 2"
                   cols="12" sm="6" md="6" lg="5" xl="5"
                 >
                   <div>
@@ -100,14 +72,14 @@
                       :dataList="getDataList()"
                       :min="0"
                       :max="100"
-                      :step="100 / getStep()"
+                      :step="getStep()"
                       :show-legend="false"
                     />
                   </div>
                 </v-col>
                 <v-col>
                   <review-values
-                    v-if="displayType === 'all'"
+                    v-if="displayType === 'all' || displayType === 'list'"
                     :factors="review.reviewFactors"
                     :display-type="displayType"
                     :point-display-type="pointDisplayType"
@@ -139,7 +111,7 @@
         <v-col>
           <v-card class="ma-3" flat v-for="section,index in review.sections" :key="index">
             <section-component :section="section" :display-type="displayType" />
-            <v-divider v-if="index !== (review.sections.length - 1)" />
+            <v-divider v-if="index !== (review.sections.length - 1)" class="mt-3 mb-3" />
           </v-card>
         </v-col>
       </v-row>

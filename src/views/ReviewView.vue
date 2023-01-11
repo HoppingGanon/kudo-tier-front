@@ -16,8 +16,18 @@
   </v-container>
 
   <padding-component v-else :target-user-id="userId">
-    <v-container class="pa-0">
-      <v-card class="block-center" max-width="1080px">
+    <template v-slot:left>
+      <v-container fluid class="ma-0 pl-1 pt-0 pr-0 pb-0">
+        <v-card>
+          <v-toolbar class="pl-2" color="thirdry">
+            <span class="font-weight-bold">レビュー元のTier</span>
+          </v-toolbar>
+          <simple-tier :tier="tier" :this-review-id="review.reviewId"/>
+        </v-card>
+      </v-container>
+    </template>
+    <v-container class="pa-0 ma-0" fluid>
+      <v-card class="block-center">
         <v-toolbar color="secondary" dark>
           <v-card-title>
             レビュー
@@ -57,12 +67,13 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { ReviewFactorParam, ReviewFunc, ReviewPointType } from '@/common/review'
 import ReviewComponent from '@/components/ReviewComponent.vue'
+import SimpleTier from '@/components/SimpleTier.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
-import { emptyReviwew } from '@/common/dummy'
+import { emptyReviwew, emptyTier } from '@/common/dummy'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
@@ -74,6 +85,7 @@ export default defineComponent({
   name: 'ReviewView',
   components: {
     ReviewComponent,
+    SimpleTier,
     ErrorComponent,
     SessionChecker,
     PaddingComponent,
@@ -97,6 +109,8 @@ export default defineComponent({
       pointType.value = v
     }
 
+    const tier = ref(emptyTier)
+
     // レビューの初期値を設定
     onMounted(() => {
       if (route.params.rid && typeof route.params.rid === 'string') {
@@ -107,11 +121,16 @@ export default defineComponent({
           pointType.value = review.value.pointType || 'point'
           userId.value = review.value.userId
           isNotFound.value = false
-        }).catch((e) => {
-          const v = e.response.data
-          toast.warning(`${v.message} (${v.code})`)
-          isNotFound.value = true
-        })
+
+          // レビューの取得に成功した場合、続けてTierの取得を試みる
+          RestApi.getTier(review.value.tierId).then((res) => {
+            tier.value = Parser.parseTier(res.data)
+            // 重みを考慮した合計点を算出する
+            tier.value.reviews.sort((review1, review2) => {
+              return ReviewFunc.calcSum(review2, tier.value.reviewFactorParams) - ReviewFunc.calcSum(review1, tier.value.reviewFactorParams)
+            })
+          }).catch((e) => toastError(e, toast))
+        }).catch((e) => toastError(e, toast))
         // 自身のレビューを表示している場合
         isSelf.value = route.params.uid === store.state.userId
       }
@@ -168,6 +187,7 @@ export default defineComponent({
       isNotFound,
       isSelf,
       updatePointType,
+      tier,
       menuItems,
       goThere,
       delDialog,

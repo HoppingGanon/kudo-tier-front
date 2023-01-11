@@ -2,7 +2,7 @@
   <v-container class="pa-0 ma-0" fluid>
     <v-row dense :style="'background-color:' + bgColor">
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-icon dense>mdi-swap-vertical</v-icon><b>移動</b>
+        <v-icon v-if="!readonly" dense>mdi-swap-vertical</v-icon><b v-if="!readonly">移動</b>
       </v-col>
       <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
         <v-container fluid class="ma-0 pa-0">
@@ -31,7 +31,7 @@
     <v-row dense>
       <v-col>
         <v-container class="pa-0 ma-0" fluid>
-          <draggable v-model="draggedParams" item-key="index" handle=".handle">
+          <draggable v-model="draggedParams" item-key="index" handle=".handle" :disabled="readonly">
             <template #item="{ element, index }">
               <div class="mt-1 mb-1" :style="index %2 === 0 ? 'background-color: light-gray' : ''">
                 <v-container class="pa-0 ma-0" fluid>
@@ -39,7 +39,7 @@
                     <v-col cols="2" sm="1" md="1" lg="1" xl="1" class="mt-3">
                       <!-- 番号 -->
                       <v-container fluid class="cursor-grab fa fa-align-justify handle">
-                        <v-icon>
+                        <v-icon v-if="!readonly">
                           mdi-drag-vertical-variant
                         </v-icon>
                       </v-container>

@@ -20,12 +20,12 @@
             </v-btn>
           </template>
           <v-container class="ma-0 pa-0">
-            <v-card class="block-center">
+            <v-card class="block-center card-h">
               <v-toolbar
                 color="secondary"
                 dark
               >
-                <v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold">
                   評価の重み
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -33,7 +33,7 @@
                   <v-icon>mdi-close-thick</v-icon>
                 </v-btn>
               </v-toolbar>
-              <v-card class="pa-3 scroll" flat>
+              <v-card class="pa-3 scroll" flat height="80vh">
                 <weight-settings :params="params" :readonly="true" />
               </v-card>
             </v-card>
@@ -360,5 +360,8 @@ export default defineComponent({
 <style scoped>
 .b-right {
   border-right: 1px solid #D3D3D3;
+}
+.card-h {
+  height: -webkit-calc(100vh - 100px);
 }
 </style>
