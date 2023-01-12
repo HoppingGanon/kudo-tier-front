@@ -22,7 +22,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-img :src="tier.imageUrl" width="100%" />
+          <v-img :src="getImgSource(tier.imageUrl)" width="100%" />
         </v-col>
       </v-row>
       <v-row>
@@ -72,6 +72,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
 import { ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, Tier } from '@/common/review'
+import { getImgSource } from '@/common/restapi'
 import CommonApi from '@/common/commonapi'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewList from '@/components/ReviewList.vue'
@@ -156,6 +157,7 @@ export default defineComponent({
     }
 
     return {
+      getImgSource,
       lastWriteTime,
       pointTypes,
       reviewFactorParamsList,

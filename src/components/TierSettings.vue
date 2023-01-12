@@ -84,7 +84,7 @@
             <v-card v-if="modelValue.imageUrl === ''" height="100%" class="dahed-box" flat>
               画像を選択するとここに表示されます
             </v-card>
-            <v-img v-else style="border: 1px solid" height="100%" :src="modelValue.imageUrl" />
+            <v-img v-else style="border: 1px solid" height="100%" :src="getImgSource(modelValue.imageUrl)" />
           </v-col>
           <v-col v-if="!isNew" cols="2" sm="1" md="1" lg="1" xl="1">
             <v-btn icon flat @click="$emit('updateImageUrl', '')">
@@ -311,7 +311,7 @@ import SectionComponent, { additionalItems2 } from '@/components/SectionComponen
 import MenuButton from '@/components/MenuButton.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
-import RestApi, { ErrorResponse } from '@/common/restapi'
+import RestApi, { ErrorResponse, getImgSource } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
 import { ValidState } from '@/common/page'
@@ -563,6 +563,7 @@ export default defineComponent({
     }
 
     return {
+      getImgSource,
       additionalItems2,
       sectionValidation,
       rulesFunc: rules,

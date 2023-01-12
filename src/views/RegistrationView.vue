@@ -108,7 +108,7 @@
 import { defineComponent, computed, ref } from 'vue'
 import store from '@/store'
 import rules from '@/common/rules'
-import RestApi, { } from '@/common/restapi'
+import RestApi, { getImgSource } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'

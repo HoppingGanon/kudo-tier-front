@@ -2,7 +2,7 @@
   <div style="display:flex">
     <div class="avatar-space cursor-pointer" @click="goHome">
       <v-avatar size="100%">
-        <v-img :src="iconUrl"/>
+        <v-img :src="getImgSource(iconUrl)"/>
       </v-avatar>
     </div>
     <v-card flat height="100%">
@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import router from '@/router'
+import { getImgSource } from '@/common/restapi'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -45,6 +46,7 @@ export default defineComponent({
       router.push(`/home/${props.userId}`)
     }
     return {
+      getImgSource,
       goHome
     }
   }

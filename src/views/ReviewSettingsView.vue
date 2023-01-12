@@ -94,7 +94,7 @@
               <v-card v-if="review.iconUrl === ''" height="100%" class="dahed-box" flat>
                 画像を選択するとここに表示されます
               </v-card>
-              <v-img v-else style="border: 1px solid" height="100%" :src="review.iconUrl" />
+              <v-img v-else style="border: 1px solid" height="100%" :src="getImgSource(review.iconUrl)" />
             </v-col>
             <v-col cols="2" sm="1" md="1" lg="1" xl="1">
               <v-btn v-if="!isNew" icon flat @click="review.iconUrl = ''">
@@ -276,7 +276,7 @@ import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import RestApi, { ErrorResponse, Parser, toastError } from '@/common/restapi'
+import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import { ValidState } from '@/common/page'
@@ -572,6 +572,7 @@ export default defineComponent({
     }
 
     return {
+      getImgSource,
       rulesFunc: rules,
       reviewValidation,
       isNew,

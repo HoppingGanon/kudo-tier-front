@@ -123,6 +123,8 @@ export interface ErrorResponse {
   message: string
 }
 
+export const getImgSource = (uri: string) => `${process.env.VUE_APP_BACK_BASE_URI}/${uri}`
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
   const v = err.response.data
@@ -178,6 +180,7 @@ export default class RestApi {
     return axios.get<TempSession>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession`)
   }
 
+  // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
   static getSession (code: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return axios.get<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {

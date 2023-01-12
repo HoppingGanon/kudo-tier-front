@@ -2,7 +2,7 @@
   <v-menu bottom v-model="isHover">
     <template v-slot:activator="{ props }">
       <v-card class="ma-1" :width="size" :height="size" @click="click" v-bind="props">
-        <v-img v-if="infomation.review.iconUrl" :src="infomation.review.iconUrl" />
+        <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
         <v-img v-else src="@/assets/common/noimage256.png"/>
       </v-card>
     </template>
@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
+import { getImgSource } from '@/common/restapi'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import router from '@/router'
 import { defineComponent, PropType, ref } from 'vue'
@@ -73,6 +74,7 @@ export default defineComponent({
       router.push(`/review/${props.infomation.review.reviewId}`)
     }
     return {
+      getImgSource,
       isHover,
       click,
       goReview

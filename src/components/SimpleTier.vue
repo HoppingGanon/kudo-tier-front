@@ -8,7 +8,7 @@
     <v-row v-if="$vuetify.display.xs || $vuetify.display.sm || $vuetify.display.md" >
       <v-col class="d-flex">
         <v-card v-for="review, index in tier.reviews" :key="index" class="mb-1 ml-1 cursor-pointer" width="48px" height="48px" @click="goReview(review.reviewId)">
-          <v-img :src="review.iconUrl" />
+          <v-img :src="getImgSource(review.iconUrl)" />
         </v-card>
       </v-col>
     </v-row>
@@ -18,7 +18,7 @@
           <v-list-item v-for="review, index in tier.reviews" :key="index" class="cursor-pointer" @click="goReview(review.reviewId)">
             <div style="width: 100%" class="d-flex align-center">
               <v-card width="48px" height="48px">
-                <v-img :src="review.iconUrl" />
+                <v-img :src="getImgSource(review.iconUrl)" />
               </v-card>
               <div class="ml-2">
                 <span v-text="review.name" />
@@ -34,6 +34,7 @@
 <script lang="ts">
 import { Tier } from '@/common/review'
 import router from '@/router'
+import { getImgSource } from '@/common/restapi'
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
@@ -59,6 +60,7 @@ export default defineComponent({
       router.push(`/review/${reviewId}`)
     }
     return {
+      getImgSource,
       goTier,
       goReview
     }

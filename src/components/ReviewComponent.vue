@@ -16,7 +16,7 @@
       <v-row>
         <v-col cols="4" sm="3" md="3" lg="2" xl="2">
           <v-card>
-            <v-img v-if="review.iconUrl" :src="review.iconUrl" />
+            <v-img v-if="review.iconUrl" :src="getImgSource(review.iconUrl)" />
             <v-img v-else src="@/assets/common/noimage256.png"/>
           </v-card>
         </v-col>
@@ -130,6 +130,7 @@
 import { defineComponent, PropType, computed, ref } from 'vue'
 import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam, pointTypeTierCountDic } from '@/common/review'
 import CommonApi from '@/common/commonapi'
+import { getImgSource } from '@/common/restapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
@@ -240,6 +241,7 @@ export default defineComponent({
     }
 
     return {
+      getImgSource,
       primaryColor,
       lastWriteTime,
       average,
