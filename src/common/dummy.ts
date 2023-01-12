@@ -33,6 +33,7 @@ export const emptyReviwew: Review = {
 }
 
 export const emptyUser: UserData = {
+  userId: '',
   name: '',
   profile: '',
   iconUrl: '',

@@ -3,64 +3,25 @@
     <v-card width="540px" min-height="320px" class="center">
 
     <!-- セッション有効期限をチェックする -->
-    <session-checker :is-going="true" :no-session-error="true" />
+    <session-checker :is-going="true" :no-temp-session-error="true" />
 
       <v-card-title>
         ユーザー登録
       </v-card-title>
 
       <v-form ref="form">
-        <v-container flat>
-          <v-row class="ma-3">
-            <v-card flat class="ma-3">
-              <v-avatar>
-                <v-img :src="iconUrl"/>
-              </v-avatar>
-            </v-card>
-            <v-card flat>
-              <v-row>
-                <v-col>
-                  <b>{{ twitterName }}</b>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  @{{ twitterUserName }}
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-row>
-          <v-row>
-            <v-divider class="ma-3" />
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-text-field v-model="dispName" label="表示名" :rules="[requiredValidation, nameValidation]" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-textarea v-model="profile" label="プロフィール" multi-line height="120px" :rules="[profValidation]" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card class="body-1" flat @click="() => { termDialog = true }">
-                利用規約を読む
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card class="body-1" flat>
-                <v-checkbox v-model="isCheckedTerms" label="利用規約に同意します" :rules="[checkedValidation]" />
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+        <registration-component
+          v-model:icon-url="iconUrl"
+          v-model:disp-name="dispName"
+          v-model:profile="profile"
+          v-model:is-checked-terms="isCheckedTerms"
+          :twitter-name="twitterName"
+          :twitter-user-name="twitterUserName"
+        />
+
       </v-form>
       <v-card-actions class="justify-end">
-        <v-btn>
+        <v-btn @click="cancel">
           今はしない
         </v-btn>
         <v-btn @click="submit">
@@ -69,55 +30,25 @@
       </v-card-actions>
     </v-card>
 
-    <v-dialog v-model="iniDialog">
-      <v-card width="540px" min-height="200px">
-        <v-card-actions class="justify-end">
-          <v-btn @click="() => { iniDialog = false }">
-            <v-icon>
-              mdi-close
-            </v-icon>
-          </v-btn>
-        </v-card-actions>
-        <v-card-title>
-          ユーザー登録の方法
-        </v-card-title>
-        <v-card-text class="ma-5">
-          <span>
-            ユーザー登録は、表示名を設定するだけで完了します。<br />
-            一度登録すると、次回以降はTwitter認証のみでログイン可能です。
-          </span>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="termDialog">
-      <v-btn color="primary" @click="() => { termDialog = false }">
-        <v-icon>
-          mdi-close
-        </v-icon>
-      </v-btn>
-      <v-card width="540px" min-height="200px">
-        <iframe :src="termsOfService" height="480px" width="100%"></iframe>
-      </v-card>
-    </v-dialog>
-
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue'
 import store from '@/store'
-import rules from '@/common/rules'
-import RestApi, { getImgSource } from '@/common/restapi'
+import RestApi, { toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
+import RegistrationComponent from '@/components/RegistrationComponent.vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 export default defineComponent({
   name: 'RegistrationView',
 
   components: {
-    SessionChecker
+    SessionChecker,
+    RegistrationComponent
   },
   setup () {
     const twitterName = computed(() => store.state.twitterName)
@@ -126,14 +57,7 @@ export default defineComponent({
     const profile = ref('')
     const isCheckedTerms = ref(false)
     const iconUrl = computed(() => store.state.iconUrl)
-    const iniDialog = ref(true)
-    const termDialog = ref(false)
-    const termsOfService = ref(`${process.env.VUE_APP_BASE_URI}/terms/service.html`)
     const form = ref()
-    const requiredValidation = rules.required()
-    const nameValidation = rules.maxLen(64)
-    const profValidation = rules.maxLen(200)
-    const checkedValidation = (v: boolean) => v || '登録するには利用規約に同意する必要があります'
 
     const toast = useToast()
 
@@ -144,9 +68,10 @@ export default defineComponent({
           name: dispName.value,
           profile: profile.value,
           accept: isCheckedTerms.value
-        }).then(() => {
+        }).then((res) => {
           toast.success('登録しました')
-          router.push('/home')
+          store.commit('setUserId', res.data.userId)
+          router.push(`/home/${res.data.userId}`)
         }).catch((err) => {
           toast.error('登録に失敗しました')
           console.log(err)
@@ -156,6 +81,19 @@ export default defineComponent({
       }
     }
 
+    const cancel = () => {
+      router.push('/login')
+    }
+
+    // これがないとページを離れる際のイベントが設定できない
+    history.replaceState(null, '')
+
+    // ページを離れた時にセッションを削除する
+    onBeforeRouteLeave(() => {
+      RestApi.delSession().catch((e) => toastError(e, toast))
+      store.commit('initAllSession')
+    })
+
     return {
       twitterName,
       twitterUserName,
@@ -163,15 +101,9 @@ export default defineComponent({
       profile,
       isCheckedTerms,
       iconUrl,
-      iniDialog,
-      termsOfService,
-      termDialog,
       form,
-      requiredValidation,
-      nameValidation,
-      profValidation,
-      checkedValidation,
-      submit
+      submit,
+      cancel
     }
   }
 })

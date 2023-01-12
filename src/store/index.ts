@@ -25,7 +25,9 @@ export default createStore<State>({
     isNew: true,
     barIsVisible: true
   },
-  getters: {},
+  getters: {
+    isRegistered: (state) => state.sessionId && state.userId
+  },
   mutations: {
     setTempSessionId (state, val: string) {
       state.tempSessionId = val

@@ -70,6 +70,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/review-settings/:rid',
     name: 'review-settings',
     component: () => import('../views/ReviewSettingsView.vue')
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('../views/SettingsView.vue')
   }
 ]
 

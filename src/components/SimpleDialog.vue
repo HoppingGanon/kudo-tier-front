@@ -1,30 +1,32 @@
 <template>
-  <v-dialog :persistent="persistent" :model-value="modelValue" @update:model-value="setValue">
-    <v-card>
-      <v-toolbar v-if="title !== undefined" color="secondary" class="font-weight-bold">
-        <v-card-title v-text="title" />
-        <div style="width: 100%" class="d-flex flex-row-reverse">
-          <v-btn v-if="showTopCloseButton" @click="closeProxy" flat icon><v-icon> mdi-close </v-icon></v-btn>
+  <v-dialog :persistent="persistent" :model-value="modelValue" @update:model-value="setValue" :fullscreen="fullscreen">
+    <div width="100%" class="d-flex align-center justify-center">
+      <v-card :width="width" :height="height">
+        <v-toolbar v-if="title !== undefined" color="secondary" class="font-weight-bold">
+          <v-card-title v-text="title" />
+          <div style="width: 100%" class="d-flex flex-row-reverse">
+            <v-btn v-if="showTopCloseButton" @click="closeProxy" flat icon><v-icon> mdi-close </v-icon></v-btn>
+          </div>
+        </v-toolbar>
+        <div class="ma-3">
+          <slot name="prepend" >
+            <p v-if="prependText !== undefined" v-text="prependText" />
+          </slot>
+          <v-img v-if="prependImageSrc !== undefined" :src="prependImageSrc" />
+          <slot>
+            <p v-if="text !== undefined" v-text="text" />
+          </slot>
+          <v-img v-if="appendImageSrc !== undefined" :src="appendImageSrc" />
+          <slot name="append" >
+            <p v-if="appendText !== undefined" v-text="appendText" />
+          </slot>
         </div>
-      </v-toolbar>
-      <div class="ma-3">
-        <slot name="prepend" >
-          <p v-if="prependText !== undefined" v-text="prependText" />
-        </slot>
-        <v-img v-if="prependImageSrc !== undefined" :src="prependImageSrc" />
-        <slot>
-          <p v-if="text !== undefined" v-text="text" />
-        </slot>
-        <v-img v-if="appendImageSrc !== undefined" :src="appendImageSrc" />
-        <slot name="append" >
-          <p v-if="appendText !== undefined" v-text="appendText" />
-        </slot>
-      </div>
-      <v-card-actions class="d-flex flex-row-reverse">
-        <v-btn v-if="showCloseButton" v-text="closeButtonText" @click="closeProxy" />
-        <v-btn v-if="showSubmitButton" v-text="submitButtonText" @click="submitProxy" />
-      </v-card-actions>
-    </v-card>
+        <v-card-actions class="d-flex flex-row-reverse">
+          <v-btn v-if="showCloseButton" v-text="closeButtonText" @click="closeProxy" />
+          <v-btn v-if="showSubmitButton" v-text="submitButtonText" @click="submitProxy" />
+        </v-card-actions>
+      </v-card>
+  </div>
   </v-dialog>
 </template>
 
@@ -40,6 +42,12 @@ export default defineComponent({
       required: true
     },
     title: {
+      type: String
+    },
+    width: {
+      type: String
+    },
+    height: {
       type: String
     },
     prependText: {
@@ -58,6 +66,10 @@ export default defineComponent({
       type: String
     },
     persistent: {
+      type: Boolean,
+      default: false
+    },
+    fullscreen: {
       type: Boolean,
       default: false
     },

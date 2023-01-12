@@ -20,9 +20,10 @@ export default defineComponent({
     const toast = useToast()
     const code = route.query.code as string
 
-    if (store.state.sessionId !== '') {
-      router.push('/home')
-    } else if (store.state.tempSessionId !== '') {
+    console.log(store.getters.isRegistered ? 'hit' : 'no')
+    if (store.getters.isRegistered) {
+      router.push(`/home/${store.state.userId}`)
+    } else if (store.state.tempSessionId) {
       // 一時セッションを持っている場合
       RestApi.getSession(code, store.state.tempSessionId).then((response) => {
         store.commit('setTempSessionId', '')

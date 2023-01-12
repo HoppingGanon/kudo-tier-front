@@ -162,12 +162,13 @@
 
 <script lang="ts">
 import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType } from '@/common/review'
-import { defineComponent, PropType, computed, ref } from 'vue'
+import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import PivotIcon from '@/components/PivotIcon.vue'
 import vuetify from '@/plugins/vuetify'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 export default defineComponent({
   name: 'TierRanking',
@@ -209,6 +210,8 @@ export default defineComponent({
       value: ReviewPointType) => true
   },
   setup (props, { emit }) {
+    const display = useDisplay()
+
     // プロパティからテーブルヘッダを作成
     const headers = computed(() => {
       let i = 0
@@ -302,26 +305,40 @@ export default defineComponent({
     const iconSize = ref('48px' as string)
     const iconSizeList = [
       {
-        text: '最小',
-        value: '24px'
-      },
-      {
-        text: '小',
-        value: '32px'
-      },
-      {
-        text: '普通',
-        value: '48px'
+        text: '特大',
+        value: '96px'
       },
       {
         text: '大',
         value: '64px'
       },
       {
-        text: '特大',
-        value: '96px'
+        text: '普通',
+        value: '48px'
+      },
+      {
+        text: '小',
+        value: '32px'
+      },
+      {
+        text: '最小',
+        value: '24px'
       }
     ]
+
+    onMounted(() => {
+      if (display.xl.value) {
+        iconSize.value = iconSizeList[1].value
+      } else if (display.lg.value) {
+        iconSize.value = iconSizeList[1].value
+      } else if (display.md.value) {
+        iconSize.value = iconSizeList[1].value
+      } else if (display.sm.value) {
+        iconSize.value = iconSizeList[2].value
+      } else if (display.xs.value) {
+        iconSize.value = iconSizeList[2].value
+      }
+    })
 
     return {
       /** ヘッダー情報を加工して列挙した配列 */

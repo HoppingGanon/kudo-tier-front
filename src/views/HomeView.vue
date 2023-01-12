@@ -25,6 +25,13 @@
                   プロフィール
                 </b>
               </v-card-title>
+              <v-spacer />
+              <v-btn v-if="isSelf" @click="goSettings">
+                <v-icon>
+                  mdi-pencil-box-outline
+                </v-icon>
+                編集
+              </v-btn>
             </v-toolbar>
             <profile-component
               :disp-name="user.name"
@@ -143,6 +150,7 @@ import { emptyUser } from '@/common/dummy'
 import { useToast } from 'vue-toast-notification'
 import router from '@/router'
 import { TierContentType } from '@/common/page'
+import store from '@/store'
 
 export default defineComponent({
   name: 'HomeView',
@@ -174,21 +182,17 @@ export default defineComponent({
     const isLoadingReviews = ref(true)
     const isLoadingTiers = ref(true)
 
+    const isSelf = ref(false)
+
     const tab = ref(0)
 
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
+        isSelf.value = store.state.userId === route.params.id
         userId.value = route.params.id
         // URIにIDが含まれている場合、ユーザーの情報をダウンロード
         RestApi.getUserData(route.params.id).then((res) => {
-          user.value = {
-            name: res.data.name,
-            profile: res.data.profile,
-            iconUrl: res.data.iconUrl,
-            twitterName: res.data.twitterName,
-            tierCount: res.data.tierCount,
-            reviewCount: res.data.reviewCount
-          }
+          user.value = res.data
         }).catch(() => {
           isNotFound.value = true
         }).finally(() => { isLoadingUser.value = false })
@@ -230,6 +234,10 @@ export default defineComponent({
       router.push('/tier-settings-new')
     }
 
+    const goSettings = () => {
+      router.push('/settings')
+    }
+
     return {
       isNotFound,
       user,
@@ -240,9 +248,11 @@ export default defineComponent({
       isLoadingReviews,
       isLoadingTiers,
       tiers,
+      isSelf,
       tab,
       goSearch,
-      goTierSettings
+      goTierSettings,
+      goSettings
     }
   }
 })

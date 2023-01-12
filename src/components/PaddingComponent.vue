@@ -121,14 +121,7 @@ export default defineComponent({
     watch(targetUserId, () => {
       if (targetUserId.value !== '') {
         RestApi.getUserData(targetUserId.value).then((res) => {
-          targetUser.value = {
-            name: res.data.name,
-            profile: res.data.profile,
-            iconUrl: res.data.iconUrl,
-            twitterName: res.data.twitterName,
-            tierCount: res.data.tierCount,
-            reviewCount: res.data.reviewCount
-          }
+          targetUser.value = res.data
           isNotFound.value = false
         }).catch(() => {
           isNotFound.value = true

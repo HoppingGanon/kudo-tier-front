@@ -20,6 +20,10 @@ export default defineComponent({
     noSessionError: {
       type: Boolean,
       default: false
+    },
+    noTempSessionError: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -29,11 +33,14 @@ export default defineComponent({
     onMounted(() => {
       try {
         // noSessionErrorがあれば、セッションが無い場合に強制転送
-        if (props.noSessionError && store.state.sessionId === '') {
+        if (props.noSessionError && !store.getters.isRegistered) {
           toast.warning('セッションがありません。ログインしてください。')
           router.push('/login')
+        } else if (props.noTempSessionError && !store.state.sessionId) {
+          toast.warning('セッションがありません。ユーザー登録のため、もう一度Twitter認証してください。')
+          router.push('/login')
         }
-        if (store.state.sessionId !== '' && new Date(store.state.expiredTime) < new Date()) {
+        if (!store.getters.isRegistered && new Date(store.state.expiredTime) < new Date()) {
           RestApi.delSession().then(() => {
             store.commit('initAllSession')
             toast.warning('セッションの有効期限が切れました。再度ログインしてください。')

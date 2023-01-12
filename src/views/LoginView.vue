@@ -57,7 +57,7 @@ export default defineComponent({
     const retryLink = ref('')
 
     const connectTemp = () => {
-      if (store.state.sessionId === '') {
+      if (!store.getters.isRegistered) {
         RestApi.getTempSession().then((response) => {
           const session = response.data.codeChallenge
           const base = 'https://twitter.com/i/oauth2/authorize'
@@ -82,7 +82,7 @@ export default defineComponent({
       }
     }
 
-    if (store.state.sessionId !== '') {
+    if (store.getters.isRegistered) {
       toast.warning('すでにログイン済みです')
       router.push(`/home/${store.state.userId}`)
     }

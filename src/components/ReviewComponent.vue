@@ -118,7 +118,7 @@
       <v-row v-if="displayType === 'list'">
         <v-col class="d-flex flex-row-reverse">
           <v-btn flat :disabled="isSample" @click="goReview(true)">
-            (続きを見る)
+            (本文を読む)
           </v-btn>
         </v-col>
       </v-row>

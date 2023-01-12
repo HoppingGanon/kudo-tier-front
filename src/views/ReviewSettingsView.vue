@@ -466,7 +466,7 @@ export default defineComponent({
         // 編集
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.updateReview(review.value.reviewId, data).then((v) => {
-          toast.success('レビューを作成しました')
+          toast.success('レビューを更新しました')
           isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {

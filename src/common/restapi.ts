@@ -34,6 +34,7 @@ export interface InitUserData {
 }
 
 export interface UserData {
+  userId: string
   name: string
   profile: string
   /** Teittwrの表示名 */
@@ -196,7 +197,7 @@ export default class RestApi {
   }
 
   static createUser (data: InitUserData) {
-    return this.post('/user', data)
+    return this.post<UserData>('/user', data)
   }
 
   static getUserData (userId: string) {
