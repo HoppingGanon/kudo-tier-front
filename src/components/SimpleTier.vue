@@ -7,7 +7,7 @@
     </v-row>
     <v-row v-if="$vuetify.display.xs || $vuetify.display.sm || $vuetify.display.md" >
       <v-col class="d-flex">
-        <v-card v-for="review, index in tier.reviews" :key="index" class="mb-1 ml-1" width="48px" height="48px">
+        <v-card v-for="review, index in tier.reviews" :key="index" class="mb-1 ml-1 cursor-pointer" width="48px" height="48px" @click="goReview(review.reviewId)">
           <v-img :src="review.iconUrl" />
         </v-card>
       </v-col>

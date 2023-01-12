@@ -16,7 +16,7 @@
         <v-divider />
       </v-col>
     </v-row>
-    <v-row v-if="reviews.length == 0">
+    <v-row v-if="reviews.length == 0 && !isLoading && !isWaiting">
       <v-col>
         <v-card flat>
           <span>
@@ -32,6 +32,7 @@
           :is-link="true"
           display-type="summary"
           :review-factor-params="paramsList"
+          :is-loading="isWaiting || isLoading"
         />
       </v-col>
     </v-row>
@@ -44,7 +45,7 @@ import { Review, ReviewFactorParam } from '@/common/review'
 import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
 import SearchComponent from '@/components/SearchComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
-import RestApi, { Parser } from '@/common/restapi'
+import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { onBeforeRouteLeave } from 'vue-router'
 
@@ -66,6 +67,10 @@ export default defineComponent({
     userId: {
       type: String,
       required: true
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -98,6 +103,7 @@ export default defineComponent({
         // ユーザーID取得前に読み込まれた場合は処理終了
         return
       }
+      isWaiting.value = true
       RestApi.getReviewPairs(props.userId, text.value, sortItem.value.value, 1).then((res) => {
         if (res.data.length !== 0) {
           // 取得件数1件以上
@@ -119,14 +125,17 @@ export default defineComponent({
         if (isInputed) {
           isInputing.value = false
         }
+        // データ更新待ち状態を解除
+        isWaiting.value = false
       }).catch((e) => {
-        const v = e.response.data
-        toast.error(`${v.message} (${v.code})`)
+        toastError(e, toast)
         // データ追加を不能に
         isStop.value = true
         if (isInputed) {
           isInputing.value = false
         }
+        // データ更新待ち状態を解除
+        isWaiting.value = false
       })
     }
 
@@ -157,10 +166,11 @@ export default defineComponent({
           // データ更新待ち状態を解除
           isWaiting.value = false
         }).catch((e) => {
-          const v = e.response.data
-          toast.error(`${v.message} (${v.code})`)
+          toastError(e, toast)
           // データ追加を不能に
           isStop.value = true
+          // データ更新待ち状態を解除
+          isWaiting.value = false
         })
       }
     }
@@ -209,7 +219,8 @@ export default defineComponent({
       tierContentTypeList,
       updateText,
       sortItem,
-      updateSortItem
+      updateSortItem,
+      isWaiting
     }
   }
 })

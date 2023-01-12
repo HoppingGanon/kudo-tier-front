@@ -232,6 +232,10 @@ export default class RestApi {
     return this.get<ReviewDataWithParams>(`/review/${reviewId}`)
   }
 
+  static updateReview (reviewId: string, data: ReviewEditingData) {
+    return this.update<ReviewDataWithParams>(`/review/${reviewId}`, data)
+  }
+
   static getReviewPairs (userId: string, word: string, sortType: TierSortType, page: number) {
     return this.get<ReviewDataWithParams[]>(encodeURI(`/review-pairs?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
   }

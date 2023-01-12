@@ -14,7 +14,7 @@
     </v-row>
   </v-container>
 
-  <padding-component v-else :target-user-id="userId">
+  <padding-component v-else :target-user-id="userId" title="ユーザー">
     <v-container fluid class="ma-0 pa-0">
       <v-row>
         <v-col>
@@ -65,7 +65,7 @@
               <v-card
                 flat
               >
-                <v-card v-if="tiers.length === 0" height="40vh" class="flex-center pa-1">
+                <v-card v-if="tiers.length === 0 && !isLoadingTiers" height="40vh" class="flex-center pa-1">
                   <div style="text-align: center;">
                     Tierがありません<br />
                     初めてのTierを作成しましょう<br />
@@ -77,6 +77,7 @@
                   class="pa-1"
                   :tiers="tiers"
                   :is-link="true"
+                  :is-loading="isLoadingTiers"
                 />
                 <v-card v-if="tiers.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('tier')">
                   もっと投稿を見る
@@ -89,14 +90,14 @@
                 id="reviewsWindow"
                 flat
               >
-                <v-card v-if="tiers.length === 0 && reviews.length === 0" height="40vh" class="flex-center pa-1">
+                <v-card v-if="tiers.length === 0 && reviews.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1">
                   <div style="text-align: center;">
                     レビューがありません<br />
                     レビューを作成するにはまずはTierを作成しましょう<br />
                     <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
                   </div>
                 </v-card>
-                <v-card v-else-if="tiers.length !== 0 && reviews.length === 0" height="40vh" class="flex-center pa-1">
+                <v-card v-else-if="tiers.length !== 0 && reviews.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1">
                   <div style="text-align: center;">
                     レビューがありません<br />
                     Tierからレビューを追加しましょう<br />
@@ -109,18 +110,21 @@
                   :review-factor-params="params"
                   :is-link="true"
                   display-type="summary"
+                  :is-loading="isLoadingReviews"
                 />
                 <v-card v-if="reviews.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
                   もっと投稿を見る
                 </v-card>
               </v-card>
             </v-card>
-
           </v-card>
         </v-col>
       </v-row>
     </v-container>
   </padding-component>
+
+  <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
+  <loading-component v-if="isLoadingUser" :is-loading="true" :is-floating="true" title="ユーザー情報の取得中..." />
 </template>
 
 <script lang="ts">
@@ -132,6 +136,7 @@ import ReviewList from '@/components/ReviewList.vue'
 import TierList from '@/components/TierList.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { useRoute } from 'vue-router'
 import { Tier, Review, ReviewFactorParam } from '@/common/review'
 import { emptyUser } from '@/common/dummy'
@@ -147,7 +152,8 @@ export default defineComponent({
     ErrorComponent,
     ReviewList,
     TierList,
-    PaddingComponent
+    PaddingComponent,
+    LoadingComponent
   },
   setup () {
     const route = useRoute()
@@ -163,6 +169,10 @@ export default defineComponent({
 
     const tiers = ref([] as Tier[])
     const params = ref([] as ReviewFactorParam[][])
+
+    const isLoadingUser = ref(true)
+    const isLoadingReviews = ref(true)
+    const isLoadingTiers = ref(true)
 
     const tab = ref(0)
 
@@ -181,7 +191,7 @@ export default defineComponent({
           }
         }).catch(() => {
           isNotFound.value = true
-        })
+        }).finally(() => { isLoadingUser.value = false })
 
         // 並行してTierもダウンロードする
         RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
@@ -190,7 +200,7 @@ export default defineComponent({
           tierDataList.forEach((v) => {
             tiers.value.push(Parser.parseTier(v))
           })
-        }).catch((e) => toastError(e, toast))
+        }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
 
         // 並行してレビューもダウンロードする
         RestApi.getReviewPairs(route.params.id, '', 'updatedAtDesc', 1).then((res) => {
@@ -203,7 +213,7 @@ export default defineComponent({
         }).catch((e) => {
           const v = e.response.data
           toast.error(`${v.message} (${v.code})`)
-        })
+        }).finally(() => { isLoadingReviews.value = false })
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
@@ -226,6 +236,9 @@ export default defineComponent({
       userId,
       reviews,
       params,
+      isLoadingUser,
+      isLoadingReviews,
+      isLoadingTiers,
       tiers,
       tab,
       goSearch,

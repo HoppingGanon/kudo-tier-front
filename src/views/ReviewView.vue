@@ -61,6 +61,9 @@
       @submit="deleteReview"
     />
   </padding-component>
+
+  <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
+  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true"/>
 </template>
 
 <script lang="ts">
@@ -73,6 +76,7 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
@@ -90,7 +94,8 @@ export default defineComponent({
     SessionChecker,
     PaddingComponent,
     MenuButton,
-    SimpleDialog
+    SimpleDialog,
+    LoadingComponent
   },
   props: {},
   emits: {},
@@ -101,6 +106,7 @@ export default defineComponent({
     const isNotFound = ref(false)
     const isSelf = ref(false)
     const userId = ref('')
+    const isLoading = ref(true)
 
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
     const params = ref([] as ReviewFactorParam[])
@@ -129,8 +135,14 @@ export default defineComponent({
             tier.value.reviews.sort((review1, review2) => {
               return ReviewFunc.calcSum(review2, tier.value.reviewFactorParams) - ReviewFunc.calcSum(review1, tier.value.reviewFactorParams)
             })
-          }).catch((e) => toastError(e, toast))
-        }).catch((e) => toastError(e, toast))
+          }).catch((e) => {
+            isNotFound.value = true
+            toastError(e, toast)
+          }).finally(() => { isLoading.value = false })
+        }).catch((e) => {
+          isNotFound.value = true
+          toastError(e, toast)
+        }).finally(() => { isLoading.value = false })
         // 自身のレビューを表示している場合
         isSelf.value = route.params.uid === store.state.userId
       }
@@ -160,7 +172,7 @@ export default defineComponent({
           router.push(`/tier/${review.value.tierId}`)
           break
         case 'edit':
-          router.push(`/review-settings-new/${review.value.reviewId}`)
+          router.push(`/review-settings/${review.value.reviewId}`)
           break
         case 'delete':
           delDialog.value = true
@@ -186,6 +198,7 @@ export default defineComponent({
       userId,
       isNotFound,
       isSelf,
+      isLoading,
       updatePointType,
       tier,
       menuItems,

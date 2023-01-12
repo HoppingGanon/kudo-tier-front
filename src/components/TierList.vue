@@ -15,6 +15,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row v-if="isLoading">
+      <v-col>
+        <loading-component class="mt-5" title="Tierを取得中..." />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -22,11 +27,13 @@
 import { defineComponent, PropType } from 'vue'
 import { Tier, ReviewPointType } from '@/common/review'
 import TierComponent from '@/components/TierComponent.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 
 export default defineComponent({
   name: 'TierList',
   components: {
-    TierComponent
+    TierComponent,
+    LoadingComponent
   },
   props: {
     tiers: {
@@ -34,6 +41,10 @@ export default defineComponent({
       required: true
     },
     isLink: {
+      type: Boolean,
+      default: false
+    },
+    isLoading: {
       type: Boolean,
       default: false
     }

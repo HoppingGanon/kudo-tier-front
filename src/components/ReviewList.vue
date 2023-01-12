@@ -18,6 +18,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row v-if="isLoading">
+      <v-col>
+        <loading-component class="mt-5" title="レビューを取得中..." />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -25,11 +30,13 @@
 import { defineComponent, PropType } from 'vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import { Review, ReviewDisplayType, ReviewFactorParam, ReviewPointType } from '@/common/review'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 
 export default defineComponent({
   name: 'ReviewList',
   components: {
-    ReviewComponent
+    ReviewComponent,
+    LoadingComponent
   },
   props: {
     reviews: {
@@ -63,6 +70,10 @@ export default defineComponent({
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointTypes: {
       type: Array as PropType<ReviewPointType[]>
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {

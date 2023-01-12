@@ -35,6 +35,7 @@
           @clear-tiers="clearTiers"
           @update-tiers="updateTiers"
           @add-tiers="addTiers"
+          :is-loading="isTiersLoading"
         />
         <review-search
           v-show="!isNotFound && tab === 1"
@@ -44,6 +45,7 @@
           @clear-reviews-pair="clearReviewsPair"
           @update-reviews-pair="updateReviewsPair"
           @add-reviews-pair="addReviewsPair"
+          :is-loading="isReviewsLoading"
         />
       </v-card>
     </v-container>
@@ -56,7 +58,7 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import TierSearch from '@/components/TierSearch.vue'
 import ReviewSearch from '@/components/ReviewSearch.vue'
 import { useRoute } from 'vue-router'
-import RestApi, { Parser } from '@/common/restapi'
+import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { Review, ReviewFactorParam, Tier } from '@/common/review'
 import PaddingComponent from '@/components/PaddingComponent.vue'
@@ -83,6 +85,9 @@ export default defineComponent({
     const reviews = ref([] as Review[])
     const paramsList = ref([] as ReviewFactorParam[][])
 
+    const isReviewsLoading = ref(true)
+    const isTiersLoading = ref(true)
+
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
         const id = route.params.id
@@ -97,9 +102,10 @@ export default defineComponent({
             tierDataList.forEach((v) => {
               tiers.value.push(Parser.parseTier(v))
             })
+            isTiersLoading.value = false
           }).catch((e) => {
-            const v = e.response.data
-            toast.error(`${v.message} (${v.code})`)
+            toastError(e, toast)
+            isTiersLoading.value = false
           })
 
           // ユーザーが存在する場合は、レビューの検索(初動)
@@ -113,12 +119,14 @@ export default defineComponent({
                 paramsList.value.push(v.params)
               })
             }
+            isReviewsLoading.value = false
           }).catch((e) => {
-            const v = e.response.data
-            toast.error(`${v.message} (${v.code})`)
+            toastError(e, toast)
+            isReviewsLoading.value = false
           })
           isNotFound.value = false
-        }).catch(() => {
+        }).catch((e) => {
+          toastError(e, toast)
           isNotFound.value = true
         })
       } else {
@@ -176,6 +184,8 @@ export default defineComponent({
       dispName,
       userId,
       tab,
+      isReviewsLoading,
+      isTiersLoading,
       clearTiers,
       updateTiers,
       addTiers,

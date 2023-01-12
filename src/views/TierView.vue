@@ -53,6 +53,9 @@
     submit-button-text="削除"
     @submit="deleteTier"
   />
+
+  <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
+  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true"/>
 </template>
 
 <script lang="ts">
@@ -64,6 +67,7 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { emptyTier } from '@/common/dummy'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
@@ -80,7 +84,8 @@ export default defineComponent({
     SessionChecker,
     PaddingComponent,
     MenuButton,
-    SimpleDialog
+    SimpleDialog,
+    LoadingComponent
   },
   props: {},
   emits: {},
@@ -89,6 +94,7 @@ export default defineComponent({
     const toast = useToast()
     const isNotFound = ref(false)
     const isSelf = ref(false)
+    const isLoading = ref(true)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const pointType = ref('stars' as ReviewPointType)
@@ -111,10 +117,10 @@ export default defineComponent({
             return ReviewFunc.calcSum(review2, tier.value.reviewFactorParams) - ReviewFunc.calcSum(review1, tier.value.reviewFactorParams)
           })
         }).catch((e) => {
-          const v = e.response.data
-          toast.warning(`${v.message} (${v.code})`)
           isNotFound.value = true
-        })
+          isLoading.value = false
+          toastError(e, toast)
+        }).finally(() => { isLoading.value = false })
       }
     })
 
@@ -176,6 +182,7 @@ export default defineComponent({
       pointType,
       isNotFound,
       isSelf,
+      isLoading,
       updatePointType,
       edit,
       goReviewSettings,

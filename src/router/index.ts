@@ -67,7 +67,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/ReviewSettingsView.vue')
   },
   {
-    path: '/review-settings/:tid/:rid',
+    path: '/review-settings/:rid',
     name: 'review-settings',
     component: () => import('../views/ReviewSettingsView.vue')
   }

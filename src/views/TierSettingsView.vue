@@ -33,7 +33,7 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType } from '@/common/review'
 import { useRoute } from 'vue-router'
-import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
+import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 
@@ -97,8 +97,8 @@ export default defineComponent({
           isNew.value = false
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
-          const v = e.response.data as ErrorResponse
-          toast.warning(`${v.message}(${v.code}) Tierを新規作成します`)
+          toastError(e, toast)
+          toast.warning('Tierを新規作成します')
           isNew.value = true
         })
       }

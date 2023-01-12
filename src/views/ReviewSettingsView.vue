@@ -276,7 +276,7 @@ import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import RestApi, { ErrorResponse, Parser } from '@/common/restapi'
+import RestApi, { ErrorResponse, Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import { ValidState } from '@/common/page'
@@ -315,8 +315,16 @@ export default defineComponent({
       ]
     })
 
+    const tabValidation = ref([
+      'none',
+      'none',
+      'none',
+      'none'
+    ] as ValidState[])
+
     onMounted(() => {
       if (route.params.tid && typeof route.params.tid === 'string') {
+        // RouterからTierIDが指定されている場合
         RestApi.getTier(route.params.tid).then((res) => {
           // 成功の場合
           tier.value = Parser.parseTier(res.data)
@@ -331,10 +339,39 @@ export default defineComponent({
               })
             }
           })
+          isNew.value = true
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
           const v = e.response.data as ErrorResponse
           toast.warning(`${v.message}(${v.code}) Tierが存在しません`)
+          isNew.value = true
+        })
+      }
+
+      if (route.params.rid && typeof route.params.rid === 'string') {
+        // RouterからReviewIDが指定されている場合
+        RestApi.getReview(route.params.rid).then((revres) => {
+          // 成功の場合
+          RestApi.getTier(revres.data.review.tierId).then((res) => {
+          // 成功の場合
+            review.value = Parser.parseReview(revres.data.review)
+            tabValidation.value[0] = 'checked'
+            tabValidation.value[1] = 'checked'
+            tabValidation.value[2] = 'checked'
+            tabValidation.value[3] = 'checked'
+            tier.value = Parser.parseTier(res.data)
+            isNew.value = false
+          }).catch((e) => {
+            // 失敗の場合は通知を表示して、新規作成
+            toastError(e, toast)
+            toast.warning('レビューを新規作成します')
+            isNew.value = true
+          })
+        }).catch((e) => {
+          // 失敗の場合は通知を表示して、新規作成
+          toastError(e, toast)
+          toast.warning('レビューを新規作成します')
+          isNew.value = true
         })
       }
     })
@@ -359,13 +396,6 @@ export default defineComponent({
       }
       return true
     })
-
-    const tabValidation = ref([
-      'none',
-      'none',
-      'none',
-      'none'
-    ] as ValidState[])
 
     const forms = ref([
       ref(),
@@ -421,9 +451,21 @@ export default defineComponent({
           return
         }
       }
-      if (route.params.tid && typeof route.params.tid === 'string') {
-        const data = ReviewFunc.createReviewRequestData(review.value, route.params.tid)
+      if (isNew.value) {
+        // 新規作成
+        const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.postReview(data).then((v) => {
+          toast.success('レビューを作成しました')
+          isSubmitting.value = true
+          router.push(`/review/${v.data}`)
+        }).catch((e) => {
+          const v = e.response.data as ErrorResponse
+          toast.error(`${v.message}(${v.code})`)
+        })
+      } else {
+        // 編集
+        const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
+        RestApi.updateReview(review.value.reviewId, data).then((v) => {
           toast.success('レビューを作成しました')
           isSubmitting.value = true
           router.push(`/review/${v.data}`)
