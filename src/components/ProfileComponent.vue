@@ -34,6 +34,18 @@
               </span>
             </v-col>
           </v-row>
+          <v-row v-if="allowTwitterLink">
+            <v-col>
+              <v-btn @click="goTwitter" flat color="#00acee" style="text-transform: none">
+                <v-icon class="mr-1" color="white">
+                  mdi-twitter
+                </v-icon>
+                <span class="text-caption" style="color: white">
+                  Twitter
+                </span>
+              </v-btn>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col class="mt-3">
               <div :class="isSummary ? 'no-break-box-2' : ''">
@@ -88,6 +100,14 @@ export default defineComponent({
     userId: {
       type: String,
       required: true
+    },
+    allowTwitterLink: {
+      type: Boolean,
+      default: false
+    },
+    twitterName: {
+      type: String,
+      default: ''
     }
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -99,6 +119,9 @@ export default defineComponent({
       },
       goTierSearch: (tab: TierContentType) => {
         router.push(`/tier-search/${props.userId}?tab=${tab}`)
+      },
+      goTwitter: () => {
+        window.open(`https://twitter.com/intent/user?user_id=${props.twitterName}`)
       }
     }
   }

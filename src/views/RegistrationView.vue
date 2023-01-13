@@ -19,6 +19,7 @@
           :twitter-name="twitterName"
           :twitter-user-name="twitterUserName"
           :twitter-icon-url="twitterIconUrl"
+          :is-new="true"
         />
 
       </v-form>
@@ -60,6 +61,7 @@ export default defineComponent({
     const profile = ref('')
     const iconUrl = ref('')
     const isCheckedTerms = ref(false)
+
     const form = ref()
     const isSumitting = ref(false)
 

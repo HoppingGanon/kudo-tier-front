@@ -40,6 +40,8 @@
               :tier-count="user.tierCount"
               :review-count="user.reviewCount"
               :user-id="userId"
+              :allow-twitter-link="user.allowTwitterLink"
+              :twitter-name="user.twitterName"
             />
           </v-card>
         </v-col>

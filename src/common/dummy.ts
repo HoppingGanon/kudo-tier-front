@@ -38,6 +38,7 @@ export const emptyUser: UserData = {
   profile: '',
   iconUrl: '',
   twitterName: '',
+  allowTwitterLink: false,
   tierCount: 0,
   reviewCount: 0
 }

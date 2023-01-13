@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
-import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData, ReviewFunc } from './review'
+import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData } from './review'
 import { TierSortType } from './page'
 import { ToastPluginApi } from 'vue-toast-notification'
 import Base64Api from './base64api'
@@ -29,11 +29,18 @@ export interface Session {
   isNew: string
 }
 
-export interface UserEdittingData {
+export interface UserCreatingData {
   name: string
   profile: string
   iconBase64: string
-  accept?: boolean
+  accept: boolean
+}
+
+export interface UserEditingData {
+  name: string
+  profile: string
+  iconBase64: string
+  allowTwitterLink: boolean
 }
 
 export interface UserData {
@@ -45,6 +52,7 @@ export interface UserData {
   iconUrl: string
   reviewCount: number
   tierCount: number
+  allowTwitterLink: boolean
 }
 
 export interface ReviewData {
@@ -208,8 +216,12 @@ export default class RestApi {
     return this.delete('/auth/session')
   }
 
-  static createUser (data: UserEdittingData) {
+  static createUser (data: UserCreatingData) {
     return this.post<UserData>('/user', data)
+  }
+
+  static updateUser (data: UserEditingData, userId: string) {
+    return this.update<UserData>(`/user/${userId}`, data)
   }
 
   static getUserData (userId: string) {

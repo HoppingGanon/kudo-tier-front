@@ -49,14 +49,12 @@
         <v-textarea :model-value="profile" @update:model-value="$emit('update:profile', $event)" label="プロフィール" multi-line height="120px" :rules="[profValidation]" />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="isNew">
       <v-col>
-        <v-card class="body-1" flat @click="() => { termDialog = true }">
-          利用規約を読む
-        </v-card>
+        <term-of-servise />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="isNew">
       <v-col>
         <v-card class="body-1" flat>
           <v-checkbox :model-value="isCheckedTerms" @update:model-value="$emit('update:isCheckedTerms', $event)" label="利用規約に同意します" :rules="[checkedValidation]" />
@@ -64,22 +62,11 @@
       </v-col>
     </v-row>
   </v-container>
-
   <simple-dialog v-model="iniDialog" title="ユーザー登録の方法" :show-submit-button="false">
     <span>
       ユーザー登録は、表示名を設定するだけで完了します。<br />
       一度登録すると、次回以降はTwitter認証のみでログイン可能です。
     </span>
-  </simple-dialog>
-
-  <simple-dialog
-    v-model="termDialog"
-    title="利用規約"
-    :show-submit-button="false"
-    :fullscreen="$vuetify.display.smAndDown"
-    :width="$vuetify.display.smAndDown ? '100%' : '800px'"
-  >
-    <iframe :src="termsOfService" style="width: 100%; height: 60vh"></iframe>
   </simple-dialog>
 </template>
 
@@ -88,6 +75,7 @@ import { defineComponent, ref } from 'vue'
 import rules from '@/common/rules'
 import { getImgSource } from '@/common/restapi'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import TermOfServise from '@/components/TermOfServise.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 
 export default defineComponent({
@@ -95,6 +83,7 @@ export default defineComponent({
 
   components: {
     SimpleDialog,
+    TermOfServise,
     ImageSelector
   },
   props: {
@@ -115,8 +104,7 @@ export default defineComponent({
       required: true
     },
     isCheckedTerms: {
-      type: Boolean,
-      required: true
+      type: Boolean
     },
     iconUrl: {
       type: String,
@@ -125,6 +113,10 @@ export default defineComponent({
     twitterIconUrl: {
       type: String,
       required: true
+    },
+    isNew: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -141,10 +133,9 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true
   },
-  setup () {
-    const iniDialog = ref(true)
+  setup (props) {
+    const iniDialog = ref(props.isNew)
     const termDialog = ref(false)
-    const termsOfService = ref(`${process.env.VUE_APP_BASE_URI}/terms/service.html`)
     const requiredValidation = rules.required()
     const nameValidation = rules.maxLen(64)
     const profValidation = rules.maxLen(200)
@@ -153,7 +144,6 @@ export default defineComponent({
     return {
       getImgSource,
       iniDialog,
-      termsOfService,
       termDialog,
       requiredValidation,
       nameValidation,

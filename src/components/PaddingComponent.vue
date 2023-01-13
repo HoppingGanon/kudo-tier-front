@@ -32,6 +32,8 @@
                   :is-summary="true"
                   :user-id="targetUserId || ''"
                   :is-vertical="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl"
+                  :allow-twitter-link="targetUser.allowTwitterLink"
+                  :twitter-name="targetUser.twitterName"
                 />
               </v-card>
             </v-col>
