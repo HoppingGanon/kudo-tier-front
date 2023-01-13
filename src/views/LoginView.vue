@@ -7,8 +7,6 @@
       <v-col cols="0" sm="0" md="3" lg="4" xl="4" />
       <v-col cols="12" sm="12" md="6" lg="4" xl="4">
         <v-card class="margin-top">
-          <!-- セッション有効期限をチェックする -->
-          <session-checker />
           <v-toolbar color="secondary">
             <v-card-title class="font-weight-bold">ログイン</v-card-title>
           </v-toolbar>

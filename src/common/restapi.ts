@@ -1,8 +1,9 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
-import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData } from './review'
+import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData, ReviewFunc } from './review'
 import { TierSortType } from './page'
 import { ToastPluginApi } from 'vue-toast-notification'
+import Base64Api from './base64api'
 
 export interface TempSession {
   // eslint-disable-next-line camelcase
@@ -23,14 +24,16 @@ export interface Session {
   twitterName: string
   /** 俗にいうTeittwrのユーザーID */
   twitterUserName: string
+  twitterIconUrl: string
   iconUrl: string
   isNew: string
 }
 
-export interface InitUserData {
+export interface UserEdittingData {
   name: string
   profile: string
-  accept: boolean
+  iconBase64: string
+  accept?: boolean
 }
 
 export interface UserData {
@@ -124,7 +127,16 @@ export interface ErrorResponse {
   message: string
 }
 
-export const getImgSource = (uri: string) => `${process.env.VUE_APP_BACK_BASE_URI}/${uri}`
+export const getImgSource = (uri: string) => {
+  switch (Base64Api.isDataUrl(uri)) {
+    case true:
+      return uri
+    case false:
+      return `${process.env.VUE_APP_BACK_BASE_URI}/${uri}`
+    case undefined:
+      return ''
+  }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
@@ -196,7 +208,7 @@ export default class RestApi {
     return this.delete('/auth/session')
   }
 
-  static createUser (data: InitUserData) {
+  static createUser (data: UserEdittingData) {
     return this.post<UserData>('/user', data)
   }
 

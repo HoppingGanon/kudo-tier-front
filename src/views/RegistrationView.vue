@@ -1,13 +1,14 @@
 <template>
-  <div>
-    <v-card width="540px" min-height="320px" class="center">
+  <v-container>
+    <v-card>
 
-    <!-- セッション有効期限をチェックする -->
-    <session-checker :is-going="true" :no-temp-session-error="true" />
-
-      <v-card-title>
-        ユーザー登録
-      </v-card-title>
+      <!-- セッション有効期限をチェックする -->
+      <session-checker :is-going="true" :no-temp-session-error="true" />
+      <v-toolbar color="secondary">
+        <v-card-title class="font-weight-bold">
+          ユーザー登録
+        </v-card-title>
+      </v-toolbar>
 
       <v-form ref="form">
         <registration-component
@@ -17,6 +18,7 @@
           v-model:is-checked-terms="isCheckedTerms"
           :twitter-name="twitterName"
           :twitter-user-name="twitterUserName"
+          :twitter-icon-url="twitterIconUrl"
         />
 
       </v-form>
@@ -29,8 +31,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -42,6 +43,7 @@ import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
 import { onBeforeRouteLeave } from 'vue-router'
+import base64Api from '@/common/base64api'
 
 export default defineComponent({
   name: 'RegistrationView',
@@ -53,11 +55,13 @@ export default defineComponent({
   setup () {
     const twitterName = computed(() => store.state.twitterName)
     const twitterUserName = computed(() => store.state.twitterUserName)
+    const twitterIconUrl = computed(() => store.state.twitterIconUrl)
     const dispName = ref('')
     const profile = ref('')
+    const iconUrl = ref('')
     const isCheckedTerms = ref(false)
-    const iconUrl = computed(() => store.state.iconUrl)
     const form = ref()
+    const isSumitting = ref(false)
 
     const toast = useToast()
 
@@ -67,8 +71,10 @@ export default defineComponent({
         RestApi.createUser({
           name: dispName.value,
           profile: profile.value,
+          iconBase64: base64Api.dataURLToBase64(iconUrl.value),
           accept: isCheckedTerms.value
         }).then((res) => {
+          isSumitting.value = true
           toast.success('登録しました')
           store.commit('setUserId', res.data.userId)
           router.push(`/home/${res.data.userId}`)
@@ -90,17 +96,20 @@ export default defineComponent({
 
     // ページを離れた時にセッションを削除する
     onBeforeRouteLeave(() => {
-      RestApi.delSession().catch((e) => toastError(e, toast))
-      store.commit('initAllSession')
+      if (!isSumitting.value) {
+        RestApi.delSession().catch((e) => toastError(e, toast))
+        store.commit('initAllSession')
+      }
     })
 
     return {
       twitterName,
       twitterUserName,
+      twitterIconUrl,
       dispName,
       profile,
-      isCheckedTerms,
       iconUrl,
+      isCheckedTerms,
       form,
       submit,
       cancel
@@ -114,9 +123,5 @@ export default defineComponent({
     margin-left: auto;
     margin-right: auto;
     top: 20%;
-}
-
-.scroll {
-  overflow-y: scroll;
 }
 </style>

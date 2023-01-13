@@ -1,5 +1,6 @@
 // import { shallowMount } from '@vue/test-utils'
 import { ReviewFunc } from '@/common/review'
+import base64Api from '@/common/base64api'
 import { tier } from '@/common/dummy'
 
 test('ReviewFunc.cloneTier', () => {
@@ -7,6 +8,6 @@ test('ReviewFunc.cloneTier', () => {
 })
 
 // 文字列"あいうえお"で比較
-test('ReviewFunc.dataURLToBase64', () => {
-  expect('44GC44GE44GG44GI44GK').toEqual(ReviewFunc.dataURLToBase64('data:text/plain;base64,44GC44GE44GG44GI44GK'))
+test('base64Api.dataURLToBase64', () => {
+  expect('44GC44GE44GG44GI44GK').toEqual(base64Api.dataURLToBase64('data:text/plain;base64,44GC44GE44GG44GI44GK'))
 })

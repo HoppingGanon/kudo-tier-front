@@ -72,7 +72,7 @@
               <v-card
                 flat
               >
-                <v-card v-if="tiers.length === 0 && !isLoadingTiers" height="40vh" class="flex-center pa-1">
+                <v-card v-if="tiers.length === 0 && !isLoadingTiers" height="40vh" class="flex-center pa-1" flat>
                   <div style="text-align: center;">
                     Tierがありません<br />
                     初めてのTierを作成しましょう<br />
@@ -94,10 +94,9 @@
 
             <v-card v-show="tab === 1">
               <v-card
-                id="reviewsWindow"
                 flat
               >
-                <v-card v-if="tiers.length === 0 && reviews.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1">
+                <v-card v-if="tiers.length === 0 && reviews.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1" flat>
                   <div style="text-align: center;">
                     レビューがありません<br />
                     レビューを作成するにはまずはTierを作成しましょう<br />
@@ -112,6 +111,7 @@
                   </div>
                 </v-card>
                 <review-list
+                  v-else
                   class="pa-1"
                   :reviews="reviews"
                   :review-factor-params="params"
@@ -124,6 +124,7 @@
                 </v-card>
               </v-card>
             </v-card>
+
           </v-card>
         </v-col>
       </v-row>
@@ -170,7 +171,6 @@ export default defineComponent({
     const isNotFound = ref(false)
     const user = ref(emptyUser)
     const userId = ref('')
-    const reviewsWindow = ref(null as HTMLElement | null)
 
     // テストデータ
     const reviews = ref([] as Review[])
@@ -222,8 +222,6 @@ export default defineComponent({
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
       }
-
-      reviewsWindow.value = document.getElementById('reviewsWindow')
     })
 
     const goSearch = (tab: TierContentType) => {

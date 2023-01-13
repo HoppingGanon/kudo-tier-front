@@ -7,7 +7,7 @@ export type State = {
   userId: string
   twitterName: string
   twitterUserName: string
-  iconUrl: string
+  twitterIconUrl: string
   expiredTime: string
   isNew: boolean
   barIsVisible: boolean
@@ -20,7 +20,7 @@ export default createStore<State>({
     userId: '',
     twitterName: '',
     twitterUserName: '',
-    iconUrl: '',
+    twitterIconUrl: '',
     expiredTime: '',
     isNew: true,
     barIsVisible: true
@@ -50,8 +50,8 @@ export default createStore<State>({
     setTwitterUserName (state, val: string) {
       state.twitterUserName = val
     },
-    setIconUrl (state, val: string) {
-      state.iconUrl = val
+    setTwitterIconUrl (state, val: string) {
+      state.twitterIconUrl = val
     },
     initAllSession (state) {
       state.tempSessionId = ''
@@ -59,6 +59,7 @@ export default createStore<State>({
       state.twitterName = ''
       state.userId = ''
       state.twitterUserName = ''
+      state.twitterIconUrl = ''
       state.expiredTime = ''
       state.isNew = false
     },

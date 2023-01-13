@@ -1,64 +1,62 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="10" sm="11" md="11" lg="11" xl="11">
-        <v-file-input
-          :modelValue="imgFiles"
-          @update:modelValue="updateFile"
-          @click:clear="clearFile"
-          :label="label"
-          prepend-icon="mdi-camera"
-          accept="image/png, image/jpeg"
-        />
-      </v-col>
-      <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-dialog v-model="cropMenu" persistent :fullscreen="true">
-          <template v-slot:activator>
-            <v-btn :disabled="imageUrl === ''" icon flat @click="openCropMenu">
+  <v-file-input
+    :modelValue="imgFiles"
+    @update:modelValue="updateFile"
+    @click:clear="clearFile"
+    :label="label"
+    prepend-icon="mdi-camera"
+    accept="image/png, image/jpeg"
+  >
+    <template>
+      aaa
+    </template>
+    <template v-slot:append>
+      <v-dialog v-model="cropMenu" persistent :fullscreen="true">
+        <template v-slot:activator>
+          <v-btn :disabled="imageUrl === ''" icon flat @click="openCropMenu">
+            <v-icon>
+              mdi-crop
+            </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-toolbar color="secondary" dark>
+            <v-card-title>
+              画像のクリッピング
+            </v-card-title>
+            <v-spacer />
+            <v-btn icon flat @click="closeCrop">
               <v-icon>
-                mdi-crop
+                mdi-close
               </v-icon>
             </v-btn>
-          </template>
-          <v-card>
-            <v-toolbar color="secondary" dark>
-              <v-card-title>
-                画像のクリッピング
-              </v-card-title>
-              <v-spacer />
-              <v-btn icon flat @click="(cropMenu = false)">
-                <v-icon>
-                  mdi-close
-                </v-icon>
-              </v-btn>
-              <v-btn icon flat @click="enterCrop">
-                <v-icon>
-                  mdi-check
-                </v-icon>
-              </v-btn>
-            </v-toolbar>
-            <v-container>
-              <v-row>
-                <v-col class="d-flex justify-center">
-                  <div :style="getCanvasSize()">
-                    <vue-cropper
-                      v-if="imageUrl !== ''"
-                      class="ba-5"
-                      ref="cropper"
-                      :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
-                      :src="imageUrl"
-                      dragMode="move"
-                      :class="getCanvasSize()"
-                    />
-                  </div>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card>
-        </v-dialog>
-      </v-col>
-    </v-row>
-  </v-container>
+            <v-btn icon flat @click="enterCrop">
+              <v-icon>
+                mdi-check
+              </v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-container>
+            <v-row>
+              <v-col class="d-flex justify-center">
+                <div :style="getCanvasSize()">
+                  <vue-cropper
+                    v-if="imageUrl !== ''"
+                    class="ba-5"
+                    ref="cropper"
+                    :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
+                    :src="imageUrl"
+                    dragMode="move"
+                    :class="getCanvasSize()"
+                  />
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-dialog>
+    </template>
+  </v-file-input>
 </template>
 
 <script lang="ts">
@@ -94,6 +92,7 @@ export default defineComponent({
   setup (props, { emit }) {
     const cropMenu = ref(false)
     const imgFiles = ref([] as File[])
+    const preImgFiles = ref([] as File[])
     const imageUrl = ref('')
 
     const cropper = ref()
@@ -104,6 +103,7 @@ export default defineComponent({
 
     const updateFile = (v: File[]) => {
       if (v.length > 0) {
+        preImgFiles.value = imgFiles.value
         imgFiles.value = v
         // 入力されたファイルをのURLを取得する
         imageUrl.value = base64api.getFileUrl(v[0])
@@ -113,10 +113,16 @@ export default defineComponent({
     }
 
     const clearFile = () => {
+      preImgFiles.value.splice(0)
       imgFiles.value.splice(0)
       imageUrl.value = ''
       emit('updateFileUrl', '')
       emit('updateCroppedUrl', '')
+    }
+
+    const closeCrop = () => {
+      imgFiles.value = preImgFiles.value
+      cropMenu.value = false
     }
 
     const enterCrop = () => {
@@ -141,6 +147,7 @@ export default defineComponent({
       openCropMenu,
       updateFile,
       clearFile,
+      closeCrop,
       enterCrop,
       cropper,
       getCanvasSize

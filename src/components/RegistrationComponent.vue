@@ -1,26 +1,43 @@
 <template>
   <v-container flat>
-    <v-row class="ma-3">
-      <v-card flat class="ma-3">
-        <v-avatar>
-          <v-img :src="iconUrl"/>
-        </v-avatar>
-      </v-card>
-      <v-card flat>
-        <v-row>
-          <v-col>
-            <b>{{ twitterName }}</b>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            @{{ twitterUserName }}
-          </v-col>
-        </v-row>
-      </v-card>
+    <v-row>
+      <v-col class="d-flex align-center">
+        <v-card flat class="ma-2">
+          <v-avatar>
+            <v-img :src="twitterIconUrl"/>
+          </v-avatar>
+        </v-card>
+        <div class="ma-2"><span class="font-weight-bold" v-text="twitterName" /></div>
+        <div class="ma-2"><span v-text="`@${twitterUserName}`" /></div>
+      </v-col>
     </v-row>
     <v-row>
-      <v-divider class="ma-3" />
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-divider />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6" sm="7" md="8" lg="9" xl="9">
+        <image-selector
+          label="アイコン画像を選択してください"
+          :aspect-ratio="(1 / 1)"
+          @update-cropped-url="$emit('update:iconUrl', $event)"
+        />
+      </v-col>
+      <v-col cols="6" sm="5" md="4" lg="3" xl="3">
+        <v-avatar v-if="iconUrl === ''" size="100%" class="dahed-box">
+          <v-card flat style="aspect-ratio: 1;width: 100%;" class="d-flex align-center justify-center">
+            <div>
+              画像を選択するとここに表示されます
+            </div>
+          </v-card>
+        </v-avatar>
+        <v-avatar v-else size="100%">
+          <v-img style="border: 1px solid" height="100%" :src="getImgSource(iconUrl)" />
+        </v-avatar>
+      </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -69,13 +86,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import rules from '@/common/rules'
+import { getImgSource } from '@/common/restapi'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import ImageSelector from '@/components/ImageSelector.vue'
 
 export default defineComponent({
   name: 'RegistrationComponent',
 
   components: {
-    SimpleDialog
+    SimpleDialog,
+    ImageSelector
   },
   props: {
     twitterName: {
@@ -99,6 +119,10 @@ export default defineComponent({
       required: true
     },
     iconUrl: {
+      type: String,
+      required: true
+    },
+    twitterIconUrl: {
       type: String,
       required: true
     }
@@ -127,6 +151,7 @@ export default defineComponent({
     const checkedValidation = (v: boolean) => v || '登録するには利用規約に同意する必要があります'
 
     return {
+      getImgSource,
       iniDialog,
       termsOfService,
       termDialog,
@@ -138,15 +163,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style Modules>
-.center {
-    margin-left: auto;
-    margin-right: auto;
-    top: 20%;
-}
-
-.scroll {
-  overflow-y: scroll;
-}
-</style>

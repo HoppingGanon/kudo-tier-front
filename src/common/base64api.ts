@@ -129,4 +129,38 @@ export default class Base64Api {
   static getFileUrl (file : File) : string {
     return window.URL.createObjectURL(file)
   }
+
+  /**
+   * DataURLからbase64形式のテキストのみ抜き出す DataURLがbase64形式出ない場合はエラー
+   * @param v DataURL
+   * @returns base64
+   */
+  static dataURLToBase64 (v: string) : string {
+    if (v === '') {
+      return v
+    }
+    const splitedStr = v.split(',')
+    if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
+      return splitedStr[1]
+    } else {
+      return 'nochange'
+    }
+  }
+
+  /**
+   * DataURLかどうか
+   * @param v DataURL
+   * @returns データかどうか(true...base64, false...base64ではない, undefined...空文字列)
+   */
+  static isDataUrl (v: string) : boolean | undefined {
+    if (v === '') {
+      return undefined
+    }
+    const splitedStr = v.split(',')
+    if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
+      return true
+    } else {
+      return false
+    }
+  }
 }

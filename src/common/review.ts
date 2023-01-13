@@ -1,4 +1,5 @@
 import CommonApi from './commonapi'
+import base64Api from './base64api'
 
 /** レビュー構成要素のタイプ */
 export type ReviewParagraphType = 'text' | 'twitterLink' | 'imageLink'
@@ -483,23 +484,6 @@ export class ReviewFunc {
   }
 
   /**
-   * DataURLからbase64形式のテキストのみ抜き出す DataURLがbase64形式出ない場合はエラー
-   * @param v DataURL
-   * @returns base64
-   */
-  static dataURLToBase64 (v: string) : string {
-    if (v === '') {
-      return v
-    }
-    const splitedStr = v.split(',')
-    if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
-      return splitedStr[1]
-    } else {
-      return 'nochange'
-    }
-  }
-
-  /**
    * Tierからリクエストデータを生成する
    * @param tier 生成元Tier
    * @param tierId Tierの固有ID (新規作成の際は空文字)
@@ -508,7 +492,7 @@ export class ReviewFunc {
   static createTierRequestData (tier: Tier) : TierEditingData {
     return {
       name: tier.name,
-      imageBase64: ReviewFunc.dataURLToBase64(tier.imageUrl),
+      imageBase64: base64Api.dataURLToBase64(tier.imageUrl),
       parags: ReviewFunc.cloneParags(tier.parags),
       pointType: tier.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)
@@ -526,7 +510,7 @@ export class ReviewFunc {
       tierId: tierId,
       title: review.title,
       name: review.name,
-      iconBase64: ReviewFunc.dataURLToBase64(review.iconUrl),
+      iconBase64: base64Api.dataURLToBase64(review.iconUrl),
       reviewFactors: ReviewFunc.cloneFactors(review.reviewFactors),
       sections: ReviewFunc.cloneSections(review.sections)
     }

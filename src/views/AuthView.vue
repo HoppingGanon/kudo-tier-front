@@ -20,7 +20,6 @@ export default defineComponent({
     const toast = useToast()
     const code = route.query.code as string
 
-    console.log(store.getters.isRegistered ? 'hit' : 'no')
     if (store.getters.isRegistered) {
       router.push(`/home/${store.state.userId}`)
     } else if (store.state.tempSessionId) {
@@ -30,10 +29,10 @@ export default defineComponent({
         store.commit('setSessionId', response.data.sessionId)
         store.commit('setTwitterName', response.data.twitterName)
         store.commit('setTwitterUserName', response.data.twitterUserName)
+        store.commit('setTwitterIconUrl', response.data.twitterIconUrl)
         store.commit('setUserId', response.data.userId)
         store.commit('setExpiredTime', response.data.expiredTime)
         store.commit('setIsNew', response.data.isNew)
-        store.commit('setIconUrl', response.data.iconUrl)
         if (response.data.isNew) {
           router.push('/regist')
         } else {

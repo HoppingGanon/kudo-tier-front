@@ -220,6 +220,7 @@ export default defineComponent({
 
     // ユーザーデータをダウンロードする関数
     const getUser = () => {
+      console.log(store.state)
       if (store.state.userId) {
         RestApi.getUserData(store.state.userId).then((res) => {
           user.value = res.data
