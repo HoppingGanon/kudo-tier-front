@@ -77,6 +77,7 @@ import { getImgSource } from '@/common/restapi'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import TermOfServise from '@/components/TermOfServise.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
+import { userValidation } from '@/common/review'
 
 export default defineComponent({
   name: 'RegistrationComponent',
@@ -137,8 +138,8 @@ export default defineComponent({
     const iniDialog = ref(props.isNew)
     const termDialog = ref(false)
     const requiredValidation = rules.required()
-    const nameValidation = rules.maxLen(64)
-    const profValidation = rules.maxLen(200)
+    const nameValidation = rules.maxLen(userValidation.nameLenMax)
+    const profValidation = rules.maxLen(userValidation.profileLenMax)
     const checkedValidation = (v: boolean) => v || '登録するには利用規約に同意する必要があります'
 
     return {

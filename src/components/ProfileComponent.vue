@@ -19,7 +19,9 @@
         <v-container class="pa-0 ma-0" fluid>
           <v-row>
             <v-col>
-              <span class="font-weight-bold cursor-pointer" :class="isSummary ? 'no-break' : 'text-h5'" @click="goHome" v-text="dispName"/>
+              <div :class="isSummary ? 'no-break-box' : 'text-h5'">
+                <span class="font-weight-bold cursor-pointer" @click="goHome" v-text="dispName"/>
+              </div>
             </v-col>
           </v-row>
           <v-row>
@@ -129,6 +131,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@import url("@/style/common-style.css");
 .avatar-space {
   aspect-ratio: 1;
   width: 64px;

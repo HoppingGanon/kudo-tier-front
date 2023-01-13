@@ -103,6 +103,7 @@ export default defineComponent({
 
     const updateFile = (v: File[]) => {
       if (v.length > 0) {
+        preImgFiles.value.splice(0)
         preImgFiles.value = imgFiles.value
         imgFiles.value = v
         // 入力されたファイルをのURLを取得する

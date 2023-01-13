@@ -128,6 +128,11 @@ export interface Tier {
   updatedAt: Date
 }
 
+export const userValidation = {
+  nameLenMax: 50,
+  profileLenMax: 400
+}
+
 export const tierValidation = {
   /** Tier名の長さの上限 */
   tierNameLenMax: 100,

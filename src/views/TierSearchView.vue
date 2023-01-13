@@ -3,13 +3,18 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <padding-component :target-user-id="userId">
+  <padding-component :target-user-id="userId" title="ユーザー情報">
     <v-container class="pa-0 ma-0" fluid>
       <v-card class="ma-0" flat>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary" class="d-flex" dark>
           <div class="no-break-box">
             <v-card-title class="font-weight-bold">
-              <span v-text="`${dispName} さんの投稿`" />
+              <span v-text="dispName" />
+            </v-card-title>
+          </div>
+          <div>
+            <v-card-title class="font-weight-bold">
+              <span>さんの投稿</span>
             </v-card-title>
           </div>
           <template v-slot:extension>
