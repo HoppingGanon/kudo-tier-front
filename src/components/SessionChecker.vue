@@ -40,7 +40,7 @@ export default defineComponent({
           toast.warning('セッションがありません。ユーザー登録のため、もう一度Twitter認証してください。')
           router.push('/login')
         }
-        if (!store.getters.isRegistered && new Date(store.state.expiredTime) < new Date()) {
+        if (store.getters.isRegistered && new Date(store.state.expiredTime) < new Date()) {
           RestApi.delSession().then(() => {
             store.commit('initAllSession')
             toast.warning('セッションの有効期限が切れました。再度ログインしてください。')

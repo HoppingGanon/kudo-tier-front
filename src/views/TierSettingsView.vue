@@ -135,7 +135,7 @@ export default defineComponent({
         isPoint: true,
         weight: 50,
         // indexをユニークにするため、0未満のindexのうち最小値より1少ない値を付加する
-        index: tier.value.reviewFactorParams.reduce((min, v) => Math.min(min, v.index), 0)
+        index: tier.value.reviewFactorParams.reduce((min, v) => Math.min(min, v.index), 0) - 1
       })
       tier.value.reviews.forEach((review) => {
         review.reviewFactors.push({
