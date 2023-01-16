@@ -1,14 +1,26 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <v-row class="align-center">
-      <v-col>
-        <review-header
-          v-if="!noHeader"
-          :icon-url="tier.userIconUrl"
-          :disp-name="tier.userName"
-          :user-id="tier.userId"
-          :last-write-time="lastWriteTime"
-        />
+    <v-row v-if="!noHeader" class="align-center">
+      <v-col class="d-flex">
+        <div style="width: 100%">
+          <review-header
+            :icon-url="tier.userIconUrl"
+            :disp-name="tier.userName"
+            :user-id="tier.userId"
+            :last-write-time="lastWriteTime"
+          />
+        </div>
+        <div v-if="isSelf && displayType === 'summary' || displayType === 'list'">
+          <menu-button :items="menuItems" @select="goThere($event)">
+            <template v-slot:button="{ open, props }">
+              <v-btn icon flat @click="open" v-bind="props">
+                <v-icon>
+                  mdi-dots-vertical
+                </v-icon>
+              </v-btn>
+            </template>
+          </menu-button>
+        </div>
       </v-col>
     </v-row>
 
@@ -58,6 +70,7 @@
             :reviews="tier.reviews"
             :review-factor-params="tier.reviewFactorParams"
             :is-sample="isSample"
+            :is-link="!isSample"
             :no-header="true"
             :no-change-point="true"
             :point-types="pointTypes"
@@ -67,18 +80,31 @@
       </v-row>
     </v-container></v-col></v-row>
   </v-container>
+
+  <simple-dialog
+    v-model="delDialog"
+    title="Tierの削除"
+    text="本当にTierを削除しますか？"
+    submit-button-text="削除"
+    @submit="deleteTier"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from 'vue'
+import { defineComponent, PropType, computed, ref } from 'vue'
 import { ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, Tier } from '@/common/review'
-import { getImgSource } from '@/common/restapi'
+import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import CommonApi from '@/common/commonapi'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import TierRanking from '@/components/TierRanking.vue'
 import SectionComponent from '@/components/SectionComponent.vue'
+import MenuButton from '@/components/MenuButton.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import router from '@/router'
+import store from '@/store'
+import { useToast } from 'vue-toast-notification'
+import { SelectObject } from '@/common/page'
 
 export default defineComponent({
   name: 'TierComponent',
@@ -86,7 +112,9 @@ export default defineComponent({
     ReviewHeader,
     ReviewList,
     TierRanking,
-    SectionComponent
+    SectionComponent,
+    MenuButton,
+    SimpleDialog
   },
   props: {
     tier: {
@@ -121,9 +149,11 @@ export default defineComponent({
   emits: {
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewPointType) => true
+      value: ReviewPointType) => true,
+    reload: () => true
   },
-  setup (props) {
+  setup (props, { emit }) {
+    const toast = useToast()
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.tier.updatedAt, true)
     })
@@ -156,13 +186,65 @@ export default defineComponent({
       }
     }
 
+    const menuItems: SelectObject[] = [
+      {
+        value: 'add',
+        text: 'レビューを追加',
+        icon: 'mdi-book-plus-outline'
+      },
+      {
+        value: 'edit',
+        text: 'Tierを編集',
+        icon: 'mdi-pencil-box-outline'
+      },
+      {
+        value: 'delete',
+        text: 'Tierを削除',
+        icon: 'mdi-trash-can'
+      }
+    ]
+
+    const deleteTier = () => {
+      RestApi.deleteTier(props.tier.tierId).then(() => {
+        toast.success('Tierを削除しました')
+        emit('reload')
+      }).catch((e) => {
+        toastError(e, toast)
+      })
+    }
+
+    const delDialog = ref(false)
+    const goThere = (page: string) => {
+      switch (page) {
+        case 'add':
+          router.push(`/review-settings-new/${props.tier.tierId}`)
+          break
+        case 'edit':
+          router.push(`/tier-settings/${props.tier.tierId}`)
+          break
+        case 'delete':
+          delDialog.value = true
+          break
+      }
+    }
+
+    // 親コンポーネントからユーザーIDが来るため、再計算が必要
+    const isSelf = computed(() => {
+      return store.state.userId === props.tier.userId
+    })
+
     return {
       getImgSource,
       lastWriteTime,
       pointTypes,
       reviewFactorParamsList,
       section,
-      goTier
+      goTier,
+      menuItems,
+      deleteTier,
+      delDialog,
+      goThere,
+      isSelf
     }
   }
 })

@@ -10,10 +10,10 @@
             :is-sample="isSample"
             :is-link="isLink"
             :display-type="displayType"
-            point-display-type="normal"
             :point-type="pointTypes === undefined ? undefined : (index < pointTypes.length ? pointTypes[index] : 'point')"
             @update-point-type="updatePointTypeEm($event, index)"
             :no-change-point="noChangePoint"
+            @reload="$emit('reload')"
           />
         </v-card>
       </v-col>
@@ -79,7 +79,8 @@ export default defineComponent({
   emits: {
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewPointType, index: number) => true
+      value: ReviewPointType, index: number) => true,
+    reload: () => true
   },
   setup (props, { emit }) {
     const updatePointTypeEm = (value: ReviewPointType, index: number) => {

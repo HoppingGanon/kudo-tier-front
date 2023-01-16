@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactor, ReviewPointType, ReviewPointDisplayType, ReviewDisplayType, ReviewFactorParam, ReviewFunc } from '@/common/review'
+import { ReviewFactor, ReviewPointType, ReviewDisplayType, ReviewFactorParam, ReviewFunc } from '@/common/review'
 import { defineComponent, PropType } from 'vue'
 import ReviewValueDisplay from './ReviewValueDisplay.vue'
 
@@ -61,10 +61,6 @@ export default defineComponent({
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
-    },
-    pointDisplayType: {
-      type: String as PropType<ReviewPointDisplayType>,
-      default: 'normal' as ReviewPointDisplayType
     },
     reviewFactorParams: {
       type: Array as PropType<ReviewFactorParam[]>,

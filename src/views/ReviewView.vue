@@ -42,15 +42,15 @@
           </menu-button>
         </v-toolbar>
 
-        <review-component
-          class="pa-1"
-          :review="review"
-          :review-factor-params="params"
-          :point-type="pointType"
-          @update-point-type="updatePointType"
-          display-type="all"
-          point-display-type="normal"
-        />
+        <div class="pa-1">
+          <review-component
+            :review="review"
+            :review-factor-params="params"
+            :point-type="pointType"
+            @update-point-type="updatePointType"
+            display-type="all"
+          />
+        </div>
       </v-card>
     </v-container>
     <simple-dialog
@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { ReviewFactorParam, ReviewFunc, ReviewPointType } from '@/common/review'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import SimpleTier from '@/components/SimpleTier.vue'
@@ -135,6 +135,8 @@ export default defineComponent({
             tier.value.reviews.sort((review1, review2) => {
               return ReviewFunc.calcSum(review2, tier.value.reviewFactorParams) - ReviewFunc.calcSum(review1, tier.value.reviewFactorParams)
             })
+            // 自身のレビューを表示している場合
+            isSelf.value = review.value.userId === store.state.userId
           }).catch((e) => {
             isNotFound.value = true
             toastError(e, toast)
@@ -143,28 +145,31 @@ export default defineComponent({
           isNotFound.value = true
           toastError(e, toast)
         }).finally(() => { isLoading.value = false })
-        // 自身のレビューを表示している場合
-        isSelf.value = route.params.uid === store.state.userId
       }
     })
 
-    const menuItems: SelectObject[] = [
-      {
-        value: 'original',
-        text: '元のTierを開く',
-        icon: 'mdi-book-plus-outline'
-      },
-      {
-        value: 'edit',
-        text: 'レビューを編集',
-        icon: 'mdi-pencil-box-outline'
-      },
-      {
-        value: 'delete',
-        text: 'レビューを削除',
-        icon: 'mdi-trash-can'
+    const menuItems = computed(() => {
+      const items: SelectObject[] = [
+        {
+          value: 'original',
+          text: '元のTierを開く',
+          icon: 'mdi-book-plus-outline'
+        }
+      ]
+      if (isSelf.value) {
+        items.push({
+          value: 'edit',
+          text: 'レビューを編集',
+          icon: 'mdi-pencil-box-outline'
+        })
+        items.push({
+          value: 'delete',
+          text: 'レビューを削除',
+          icon: 'mdi-trash-can'
+        })
       }
-    ]
+      return items
+    })
 
     const goThere = (page: SelectObject) => {
       switch (page.value) {

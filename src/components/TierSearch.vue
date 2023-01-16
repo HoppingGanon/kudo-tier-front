@@ -183,12 +183,14 @@ export default defineComponent({
       update(false)
     })
 
+    const onScroll = () => {
+      if (window.scrollY > (document.documentElement.scrollHeight - document.documentElement.clientHeight - 100)) {
+        add()
+      }
+    }
+
     onMounted(() => {
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > (document.documentElement.scrollHeight - document.documentElement.clientHeight - 100)) {
-          add()
-        }
-      })
+      window.addEventListener('scroll', onScroll)
     })
 
     // これがないとイベントが設定できない
@@ -196,7 +198,7 @@ export default defineComponent({
 
     // ページを離れた時にイベントを削除するように予定する
     onBeforeRouteLeave(() => {
-      window.addEventListener('scroll', () => true)
+      window.removeEventListener('scroll', onScroll)
     })
 
     return {

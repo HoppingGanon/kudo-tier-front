@@ -12,7 +12,6 @@
         :review="infomation.review"
         :review-factor-params="reviewFactorParams"
         display-type="summary"
-        point-display-type="normal"
         :point-type="pointType"
         :no-change-point="true"
       />

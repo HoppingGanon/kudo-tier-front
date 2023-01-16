@@ -6,11 +6,9 @@
           <tier-component
             :tier="tier"
             :is-link="isLink"
-            min-height="200px"
-            width="100%"
             display-type="summary"
-            point-display-type="normal"
             @update-point-type="updatePointTypeEm($event, index)"
+            @reload="$emit('reload')"
           />
         </v-card>
       </v-col>
@@ -52,7 +50,8 @@ export default defineComponent({
   emits: {
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewPointType, index: number) => true
+      value: ReviewPointType, index: number) => true,
+    reload: () => true
   },
   setup (props, { emit }) {
     const updatePointTypeEm = (value: ReviewPointType, index: number) => {

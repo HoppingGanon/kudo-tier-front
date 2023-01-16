@@ -1,14 +1,26 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <v-row class="align-center">
-      <v-col>
-        <review-header
-          v-if="!noHeader"
-          :icon-url="review.userIconUrl"
-          :disp-name="review.userName"
-          :user-id="review.userId"
-          :last-write-time="lastWriteTime"
-        />
+    <v-row v-if="!noHeader" class="align-center">
+      <v-col class="d-flex">
+        <div style="width: 100%">
+          <review-header
+            :icon-url="review.userIconUrl"
+            :disp-name="review.userName"
+            :user-id="review.userId"
+            :last-write-time="lastWriteTime"
+          />
+        </div>
+        <div v-if="isSelf && displayType === 'summary' || displayType === 'list'">
+          <menu-button :items="menuItems" @select="goThere($event)">
+            <template v-slot:button="{ open, props }">
+              <v-btn icon flat @click="open" v-bind="props">
+                <v-icon>
+                  mdi-dots-vertical
+                </v-icon>
+              </v-btn>
+            </template>
+          </menu-button>
+        </div>
       </v-col>
     </v-row>
 
@@ -23,10 +35,21 @@
         <v-col>
           <v-container fluid class="ma-0 pa-0">
             <v-row>
-              <v-col>
-                <a :id="`rev${review.reviewId}`">
-                  <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
-                </a>
+              <v-col class="d-flex">
+                <div style="width: 100%">
+                  <a :id="`rev${review.reviewId}`">
+                    <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
+                  </a>
+                </div>
+                <div v-if="isSelf && noHeader && (displayType === 'summary' || displayType === 'list')">
+                  <menu-button :items="menuItems" @select="goThere($event)">
+                    <template v-slot:button="{ open, props }">
+                      <v-icon class="cursor-pointer" @click="open" v-bind="props">
+                        mdi-dots-vertical
+                      </v-icon>
+                    </template>
+                  </menu-button>
+                </div>
               </v-col>
             </v-row>
             <v-row v-if="review.title">
@@ -63,16 +86,16 @@
               </v-row>
               <v-row>
                 <v-col
-                  v-if="displayType === 'all' || displayType === 'list' && getPointType() !== 'unlimited' && getLabels().length > 2"
+                  v-if="(displayType === 'all' || displayType === 'list') && getPointType() !== 'unlimited' && chartLabels.length > 2"
                   cols="12" sm="6" md="6" lg="5" xl="5"
                 >
                   <div>
                     <radar-chart
-                      :labels="getLabels()"
-                      :dataList="getDataList()"
+                      :labels="chartLabels"
+                      :dataList="chartDataList"
                       :min="0"
                       :max="100"
-                      :step="getStep()"
+                      :step="chartStep"
                       :show-legend="false"
                     />
                   </div>
@@ -82,7 +105,6 @@
                     v-if="displayType === 'all' || displayType === 'list'"
                     :factors="review.reviewFactors"
                     :display-type="displayType"
-                    :point-display-type="pointDisplayType"
                     :point-type="getPointType()"
                     :review-factor-params="reviewFactorParams"
                     @update-point-type="$emit('updatePointType', $event)"
@@ -115,30 +137,35 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="displayType === 'list'">
-        <v-col class="d-flex flex-row-reverse">
-          <v-btn flat :disabled="isSample" @click="goReview(true)">
-            (本文を読む)
-          </v-btn>
-        </v-col>
-      </v-row>
     </v-container></v-col></v-row>
   </v-container>
+  <simple-dialog
+    v-model="delDialog"
+    title="レビューの削除"
+    text="本当にレビューを削除しますか？"
+    submit-button-text="削除"
+    @submit="deleteReview"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, computed, ref } from 'vue'
-import { Review, ReviewDisplayType, ReviewPointDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam, pointTypeTierCountDic } from '@/common/review'
+import { Review, ReviewDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam, pointTypeTierCountDic } from '@/common/review'
 import CommonApi from '@/common/commonapi'
-import { getImgSource } from '@/common/restapi'
+import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import SectionComponent from '@/components/SectionComponent.vue'
 import ReviewHeader from '@/components/ReviewHeader.vue'
 import ReviewValues from '@/components/ReviewValues.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import RadarChart, { RadarChartData } from '@/components/RadarChart.vue'
 import ReviewLargeValue from '@/components/ReviewLargeValue.vue'
+import MenuButton from '@/components/MenuButton.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import vuetify from '@/plugins/vuetify'
 import router from '@/router'
+import { SelectObject } from '@/common/page'
+import { useToast } from 'vue-toast-notification'
+import store from '@/store'
 
 export default defineComponent({
   name: 'ReviewComponent',
@@ -148,7 +175,9 @@ export default defineComponent({
     ReviewValues,
     PointTypeSelector,
     RadarChart,
-    ReviewLargeValue
+    ReviewLargeValue,
+    MenuButton,
+    SimpleDialog
   },
   props: {
     review: {
@@ -162,10 +191,6 @@ export default defineComponent({
     displayType: {
       type: String as PropType<ReviewDisplayType>,
       required: true
-    },
-    pointDisplayType: {
-      type: String as PropType<ReviewPointDisplayType>,
-      default: 'normal'
     },
     isSample: {
       type: Boolean,
@@ -199,9 +224,11 @@ export default defineComponent({
   emits: {
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewPointType) => true
+      value: ReviewPointType) => true,
+    reload: () => true
   },
-  setup (props) {
+  setup (props, { emit }) {
+    const toast = useToast()
     const primaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.review.updatedAt, true)
@@ -221,18 +248,18 @@ export default defineComponent({
       return props.pointType || props.review.pointType || 'point'
     }
 
-    const getStep = () => 100 / (pointTypeTierCountDic[getPointType()] - 1)
+    const chartStep = computed(() => 100 / (pointTypeTierCountDic[getPointType()] - 1))
 
-    const getLabels = () => props.reviewFactorParams.filter(v => v.isPoint).map(v => v.name)
+    const chartLabels = computed(() => props.reviewFactorParams.filter(v => v.isPoint).map(v => v.name))
 
-    const getDataList: () => RadarChartData[] = () => {
+    const chartDataList = computed(() => {
       return [
         {
           name: props.review.name,
           values: props.review.reviewFactors.filter((v, i) => props.reviewFactorParams[i].isPoint && v.point !== undefined).map(v => v.point)
         }
       ] as RadarChartData[]
-    }
+    })
 
     const goReview = (enable: boolean) => {
       if (enable) {
@@ -240,7 +267,47 @@ export default defineComponent({
       }
     }
 
+    const menuItems: SelectObject[] = [
+      {
+        value: 'edit',
+        text: 'レビューを編集',
+        icon: 'mdi-pencil-box-outline'
+      },
+      {
+        value: 'delete',
+        text: 'レビューを削除',
+        icon: 'mdi-trash-can'
+      }
+    ]
+
+    const delDialog = ref(false)
+    const goThere = (page: string) => {
+      switch (page) {
+        case 'edit':
+          router.push(`/review-settings/${props.review.reviewId}`)
+          break
+        case 'delete':
+          delDialog.value = true
+          emit('reload')
+          break
+      }
+    }
+
+    const deleteReview = () => {
+      RestApi.deleteReview(props.review.reviewId).then(() => {
+        toast.success('レビューを削除しました')
+      }).catch((e) => {
+        toastError(e, toast)
+      })
+    }
+
+    // 親コンポーネントからユーザーIDが来るため、再計算が必要
+    const isSelf = computed(() => {
+      return store.state.userId === props.review.userId
+    })
+
     return {
+      menuItems,
       getImgSource,
       primaryColor,
       lastWriteTime,
@@ -248,10 +315,14 @@ export default defineComponent({
       sum,
       expansion,
       getPointType,
-      getStep,
-      getLabels,
-      getDataList,
-      goReview
+      chartStep,
+      chartLabels,
+      chartDataList,
+      goReview,
+      delDialog,
+      goThere,
+      deleteReview,
+      isSelf
     }
   }
 })

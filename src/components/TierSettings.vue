@@ -112,7 +112,7 @@
         <v-row>
           <v-col>
             <section-component
-              :section="getSection()"
+              :section="section"
               display-type="all"
               :editable="true"
               :hide-section-title="true"
@@ -274,7 +274,6 @@
               display-type="all"
               :no-header="true"
               :no-menu-icon="true"
-              point-display-type="normal"
               width="100%"
               min-height="720px"
             />
@@ -301,7 +300,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierValidation, sectionValidation, ReviewSection } from '@/common/review'
-import { defineComponent, PropType, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, PropType, ref, toRefs, watch } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TierComponent from '@/components/TierComponent.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
@@ -315,6 +314,7 @@ import RestApi, { ErrorResponse, getImgSource } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
 import { ValidState } from '@/common/page'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettings',
@@ -431,12 +431,12 @@ export default defineComponent({
       }
     }
 
-    const getSection: () => ReviewSection = () => {
+    const section = computed(() => {
       return {
         title: '',
         parags: props.modelValue.parags
-      }
-    }
+      } as ReviewSection
+    })
 
     const tabValidation = ref([
       'none',
@@ -576,7 +576,7 @@ export default defineComponent({
       removeWeightItemProxy,
       addWeightItemProxy,
       addParagItemProxy,
-      getSection,
+      section,
       forms,
       tabValidation,
       next,

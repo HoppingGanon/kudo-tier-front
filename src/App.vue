@@ -15,13 +15,13 @@
         <v-row v-if="hasSession">
           <v-col>
             <profile-component
-              :disp-name="user.name"
-              :profile="user.profile"
-              :icon-url="user.iconUrl"
-              :tier-count="user.tierCount"
-              :review-count="user.reviewCount"
+              :disp-name="userName"
+              :profile="userProfile"
+              :icon-url="userIconUrl"
+              :tiers-count="tiersCount"
+              :reviews-count="reviewsCount"
               :is-summary="true"
-              :user-id="getUserId() || ''"
+              :user-id="sessionUserId || ''"
               :is-vertical="true"
             />
           </v-col>
@@ -104,7 +104,7 @@
       </v-container>
     </v-navigation-drawer>
 
-    <v-app-bar app class="pink lighten-4 anime" :style="barStyle" v-if="barIsVisible">
+    <v-app-bar app class="pink lighten-4 anime" :style="barStyle">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
       <v-toolbar-title>Tiereview</v-toolbar-title>
@@ -126,25 +126,24 @@
       </v-card>
     </v-dialog>
 
-    <v-avatar class="overlay anime baricon" color="primary" @click="clickHideBarIcon" :style="iconStyle">
-      <v-icon v-if="barIsVisible" dark>mdi-overscan</v-icon>
-      <v-icon v-else dark>mdi-page-layout-header</v-icon>
-    </v-avatar>
-
     <v-main>
       <router-view :key="routeWatcher($route)" />
     </v-main>
+
+    <v-avatar class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
+        <v-icon v-show="barIsVisible" dark>mdi-overscan</v-icon>
+        <v-icon v-show="!barIsVisible" dark>mdi-page-layout-header</v-icon>
+    </v-avatar>
   </v-app>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
-import RestApi, { toastError } from '@/common/restapi'
+import RestApi from '@/common/restapi'
 import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
-import { emptyUser } from './common/dummy'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 export default defineComponent({
@@ -156,13 +155,10 @@ export default defineComponent({
     const toast = useToast()
 
     const drawer = ref(false)
-    // app-barの幅
-    const barHeight = ref(60)
     const logoutDialog = ref(false)
     const forceDialog = ref(false)
 
-    const user = ref(emptyUser)
-    const getUserId = () => store.state.userId
+    const sessionUserId = computed(() => store.state.userId)
 
     const barIsVisible = ref(true)
 
@@ -170,8 +166,7 @@ export default defineComponent({
       barIsVisible.value = !barIsVisible.value
     }
 
-    const iconStyle = computed(() => barIsVisible.value ? `top:${barHeight.value + 8}px;` : 'top: 0px;')
-    const barStyle = computed(() => barIsVisible.value ? `height:${barHeight.value}px;` : 'height: 0px;')
+    const barStyle = computed(() => barIsVisible.value ? 'height:60px;' : 'height: 0px;')
     const hasSession = computed(() => store.getters.isRegistered)
     const isNew = computed(() => store.state.isNew)
 
@@ -218,21 +213,12 @@ export default defineComponent({
       router.push('/settings')
     }
 
-    // ユーザーデータをダウンロードする関数
-    const getUser = () => {
-      if (store.state.userId) {
-        RestApi.getUserData(store.state.userId).then((res) => {
-          user.value = res.data
-        }).catch((e) => {
-          toastError(e, toast)
-        })
-      }
-    }
-
     // セッションのユーザーIDに変化があればユーザーデータをダウンロードする
-    const { userId } = toRefs(store.state)
+    const { userId, userName, userProfile, userIconUrl, reviewsCount, tiersCount } = toRefs(store.state)
+
+    // ユーザーIDが変更したときはダウンロード
     watch(userId, () => {
-      getUser()
+      store.commit('downloadUserData', store.state.userId)
     })
 
     // routerがページ内リンクによる変化には反応しないように制御
@@ -249,17 +235,21 @@ export default defineComponent({
       }
     }
 
-    onMounted(getUser)
+    onMounted(() => {
+      store.commit('downloadUserData', store.state.userId)
+    })
 
     return {
       logoutDialog,
       forceDialog,
-      user,
-      getUserId,
+      userName,
+      userProfile,
+      userIconUrl,
+      reviewsCount,
+      tiersCount,
+      sessionUserId,
       barIsVisible,
       drawer,
-      barHeight,
-      iconStyle,
       barStyle,
       hasSession,
       isNew,
@@ -282,12 +272,19 @@ export default defineComponent({
 
 .overlay {
   position: fixed;
-  top: 20px;
-  right: 10px;
+  right: 6px;
   z-index: 100;
   text-align: right;
   align-content: right;
   cursor: pointer;
+}
+
+.icon1 {
+  top: 68px;
+}
+
+.icon2 {
+  top: 8px;
 }
 
 .baricon {
@@ -297,4 +294,5 @@ export default defineComponent({
 .anime {
   transition: all 0.25s ease-out;
 }
+
 </style>

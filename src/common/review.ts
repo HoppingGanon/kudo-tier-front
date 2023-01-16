@@ -40,9 +40,6 @@ export type TierTableType = typeof TierTableTypeArray[number]
 /** レビューの表示方法 */
 export type ReviewDisplayType = 'summary' | 'list' | 'all'
 
-/** レビューポイントの表示方法 */
-export type ReviewPointDisplayType = 'normal' | 'radar'
-
 /** レビュー評点 */
 export interface ReviewFactorParam {
   /** レビュー評点の名称 */

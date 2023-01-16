@@ -50,8 +50,8 @@ export interface UserData {
   /** Teittwrの表示名 */
   twitterName: string
   iconUrl: string
-  reviewCount: number
-  tierCount: number
+  reviewsCount: number
+  tiersCount: number
   allowTwitterLink: boolean
 }
 

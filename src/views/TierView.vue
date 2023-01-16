@@ -41,7 +41,6 @@
           :point-type="pointType"
           @update-point-type="updatePointType"
           display-type="all"
-          point-display-type="normal"
         />
       </v-card>
     </v-container>

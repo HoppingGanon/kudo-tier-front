@@ -39,8 +39,8 @@ export const emptyUser: UserData = {
   iconUrl: '',
   twitterName: '',
   allowTwitterLink: false,
-  tierCount: 0,
-  reviewCount: 0
+  tiersCount: 0,
+  reviewsCount: 0
 }
 
 export const tier: Tier = {

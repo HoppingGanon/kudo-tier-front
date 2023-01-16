@@ -1,3 +1,5 @@
+import RestApi from '@/common/restapi'
+import store from '@/store'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
@@ -81,6 +83,13 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+// 画面遷移時の処理
+router.afterEach(() => {
+  if (store.getters.isRegistered) {
+    store.commit('downloadUserData')
+  }
 })
 
 export default router

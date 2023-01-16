@@ -37,8 +37,8 @@
               :disp-name="user.name"
               :icon-url="user.iconUrl"
               :profile="user.profile"
-              :tier-count="user.tierCount"
-              :review-count="user.reviewCount"
+              :tiers-count="user.tiersCount"
+              :reviews-count="user.reviewsCount"
               :user-id="userId"
               :allow-twitter-link="user.allowTwitterLink"
               :twitter-name="user.twitterName"
@@ -87,6 +87,7 @@
                   :tiers="tiers"
                   :is-link="true"
                   :is-loading="isLoadingTiers"
+                  @reload="reloadTiers"
                 />
                 <v-card v-if="tiers.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('tier')">
                   もっと投稿を見る
@@ -120,6 +121,7 @@
                   :is-link="true"
                   display-type="summary"
                   :is-loading="isLoadingReviews"
+                  @reload="reloadReviews"
                 />
                 <v-card v-if="reviews.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
                   もっと投稿を見る
@@ -166,6 +168,9 @@ export default defineComponent({
     PaddingComponent,
     LoadingComponent
   },
+  emits: {
+    reload: () => true
+  },
   setup () {
     const route = useRoute()
     const toast = useToast()
@@ -188,6 +193,32 @@ export default defineComponent({
 
     const tab = ref(0)
 
+    const reloadTiers = () => {
+      console.log('reloadTiers')
+      RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
+        const tierDataList = res.data
+        tiers.value.splice(0)
+        tierDataList.forEach((v) => {
+          tiers.value.push(Parser.parseTier(v))
+        })
+      }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
+    }
+
+    const reloadReviews = () => {
+      console.log('reloadReviews')
+      RestApi.getReviewPairs(userId.value, '', 'updatedAtDesc', 1).then((res) => {
+        reviews.value.splice(0)
+        params.value.splice(0)
+        res.data.forEach((v) => {
+          reviews.value.push(Parser.parseReview(v.review))
+          params.value.push(v.params)
+        })
+      }).catch((e) => {
+        const v = e.response.data
+        toast.error(`${v.message} (${v.code})`)
+      }).finally(() => { isLoadingReviews.value = false })
+    }
+
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
         isSelf.value = store.state.userId === route.params.id
@@ -200,26 +231,10 @@ export default defineComponent({
         }).finally(() => { isLoadingUser.value = false })
 
         // 並行してTierもダウンロードする
-        RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
-          const tierDataList = res.data
-          tiers.value.splice(0)
-          tierDataList.forEach((v) => {
-            tiers.value.push(Parser.parseTier(v))
-          })
-        }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
+        reloadTiers()
 
         // 並行してレビューもダウンロードする
-        RestApi.getReviewPairs(route.params.id, '', 'updatedAtDesc', 1).then((res) => {
-          reviews.value.splice(0)
-          params.value.splice(0)
-          res.data.forEach((v) => {
-            reviews.value.push(Parser.parseReview(v.review))
-            params.value.push(v.params)
-          })
-        }).catch((e) => {
-          const v = e.response.data
-          toast.error(`${v.message} (${v.code})`)
-        }).finally(() => { isLoadingReviews.value = false })
+        reloadReviews()
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
         isNotFound.value = true
@@ -252,7 +267,9 @@ export default defineComponent({
       tab,
       goSearch,
       goTierSettings,
-      goSettings
+      goSettings,
+      reloadTiers,
+      reloadReviews
     }
   }
 })

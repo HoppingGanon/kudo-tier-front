@@ -27,12 +27,12 @@
           <v-row>
             <v-col>
               <span v-if="isSummary" class="text-subtitle-1 cursor-pointer">
-                <span @click="goTierSearch('tier')">Tier数: <span v-text="tierCount" /></span><br/>
-                <span @click="goTierSearch('review')">レビュー数: <span v-text="reviewCount" /></span>
+                <span @click="goTierSearch('tier')">Tier数: <span v-text="tiersCount" /></span><br/>
+                <span @click="goTierSearch('review')">レビュー数: <span v-text="reviewsCount" /></span>
               </span>
               <span v-else class="text-subtitle-1 cursor-pointer">
-                <span @click="goTierSearch('tier')">Tier数: <span v-text="tierCount" /></span>
-                <span @click="goTierSearch('review')">レビュー数: <span v-text="reviewCount" /></span>
+                <span @click="goTierSearch('tier')">Tier数: <span v-text="tiersCount" /></span>
+                <span @click="goTierSearch('review')">レビュー数: <span v-text="reviewsCount" /></span>
               </span>
             </v-col>
           </v-row>
@@ -83,11 +83,11 @@ export default defineComponent({
       type: String,
       default: ''
     },
-    tierCount: {
+    tiersCount: {
       type: Number,
       default: 0
     },
-    reviewCount: {
+    reviewsCount: {
       type: Number,
       default: 0
     },

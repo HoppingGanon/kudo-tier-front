@@ -39,7 +39,7 @@
           <v-container>
             <v-row>
               <v-col class="d-flex justify-center">
-                <div :style="getCanvasSize()">
+                <div :style="canvasSize">
                   <vue-cropper
                     v-if="imageUrl !== ''"
                     class="ba-5"
@@ -47,7 +47,7 @@
                     :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
                     :src="imageUrl"
                     dragMode="move"
-                    :class="getCanvasSize()"
+                    :class="canvasSize"
                   />
                 </div>
               </v-col>
@@ -64,6 +64,7 @@ import { defineComponent, ref } from 'vue'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 import base64api from '@/common/base64api'
+import { computed } from '@vue/reactivity'
 
 export default defineComponent({
   name: 'ImageSelector',
@@ -133,13 +134,13 @@ export default defineComponent({
       emit('updateCroppedUrl', url)
     }
 
-    const getCanvasSize = () => {
+    const canvasSize = computed(() => {
       if (window.innerWidth < window.innerHeight - 100) {
         return 'canvas-size-w'
       } else {
         return 'canvas-size-h'
       }
-    }
+    })
 
     return {
       cropMenu,
@@ -151,7 +152,7 @@ export default defineComponent({
       closeCrop,
       enterCrop,
       cropper,
-      getCanvasSize
+      canvasSize
     }
   }
 })

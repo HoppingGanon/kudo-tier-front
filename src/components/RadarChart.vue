@@ -1,11 +1,11 @@
 <template>
-  <RadarChart :chartData="getData()" :options="getOptions()" reactive style="width: 100%" />
+  <RadarChart :chartData="chartData" :options="chartOptions" reactive style="width: 100%" />
 </template>
 
 <script lang="ts">
 import vuetify from '@/plugins/vuetify'
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { RadarChart } from 'vue-chart-3'
 
 export interface RadarChartData {
@@ -47,7 +47,7 @@ export default defineComponent({
     const chartColor = `${vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary}50`
     const pointColor = `${vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary}`
 
-    const getData = () => {
+    const chartData = computed(() => {
       const data: ChartData<'radar'> = {
         labels: props.labels,
         datasets: []
@@ -66,9 +66,9 @@ export default defineComponent({
           })
       })
       return data
-    }
+    })
 
-    const getOptions: () => ChartOptions<'radar'> = () => {
+    const chartOptions = computed(() => {
       let min = props.min
       if (props.min === undefined) {
         props.dataList.forEach((data) => {
@@ -114,14 +114,14 @@ export default defineComponent({
             }
           }
         }
-      }
-    }
+      } as ChartOptions<'radar'>
+    })
 
     return {
       chartColor,
       pointColor,
-      getData,
-      getOptions
+      chartData,
+      chartOptions
     }
   }
 })

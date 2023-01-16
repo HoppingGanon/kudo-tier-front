@@ -1,3 +1,4 @@
+import RestApi from '@/common/restapi'
 import { createStore, useStore as baseUseStore } from 'vuex'
 import persist from 'vuex-persistedstate'
 
@@ -5,6 +6,11 @@ export type State = {
   tempSessionId: string
   sessionId: string
   userId: string
+  userName: string
+  userProfile: string
+  userIconUrl: string
+  tiersCount: number
+  reviewsCount: number
   twitterName: string
   twitterUserName: string
   twitterIconUrl: string
@@ -18,6 +24,11 @@ export default createStore<State>({
     tempSessionId: '',
     sessionId: '',
     userId: '',
+    userName: '',
+    userProfile: '',
+    userIconUrl: '',
+    tiersCount: 0,
+    reviewsCount: 0,
     twitterName: '',
     twitterUserName: '',
     twitterIconUrl: '',
@@ -44,6 +55,21 @@ export default createStore<State>({
     setUserId (state, val: string) {
       state.userId = val
     },
+    setUserName (state, val: string) {
+      state.userName = val
+    },
+    setUserProfile (state, val: string) {
+      state.userProfile = val
+    },
+    setUserIcon (state, val: string) {
+      state.userIconUrl = val
+    },
+    setReviewsCount (state, val: number) {
+      state.reviewsCount = val
+    },
+    setTiersCount (state, val: number) {
+      state.tiersCount = val
+    },
     setTwitterName (state, val: string) {
       state.twitterName = val
     },
@@ -65,6 +91,27 @@ export default createStore<State>({
     },
     setBarIsVisible (state, val: boolean) {
       state.barIsVisible = val
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    downloadUserData (state, userId?: string, success?: (v: any) => void, failure?: (v: any) => void) {
+      if (userId) {
+        state.userId = userId
+        RestApi.getUserData(userId).then((res) => {
+          state.userName = res.data.name
+          state.userProfile = res.data.profile
+          state.userIconUrl = res.data.iconUrl
+          state.reviewsCount = res.data.reviewsCount
+          state.tiersCount = res.data.tiersCount
+        }).then(success).catch(failure)
+      } else if (userId === undefined && state.userId) {
+        RestApi.getUserData(state.userId).then((res) => {
+          state.userName = res.data.name
+          state.userProfile = res.data.profile
+          state.userIconUrl = res.data.iconUrl
+          state.reviewsCount = res.data.reviewsCount
+          state.tiersCount = res.data.tiersCount
+        }).then(success).catch(failure)
+      }
     }
   },
   actions: {
