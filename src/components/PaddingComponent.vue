@@ -43,11 +43,11 @@
                   <span class="font-weight-bold no-break-box" v-text="'最近投稿したTier'"></span>
                 </v-toolbar>
                 <v-list>
-                  <v-list-item v-for="tier, i of tiers" :key="i" class="mb-1">
+                  <v-list-item v-for="tier, i of tiers" :key="i" class="mb-1" @click="goTier(tier.id)">
                     <template v-slot:prepend>
                       <b v-text="'・'"></b>
                     </template>
-                    <div class="no-break-box-2 cursor-pointer" @click="goTier(tier.id)">
+                    <div class="no-break-box-2">
                       <span v-text="tier.name"></span>
                     </div>
                   </v-list-item>
@@ -63,11 +63,11 @@
                   <span class="font-weight-bold no-break-box" v-text="'最近投稿したレビュー'"></span>
                 </v-toolbar>
                 <v-list>
-                  <v-list-item v-for="review, i of reviews" :key="i" class="mb-1">
+                  <v-list-item v-for="review, i of reviews" :key="i" class="mb-1" @click="goReview(review.id)">
                     <template v-slot:prepend>
                       <b v-text="'・'"></b>
                     </template>
-                    <div class="no-break-box-2 cursor-pointer" @click="goReview(review.id)">
+                    <div class="no-break-box-2">
                       <span v-text="review.name"></span>
                     </div>
                   </v-list-item>
