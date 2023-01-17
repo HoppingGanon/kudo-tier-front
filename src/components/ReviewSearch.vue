@@ -198,7 +198,6 @@ export default defineComponent({
     })
 
     const onScroll = () => {
-      console.log('scroll')
       if (window.scrollY > (document.documentElement.scrollHeight - document.documentElement.clientHeight - 100)) {
         add()
       }

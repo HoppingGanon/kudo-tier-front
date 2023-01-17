@@ -194,7 +194,6 @@ export default defineComponent({
     const tab = ref(0)
 
     const reloadTiers = () => {
-      console.log('reloadTiers')
       RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
         const tierDataList = res.data
         tiers.value.splice(0)
@@ -205,7 +204,6 @@ export default defineComponent({
     }
 
     const reloadReviews = () => {
-      console.log('reloadReviews')
       RestApi.getReviewPairs(userId.value, '', 'updatedAtDesc', 1).then((res) => {
         reviews.value.splice(0)
         params.value.splice(0)
