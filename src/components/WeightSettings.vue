@@ -57,11 +57,11 @@
                             </div>
                             <v-text-field
                               v-else
-                              label="項目名"
+                              :label="element.isPoint ? '評価の項目名' : '情報の項目名'"
                               class="mt-1"
                               :model-value="element.name"
                               @update:model-value="$emit('updateName', $event, index)"
-                              hint="項目名には短い名前を入力してください"
+                              :hint="element.isPoint ? '項目名には短い名前を入力してください (例: ストーリーの評価)' : '項目名には短い名前を入力してください (例: 上映した年)'"
                               dense
                               :rules="rules"
                             />
@@ -73,11 +73,11 @@
                             </div>
                             <v-text-field
                               v-else
-                              label="項目名"
+                              :label="element.isPoint ? '評価の項目名' : '情報の項目名'"
                               class="mt-1"
                               :model-value="element.name"
                               @update:model-value="$emit('updateName', $event, index)"
-                              hint="項目名には短い名前を入力してください"
+                              :hint="element.isPoint ? '項目名には短い名前を入力してください (例: ストーリーの評価)' : '項目名には短い名前を入力してください (例: 上映した年)'"
                               dense
                               :rules="rules"
                             />

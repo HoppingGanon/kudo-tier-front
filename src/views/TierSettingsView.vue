@@ -54,6 +54,18 @@ export default defineComponent({
       isPoint: true,
       index: -1
     })
+    tier.value.reviewFactorParams.push({
+      name: '',
+      weight: 50,
+      isPoint: true,
+      index: -2
+    })
+    tier.value.reviewFactorParams.push({
+      name: '',
+      weight: 50,
+      isPoint: true,
+      index: -3
+    })
     tier.value.parags.push({
       type: 'text',
       body: ''
@@ -71,21 +83,33 @@ export default defineComponent({
         }
       ]
     })
-    review.reviewFactors.push({
-      point: Math.round(Math.random() * 100)
+    tier.value.reviewFactorParams.forEach(() => {
+      review.reviewFactors.push({
+        point: Math.round(Math.random() * 100)
+      })
     })
     tier.value.reviews.push(review)
 
     review = ReviewFunc.cloneReview(review)
     review.name = 'サンプル用レビュー2'
     review.reviewId = 'sample2'
-    review.reviewFactors[0].point = Math.round(Math.random() * 100)
+    review.reviewFactors = []
+    tier.value.reviewFactorParams.forEach(() => {
+      review.reviewFactors.push({
+        point: Math.round(Math.random() * 100)
+      })
+    })
     tier.value.reviews.push(review)
 
     review = ReviewFunc.cloneReview(review)
     review.name = 'サンプル用レビュー3'
     review.reviewId = 'sample3'
-    review.reviewFactors[0].point = Math.round(Math.random() * 100)
+    review.reviewFactors = []
+    tier.value.reviewFactorParams.forEach(() => {
+      review.reviewFactors.push({
+        point: Math.round(Math.random() * 100)
+      })
+    })
     tier.value.reviews.push(review)
 
     const isNew = ref(true)
