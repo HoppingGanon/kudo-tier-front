@@ -41,6 +41,7 @@ export interface UserEditingData {
   profile: string
   iconBase64: string
   allowTwitterLink: boolean
+  keepSession: number
 }
 
 export interface UserData {
@@ -49,6 +50,8 @@ export interface UserData {
   profile: string
   /** Teittwrの表示名 */
   twitterName: string
+  /** ログイン状態の保持時間 */
+  keepSession?: number
   iconUrl: string
   reviewsCount: number
   tiersCount: number

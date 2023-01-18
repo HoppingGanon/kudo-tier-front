@@ -44,18 +44,40 @@
             <v-col>
               <div class="mt-1 ml-1">
                 <span class="text-caption">
-                  有効にすると、他人がユーザー情報を参照したときに、Twitterアカウントにアクセスできるリンクボタンを表示します
+                  有効にすると、他ユーザーがプロフィールを参照したときに、Twitterアカウントにアクセスできるリンクボタンを表示します
                 </span>
               </div>
-              <v-checkbox
-                v-model="allowTwitterLink"
-                label="Twitterへのリンクを表示する"
-              >
-              </v-checkbox>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
+              <v-checkbox
+                v-model="allowTwitterLink"
+                label="プロフィールにTwitterへのリンクを表示する"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <div class="mt-1 ml-1">
+                <span class="text-caption">
+                  ログイン状態を保持する時間を指定します この設定は次回のログイン時から適用されます
+                </span>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-slider
+                v-model="keepSession"
+                class="mr-5"
+                label="セッション保持時間(分)"
+                :step="10"
+                :min="10"
+                :max="1440"
+                prepend-icon="mdi-key"
+                thumb-label
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -75,7 +97,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
 import store from '@/store'
-import RestApi, { toastError } from '@/common/restapi'
+import RestApi, { toastError, UserData } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import Base64Api from '@/common/base64api'
 import router from '@/router'
@@ -100,6 +122,7 @@ export default defineComponent({
     const profile = ref('')
     const iconUrl = ref('')
     const allowTwitterLink = ref(false)
+    const keepSession = ref(120)
 
     const form = ref()
 
@@ -110,6 +133,7 @@ export default defineComponent({
           profile.value = res.data.profile
           iconUrl.value = res.data.iconUrl
           allowTwitterLink.value = res.data.allowTwitterLink
+          keepSession.value = res.data.keepSession || 120
         }).catch((e) => toastError(e, toast))
       }
     })
@@ -121,7 +145,8 @@ export default defineComponent({
           name: dispName.value,
           profile: profile.value,
           iconBase64: Base64Api.dataURLToBase64(iconUrl.value),
-          allowTwitterLink: allowTwitterLink.value
+          allowTwitterLink: allowTwitterLink.value,
+          keepSession: keepSession.value
         }, store.state.userId).then((res) => {
           toast.success('ユーザー設定を更新しました')
           router.push(`/home/${res.data}`)
@@ -138,6 +163,7 @@ export default defineComponent({
       profile,
       iconUrl,
       allowTwitterLink,
+      keepSession,
       form,
       save
     }

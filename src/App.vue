@@ -271,7 +271,7 @@ export default defineComponent({
 @import url("@/style/common-style.css");
 
 .overlay {
-  position: fixed;
+  position:fixed;
   right: 6px;
   z-index: 100;
   text-align: right;
