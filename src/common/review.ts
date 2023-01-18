@@ -166,6 +166,8 @@ export interface TierEditingData {
   name: string
   /** TierのアイコンURL */
   imageBase64: string | undefined
+  /** Tierアイコンを変更したかどうかのフラグ */
+  imageIsChanged: boolean
 
   /** 本文 */
   parags: ReviewParagraph[]
@@ -184,8 +186,10 @@ export interface ReviewEditingData {
   title: string
   /** 作品名や商品名 */
   name: string
-  /** レビューのアイコンURL */
+  /** レビューのアイコンBase64データ */
   iconBase64: string
+  /** レビューアイコンを変更したかどうかのフラグ */
+  iconIsChanged: boolean
   /** レビュー評点 */
   reviewFactors: ReviewFactor[]
   sections: ReviewSection[]
@@ -492,9 +496,11 @@ export class ReviewFunc {
    * @returns リクエストデータ
    */
   static createTierRequestData (tier: Tier) : TierEditingData {
+    const img = base64Api.dataURLToBase64(tier.imageUrl)
     return {
       name: tier.name,
-      imageBase64: base64Api.dataURLToBase64(tier.imageUrl),
+      imageBase64: img.base64,
+      imageIsChanged: img.isChanged,
       parags: ReviewFunc.cloneParags(tier.parags),
       pointType: tier.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)
@@ -508,11 +514,13 @@ export class ReviewFunc {
    * @returns リクエストデータ
    */
   static createReviewRequestData (review: Review, tierId: string) : ReviewEditingData {
+    const img = base64Api.dataURLToBase64(review.iconUrl)
     return {
       tierId: tierId,
       title: review.title,
       name: review.name,
-      iconBase64: base64Api.dataURLToBase64(review.iconUrl),
+      iconBase64: img.base64,
+      iconIsChanged: img.isChanged,
       reviewFactors: ReviewFunc.cloneFactors(review.reviewFactors),
       sections: ReviewFunc.cloneSections(review.sections)
     }

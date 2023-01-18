@@ -40,6 +40,7 @@ export interface UserEditingData {
   name: string
   profile: string
   iconBase64: string
+  iconIsChanged: boolean
   allowTwitterLink: boolean
   keepSession: number
 }
@@ -58,6 +59,7 @@ export interface UserData {
   allowTwitterLink: boolean
 }
 
+/** レビューをダウンロードする際の構造 */
 export interface ReviewData {
   /** review識別ID */
   reviewId: string
@@ -93,6 +95,7 @@ export interface ReviewDataWithParams {
   params: ReviewFactorParam[]
 }
 
+/** Tierをダウンロードする際の構造 */
 export interface TierData {
   /** Tier識別ID */
   tierId: string

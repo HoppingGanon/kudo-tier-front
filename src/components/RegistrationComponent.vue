@@ -19,14 +19,14 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="12" md="8" lg="9" xl="9">
+      <v-col cols="12" sm="12" md="8" lg="8" xl="8">
         <image-selector
           label="アイコン画像を選択してください"
           :aspect-ratio="(1 / 1)"
           @update-cropped-url="$emit('update:iconUrl', $event)"
         />
       </v-col>
-      <v-col cols="6" sm="5" md="4" lg="3" xl="3">
+      <v-col cols="4" sm="4" md="3" lg="3" xl="3">
         <v-avatar v-if="iconUrl === ''" size="100%" class="dahed-box">
           <v-card flat style="aspect-ratio: 1;width: 100%;" class="d-flex align-center justify-center">
             <div>
@@ -35,8 +35,15 @@
           </v-card>
         </v-avatar>
         <v-avatar v-else size="100%">
-          <v-img style="border: 1px solid" height="100%" :src="getImgSource(iconUrl)" />
+          <v-img style="border: 1px solid" height="100%" :src="imgSource" />
         </v-avatar>
+      </v-col>
+      <v-col cols="2" sm="1" md="1" lg="1" xl="1">
+        <v-btn icon flat @click="$emit('update:iconUrl', '')">
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -71,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import rules from '@/common/rules'
 import { getImgSource } from '@/common/restapi'
 import SimpleDialog from '@/components/SimpleDialog.vue'
@@ -142,8 +149,10 @@ export default defineComponent({
     const profValidation = rules.maxLen(userValidation.profileLenMax)
     const checkedValidation = (v: boolean) => v || '登録するには利用規約に同意する必要があります'
 
+    const imgSource = computed(() => getImgSource(props.iconUrl))
+
     return {
-      getImgSource,
+      imgSource,
       iniDialog,
       termDialog,
       requiredValidation,

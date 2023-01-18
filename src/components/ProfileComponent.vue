@@ -4,14 +4,16 @@
       <v-col v-if="isVertical" cols="12" sm="12" md="12" lg="12" xl="12">
         <div class="avatar-space">
           <v-avatar size="100%" @click="goHome" class="cursor-pointer">
-            <v-img :src="getImgSource(iconUrl)" />
+            <v-img v-if="imgSource" :src="imgSource" />
+            <v-img v-else src="@/assets/common/nouserimage256.png" />
           </v-avatar>
         </div>
       </v-col>
       <v-col v-else cols="3" sm="2" md="2" lg="2" xl="2">
         <div>
           <v-avatar size="100%" @click="goHome" class="cursor-pointer">
-            <v-img :src="getImgSource(iconUrl)" />
+            <v-img v-if="imgSource" :src="imgSource" />
+            <v-img v-else src="@/assets/common/nouserimage256.png" />
           </v-avatar>
         </div>
       </v-col>
@@ -65,7 +67,7 @@
 import { TierContentType } from '@/common/page'
 import router from '@/router'
 import { getImgSource } from '@/common/restapi'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ProfileComponent',
@@ -115,7 +117,7 @@ export default defineComponent({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props) {
     return {
-      getImgSource,
+      imgSource: computed(() => getImgSource(props.iconUrl)),
       goHome: () => {
         router.push(`/home/${props.userId}`)
       },

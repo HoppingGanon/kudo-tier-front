@@ -150,10 +150,12 @@ export default defineComponent({
     const save = async () => {
       const validResult = await form.value.validate()
       if (validResult.valid) {
+        const img = Base64Api.dataURLToBase64(iconUrl.value)
         RestApi.updateUser({
           name: dispName.value,
           profile: profile.value,
-          iconBase64: Base64Api.dataURLToBase64(iconUrl.value),
+          iconBase64: img.base64,
+          iconIsChanged: img.isChanged,
           allowTwitterLink: allowTwitterLink.value,
           keepSession: keepSession.value
         }, store.state.userId).then((res) => {

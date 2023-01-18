@@ -135,15 +135,24 @@ export default class Base64Api {
    * @param v DataURL
    * @returns base64
    */
-  static dataURLToBase64 (v: string) : string {
+  static dataURLToBase64 (v: string) : { base64 :string, isChanged: boolean } {
     if (v === '') {
-      return v
+      return {
+        base64: v,
+        isChanged: true
+      }
     }
     const splitedStr = v.split(',')
     if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
-      return splitedStr[1]
+      return {
+        base64: splitedStr[1],
+        isChanged: true
+      }
     } else {
-      return 'nochange'
+      return {
+        base64: v,
+        isChanged: false
+      }
     }
   }
 

@@ -70,10 +70,11 @@ export default defineComponent({
     const submit = async () => {
       const validResult = await form.value.validate()
       if (validResult.valid) {
+        const img = base64Api.dataURLToBase64(iconUrl.value)
         RestApi.createUser({
           name: dispName.value,
           profile: profile.value,
-          iconBase64: base64Api.dataURLToBase64(iconUrl.value),
+          iconBase64: img.base64,
           accept: isCheckedTerms.value
         }).then((res) => {
           isSumitting.value = true
