@@ -50,7 +50,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row v-if="profile">
             <v-col class="mt-3">
               <div :class="isSummary ? 'no-break-box-2' : ''">
                 <span v-text="profile" />

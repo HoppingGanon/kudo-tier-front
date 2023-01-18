@@ -16,7 +16,7 @@
           <v-col>
             <profile-component
               :disp-name="userName"
-              :profile="userProfile"
+              profile=""
               :icon-url="userIconUrl"
               :tiers-count="tiersCount"
               :reviews-count="reviewsCount"
