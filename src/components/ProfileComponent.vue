@@ -38,7 +38,7 @@
           </v-row>
           <v-row v-if="allowTwitterLink">
             <v-col>
-              <v-btn @click="goTwitter" flat color="#00acee" style="text-transform: none">
+              <v-btn @click="goTwitter" flat color="#00acee" class="text-no-transform">
                 <v-icon class="mr-1" color="white">
                   mdi-twitter
                 </v-icon>

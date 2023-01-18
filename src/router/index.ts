@@ -1,4 +1,3 @@
-import RestApi from '@/common/restapi'
 import store from '@/store'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 

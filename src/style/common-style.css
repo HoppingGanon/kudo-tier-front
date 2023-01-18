@@ -90,3 +90,7 @@ a:link.no-link, a:visited.no-link, a:hover.no-link, a:active.no-link  {
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
+
+.text-no-transform {
+  text-transform: none;
+}

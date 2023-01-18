@@ -1,59 +1,52 @@
 <template>
-  <v-toolbar color="secondary">
-    <v-card-title>
-      <b v-if="isNew">
+  <v-card>
+    <v-toolbar color="secondary">
+      <v-card-title v-if="isNew" class="font-weight-bold">
         Tier新規作成
-      </b>
-      <b v-else>
+      </v-card-title>
+      <v-card-title v-else class="font-weight-bold">
         Tier編集
-      </b>
-    </v-card-title>
-    <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
-      <v-btn v-if="tab === 3" icon @click="submit">
-        <v-icon>
-          mdi-send
-        </v-icon>
-      </v-btn>
-      <v-btn v-else icon @click="next(tab)">
-        <v-icon>
-          mdi-arrow-right-drop-circle-outline
-        </v-icon>
-      </v-btn>
-      <v-btn v-if="tab > 0" icon @click="back(tab)">
-        <v-icon>
-          mdi-arrow-left-drop-circle-outline
-        </v-icon>
-      </v-btn>
-    </div>
-    <template v-slot:extension>
-      <v-tabs :model-value="tab" @update:model-value="updateTab($event as number)" centered slider-color="primary" grow>
-        <v-tab>
-          <span :class="tabValidation[0] === 'error' ? 'error-style' : ''">1. Tier概要</span>
-        </v-tab>
-        <v-tab :disabled="tabValidation[1] === 'none'">
-          <span :class="tabValidation[1] === 'error' ? 'error-style' : ''">2. 表示方法</span>
-        </v-tab>
-        <v-tab :disabled="tabValidation[2] === 'none'">
-          <span :class="tabValidation[2] === 'error' ? 'error-style' : ''">3. 評価項目</span>
-        </v-tab>
-        <v-tab :disabled="tabValidation[3] === 'none'">
-          <span :class="tabValidation[3] === 'error' ? 'error-style' : ''">4. プレビュー</span>
-        </v-tab>
-      </v-tabs>
-    </template>
-  </v-toolbar>
+      </v-card-title>
+      <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
+        <v-btn v-if="tab === 3" icon @click="submit">
+          <v-icon>
+            mdi-send
+          </v-icon>
+        </v-btn>
+      </div>
+      <template v-slot:extension>
+        <v-tabs v-model="tab" centered slider-color="primary" grow>
+          <v-tab class="text-no-transform">
+            <span>Tier情報の入力</span>
+          </v-tab>
+          <v-tab>
+            <span>プレビュー</span>
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-toolbar>
+  </v-card>
 
   <v-card flat class="pa-0">
-    <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-      <v-form :ref="forms[0]">
+    <v-form ref="form">
+      <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
         <v-row>
           <v-col>
-            <v-card-title>
-              1.Tier概要
+            <v-card-title class="font-weight-bold">
+              Tier情報の入力
             </v-card-title>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
             <v-card-text>
-              このTierを表す基本的な情報を設定しましょう。
+              このTierの情報を入力してください。
             </v-card-text>
+          </v-col>
+          <v-col class="d-flex flex-row-reverse">
+            <div>
+              <v-switch label="詳細設定を表示する" color="primary" v-model="displayDeatails" />
+            </div>
           </v-col>
         </v-row>
         <v-row>
@@ -95,6 +88,113 @@
           </v-col>
         </v-row>
         <v-row>
+          <v-col>
+            <v-divider />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-container fluid class="ma-0 pa-0">
+              <v-row v-if="displayDeatails">
+                <v-col cols="12" sm="5" md="4" lg="3" xl="2">
+                  <point-type-selector
+                    :model-value="pointType"
+                    @update="$emit('updatePointType', $event)"
+                    :always="true"
+                  />
+                </v-col>
+                <v-col style="vertical-align: top;">
+                  <v-container class="ma-0 pa-0" fluid>
+                    <v-row>
+                      <v-col>
+                        <v-card flat>
+                          <span class="text-h5" v-text="modelValue.pointType" />
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-divider />
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-card class="mt-2" flat>
+                          <span v-show="modelValue.pointType === 'stars'">
+                            0～5つの星の数で6段階のレビューを行います。<br />
+                            シンプルでわかりやすいレビューが可能なため、初心者向けのレビューや簡単なレビューを作成したい場合におすすめです。
+                          </span>
+                          <span v-show="modelValue.pointType === 'rank7'">
+                            E～SSランクで7段階のレビューを行います。<br />
+                            シンプルでわかりやすいレビューが可能なため、初心者向けのレビューや簡単なレビューを作成したい場合におすすめです。
+                          </span>
+                          <span v-show="modelValue.pointType === 'rank14'">
+                            E～SS+のランクで14段階のレビューを行います。<br />
+                            詳細なレビューを作成できるため、こだわりのある分野のレビューを行う場合におすすめです。
+                          </span>
+                          <span v-show="modelValue.pointType === 'score'">
+                            0～10点で11段階のレビューを行います。<br />
+                            評価の大小が分かりやすいため、明確に数値化できるものをレビューしたい場合におすすめです。
+                          </span>
+                          <span v-show="modelValue.pointType === 'point'">
+                            0～100点で101段階のレビューを行います。<br />
+                            評価の大小が分かりやすく、詳細なレビューが可能なため、明確な数値や百分率で表せるものをレビューしたい場合におすすめです。
+                          </span>
+                          <span v-show="modelValue.pointType === 'unlimited'">
+                            0～10000点で10001段階のレビューを行います。<br />
+                            最も詳細にレビューを作成できますが、使用できない機能や表示の制約が多いためレビューには向きません。レビューではなく単純な数値の比較を行う場合におすすめです。
+                          </span>
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <table>
+                          <tr v-for="num of 5" :key="num">
+                            <td>
+                              <span v-text="`サンプル${num} : `"></span>
+                            </td>
+                            <td>
+                              <review-value-display
+                                :value="100 * (5 - num) / 4"
+                                :point-type="modelValue.pointType"
+                                bar-width="200px"
+                                display-size="larger"
+                              />
+                            </td>
+                          </tr>
+                        </table>
+                      </v-col>
+                    </v-row>
+                    <v-col>
+                      <v-divider />
+                    </v-col>
+                  </v-container>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-col>
+        </v-row>
+        <v-row>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card class="pa-1">
+              <weight-settings
+                :params="modelValue.reviewFactorParams"
+                @update-params="updateParams"
+                @add-item="addWeightItemProxy"
+                @update-name="updateWeightNameProxy"
+                @update-is-point="updateWeightIsPointProxy"
+                @update-weight="updateWeightProxy"
+                @remove-item="removeWeightItemProxy"
+                :max-len="tierValidation.paramsLenMax"
+                :rules="[rulesFunc.required(' 項目が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierValidation.paramNameLenMax)]"
+                :required-point="true"
+                :show-details="displayDeatails"
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
           <v-divider class="mt-3 mb-3"></v-divider>
         </v-row>
         <v-row v-if="modelValue.parags.length === 0">
@@ -132,164 +232,41 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-form>
-    </v-container>
+      </v-container>
+    </v-form>
 
     <v-container v-show="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-      <v-form :ref="forms[1]">
-        <v-row>
-          <v-col>
-            <v-card-title>
-              2.表示方法
-            </v-card-title>
-            <v-card-text>
-              レビューやTierの評点を表示する方法を選んでください。
-            </v-card-text>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-divider />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="5" md="4" lg="3" xl="2">
-            <point-type-selector
-              :model-value="pointType"
-              @update="$emit('updatePointType', $event)"
-              :always="true"
-            />
-          </v-col>
-          <v-col style="vertical-align: top;">
-            <v-container class="ma-0 pa-0" fluid>
-              <v-row>
-                <v-col>
-                  <v-card flat>
-                    <span class="text-h5" v-text="modelValue.pointType" />
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-divider />
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-card class="mt-2" flat>
-                    <span v-show="modelValue.pointType === 'stars'">
-                      0～5つの星の数で6段階のレビューを行います。<br />
-                      シンプルでわかりやすいレビューが可能なため、初心者向けのレビューや簡単なレビューを作成したい場合におすすめです。
-                    </span>
-                    <span v-show="modelValue.pointType === 'rank7'">
-                      E～SSランクで7段階のレビューを行います。<br />
-                      シンプルでわかりやすいレビューが可能なため、初心者向けのレビューや簡単なレビューを作成したい場合におすすめです。
-                    </span>
-                    <span v-show="modelValue.pointType === 'rank14'">
-                      E～SS+のランクで14段階のレビューを行います。<br />
-                      詳細なレビューを作成できるため、こだわりのある分野のレビューを行う場合におすすめです。
-                    </span>
-                    <span v-show="modelValue.pointType === 'score'">
-                      0～10点で11段階のレビューを行います。<br />
-                      評価の大小が分かりやすいため、明確に数値化できるものをレビューしたい場合におすすめです。
-                    </span>
-                    <span v-show="modelValue.pointType === 'point'">
-                      0～100点で101段階のレビューを行います。<br />
-                      評価の大小が分かりやすく、詳細なレビューが可能なため、明確な数値や百分率で表せるものをレビューしたい場合におすすめです。
-                    </span>
-                    <span v-show="modelValue.pointType === 'unlimited'">
-                      0～10000点で10001段階のレビューを行います。<br />
-                      最も詳細にレビューを作成できますが、使用できない機能や表示の制約が多いためレビューには向きません。レビューではなく単純な数値の比較を行う場合におすすめです。
-                    </span>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <table>
-                    <tr v-for="num of 5" :key="num">
-                      <td>
-                        <span v-text="`サンプル${num} : `"></span>
-                      </td>
-                      <td>
-                        <review-value-display
-                          :value="100 * (5 - num) / 4"
-                          :point-type="modelValue.pointType"
-                          bar-width="200px"
-                          display-size="larger"
-                        />
-                      </td>
-                    </tr>
-                  </table>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-col>
-        </v-row>
-      </v-form>
-    </v-container>
-
-    <v-container v-show="tab === 2" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-      <v-form :ref="forms[2]">
-        <v-row>
-          <v-col>
-            <v-card-title>
-              3.評価項目
-            </v-card-title>
-            <v-card-text>
-              評価する項目や付加したい情報を設定してください。
-            </v-card-text>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-divider />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <weight-settings
-              :params="modelValue.reviewFactorParams"
-              @update-params="updateParams"
-              @add-item="addWeightItemProxy"
-              @update-name="updateWeightNameProxy"
-              @update-is-point="updateWeightIsPointProxy"
-              @update-weight="updateWeightProxy"
-              @remove-item="removeWeightItemProxy"
-              :max-len="tierValidation.paramsLenMax"
-              :rules="[rulesFunc.required(' 項目が不要な場合は、空白のままにせず右側の×マークで削除してください'), rulesFunc.maxLen(tierValidation.paramNameLenMax)]"
-              :required-point="true"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
-    </v-container>
-
-    <v-container v-show="tab === 3" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-      <v-form :ref="forms[3]">
-        <v-row>
-          <v-col>
-            <tier-component
-              :tier="modelValue"
-              :is-sample="true"
-              :point-type="pointType"
-              display-type="all"
-              :no-header="true"
-              :no-menu-icon="true"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
+      <v-row>
+        <v-col>
+          <v-card-title class="font-weight-bold">
+            プレビュー
+          </v-card-title>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <tier-component
+            :tier="modelValue"
+            :is-sample="true"
+            :point-type="pointType"
+            display-type="all"
+            :no-header="true"
+            :no-menu-icon="true"
+          />
+        </v-col>
+      </v-row>
     </v-container>
 
   </v-card>
   <v-card-actions>
     <v-row class="justify-end ma-5">
-      <v-btn v-show="tab > 0" @click="back(tab)">
-        戻る
+      <v-btn v-show="tab === 0" @click="tab = 1">
+        プレビュー
       </v-btn>
-      <v-btn v-show="tab < 3" @click="next(tab)">
-        次へ
+      <v-btn v-show="tab === 1" @click="tab = 0">
+        情報の入力
       </v-btn>
-      <v-btn v-show="tab == 3" @click="submit">
+      <v-btn @click="submit">
         完了
       </v-btn>
     </v-row>
@@ -298,7 +275,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierValidation, sectionValidation, ReviewSection } from '@/common/review'
-import { computed, defineComponent, PropType, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TierComponent from '@/components/TierComponent.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
@@ -311,8 +288,6 @@ import { useToast } from 'vue-toast-notification'
 import RestApi, { ErrorResponse, getImgSource } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
-import { ValidState } from '@/common/page'
-import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettings',
@@ -396,6 +371,7 @@ export default defineComponent({
     const tab = ref(0)
     const tweetdialog = ref(false)
     const isSubmitting = ref(false)
+    const displayDeatails = ref(false)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -436,77 +412,24 @@ export default defineComponent({
       } as ReviewSection
     })
 
-    const tabValidation = ref([
-      'none',
-      'none',
-      'none',
-      'none'
-    ] as ValidState[])
+    const form = ref()
 
-    // 仕方ないのでisNewを監視して、falseになったらバリデーションをcheckedにすることで更新時には食べの変更ができるようにする
-    const { isNew } = toRefs(props)
-    watch(isNew, () => {
-      if (!isNew.value) {
-        tabValidation.value[0] = 'checked'
-        tabValidation.value[1] = 'checked'
-        tabValidation.value[2] = 'checked'
-        tabValidation.value[3] = 'checked'
-      }
-    })
-
-    const forms = ref([
-      ref(),
-      ref(),
-      ref(),
-      ref()
-    ])
-
-    const valid = async (index: number) => {
+    const valid = async () => {
       let result = false
-      const validResult = await forms.value[index].value.validate()
+      const validResult = await form.value.validate()
 
-      if (index === 2) {
-        // タブ2のみ、ポイント項目があるかどうかチェックを行う
-        result = validResult.valid && props.modelValue.reviewFactorParams.filter((value) => value.isPoint).length !== 0
-      } else {
-        result = validResult.valid
-      }
+      // タブ2のみ、ポイント項目があるかどうかチェックを行う
+      result = validResult.valid && props.modelValue.reviewFactorParams.filter((value) => value.isPoint).length !== 0
 
-      if (result) {
-        tabValidation.value[index] = 'checked'
-      } else {
-        tabValidation.value[index] = 'error'
-      }
       return result
-    }
-
-    const next = async (index: number) => {
-      const result: boolean = await valid(index)
-      if (result) {
-        if (index + 1 < 4) {
-          tab.value++
-          if (tabValidation.value[index + 1] === 'none') {
-            tabValidation.value[index + 1] = 'unknown'
-          }
-        }
-      } else {
-        tabValidation.value[index] = 'error'
-        toast.warning('適切でない入力があります。')
-      }
-    }
-    const back = async (index: number) => {
-      await valid(index)
-      tab.value--
     }
 
     const submit = async () => {
       // 全タブでバリデーションチェックを行う
-      for (let i = 0; i < 4; i++) {
-        if (!await valid(i)) {
-          toast.warning('適切でない入力があります。')
-          tab.value = i
-          return
-        }
+      if (!await valid()) {
+        toast.warning('適切でない入力があります。')
+        tab.value = 0
+        return
       }
       const data = ReviewFunc.createTierRequestData(props.modelValue)
       if (props.isNew) {
@@ -528,11 +451,6 @@ export default defineComponent({
           toast.error(`${v.message}(${v.code})`)
         })
       }
-    }
-
-    const updateTab = async (value: number) => {
-      await valid(tab.value)
-      tab.value = value
     }
 
     // これがないとイベントが設定できない
@@ -566,6 +484,7 @@ export default defineComponent({
       sectionValidation,
       rulesFunc: rules,
       tierValidation,
+      displayDeatails,
       tab,
       tweetdialog,
       updateWeightNameProxy,
@@ -575,13 +494,9 @@ export default defineComponent({
       addWeightItemProxy,
       addParagItemProxy,
       section,
-      forms,
-      tabValidation,
-      next,
-      back,
+      form,
       submit,
       valid,
-      updateTab,
       updateParams
     }
   }

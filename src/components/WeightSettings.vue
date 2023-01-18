@@ -7,13 +7,16 @@
       <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
         <v-container fluid class="ma-0 pa-0">
           <v-row dense>
-            <v-col cols="12" sm="6" md="4" lg="5" xl="6">
+            <v-col v-if="showDetails" cols="12" sm="6" md="4" lg="5" xl="6">
+              <b>項目名</b>
+            </v-col>
+            <v-col v-else cols="12" sm="12" md="7" lg="8" xl="9">
               <b>項目名</b>
             </v-col>
             <v-col cols="12" sm="6" md="3" lg="2" xl="2">
               <b>種類</b>
             </v-col>
-            <v-col cols="12" sm="6" md="3" lg="3" xl="3">
+            <v-col v-if="showDetails" cols="12" sm="6" md="3" lg="3" xl="3">
               <b>重要度</b>
             </v-col>
           </v-row>
@@ -47,7 +50,23 @@
                     <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
                       <v-container fluid class="ma-0 pa-0">
                         <v-row dense>
-                          <v-col cols="12" sm="6" md="4" lg="5" xl="6">
+                          <v-col v-if="showDetails" cols="12" sm="6" md="4" lg="5" xl="6">
+                            <!-- ポイントの説明欄 -->
+                            <div v-if="readonly" class="d-flex align-center" style="height: 100%">
+                              <span v-text="element.name"></span>
+                            </div>
+                            <v-text-field
+                              v-else
+                              label="項目名"
+                              class="mt-1"
+                              :model-value="element.name"
+                              @update:model-value="$emit('updateName', $event, index)"
+                              hint="項目名には短い名前を入力してください"
+                              dense
+                              :rules="rules"
+                            />
+                          </v-col>
+                          <v-col v-else cols="12" sm="12" md="7" lg="8" xl="9">
                             <!-- ポイントの説明欄 -->
                             <div v-if="readonly" class="d-flex align-center" style="height: 100%">
                               <span v-text="element.name"></span>
@@ -78,7 +97,7 @@
                               dense
                             />
                           </v-col>
-                          <v-col v-if="element.isPoint" cols="12" sm="12" md="5" lg="5" xl="4">
+                          <v-col v-if="element.isPoint && showDetails" cols="12" sm="12" md="5" lg="5" xl="4">
                             <!-- ポイントのスライダー -->
                             <v-slider
                               class="mt-4 pt-4"
@@ -167,6 +186,10 @@ export default defineComponent({
     maxLen: {
       type: Number,
       default: 16
+    },
+    showDetails: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {

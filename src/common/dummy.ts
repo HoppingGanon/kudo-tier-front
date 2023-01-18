@@ -6,7 +6,7 @@ export const emptyTier: Tier = {
   userName: '',
   userId: '',
   userIconUrl: '',
-  pointType: 'stars',
+  pointType: 'rank7',
   name: '',
   imageUrl: '',
   parags: [],
@@ -26,7 +26,6 @@ export const emptyReviwew: Review = {
   name: '',
   iconUrl: '',
   reviewFactors: [],
-  pointType: 'stars',
   sections: [],
   createdAt: new Date(),
   updatedAt: new Date()

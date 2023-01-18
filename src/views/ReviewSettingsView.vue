@@ -5,10 +5,10 @@
   <v-container class="pa-0">
     <v-card class="ma-0">
       <v-toolbar color="secondary">
-        <v-card-title v-if="isNew">
+        <v-card-title v-if="isNew" class="font-weight-bold">
           レビュー新規作成
         </v-card-title>
-        <v-card-title v-else>
+        <v-card-title v-else class="font-weight-bold">
           レビュー編集
         </v-card-title>
         <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
@@ -21,7 +21,7 @@
         <template v-slot:extension>
           <v-tabs v-model="tab" centered slider-color="primary" grow>
             <v-tab>
-              <span>編集</span>
+              <span>レビュー情報の入力</span>
             </v-tab>
             <v-tab>
               <span>プレビュー</span>
@@ -34,8 +34,8 @@
         <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
           <v-row>
             <v-col>
-              <v-card-title>
-                編集
+              <v-card-title class="font-weight-bold">
+                レビュー情報の入力
               </v-card-title>
               <v-card-text>
                 このレビューの情報を入力してください。
@@ -92,7 +92,9 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-divider class="mt-3 mb-3"></v-divider>
+            <v-col>
+              <v-divider class="mt-3 mb-3"></v-divider>
+            </v-col>
           </v-row>
           <v-row>
             <v-col>
@@ -156,7 +158,7 @@
       <v-container v-show="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
         <v-row>
           <v-col>
-            <v-card-title>
+            <v-card-title class="font-weight-bold">
               プレビュー
             </v-card-title>
           </v-col>
@@ -180,7 +182,7 @@
             プレビュー
           </v-btn>
           <v-btn v-show="tab == 1" @click="tab = 0">
-            編集画面へ
+            情報の入力
           </v-btn>
           <v-btn @click="submit">
             完了
@@ -335,6 +337,7 @@ export default defineComponent({
       // バリデーションチェックを行う
       if (!await valid()) {
         toast.warning('適切でない入力があります。')
+        tab.value = 0
         return
       }
       if (isNew.value) {
