@@ -57,6 +57,9 @@
                 <v-btn @click="goSearch(tab === 0 ? 'tier' : 'review')">
                   <v-icon>mdi-magnify</v-icon>検索
                 </v-btn>
+                <v-btn v-if="isSelf" @click="goTierSettings" class="text-no-transform">
+                  <v-icon>mdi-plus</v-icon>Tierを追加
+                </v-btn>
               </div>
               <template v-slot:extension>
                 <v-tabs v-model="tab" centered slider-color="primary" grow>
@@ -200,6 +203,7 @@ export default defineComponent({
         tierDataList.forEach((v) => {
           tiers.value.push(Parser.parseTier(v))
         })
+        reloadUser()
       }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
     }
 
@@ -211,22 +215,30 @@ export default defineComponent({
           reviews.value.push(Parser.parseReview(v.review))
           params.value.push(v.params)
         })
+        reloadUser()
       }).catch((e) => {
         const v = e.response.data
         toast.error(`${v.message} (${v.code})`)
       }).finally(() => { isLoadingReviews.value = false })
     }
 
-    onMounted(() => {
+    const reloadUser = () => {
       if (route.params.id && typeof route.params.id === 'string') {
-        isSelf.value = store.state.userId === route.params.id
-        userId.value = route.params.id
         // URIにIDが含まれている場合、ユーザーの情報をダウンロード
         RestApi.getUserData(route.params.id).then((res) => {
           user.value = res.data
         }).catch(() => {
           isNotFound.value = true
         }).finally(() => { isLoadingUser.value = false })
+      }
+    }
+
+    onMounted(() => {
+      if (route.params.id && typeof route.params.id === 'string') {
+        isSelf.value = store.state.userId === route.params.id
+        userId.value = route.params.id
+
+        reloadUser()
 
         // 並行してTierもダウンロードする
         reloadTiers()

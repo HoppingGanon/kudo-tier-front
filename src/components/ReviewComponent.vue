@@ -274,6 +274,11 @@ export default defineComponent({
         icon: 'mdi-pencil-box-outline'
       },
       {
+        value: 'add',
+        text: '新しいレビューを追加',
+        icon: 'mdi-plus'
+      },
+      {
         value: 'delete',
         text: 'レビューを削除',
         icon: 'mdi-trash-can'
@@ -286,9 +291,11 @@ export default defineComponent({
         case 'edit':
           router.push(`/review-settings/${props.review.reviewId}`)
           break
+        case 'add':
+          router.push(`/review-settings-new/${props.review.tierId}`)
+          break
         case 'delete':
           delDialog.value = true
-          emit('reload')
           break
       }
     }
@@ -296,6 +303,7 @@ export default defineComponent({
     const deleteReview = () => {
       RestApi.deleteReview(props.review.reviewId).then(() => {
         toast.success('レビューを削除しました')
+        emit('reload')
       }).catch((e) => {
         toastError(e, toast)
       })

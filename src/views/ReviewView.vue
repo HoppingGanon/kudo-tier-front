@@ -163,6 +163,11 @@ export default defineComponent({
           icon: 'mdi-pencil-box-outline'
         })
         items.push({
+          value: 'add',
+          text: '新しいレビューを追加',
+          icon: 'mdi-plus'
+        })
+        items.push({
           value: 'delete',
           text: 'レビューを削除',
           icon: 'mdi-trash-can'
@@ -178,6 +183,9 @@ export default defineComponent({
           break
         case 'edit':
           router.push(`/review-settings/${review.value.reviewId}`)
+          break
+        case 'add':
+          router.push(`/review-settings-new/${review.value.tierId}`)
           break
         case 'delete':
           delDialog.value = true

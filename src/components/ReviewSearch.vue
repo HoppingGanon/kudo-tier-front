@@ -33,6 +33,7 @@
           display-type="summary"
           :review-factor-params="paramsList"
           :is-loading="isWaiting || isLoading"
+          @reload="update(false)"
         />
       </v-col>
     </v-row>
@@ -222,7 +223,8 @@ export default defineComponent({
       updateText,
       sortItem,
       updateSortItem,
-      isWaiting
+      isWaiting,
+      update
     }
   }
 })

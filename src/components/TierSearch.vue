@@ -27,7 +27,7 @@
     </v-row>
     <v-row v-else>
       <v-col>
-        <tier-list :tiers="tiers" :is-link="true" :is-loading="isLoading || isWaiting" />
+        <tier-list :tiers="tiers" :is-link="true" :is-loading="isLoading || isWaiting" @reload="update(false)" />
       </v-col>
     </v-row>
   </v-container>
@@ -208,7 +208,8 @@ export default defineComponent({
       isWaiting,
       updateText,
       sortItem,
-      updateSortItem
+      updateSortItem,
+      update
     }
   }
 })

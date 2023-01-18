@@ -188,7 +188,7 @@ export default defineComponent({
 
     const menuItems: SelectObject[] = [
       {
-        value: 'add',
+        value: 'add-review',
         text: 'レビューを追加',
         icon: 'mdi-book-plus-outline'
       },
@@ -196,6 +196,11 @@ export default defineComponent({
         value: 'edit',
         text: 'Tierを編集',
         icon: 'mdi-pencil-box-outline'
+      },
+      {
+        value: 'add',
+        text: '新しいTierを追加',
+        icon: 'mdi-table-plus'
       },
       {
         value: 'delete',
@@ -216,11 +221,14 @@ export default defineComponent({
     const delDialog = ref(false)
     const goThere = (page: string) => {
       switch (page) {
-        case 'add':
+        case 'add-review':
           router.push(`/review-settings-new/${props.tier.tierId}`)
           break
         case 'edit':
           router.push(`/tier-settings/${props.tier.tierId}`)
+          break
+        case 'add':
+          router.push('/tier-settings-new')
           break
         case 'delete':
           delDialog.value = true
