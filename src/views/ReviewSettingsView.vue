@@ -5,53 +5,40 @@
   <v-container class="pa-0">
     <v-card class="ma-0">
       <v-toolbar color="secondary">
-        <v-card-title>
+        <v-card-title v-if="isNew">
           レビュー新規作成
         </v-card-title>
+        <v-card-title v-else>
+          レビュー編集
+        </v-card-title>
         <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
-          <v-btn v-if="tab === 3" icon @click="submit">
+          <v-btn icon @click="submit">
             <v-icon>
               mdi-send
             </v-icon>
           </v-btn>
-          <v-btn v-else icon @click="next(tab)">
-            <v-icon>
-              mdi-arrow-right-drop-circle-outline
-            </v-icon>
-          </v-btn>
-          <v-btn v-if="tab > 0" icon @click="back(tab)">
-            <v-icon>
-              mdi-arrow-left-drop-circle-outline
-            </v-icon>
-          </v-btn>
         </div>
         <template v-slot:extension>
-          <v-tabs :model-value="tab" @update:model-value="updateTab" centered slider-color="primary" grow>
+          <v-tabs v-model="tab" centered slider-color="primary" grow>
             <v-tab>
-              <span :class="tabValidation[0] === 'error' ? 'error-style' : ''">1. 概要</span>
+              <span>編集</span>
             </v-tab>
-            <v-tab :disabled="tabValidation[1] === 'none'">
-              <span :class="tabValidation[1] === 'error' ? 'error-style' : ''">2. 評点</span>
-            </v-tab>
-            <v-tab :disabled="tabValidation[2] === 'none'">
-              <span :class="tabValidation[2] === 'error' ? 'error-style' : ''">3. 説明</span>
-            </v-tab>
-            <v-tab :disabled="tabValidation[3] === 'none'">
-              <span :class="tabValidation[3] === 'error' ? 'error-style' : ''">4. プレビュー</span>
+            <v-tab>
+              <span>プレビュー</span>
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
 
-      <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-        <v-form :ref="forms[0]">
+      <v-form ref="form">
+        <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
           <v-row>
             <v-col>
               <v-card-title>
-                1. 概要
+                編集
               </v-card-title>
               <v-card-text>
-                このレビューの概要・情報を入力してください。
+                このレビューの情報を入力してください。
               </v-card-text>
             </v-col>
           </v-row>
@@ -104,22 +91,6 @@
               </v-btn>
             </v-col>
           </v-row>
-        </v-form>
-      </v-container>
-
-      <v-container v-show="tab === 1" flat class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-        <v-form :ref="forms[1]">
-          <v-row>
-            <v-col>
-              <v-card-title>
-                2. 評点
-              </v-card-title>
-              <v-card-text>
-                このレビューの評点を設定してください<br />
-                項目に評点を設定すると、自動的に総合ランクが計算されます
-              </v-card-text>
-            </v-col>
-          </v-row>
           <v-row>
             <v-divider class="mt-3 mb-3"></v-divider>
           </v-row>
@@ -132,21 +103,6 @@
                 @update-point="updatePoint"
                 @update-info="updateInfo"
               />
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-container>
-
-      <v-container v-show="tab === 2" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-        <v-form :ref="forms[2]">
-          <v-row>
-            <v-col>
-              <v-card-title>
-                3. 説明
-              </v-card-title>
-              <v-card-text>
-                このレビューの説明を入力してください
-              </v-card-text>
             </v-col>
           </v-row>
           <v-row>
@@ -195,45 +151,38 @@
               </v-card>
             </v-col>
           </v-row>
-        </v-form>
-      </v-container>
-
-      <v-container v-show="tab === 3" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-        <v-form :ref="forms[3]">
-          <v-row>
-            <v-col>
-              <v-card-title>
-                4. プレビュー
-              </v-card-title>
-              <v-card-text>
-                レビューの最終確認です<br />
-                問題がなければ右下の「完了」を押してください
-              </v-card-text>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <review-component
-                :review="review"
-                :point-type="tier.pointType"
-                display-type="all"
-                :no-header="true"
-                :review-factor-params="tier.reviewFactorParams"
-                :no-change-point="true"
-              />
-            </v-col>
-          </v-row>
-        </v-form>
+        </v-container>
+      </v-form>
+      <v-container v-show="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
+        <v-row>
+          <v-col>
+            <v-card-title>
+              プレビュー
+            </v-card-title>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <review-component
+              :review="review"
+              :point-type="tier.pointType"
+              display-type="all"
+              :no-header="true"
+              :review-factor-params="tier.reviewFactorParams"
+              :no-change-point="true"
+            />
+          </v-col>
+        </v-row>
       </v-container>
       <v-card-actions>
         <v-row class="justify-end ma-5">
-          <v-btn v-show="tab > 0" @click="back(tab)">
-            戻る
+          <v-btn v-show="tab == 0" @click="tab = 1">
+            プレビュー
           </v-btn>
-          <v-btn v-show="tab < 3" @click="next(tab)">
-            次へ
+          <v-btn v-show="tab == 1" @click="tab = 0">
+            編集画面へ
           </v-btn>
-          <v-btn v-show="tab == 3" @click="submit">
+          <v-btn @click="submit">
             完了
           </v-btn>
         </v-row>
@@ -241,29 +190,15 @@
     </v-card>
   </v-container>
 
-  <v-dialog v-model="confirmdialog">
-    <v-container>
-      <v-card>
-        <v-toolbar color="secondary">
-          <v-card-title>
-            確認
-          </v-card-title>
-        </v-toolbar>
-        <v-card-text>
-          見出しがない場合、説明文やリンクは追加できません<br />
-          既に入力がある場合は削除されます
-        </v-card-text>
-        <v-card-actions class="d-flex flex-row-reverse">
-          <v-btn color="primary" dark @click="delAllSections">
-            削除する
-          </v-btn>
-          <v-btn flat  @click="confirmdialog = false">
-            キャンセル
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-container>
-  </v-dialog>
+  <simple-dialog
+    v-model="confirmdialog"
+    title="確認"
+    text="見出しがない場合、説明文やリンクは追加できません"
+    append-text="既に入力がある場合は削除されます"
+    submit-button-text="削除"
+    close-button-text="キャンセル"
+  >
+  </simple-dialog>
 </template>
 
 <script lang="ts">
@@ -274,12 +209,12 @@ import SectionComponent, { additionalItems } from '@/components/SectionComponent
 import MenuButton from '@/components/MenuButton.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
-import { ValidState } from '@/common/page'
 import rules from '@/common/rules'
 import router from '@/router'
 
@@ -291,7 +226,8 @@ export default defineComponent({
     SectionComponent,
     MenuButton,
     ImageSelector,
-    ReviewComponent
+    ReviewComponent,
+    SimpleDialog
   },
   setup () {
     const route = useRoute()
@@ -302,6 +238,7 @@ export default defineComponent({
     const tab = ref(0)
     const confirmdialog = ref(false)
     const isSubmitting = ref(false)
+    const form = ref()
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -314,13 +251,6 @@ export default defineComponent({
         }
       ]
     })
-
-    const tabValidation = ref([
-      'none',
-      'none',
-      'none',
-      'none'
-    ] as ValidState[])
 
     onMounted(() => {
       if (route.params.tid && typeof route.params.tid === 'string') {
@@ -355,10 +285,6 @@ export default defineComponent({
           RestApi.getTier(revres.data.review.tierId).then((res) => {
           // 成功の場合
             review.value = Parser.parseReview(revres.data.review)
-            tabValidation.value[0] = 'checked'
-            tabValidation.value[1] = 'checked'
-            tabValidation.value[2] = 'checked'
-            tabValidation.value[3] = 'checked'
             tier.value = Parser.parseTier(res.data)
             isNew.value = false
           }).catch((e) => {
@@ -397,59 +323,19 @@ export default defineComponent({
       return true
     })
 
-    const forms = ref([
-      ref(),
-      ref(),
-      ref(),
-      ref()
-    ])
-
-    const valid = async (index: number) => {
+    const valid = async () => {
       let result = false
-      const validResult = await forms.value[index].value.validate()
+      const validResult = await form.value.validate()
 
       result = validResult.valid
-
-      if (result) {
-        tabValidation.value[index] = 'checked'
-      } else {
-        tabValidation.value[index] = 'error'
-      }
       return result
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateTab = (v: any) => {
-      valid(tab.value)
-      tab.value = v
-    }
-
-    const next = async (index: number) => {
-      const result: boolean = await valid(index)
-      if (result) {
-        if (index + 1 < 4) {
-          tab.value++
-          if (tabValidation.value[index + 1] === 'none') {
-            tabValidation.value[index + 1] = 'unknown'
-          }
-        }
-      } else {
-        tabValidation.value[index] = 'error'
-        toast.warning('適切でない入力があります。')
-      }
-    }
-    const back = async (index: number) => {
-      await valid(index)
-      tab.value--
-    }
     const submit = async () => {
-      // 全タブでバリデーションチェックを行う
-      for (let i = 0; i < 4; i++) {
-        if (!await valid(i)) {
-          toast.warning('適切でない入力があります。')
-          tab.value = i
-          return
-        }
+      // バリデーションチェックを行う
+      if (!await valid()) {
+        toast.warning('適切でない入力があります。')
+        return
       }
       if (isNew.value) {
         // 新規作成
@@ -577,12 +463,8 @@ export default defineComponent({
       reviewValidation,
       isNew,
       tab,
-      updateTab,
       confirmdialog,
-      tabValidation,
-      forms,
-      next,
-      back,
+      form,
       submit,
       valid,
       tier,

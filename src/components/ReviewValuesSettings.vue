@@ -104,6 +104,22 @@
                         thumb-label
                       />
                       <v-slider
+                        v-else-if="pointType === 'stars'"
+                        :model-value="factor.point"
+                        @update:model-value="$emit('updatePoint', $event, index)"
+                        class="pr-3"
+                        color="primary"
+                        :min="0"
+                        :max="100"
+                        :step="step"
+                        label="評点"
+                        thumb-label
+                      >
+                        <template v-slot:thumb-label>
+                          <span v-text="factor.point !== undefined ? (factor.point / step) : ''" />
+                        </template>
+                      </v-slider>
+                      <v-slider
                         v-else
                         :model-value="factor.point"
                         @update:model-value="$emit('updatePoint', $event, index)"
@@ -111,7 +127,7 @@
                         color="primary"
                         :min="0"
                         :max="100"
-                        :step="step()"
+                        :step="step"
                         label="評点"
                         thumb-label
                       >
@@ -146,7 +162,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { pointTypeTierCountDic, Review, ReviewFactorParam, ReviewFunc, ReviewPointType, reviewValidation } from '@/common/review'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import vuetify from '@/plugins/vuetify'
@@ -185,7 +201,7 @@ export default defineComponent({
     const secondaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.secondary
     const thirdryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry
 
-    const step = () => 100 / (pointTypeTierCountDic[props.pointType] - 1)
+    const step = computed(() => 100 / (pointTypeTierCountDic[props.pointType] - 1))
 
     return {
       reviewValidation,

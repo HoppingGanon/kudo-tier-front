@@ -35,13 +35,14 @@
           </v-card-actions>
         </v-toolbar>
 
-        <tier-component
-          class="pa-1"
-          :tier="tier"
-          :point-type="pointType"
-          @update-point-type="updatePointType"
-          display-type="all"
-        />
+        <div class="pa-1">
+          <tier-component
+            :tier="tier"
+            :point-type="pointType"
+            @update-point-type="updatePointType"
+            display-type="all"
+          />
+        </div>
       </v-card>
     </v-container>
   </padding-component>

@@ -93,7 +93,7 @@
                     <radar-chart
                       :labels="chartLabels"
                       :dataList="chartDataList"
-                      :min="0"
+                      :min="-chartStep"
                       :max="100"
                       :step="chartStep"
                       :show-legend="false"

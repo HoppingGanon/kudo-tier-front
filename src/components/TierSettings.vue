@@ -274,8 +274,6 @@
               display-type="all"
               :no-header="true"
               :no-menu-icon="true"
-              width="100%"
-              min-height="720px"
             />
           </v-col>
         </v-row>

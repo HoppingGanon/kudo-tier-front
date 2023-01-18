@@ -8,7 +8,8 @@
     <v-row v-if="$vuetify.display.xs || $vuetify.display.sm || $vuetify.display.md" >
       <v-col class="d-flex">
         <v-card v-for="review, index in tier.reviews" :key="index" class="mb-1 ml-1 cursor-pointer" width="48px" height="48px" @click="goReview(review.reviewId)">
-          <v-img :src="getImgSource(review.iconUrl)" />
+          <v-img v-if="review.iconUrl" :src="getImgSource(review.iconUrl)" />
+          <v-img v-else src="@/assets/common/noimage256.png"/>
         </v-card>
       </v-col>
     </v-row>

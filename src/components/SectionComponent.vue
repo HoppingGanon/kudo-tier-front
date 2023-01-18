@@ -5,7 +5,7 @@
         <v-col cols="8" sm="9" md="10" lg="10" xl="10">
           <v-text-field
             v-model="title"
-            label="見出し"
+            label="説明文の見出し"
             hint="レビュー説明の見出しを設定してください"
             class="font-weight-bold"
             :rules="[rulesFunc.maxLen(sectionValidation.sectionTitleLen)]"
