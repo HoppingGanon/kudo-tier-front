@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6" sm="7" md="8" lg="9" xl="9">
+      <v-col cols="12" sm="12" md="8" lg="9" xl="9">
         <image-selector
           label="アイコン画像を選択してください"
           :aspect-ratio="(1 / 1)"

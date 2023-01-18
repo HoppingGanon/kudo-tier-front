@@ -36,7 +36,7 @@
         <v-container class="pa-0 ma-0" fluid>
           <draggable v-model="draggedParams" item-key="index" handle=".handle" :disabled="readonly">
             <template #item="{ element, index }">
-              <div class="mt-1 mb-1" :style="index %2 === 0 ? 'background-color: light-gray' : ''">
+              <v-card class="mt-1 mb-1" :style="index %2 === 0 ? 'background-color: light-gray' : ''">
                 <v-container class="pa-0 ma-0" fluid>
                   <v-row dense>
                     <v-col cols="2" sm="1" md="1" lg="1" xl="1" class="mt-3">
@@ -126,7 +126,7 @@
                     </v-col>
                   </v-row>
                 </v-container>
-              </div>
+              </v-card>
             </template>
           </draggable>
         </v-container>

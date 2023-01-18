@@ -131,8 +131,8 @@
     </v-main>
 
     <v-avatar class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
-        <v-icon v-show="barIsVisible" dark>mdi-overscan</v-icon>
-        <v-icon v-show="!barIsVisible" dark>mdi-page-layout-header</v-icon>
+      <v-icon v-show="barIsVisible" dark>mdi-overscan</v-icon>
+      <v-icon v-show="!barIsVisible" dark>mdi-page-layout-header</v-icon>
     </v-avatar>
   </v-app>
 </template>
@@ -280,7 +280,7 @@ export default defineComponent({
 }
 
 .icon1 {
-  top: 68px;
+  top: 8px;
 }
 
 .icon2 {

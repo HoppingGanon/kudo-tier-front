@@ -41,6 +41,11 @@
       <div v-show="tab === 1">
         <v-container fluid class="ma-0 pa-1">
           <v-row>
+            <v-col class="font-weight-bold mt-3">
+              プロフィールにTwitterへのリンクを表示する
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col>
               <div class="mt-1 ml-1">
                 <span class="text-caption">
@@ -53,8 +58,13 @@
             <v-col>
               <v-checkbox
                 v-model="allowTwitterLink"
-                label="プロフィールにTwitterへのリンクを表示する"
+                label="有効"
               />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="font-weight-bold mt-3">
+              セッション保持時間(分)
             </v-col>
           </v-row>
           <v-row>
@@ -71,7 +81,6 @@
               <v-slider
                 v-model="keepSession"
                 class="mr-5"
-                label="セッション保持時間(分)"
                 :step="10"
                 :min="10"
                 :max="1440"

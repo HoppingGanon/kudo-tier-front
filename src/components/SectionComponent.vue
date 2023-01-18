@@ -2,7 +2,7 @@
   <v-card v-if="editable" flat>
     <v-container flat class="ma-0 pa-0">
       <v-row v-if="!hideSectionTitle">
-        <v-col cols="8" sm="9" md="10" lg="10" xl="10">
+        <v-col cols="10" sm="10" md="10" lg="10" xl="10">
           <v-text-field
             v-model="title"
             label="説明文の見出し"
@@ -11,7 +11,7 @@
             :rules="[rulesFunc.maxLen(sectionValidation.sectionTitleLen)]"
           />
         </v-col>
-        <v-col cols="4" sm="3" md="2" lg="2" xl="2">
+        <v-col class="ma-0 pa-0" cols="2" sm="2" md="2" lg="2" xl="2">
           <menu-button :items="additionalItems" @select="(v) => $emit('addObject', v, 0)">
             <template v-slot:button="{ open, props }">
               <v-btn @click="open" v-bind="props" icon flat>
@@ -30,7 +30,7 @@
       >
         <v-col cols="1" sm="1" md="1" lg="1" xl="1">
         </v-col>
-        <v-col cols="7" sm="8" md="9" lg="9" xl="9">
+        <v-col cols="9" sm="9" md="9" lg="9" xl="9">
           <v-textarea
             v-if="parag.type === 'text'"
             :model-value="parag.body"
@@ -46,17 +46,25 @@
             :rules="[rulesFunc.maxLen(sectionValidation.paragLinkLenMax)]"
           />
         </v-col>
-        <v-col cols="4" sm="3" md="2" lg="2" xl="2">
-          <menu-button :items="hideSectionTitle ? additionalItems2 : additionalItems" @select="(v) => $emit('addObject', v, index + 1)">
-            <template v-slot:button="{ open, props }">
-              <v-btn @click="open" v-bind="props" icon flat>
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-          </menu-button>
-          <v-btn icon flat @click="$emit('delParag', index)">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
+        <v-col cols="2" sm="2" md="2" lg="2" xl="2" class="d-flex">
+          <v-container fluid class="ma-0 pa-0">
+            <v-row>
+              <v-col class="ma-0 pa-0" cols="12" sm="12" md="6" lg="3" xl="2">
+                <menu-button :items="hideSectionTitle ? additionalItems2 : additionalItems" @select="(v) => $emit('addObject', v, index + 1)">
+                  <template v-slot:button="{ open, props }">
+                    <v-btn @click="open" v-bind="props" icon flat>
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                </menu-button>
+              </v-col>
+              <v-col class="ma-0 pa-0">
+                <v-btn icon flat @click="$emit('delParag', index)">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
       </v-row>
     </v-container>
