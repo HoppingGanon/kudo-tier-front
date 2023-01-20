@@ -285,7 +285,7 @@ import SectionComponent, { additionalItems2 } from '@/components/SectionComponen
 import MenuButton from '@/components/MenuButton.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
-import RestApi, { ErrorResponse, getImgSource } from '@/common/restapi'
+import RestApi, { ErrorResponse, getImgSource, toastError } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
 
@@ -438,8 +438,7 @@ export default defineComponent({
           isSubmitting.value = true
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
-          const v = e.response.data as ErrorResponse
-          toast.error(`${v.message}(${v.code})`)
+          toastError(e, toast)
         })
       } else {
         RestApi.updateTier(data, props.modelValue.tierId).then((v) => {
@@ -447,8 +446,7 @@ export default defineComponent({
           isSubmitting.value = true
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
-          const v = e.response.data as ErrorResponse
-          toast.error(`${v.message}(${v.code})`)
+          toastError(e, toast)
         })
       }
     }

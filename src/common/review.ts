@@ -12,6 +12,8 @@ export interface ReviewParagraph {
   type: ReviewParagraphType
   /** 構成要素の内容 */
   body: string
+  /** 画像を変更したかどうか */
+  isChanged?: boolean
 }
 
 /**
@@ -497,14 +499,23 @@ export class ReviewFunc {
    */
   static createTierRequestData (tier: Tier) : TierEditingData {
     const img = base64Api.dataURLToBase64(tier.imageUrl)
-    return {
+    const data = {
       name: tier.name,
       imageBase64: img.base64,
       imageIsChanged: img.isChanged,
       parags: ReviewFunc.cloneParags(tier.parags),
       pointType: tier.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)
-    }
+    } as TierEditingData
+
+    data.parags.forEach((parag) => {
+      if (parag.type === 'imageLink') {
+        const bodyinfo = base64Api.dataURLToBase64(parag.body)
+        parag.body = bodyinfo.base64
+        parag.isChanged = bodyinfo.isChanged
+      }
+    })
+    return data
   }
 
   /**
@@ -515,7 +526,8 @@ export class ReviewFunc {
    */
   static createReviewRequestData (review: Review, tierId: string) : ReviewEditingData {
     const img = base64Api.dataURLToBase64(review.iconUrl)
-    return {
+
+    const data = {
       tierId: tierId,
       title: review.title,
       name: review.name,
@@ -524,5 +536,20 @@ export class ReviewFunc {
       reviewFactors: ReviewFunc.cloneFactors(review.reviewFactors),
       sections: ReviewFunc.cloneSections(review.sections)
     }
+
+    let bodyinfo = {
+      base64: '',
+      isChanged: false
+    }
+    data.sections.forEach((section) => {
+      section.parags.forEach((parag) => {
+        if (parag.type === 'imageLink') {
+          bodyinfo = base64Api.dataURLToBase64(parag.body)
+          parag.body = bodyinfo.base64
+          parag.isChanged = bodyinfo.isChanged
+        }
+      })
+    })
+    return data
   }
 }

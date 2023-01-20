@@ -68,7 +68,8 @@ export default defineComponent({
     })
     tier.value.parags.push({
       type: 'text',
-      body: ''
+      body: '',
+      isChanged: false
     })
     let review = ReviewFunc.cloneReview(emptyReviwew)
     review.name = 'サンプル用レビュー1'
@@ -79,7 +80,8 @@ export default defineComponent({
       parags: [
         {
           type: 'text',
-          body: 'サンプルレビューの説明文です\n実際はTier作成後に手動でレビューを追加する必要があります\nまた、このサンプルでは評価項目の評価情報をランダムで設定しています'
+          body: 'サンプルレビューの説明文です\n実際はTier作成後に手動でレビューを追加する必要があります\nまた、このサンプルでは評価項目の評価情報をランダムで設定しています',
+          isChanged: false
         }
       ]
     })
@@ -182,7 +184,8 @@ export default defineComponent({
       if (type !== 'section') {
         tier.value.parags.splice(index, 0, {
           body: '',
-          type: type
+          type: type,
+          isChanged: true
         })
       }
     }
@@ -194,11 +197,14 @@ export default defineComponent({
     const updateParagType = (value: ReviewParagraphType, index: number) => {
       if (index < tier.value.parags.length) {
         tier.value.parags[index].type = value
+        tier.value.parags[index].body = ''
+        tier.value.parags[index].isChanged = true
       }
     }
     const updateParagBody = (value: string, index: number) => {
       if (index < tier.value.parags.length) {
         tier.value.parags[index].body = value
+        tier.value.parags[index].isChanged = true
       }
     }
     const updateParams = (value: ReviewFactorParam[]) => {

@@ -1,10 +1,10 @@
 // import { shallowMount } from '@vue/test-utils'
 import { ReviewFunc } from '@/common/review'
 import base64Api from '@/common/base64api'
-import { tier } from '@/common/dummy'
+import { emptyTier } from '@/common/dummy'
 
 test('ReviewFunc.cloneTier', () => {
-  expect(tier).toEqual(ReviewFunc.cloneTier(tier))
+  expect(emptyTier).toEqual(ReviewFunc.cloneTier(emptyTier))
 })
 
 // 文字列"あいうえお"で比較

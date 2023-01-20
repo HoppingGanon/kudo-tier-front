@@ -45,6 +45,26 @@
             @update="$emit('updateParagBody', $event, index)"
             :rules="[rulesFunc.maxLen(sectionValidation.paragLinkLenMax)]"
           />
+          <v-container v-else-if="parag.type === 'imageLink'">
+            <v-row>
+              <v-col cols="12" sm="12" md="8" lg="7" xl="6">
+                <image-selector
+                  label="レビューのアイコンを設定してください"
+                  :aspect-ratio="(1 / 1)"
+                  @update-cropped-url="$emit('updateParagBody', $event, index)"
+                />
+              </v-col>
+              <v-col cols="8" sm="6" md="5" lg="4" xl="4">
+                <v-img
+                  v-if="parag.body"
+                  :src="getImgSource(parag.body)"
+                />
+                <v-card v-else height="100%" class="dahed-box" flat>
+                  画像を選択するとここに表示されます
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
         <v-col cols="2" sm="2" md="2" lg="2" xl="2" class="d-flex">
           <v-container fluid class="ma-0 pa-0">
@@ -83,6 +103,7 @@
       <span v-if="parag.type === 'twitterLink'">
         <twitter-component :link="parag.body" />
       </span>
+      <v-img v-if="parag.type === 'imageLink' && parag.body != ''" :src="getImgSource(parag.body)" />
     </div>
   </v-card>
   <v-card v-else-if="displayType === 'summary'" class="no-break" flat>
@@ -95,6 +116,7 @@
       <span v-if="section.parags[0].type === 'twitterLink'">
         <twitter-component :link="section.parags[0].body" />
       </span>
+      <v-img v-if="section.parags[0].type === 'imageLink' && section.parags[0].body != ''" :src="section.parags[0].body"></v-img>
     </span>
   </v-card>
 </template>
@@ -105,8 +127,10 @@ import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewValidation
 import TwitterComponent from '@/components/TwitterComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import TweetEmbedder from '@/components/TweetEmbedder.vue'
+import ImageSelector from '@/components/ImageSelector.vue'
 import { SelectObject } from '@/common/page'
 import rules from '@/common/rules'
+import { getImgSource } from '@/common/restapi'
 
 export const additionalItems: SelectObject<ReviewParagraphType | 'section', string>[] = [
   {
@@ -116,6 +140,10 @@ export const additionalItems: SelectObject<ReviewParagraphType | 'section', stri
   {
     text: '説明文',
     value: 'text'
+  },
+  {
+    text: '画像',
+    value: 'imageLink'
   },
   {
     text: 'Twitterリンク',
@@ -129,6 +157,10 @@ export const additionalItems2: SelectObject<ReviewParagraphType | 'section', str
     value: 'text'
   },
   {
+    text: '画像',
+    value: 'imageLink'
+  },
+  {
     text: 'Twitterリンク',
     value: 'twitterLink'
   }
@@ -139,7 +171,8 @@ export default defineComponent({
   components: {
     TwitterComponent,
     MenuButton,
-    TweetEmbedder
+    TweetEmbedder,
+    ImageSelector
   },
   props: {
     section: {
@@ -190,7 +223,8 @@ export default defineComponent({
       rulesFunc: rules,
       reviewValidation,
       additionalItems,
-      additionalItems2
+      additionalItems2,
+      getImgSource
     }
   }
 })

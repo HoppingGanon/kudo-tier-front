@@ -249,7 +249,8 @@ export default defineComponent({
       parags: [
         {
           type: 'text',
-          body: ''
+          body: '',
+          isChanged: false
         }
       ]
     })
@@ -270,6 +271,9 @@ export default defineComponent({
                 info: ''
               })
             }
+          })
+          tier.value.parags.forEach((_, i) => {
+            tier.value.parags[i].isChanged = false
           })
           isNew.value = true
         }).catch((e) => {
@@ -404,7 +408,8 @@ export default defineComponent({
               parags: [
                 {
                   type: value,
-                  body: ''
+                  body: '',
+                  isChanged: false
                 }
               ]
             })
@@ -412,7 +417,8 @@ export default defineComponent({
             review.value.sections[sectionIndex].parags.splice(paragIndex, 0,
               {
                 type: value,
-                body: ''
+                body: '',
+                isChanged: false
               }
             )
           }

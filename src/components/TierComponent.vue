@@ -32,7 +32,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="tier.imageUrl">
         <v-col>
           <v-img :src="getImgSource(tier.imageUrl)" width="100%" />
         </v-col>

@@ -2,7 +2,8 @@
   <div style="display:flex">
     <div class="avatar-space cursor-pointer" @click="goHome">
       <v-avatar size="100%">
-        <v-img :src="getImgSource(iconUrl)"/>
+        <v-img v-if="iconUrl" :src="getImgSource(iconUrl)"/>
+        <v-img v-else src="@/assets/common/noimage256.png"/>
       </v-avatar>
     </div>
     <v-card flat height="100%">
