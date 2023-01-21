@@ -125,22 +125,19 @@
             </v-col>
           </v-row>
           <v-row v-for="section, index in review.sections" :key="index">
-            <v-col>
-              <v-container class="ma-0 pa-0" fluid>
-                <v-row>
-                  <v-col>
-                    <section-component
-                      :section="section"
-                      :editable="true"
-                      @update-title="updateSectionTitle($event, index)"
-                      @update-parag-body="(v: string, j: number) => {updateParagBody(v, index, j)}"
-                      @add-object="(v, j) => addObject(v, index, j, false)"
-                      @del-section="() => delSection(index)"
-                      @del-parag="(i) => delParag(index, i)"
-                    />
-                  </v-col>
-                </v-row>
-              </v-container>
+            <v-col cols="12" sm="12" md="12" lg="12" xl="12">
+              <section-component
+                :section="section"
+                :editable="true"
+                @update-title="updateSectionTitle($event, index)"
+                @update-parag-body="(v: string, j: number) => {updateParagBody(v, index, j)}"
+                @add-object="(v, j) => addObject(v, index, j, false)"
+                @del-section="() => delSection(index)"
+                @del-parag="(i) => delParag(index, i)"
+              />
+            </v-col>
+            <v-col cols="12" sm="12" md="12" lg="12" xl="12">
+              <v-divider class="ml-2 mr-2" />
             </v-col>
           </v-row>
           <v-row v-if="review.sections.length === 0">

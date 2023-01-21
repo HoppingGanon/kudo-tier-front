@@ -8,7 +8,7 @@
         Tier編集
       </v-card-title>
       <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
-        <v-btn v-if="tab === 3" icon @click="submit">
+        <v-btn icon @click="submit">
           <v-icon>
             mdi-send
           </v-icon>
@@ -177,7 +177,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-card class="pa-1">
+            <v-card class="pa-1" flat>
               <weight-settings
                 :params="modelValue.reviewFactorParams"
                 @update-params="updateParams"

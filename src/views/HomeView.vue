@@ -196,17 +196,6 @@ export default defineComponent({
 
     const tab = ref(0)
 
-    const reloadTiers = () => {
-      RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
-        const tierDataList = res.data
-        tiers.value.splice(0)
-        tierDataList.forEach((v) => {
-          tiers.value.push(Parser.parseTier(v))
-        })
-        reloadUser()
-      }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
-    }
-
     const reloadReviews = () => {
       RestApi.getReviewPairs(userId.value, '', 'updatedAtDesc', 1).then((res) => {
         reviews.value.splice(0)
@@ -220,6 +209,20 @@ export default defineComponent({
         const v = e.response.data
         toast.error(`${v.message} (${v.code})`)
       }).finally(() => { isLoadingReviews.value = false })
+    }
+
+    const reloadTiers = () => {
+      RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
+        const tierDataList = res.data
+        tiers.value.splice(0)
+        tierDataList.forEach((v) => {
+          tiers.value.push(Parser.parseTier(v))
+        })
+        reloadUser()
+      }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
+
+      // レビューもリロードする
+      reloadReviews()
     }
 
     const reloadUser = () => {

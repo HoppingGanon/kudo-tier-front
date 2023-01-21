@@ -1,9 +1,10 @@
 <template>
   <v-card v-if="editable" flat>
     <v-container flat class="ma-0 pa-0">
-      <v-row v-if="!hideSectionTitle">
+      <v-row>
         <v-col cols="10" sm="10" md="10" lg="10" xl="10">
           <v-text-field
+            v-if="!hideSectionTitle"
             v-model="title"
             label="説明文の見出し"
             hint="レビュー説明の見出しを設定してください"
@@ -12,14 +13,14 @@
           />
         </v-col>
         <v-col class="ma-0 pa-0" cols="2" sm="2" md="2" lg="2" xl="2">
-          <menu-button :items="additionalItems" @select="(v) => $emit('addObject', v, 0)">
+          <menu-button :items="items" @select="(v) => $emit('addObject', v, 0)">
             <template v-slot:button="{ open, props }">
               <v-btn @click="open" v-bind="props" icon flat>
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
           </menu-button>
-          <v-btn icon flat @click="$emit('delSection')">
+          <v-btn v-if="!hideSectionTitle" icon flat @click="$emit('delSection')">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-col>
@@ -66,11 +67,11 @@
             </v-row>
           </v-container>
         </v-col>
-        <v-col cols="2" sm="2" md="2" lg="2" xl="2" class="d-flex">
+        <v-col cols="2" sm="2" md="2" lg="2" xl="2" class="d-flex align-end">
           <v-container fluid class="ma-0 pa-0">
             <v-row>
               <v-col class="ma-0 pa-0" cols="12" sm="12" md="6" lg="3" xl="2">
-                <menu-button :items="hideSectionTitle ? additionalItems2 : additionalItems" @select="(v) => $emit('addObject', v, index + 1)">
+                <menu-button :items="items" @select="(v) => $emit('addObject', v, index + 1)">
                   <template v-slot:button="{ open, props }">
                     <v-btn @click="open" v-bind="props" icon flat>
                       <v-icon>mdi-plus</v-icon>
@@ -78,13 +79,16 @@
                   </template>
                 </menu-button>
               </v-col>
-              <v-col class="ma-0 pa-0">
+              <v-col class="ma-0 pa-0"  cols="12" sm="12" md="6" lg="3" xl="2">
                 <v-btn icon flat @click="$emit('delParag', index)">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
           </v-container>
+        </v-col>
+        <v-col cols="12" sm="12" md="12" lg="12" xl="12">
+          <v-divider class="ml-5 mr-5" />
         </v-col>
       </v-row>
     </v-container>
@@ -122,7 +126,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewValidation, sectionValidation } from '@/common/review'
 import TwitterComponent from '@/components/TwitterComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
@@ -217,13 +221,12 @@ export default defineComponent({
       }
     }
   },
-  setup () {
+  setup (props) {
     return {
       sectionValidation,
       rulesFunc: rules,
       reviewValidation,
-      additionalItems,
-      additionalItems2,
+      items: computed(() => props.hideSectionTitle ? additionalItems2 : additionalItems),
       getImgSource
     }
   }
