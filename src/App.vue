@@ -72,7 +72,7 @@
           </v-list>
         </v-row>
         <v-row v-if="hasSession">
-          <v-divider class="mt-5 mb-5" />
+          <v-divider class="mt-3" />
         </v-row>
         <v-row v-if="hasSession">
           <v-list class="ml-3 mt-3" width="100%">
@@ -107,7 +107,16 @@
     <v-app-bar app class="pink lighten-4 anime" :style="barStyle">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
-      <v-toolbar-title>Tiereview</v-toolbar-title>
+      <div class="d-flex align-center">
+        <div>
+          <v-img class="ml-1 mr-5" width="40px" src="@/assets/logo.png" />
+        </div>
+        <div>
+          <v-toolbar-title>
+            TierReviews
+          </v-toolbar-title>
+        </div>
+      </div>
     </v-app-bar>
 
     <v-dialog v-model="forceDialog">
@@ -280,7 +289,7 @@ export default defineComponent({
 }
 
 .icon1 {
-  top: 8px;
+  top: 68px;
 }
 
 .icon2 {

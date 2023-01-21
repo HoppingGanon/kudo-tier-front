@@ -11,5 +11,12 @@ module.exports = defineConfig({
     vuetify: {
       // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
     }
+  },
+
+  pages: {
+    index: {
+      entry: 'src/main.ts',
+      title: 'TierReviews'
+    }
   }
 })
