@@ -40,8 +40,8 @@
             hint="Tierの説明文を入力してください"
             :rules="[rulesFunc.maxLen(sectionValidation.paragTextLenMax)]"
           />
-          <tweet-embedder
-            v-else-if="parag.type === 'twitterLink'"
+          <link-editor
+            v-else-if="parag.type === 'serviceLink'"
             :model-value="parag.body"
             @update="$emit('updateParagBody', $event, index)"
             :rules="[rulesFunc.maxLen(sectionValidation.paragLinkLenMax)]"
@@ -50,7 +50,7 @@
             <v-row>
               <v-col cols="12" sm="12" md="8" lg="7" xl="6">
                 <image-selector
-                  label="レビューのアイコンを設定してください"
+                  label="画像ファイルを指定してください"
                   :aspect-ratio="(1 / 1)"
                   @update-cropped-url="$emit('updateParagBody', $event, index)"
                 />
@@ -104,8 +104,8 @@
           <br />
         </span>
       </span>
-      <span v-if="parag.type === 'twitterLink'">
-        <twitter-component :link="parag.body" />
+      <span v-if="parag.type === 'serviceLink'">
+        <link-component :link="parag.body" />
       </span>
       <v-img v-if="parag.type === 'imageLink' && parag.body != ''" :src="getImgSource(parag.body)" />
     </div>
@@ -117,8 +117,8 @@
     <br v-if="section.title" />
     <span v-if="section.parags.length > 0">
       <span v-if="section.parags[0].type === 'text'" v-text="section.parags[0].body"></span>
-      <span v-if="section.parags[0].type === 'twitterLink'">
-        <twitter-component :link="section.parags[0].body" />
+      <span v-if="section.parags[0].type === 'serviceLink'">
+        <link-component :link="section.parags[0].body" />
       </span>
       <v-img v-if="section.parags[0].type === 'imageLink' && section.parags[0].body != ''" :src="section.parags[0].body"></v-img>
     </span>
@@ -128,9 +128,9 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
 import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewValidation, sectionValidation } from '@/common/review'
-import TwitterComponent from '@/components/TwitterComponent.vue'
+import LinkComponent from '@/components/LinkComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
-import TweetEmbedder from '@/components/TweetEmbedder.vue'
+import LinkEditor from '@/components/LinkEditor.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import { SelectObject } from '@/common/page'
 import rules from '@/common/rules'
@@ -150,8 +150,8 @@ export const additionalItems: SelectObject<ReviewParagraphType | 'section', stri
     value: 'imageLink'
   },
   {
-    text: 'Twitterリンク',
-    value: 'twitterLink'
+    text: 'リンク',
+    value: 'serviceLink'
   }
 ]
 
@@ -165,17 +165,17 @@ export const additionalItems2: SelectObject<ReviewParagraphType | 'section', str
     value: 'imageLink'
   },
   {
-    text: 'Twitterリンク',
-    value: 'twitterLink'
+    text: 'リンク',
+    value: 'serviceLink'
   }
 ]
 
 export default defineComponent({
   name: 'SectionComponent',
   components: {
-    TwitterComponent,
+    LinkComponent,
     MenuButton,
-    TweetEmbedder,
+    LinkEditor,
     ImageSelector
   },
   props: {

@@ -19,7 +19,7 @@
           </div>
           <template v-slot:extension>
             <v-tabs v-model="tab" centered slider-color="primary" grow>
-              <v-tab>
+              <v-tab class="text-no-transform">
                 Tier
               </v-tab>
               <v-tab>

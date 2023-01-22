@@ -22,8 +22,12 @@
           </slot>
         </div>
         <v-card-actions class="d-flex flex-row-reverse">
-          <v-btn v-if="showSubmitButton" v-text="submitButtonText" @click="submitProxy" />
-          <v-btn v-if="showCloseButton" v-text="closeButtonText" @click="closeProxy" />
+          <slot name="submit-button">
+            <v-btn v-if="showSubmitButton" v-text="submitButtonText" @click="submitProxy" />
+          </slot>
+          <slot name="close-button">
+            <v-btn v-if="showCloseButton" v-text="closeButtonText" @click="closeProxy" />
+          </slot>
         </v-card-actions>
       </v-card>
   </div>

@@ -29,7 +29,7 @@
 
   <v-card flat class="pa-0">
     <v-form ref="form">
-      <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
+      <v-container v-if="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
         <v-row>
           <v-col>
             <v-card-title class="font-weight-bold">
@@ -235,7 +235,7 @@
       </v-container>
     </v-form>
 
-    <v-container v-show="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
+    <v-container v-if="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
       <v-row>
         <v-col>
           <v-card-title class="font-weight-bold">
@@ -285,7 +285,7 @@ import SectionComponent, { additionalItems2 } from '@/components/SectionComponen
 import MenuButton from '@/components/MenuButton.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
-import RestApi, { ErrorResponse, getImgSource, toastError } from '@/common/restapi'
+import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
 

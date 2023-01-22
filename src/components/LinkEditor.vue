@@ -2,8 +2,9 @@
   <v-container class="ma-0 pa-0" fluid>
     <v-row>
       <v-col cols="12" sm="7" md="6" lg="5" xl="5">
-        <twitter-component
+        <link-component
           :link="twitterLink"
+          :pre-link="modelValue"
         />
       </v-col>
       <v-col
@@ -14,8 +15,8 @@
         :xl="removable ? 6 : 7"
       >
         <v-text-field
-          label="ツイートリンク"
-          hint="埋め込みたいツイートのリンクを指定してください。"
+          label="リンク"
+          hint="埋め込みたいリンクを指定してください。"
           :model-value="modelValue"
           @update:model-value="updateProxy"
           :rules="rules ? rules.concat(linkrule) : linkrule"
@@ -34,12 +35,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
-import TwitterComponent from '@/components/TwitterComponent.vue'
+import LinkComponent, { twitterReg, youtubeReg, linkReg } from '@/components/LinkComponent.vue'
 
 export default defineComponent({
-  name: 'TweetEmbedder',
+  name: 'LinkEditor',
   components: {
-    TwitterComponent
+    LinkComponent
   },
   props: {
     modelValue: {
@@ -77,9 +78,8 @@ export default defineComponent({
       emit('update', value)
     }
 
-    const linkReg = /^https:\/\/twitter\.com\/.*/
     const linkrule = [(v: string) => {
-      return linkReg.test(v) || '不正なリンクです'
+      return twitterReg.test(v) || youtubeReg.test(v) || linkReg.test(v) || '不正なリンクです'
     }]
     return {
       twitterLink,

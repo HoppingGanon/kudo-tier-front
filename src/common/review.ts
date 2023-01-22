@@ -2,7 +2,7 @@ import CommonApi from './commonapi'
 import base64Api from './base64api'
 
 /** レビュー構成要素のタイプ */
-export type ReviewParagraphType = 'text' | 'twitterLink' | 'imageLink'
+export type ReviewParagraphType = 'text' | 'serviceLink' | 'imageLink'
 
 /**
  * セクションの構成要素
@@ -158,7 +158,7 @@ export const sectionValidation = {
   /** 説明文の文字数の上限 */
   paragTextLenMax: 400,
   /** リンクの文字数の長さの上限 */
-  paragLinkLenMax: 100,
+  paragLinkLenMax: 255,
   /** 説明文やリンクの合計数の上限 */
   paragsLenMax: 16
 }

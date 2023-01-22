@@ -109,7 +109,7 @@
       </v-app-bar-nav-icon>
       <div class="d-flex align-center">
         <div>
-          <v-img class="ml-1 mr-5" width="40px" src="@/assets/logo.png" />
+          <v-img class="ml-1 mr-1" width="40px" src="@/assets/logo.png" />
         </div>
         <div>
           <v-toolbar-title>

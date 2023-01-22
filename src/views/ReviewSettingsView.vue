@@ -392,7 +392,7 @@ export default defineComponent({
           )
           break
         case 'text' :
-        case 'twitterLink' :
+        case 'serviceLink' :
         case 'imageLink' :
           if (review.value.sections[sectionIndex].parags.length >= sectionValidation.paragsLenMax) {
             toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
