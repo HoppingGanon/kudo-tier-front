@@ -12,42 +12,46 @@
   </div>
   <div v-else-if="pointType == 'rank7'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" >
     <!--rank7の評価表示 -->
-    <span v-if="point <= 0" class="rank e">E</span>
-    <span v-else-if="point == 1" class="rank d">D</span>
-    <span v-else-if="point == 2" class="rank c">C</span>
-    <span v-else-if="point == 3" class="rank b">B</span>
-    <span v-else-if="point == 4" class="rank a">A</span>
-    <span v-else-if="point == 5" class="rank s">S</span>
-    <span v-else-if="point > 5" class="rank ss">SS</span>
+    <div v-if="point <= 0" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E</div>
+    <div v-else-if="point == 1" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D</div>
+    <div v-else-if="point == 2" class="rank" :class="reverse ? 'reverse r-c' : 'c'">C</div>
+    <div v-else-if="point == 3" class="rank" :class="reverse ? 'reverse r-b' : 'b'">B</div>
+    <div v-else-if="point == 4" class="rank" :class="reverse ? 'reverse r-a' : 'a'">A</div>
+    <div v-else-if="point == 5" class="rank" :class="reverse ? 'reverse r-s' : 's'">S</div>
+    <div v-else-if="point > 5" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS</div>
   </div>
   <div v-else-if="pointType == 'rank14'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" >
     <!-- rank14の評価表示 -->
-    <span v-if="point <= 0" class="rank e">E</span>
-    <span v-else-if="point == 1" class="rank e">E+</span>
-    <span v-else-if="point == 2" class="rank d">D</span>
-    <span v-else-if="point == 3" class="rank d">D+</span>
-    <span v-else-if="point == 4" class="rank c">C</span>
-    <span v-else-if="point == 5" class="rank c">C+</span>
-    <span v-else-if="point == 6" class="rank b">B</span>
-    <span v-else-if="point == 7" class="rank b">B+</span>
-    <span v-else-if="point == 8" class="rank a">A</span>
-    <span v-else-if="point == 9" class="rank a">A+</span>
-    <span v-else-if="point == 10" class="rank s">S</span>
-    <span v-else-if="point == 11" class="rank s">S+</span>
-    <span v-else-if="point == 12" class="rank ss">SS</span>
-    <span v-else-if="point > 12" class="rank ss">SS+</span>
+    <div v-if="point <= 0" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E</div>
+    <div v-else-if="point == 1" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E+</div>
+    <div v-else-if="point == 2" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D</div>
+    <div v-else-if="point == 3" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D+</div>
+    <div v-else-if="point == 4" class="rank" :class="reverse ? 'reverse r-c' : 'c'">C</div>
+    <div v-else-if="point == 5" class="rank" :class="reverse ? 'reverse r-c' : 'c'">C+</div>
+    <div v-else-if="point == 6" class="rank" :class="reverse ? 'reverse r-b' : 'b'">B</div>
+    <div v-else-if="point == 7" class="rank" :class="reverse ? 'reverse r-b' : 'b'">B+</div>
+    <div v-else-if="point == 8" class="rank" :class="reverse ? 'reverse r-a' : 'a'">A</div>
+    <div v-else-if="point == 9" class="rank" :class="reverse ? 'reverse r-a' : 'a'">A+</div>
+    <div v-else-if="point == 10" class="rank" :class="reverse ? 'reverse r-s' : 's'">S</div>
+    <div v-else-if="point == 11" class="rank" :class="reverse ? 'reverse r-s' : 's'">S+</div>
+    <div v-else-if="point == 12" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS</div>
+    <div v-else-if="point > 12" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS+</div>
   </div>
   <div v-else-if="compact">
     <!-- score, point, unlimitedのコンパクト評価表示 -->
     <span class="ml-1" v-text="point"></span>
   </div>
-  <v-card v-else-if="pointType == 'score'" :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 10)" :width="barWidth" >
+  <v-card v-else-if="pointType == 'score'" :width="barWidth" height="100%" >
     <!-- scoreの評価表示 -->
-    <span class="ml-1" v-text="point"></span>
+    <v-card flat :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 10)" height="100%">
+      <span class="ml-1" v-text="point"></span>
+    </v-card>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 100)" :width="barWidth" >
+  <v-card v-else-if="pointType == 'point'" :width="barWidth" height="100%"  >
     <!-- pointの評価表示 -->
-    <span class="ml-1" v-text="point"></span>
+    <v-card flat :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 100)" height="100%" >
+      <span class="ml-1" v-text="point"></span>
+    </v-card>
   </v-card>
   <div v-else-if="pointType == 'unlimited'" :width="barWidth" >
     <!-- unlimitedの評価表示 -->
@@ -85,6 +89,11 @@ export default defineComponent({
     barWidth: {
       type: String as PropType<number | string | undefined>,
       default: undefined
+    },
+    reverse: {
+      /// ランクの表示色を反転する
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -166,6 +175,59 @@ export default defineComponent({
 
 .e{
   color: rgb(255,0,0);
+}
+
+.reverse {
+  color: black;
+  -webkit-text-stroke: 1px white;
+  text-stroke: 1px white;
+}
+
+.r-ss{
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255,0,0) 0% 14.29%,
+    rgb(255,160,0) 28.57% 28.57%,
+    rgb(0,160,0) 42.86% 42.86%,
+    rgb(0,160,255) 57.14% 57.14%,
+    rgb(0,0,255) 71.43% 71.43%,
+    rgb(255,0,255) 85.71% 85.71%,
+    rgb(255,0,0) 100% 100%
+  );
+}
+
+.r-s{
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255,150,0) 0% 25%,
+    rgb(255,240,80) 50% 50%,
+    rgb(255,150,0) 75% 100%
+  );
+}
+
+.r-a{
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(80,180,255) 0% 25%,
+    rgb(200,240,255) 50% 50%,
+    rgb(80,180,255) 75% 100%
+  );
+}
+
+.r-b{
+  background: rgb(60,160,60);
+}
+
+.r-c{
+  background: rgb(200,0,220);
+}
+
+.r-d{
+  background: rgb(160,80,0);
+}
+
+.r-e{
+  background: rgb(255,0,0);
 }
 
 .bar{

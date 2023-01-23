@@ -1,8 +1,13 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <v-row>
+    <v-row class="cursor-pointer" @click="goTier">
       <v-col class="ml-1 mt-1 font-weight-bold">
-        <span v-text="tier.name" class="cursor-pointer" @click="goTier"></span>
+        <span v-text="tier.name"></span>
+      </v-col>
+    </v-row>
+    <v-row class="cursor-pointer" @click="goTier">
+      <v-col>
+        <v-img :src="coverImage"></v-img>
       </v-col>
     </v-row>
     <v-row v-if="$vuetify.display.xs || $vuetify.display.sm || $vuetify.display.md" >
@@ -37,7 +42,7 @@
 import { Tier } from '@/common/review'
 import router from '@/router'
 import { getImgSource } from '@/common/restapi'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 
 export default defineComponent({
   name: 'SimpleTier',
@@ -61,10 +66,14 @@ export default defineComponent({
     const goReview = (reviewId: string) => {
       router.push(`/review/${reviewId}`)
     }
+    const coverImage = computed(() => {
+      return getImgSource(props.tier.imageUrl)
+    })
     return {
       getImgSource,
       goTier,
-      goReview
+      goReview,
+      coverImage
     }
   }
 })

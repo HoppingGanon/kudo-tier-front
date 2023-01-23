@@ -1,11 +1,12 @@
 <template>
   <v-card flat>
     <v-toolbar
+      v-if="!hideBar"
       color="secondary"
       dark
     >
       <!-- 表示形式を変更したりするためのメニューバー -->
-      <v-toolbar-title v-if="!noMenuIcon">
+      <div v-if="!noMenuIcon" style="width: 100%" class="d-flex">
         <point-type-selector
           :model-value="pointType"
           @update="updatePointTypeProxy"
@@ -19,14 +20,14 @@
               </v-icon>
             </v-btn>
           </template>
-          <v-container class="ma-0 pa-0">
+          <v-container :class="$vuetify.display.mobile ? 'ma-0 pa-0' : ''">
             <v-card class="block-center card-h">
               <v-toolbar
                 color="secondary"
                 dark
               >
                 <v-toolbar-title class="font-weight-bold">
-                  評価の重み
+                  項目情報
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="weightMenu = false">
@@ -34,7 +35,7 @@
                 </v-btn>
               </v-toolbar>
               <v-card class="pa-3 scroll" flat height="80vh">
-                <weight-settings :params="params" :readonly="true" />
+                <weight-settings :params="params" :readonly="true" :show-details="true" />
               </v-card>
             </v-card>
           </v-container>
@@ -66,61 +67,46 @@
             </v-list-item>
           </v-list>
         </v-menu>
-      </v-toolbar-title>
+        <div style="width: 100%" class="d-flex flex-row-reverse">
+          <menu-button :items="menuItems" @select="selectMenu">
+            <template v-slot:button="{ props }">
+              <v-btn icon v-bind="props">
+                <v-icon>
+                  mdi-dots-vertical
+                </v-icon>
+              </v-btn>
+            </template>
+          </menu-button>
+        </div>
+      </div>
       <template v-slot:extension>
         <v-tabs
           v-model="tab"
           grow
+          slider-color="primary"
         >
-          <v-tab v-if="pointType !== 'unlimited'">
-            ピボットTier
+          <v-tab v-if="pointType !== 'unlimited'" class="text-no-transform">
+            Tier
           </v-tab>
           <v-tab>
-            評点一覧
+            早見表
           </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
 
     <!-- ピボットしたTier -->
-    <!-- スコアやランク表示 -->
-    <div v-if="tabDisp() === 0">
-      <table
-        width="100%"
-        border="1"
-      >
-        <tr v-for="items, i in tierPivotList" :key="i">
-          <td :style="pivotColor" style="width: 0;white-space: nowrap;">
-            <span v-if="pointType === 'point'" :style="pivotColor">
-              {{ (9 - i)*10 }}点～{{ (10 - i)*10 }}点
-            </span>
-            <v-card v-else flat>
-              <review-value-display
-                :point-type="pointType"
-                :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
-                display-size="larger"
-                bar-width="100px"
-              />
-            </v-card>
-          </td>
-          <td :style="pivotColor" style="min-width: 80%;">
-            <div v-for="item,j in items" :key="j" style="display: inline-block;">
-              <pivot-icon
-                class="ma-1"
-                :infomation="item"
-                :size="iconSize"
-                :point-type="pointType"
-                :review-factor-params="params"
-                />
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <tier-ranking-pivot
+      v-show="tabDisp === 0"
+      :tier-pivot-list="tierPivotList"
+      :params="params"
+      :icon-size="iconSize"
+      :point-type="pointType"
+    />
 
     <!-- Tierランキングテーブル -->
     <EasyDataTable
-      v-if="tabDisp() === 1"
+      v-show="tabDisp === 1"
       header-text-direction="center"
       border-cell
       :headers="headers"
@@ -128,8 +114,8 @@
       :items-per-page="25"
     >
       <template v-slot:body="pageItems">
-        <tr v-for="row,i in pageItems" :key="i" class="text-caption" :style="i % 2 === 0 ? rowColor : ''">
-          <td v-for="col,j,k in row" :key="j" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'">
+        <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer" :style="i % 2 === 0 ? rowColor : ''">
+          <td v-for="col,j,k in row.dictionary" :key="j" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" @click="goTierHash(row.reviewId)">
             <v-card v-if="'' + j == 'name'" v-text="col" flat :style="i % 2 === 0 ? rowColor : ''"></v-card>
             <v-card v-else-if="'' + j == 'ave'" flat :style="i % 2 === 0 ? rowColor : ''">
               <review-value-display
@@ -166,9 +152,11 @@ import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
-import PivotIcon from '@/components/PivotIcon.vue'
+import MenuButton from '@/components/MenuButton.vue'
+import TierRankingPivot, { RankingTheme } from '@/components/TierRankingPivot.vue'
 import vuetify from '@/plugins/vuetify'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
+import { SelectObject } from '@/common/page'
 
 export default defineComponent({
   name: 'TierRanking',
@@ -176,7 +164,8 @@ export default defineComponent({
     ReviewValueDisplay,
     WeightSettings,
     PointTypeSelector,
-    PivotIcon
+    MenuButton,
+    TierRankingPivot
   },
   props: {
     tierId: {
@@ -192,14 +181,21 @@ export default defineComponent({
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true,
-      default: () => [] as PropType<ReviewFactorParam[]>
+      default: () => [] as ReviewFactorParam[]
     },
     pointType: {
       type: String as PropType<ReviewPointType>,
-      required: true,
       default: 'point' as ReviewPointType
     },
     noMenuIcon: {
+      type: Boolean,
+      default: false
+    },
+    theme: {
+      type: String as PropType<RankingTheme>,
+      default: 'light'
+    },
+    hideBar: {
       type: Boolean,
       default: false
     }
@@ -207,7 +203,10 @@ export default defineComponent({
   emits: {
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewPointType) => true
+      value: ReviewPointType) => true,
+    'update:theme': (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: RankingTheme) => true
   },
   setup (props, { emit }) {
     const display = useDisplay()
@@ -240,7 +239,7 @@ export default defineComponent({
 
     // プロパティからテーブルの表示内容を作成
     const reviewValues = computed(() => {
-      const rankingTable: Dictionary<string | number>[] = []
+      const rankingTable: { reviewId: string, dictionary:Dictionary<string | number> }[] = []
       if (props.reviews) {
         const reviews = props.reviews as Review[]
 
@@ -263,7 +262,10 @@ export default defineComponent({
             }
             i++
           })
-          rankingTable.push(rankingRow)
+          rankingTable.push({
+            dictionary: rankingRow,
+            reviewId: review.reviewId
+          })
         })
       }
       return rankingTable
@@ -286,9 +288,9 @@ export default defineComponent({
     const weightMenu = ref(false)
     const iconSizeMenu = ref(false)
 
-    const tabDisp = () => {
+    const tabDisp = computed(() => {
       return props.pointType !== 'unlimited' ? tab.value : 1
-    }
+    })
 
     const updatePointTypeProxy = (pointType: ReviewPointType) => {
       emit('updatePointType', pointType)
@@ -325,6 +327,41 @@ export default defineComponent({
         value: '24px'
       }
     ]
+
+    const menuItems: SelectObject[] = [
+      {
+        text: 'Tier表を画像で保存(beta)',
+        value: 'to-picture'
+      },
+      {
+        text: '他サイトへの埋め込みリンク生成(beta)',
+        value: 'to-embedded'
+      },
+      {
+        text: '情報をCSVとして保存(beta)',
+        value: 'to-csv'
+      },
+      {
+        text: '情報をJSONとして保存(beta)',
+        value: 'to-json'
+      }
+    ]
+
+    const selectMenu = (v: SelectObject) => {
+      switch (v.value) {
+        case 'to-picture':
+          break
+        case 'to-embedded':
+          break
+      }
+    }
+
+    const toPictureDialog = ref(false)
+    const toEmbeddedDialog = ref(false)
+
+    const goTierHash = (reviewId: string) => {
+      window.location.href = `#rev${reviewId}`
+    }
 
     onMounted(() => {
       if (display.xl.value) {
@@ -368,17 +405,18 @@ export default defineComponent({
       /** tierピボットの表示サイズ */
       iconSize,
       /** tierピボットの表示サイズリスト */
-      iconSizeList
+      iconSizeList,
+      /** 三点リーダのメニュー */
+      menuItems,
+      /** 三点リーダのメニュー選択イベント */
+      selectMenu,
+      /** 画像保存ダイアログ */
+      toPictureDialog,
+      /** 埋め込みリンク生成ダイアログ */
+      toEmbeddedDialog,
+      /** Tierの指定したページへ移動する */
+      goTierHash
     }
   }
 })
 </script>
-
-<style scoped>
-.b-right {
-  border-right: 1px solid #D3D3D3;
-}
-.card-h {
-  height: -webkit-calc(100vh - 100px);
-}
-</style>

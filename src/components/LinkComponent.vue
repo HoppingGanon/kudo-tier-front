@@ -67,7 +67,7 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 export const linkReg = /^((http)|(https)):\/\/.*/
 export const twitterReg = /^https:\/\/twitter\.com\/.*/
 export const youtubeReg = /^https:\/\/www\.youtube\.com\/watch\?v=.*/
-export const internalLink = new RegExp(`^${process.env.VUE_APP_BASE_URI}.*`)
+export const internalLink = new RegExp(`^${process.env.VUE_APP_BASE_URI}(/.*|$)`)
 
 export default defineComponent({
   name: 'LinkComponent',
