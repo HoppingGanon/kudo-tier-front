@@ -1,7 +1,7 @@
 <template>
-  <v-list v-if="always">
+  <v-list v-if="always && !isSelect">
     <v-list-item
-      v-for="(item, i) in reviewPointTypeArray"
+      v-for="(item, i) in items"
       :key="i"
       :style="listColor"
       @click="updatePointTypeProxy(item)"
@@ -11,6 +11,13 @@
       <v-list-item-title v-else v-text="item"></v-list-item-title>
     </v-list-item>
   </v-list>
+  <v-select
+    v-if="always && isSelect"
+    label="表示形式"
+    @update:model-value="$emit('update', $event)"
+    :model-value="modelValue"
+    :items="items"
+  />
   <v-menu v-else v-model="menu">
     <template v-slot:activator="{ props}">
       <v-btn flat icon @click="menu = true" v-bind="props">
@@ -29,7 +36,7 @@
         <v-divider></v-divider>
 
         <v-list-item
-          v-for="(item, i) in reviewPointTypeArray"
+          v-for="(item, i) in items"
           :key="i"
           @click="updatePointTypeProxy(item)"
           class="cursor-pointer"
@@ -43,7 +50,7 @@
 
 <script lang="ts">
 import { ReviewPointType, reviewPointTypeArray } from '@/common/review'
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import vuetify from '@/plugins/vuetify'
 
 export default defineComponent({
@@ -56,6 +63,16 @@ export default defineComponent({
     },
     /** trueを指定すると、メニュー表示ではなく常に表示する */
     always: {
+      type: Boolean,
+      default: false as boolean
+    },
+    /** alwaysとこのプロパティを両方trueを指定すると、v-selectで表示する */
+    isSelect: {
+      type: Boolean,
+      default: false as boolean
+    },
+    /** alwaysとこのプロパティを両方trueを指定すると、v-selectで表示する */
+    excludeUnlimited: {
       type: Boolean,
       default: false as boolean
     }
@@ -76,9 +93,16 @@ export default defineComponent({
 
     const listColor = 'background: ' + vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry + ';'
 
+    const items = computed(() => {
+      if (props.excludeUnlimited) {
+        return reviewPointTypeArray.filter((v) => v !== 'unlimited')
+      }
+      return reviewPointTypeArray
+    })
+
     return {
       menu,
-      reviewPointTypeArray,
+      items,
       updatePointTypeProxy,
       listColor
     }

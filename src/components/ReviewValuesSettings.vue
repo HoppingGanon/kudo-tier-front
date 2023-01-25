@@ -23,7 +23,7 @@
           <review-value-display
             :value="ave()"
             :point-type="pointType"
-            display-size="larger"
+            display-size="large2"
           />
         </div>
       </v-col>
@@ -79,7 +79,7 @@
                           v-if="factor.point !== undefined"
                           :value="factor.point"
                           :point-type="pointType"
-                          display-size="larger"
+                          display-size="large2"
                         />
                       </div>
                     </v-col>

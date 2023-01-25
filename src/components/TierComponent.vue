@@ -34,7 +34,7 @@
       </v-row>
       <v-row v-if="tier.imageUrl">
         <v-col>
-          <v-img :src="getImgSource(tier.imageUrl)" width="100%" />
+          <v-img :src="imageUrl" width="100%" />
         </v-col>
       </v-row>
       <v-row>
@@ -61,6 +61,7 @@
             :point-type="pointType"
             :no-menu-icon="noMenuIcon"
             @updatePointType="$emit('updatePointType', $event)"
+            v-model:theme="theme"
           />
         </v-col>
       </v-row>
@@ -101,6 +102,7 @@ import TierRanking from '@/components/TierRanking.vue'
 import SectionComponent from '@/components/SectionComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import { RankingTheme } from '@/components/TierRankingPivot.vue'
 import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
@@ -241,6 +243,10 @@ export default defineComponent({
       return store.state.userId === props.tier.userId
     })
 
+    const imageUrl = computed(() => getImgSource(props.tier.imageUrl))
+
+    const theme = ref('light' as RankingTheme)
+
     return {
       getImgSource,
       lastWriteTime,
@@ -252,7 +258,9 @@ export default defineComponent({
       deleteTier,
       delDialog,
       goThere,
-      isSelf
+      isSelf,
+      imageUrl,
+      theme
     }
   }
 })

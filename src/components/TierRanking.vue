@@ -102,6 +102,7 @@
       :params="params"
       :icon-size="iconSize"
       :point-type="pointType"
+      :theme="theme"
     />
 
     <!-- Tierランキングテーブル -->
@@ -124,7 +125,7 @@
                 :compact="true"
                 :point-type="pointType"
                 :value="col"
-                display-size="larger"
+                display-size="large2"
               />
             </v-card>
             <v-card v-else-if="propsDic['' + j]" style="text-align: center;" flat :style="i % 2 === 0 ? rowColor : ''">
@@ -134,7 +135,7 @@
                   :compact="true"
                   :point-type="pointType"
                   :value="col"
-                  display-size="larger"
+                  display-size="large2"
                 />
               </v-card>
               <span v-else v-text="col"></span>
@@ -176,6 +177,20 @@
       </v-row>
     </v-container>
   </simple-dialog>
+
+  <simple-dialog
+    v-model="toPictureDialog"
+    title="Tier表を画像で保存"
+    submit-button-text="保存"
+    :fullscreen="$vuetify.display.mobile"
+  >
+    <tier-to-picture
+      :theme="theme"
+      @update:theme="$emit('update:theme', $event)"
+      :point-type="pointType"
+      @update-point-type="$emit('updatePointType', $event)"
+    />
+  </simple-dialog>
 </template>
 
 <script lang="ts">
@@ -188,6 +203,7 @@ import MenuButton from '@/components/MenuButton.vue'
 import TierRankingPivot, { RankingTheme } from '@/components/TierRankingPivot.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import TierToPicture from '@/components/TierToPicture.vue'
 import vuetify from '@/plugins/vuetify'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
 import { SelectObject } from '@/common/page'
@@ -205,7 +221,8 @@ export default defineComponent({
     MenuButton,
     TierRankingPivot,
     SimpleDialog,
-    LoadingComponent
+    LoadingComponent,
+    TierToPicture
   },
   props: {
     tier: {
@@ -386,8 +403,10 @@ export default defineComponent({
     const selectMenu = (v: string) => {
       switch (v) {
         case 'to-picture':
+          toPictureDialog.value = true
           break
         case 'to-embedded':
+          toEmbeddedDialog.value = true
           break
         case 'to-json':
           toJsonDialog.value = true
@@ -563,10 +582,15 @@ export default defineComponent({
       goTierHash,
       /** バックアップ処理 */
       backup,
+      /** ダウンロード処理中のフラグ */
       isProcessing,
+      /** ダウンロード中断フラグ */
       stopFlug,
+      /** 処理時のメッセージ */
       processingMessage,
+      /** 処理数 */
       processingIndex,
+      /** 処理全数 */
       processingMax
     }
   }

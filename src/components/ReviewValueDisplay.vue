@@ -1,16 +1,16 @@
 <template>
-  <div v-if="pointType == 'stars'">
+  <div v-if="pointType == 'stars'" :class="iconsize">
     <!-- starsの評価表示 -->
     <span v-if="compact">
-      <v-icon color="orange" dark  :small="displaySize === 'smaller'" :large="displaySize === 'larger'"> mdi-star </v-icon>
+      <v-icon color="orange" dark  :small="displaySize === 'smaller'"> mdi-star </v-icon>
       <span v-text="point"></span>
     </span>
     <span v-else>
-      <v-icon v-for="n of point" :key="n" color="orange" dark :small="displaySize === 'smaller'" :large="displaySize === 'larger'"> mdi-star </v-icon>
-      <v-icon v-for="n of (5 - point)" :key="n" color="black" dark :small="displaySize === 'smaller'" :large="displaySize === 'larger'"> mdi-star </v-icon>
+      <v-icon v-for="n of point" :key="n" color="orange" dark :small="displaySize === 'smaller'"> mdi-star </v-icon>
+      <v-icon v-for="n of (5 - point)" :key="n" color="black" dark :small="displaySize === 'smaller'" > mdi-star </v-icon>
     </span>
   </div>
-  <div v-else-if="pointType == 'rank7'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" >
+  <div v-else-if="pointType == 'rank7'" :class="textsize">
     <!--rank7の評価表示 -->
     <div v-if="point <= 0" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E</div>
     <div v-else-if="point == 1" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D</div>
@@ -20,7 +20,7 @@
     <div v-else-if="point == 5" class="rank" :class="reverse ? 'reverse r-s' : 's'">S</div>
     <div v-else-if="point > 5" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS</div>
   </div>
-  <div v-else-if="pointType == 'rank14'" :class="displaySize === 'normal' ? '' : ('size-' + displaySize)" >
+  <div v-else-if="pointType == 'rank14'" :class="textsize">
     <!-- rank14の評価表示 -->
     <div v-if="point <= 0" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E</div>
     <div v-else-if="point == 1" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E+</div>
@@ -41,19 +41,19 @@
     <!-- score, point, unlimitedのコンパクト評価表示 -->
     <span class="ml-1" v-text="point"></span>
   </div>
-  <v-card v-else-if="pointType == 'score'" :width="barWidth" height="100%" >
+  <v-card v-else-if="pointType == 'score'" :width="barWidth" height="100%" :class="iconsize">
     <!-- scoreの評価表示 -->
     <v-card flat :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 10)" height="100%">
       <span class="ml-1" v-text="point"></span>
     </v-card>
   </v-card>
-  <v-card v-else-if="pointType == 'point'" :width="barWidth" height="100%"  >
+  <v-card v-else-if="pointType == 'point'" :width="barWidth" height="100%"  :class="iconsize">
     <!-- pointの評価表示 -->
     <v-card flat :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 100)" height="100%" >
       <span class="ml-1" v-text="point"></span>
     </v-card>
   </v-card>
-  <div v-else-if="pointType == 'unlimited'" :width="barWidth" >
+  <div v-else-if="pointType == 'unlimited'" :width="barWidth" :class="iconsize">
     <!-- unlimitedの評価表示 -->
     <b><span class="ml-1" v-text="point"></span></b>
   </div>
@@ -64,7 +64,7 @@ import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
 
 export default defineComponent({
-  name: 'ReviewValueStars',
+  name: 'ReviewValueDisplay',
   components: {},
   props: {
     /** 評価ポイントを指定する(元の数値) */
@@ -108,138 +108,74 @@ export default defineComponent({
       const g = percent < 25 ? percent < 10 ? 0 : 255 * percent / 25 : 255
       const b = percent < 50 ? 0 : 255 * (percent - 50) / 50
       return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 0.5) 0% ${percent}%, rgb(127, 127, 127, 0.5) ${percent}% 100%);`
-      // background-color: rgba(0, 255, 255, 0.5);
     }
+
+    const sizeArray = [
+      'text-caption',
+      'text-subtitle-1',
+      'text-h6',
+      'text-h5',
+      'text-h4',
+      'text-h3',
+      'text-h2',
+      'text-h1'
+    ]
+
+    const textsize = computed(() => {
+      switch (props.displaySize) {
+        case 'smaller':
+          return sizeArray[0]
+        case 'normal':
+          return sizeArray[1]
+        case 'large':
+          return sizeArray[2]
+        case 'large2':
+          return sizeArray[3]
+        case 'large3':
+          return sizeArray[4]
+        case 'large4':
+          return sizeArray[5]
+        case 'large5':
+          return sizeArray[6]
+        case 'large6':
+          return sizeArray[7]
+      }
+      return ''
+    })
+
+    const iconsize = computed(() => {
+      switch (props.displaySize) {
+        case 'smaller':
+          return sizeArray[0]
+        case 'normal':
+          return sizeArray[0]
+        case 'large':
+          return sizeArray[1]
+        case 'large2':
+          return sizeArray[1]
+        case 'large3':
+          return sizeArray[2]
+        case 'large4':
+          return sizeArray[2]
+        case 'large5':
+          return sizeArray[3]
+        case 'large6':
+          return sizeArray[3]
+      }
+      return ''
+    })
+
     return {
       point,
-      calcBarStyle
+      calcBarStyle,
+      textsize,
+      iconsize
     }
   }
 })
 </script>
 
 <style scoped>
-.rank {
-  font-weight: bold;
-  font-size: larger;
-}
-
-.ss{
-  color: transparent;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgb(255,0,0) 0% 14.29%,
-    rgb(255,160,0) 28.57% 28.57%,
-    rgb(0,160,0) 42.86% 42.86%,
-    rgb(0,160,255) 57.14% 57.14%,
-    rgb(0,0,255) 71.43% 71.43%,
-    rgb(255,0,255) 85.71% 85.71%,
-    rgb(255,0,0) 100% 100%
-  );
-  background-clip: text;
-}
-
-.s{
-  color: transparent;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgb(255,150,0) 0% 25%,
-    rgb(255,240,80) 50% 50%,
-    rgb(255,150,0) 75% 100%
-  );
-  background-clip: text;
-}
-
-.a{
-  color: transparent;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgb(80,180,255) 0% 25%,
-    rgb(200,240,255) 50% 50%,
-    rgb(80,180,255) 75% 100%
-  );
-  background-clip: text;
-}
-
-.b{
-  color: rgb(60,160,60);
-}
-
-.c{
-  color: rgb(200,0,220);
-}
-
-.d{
-  color: rgb(160,80,0);
-}
-
-.e{
-  color: rgb(255,0,0);
-}
-
-.reverse {
-  color: black;
-  -webkit-text-stroke: 1px white;
-  text-stroke: 1px white;
-}
-
-.r-ss{
-  background: repeating-linear-gradient(
-    -45deg,
-    rgb(255,0,0) 0% 14.29%,
-    rgb(255,160,0) 28.57% 28.57%,
-    rgb(0,160,0) 42.86% 42.86%,
-    rgb(0,160,255) 57.14% 57.14%,
-    rgb(0,0,255) 71.43% 71.43%,
-    rgb(255,0,255) 85.71% 85.71%,
-    rgb(255,0,0) 100% 100%
-  );
-}
-
-.r-s{
-  background: repeating-linear-gradient(
-    -45deg,
-    rgb(255,150,0) 0% 25%,
-    rgb(255,240,80) 50% 50%,
-    rgb(255,150,0) 75% 100%
-  );
-}
-
-.r-a{
-  background: repeating-linear-gradient(
-    -45deg,
-    rgb(80,180,255) 0% 25%,
-    rgb(200,240,255) 50% 50%,
-    rgb(80,180,255) 75% 100%
-  );
-}
-
-.r-b{
-  background: rgb(60,160,60);
-}
-
-.r-c{
-  background: rgb(200,0,220);
-}
-
-.r-d{
-  background: rgb(160,80,0);
-}
-
-.r-e{
-  background: rgb(255,0,0);
-}
-
-.bar{
-  background: linear-gradient(90deg, rgb(0, 255, 255, 0.5) 0% 0%, rgb(127, 127, 127, 0.5) 0% 100%);
-  transition: all 1s both;
-}
-
-.size-larger {
-  font-size: larger;
-}
-.size-smaller {
-  font-size: smaller;
-}
+@import url("@/style/rank.css");
 
 </style>

@@ -124,13 +124,11 @@
       <span v-if="section.parags[0].type === 'serviceLink'">
         <link-component :link="section.parags[0].body" />
       </span>
-      <div style="max-height: 100vw">
-        <v-img
-          v-if="section.parags[0].type === 'imageLink' && section.parags[0].body != ''"
-          :src="section.parags[0].body"
-          :max-height="imgHeight"
-        ></v-img>
-      </div>
+      <!--v-img
+        v-if="section.parags[0].type === 'imageLink' && section.parags[0].body != ''"
+        :src="getImgSource(section.parags[0].body)"
+        :max-height="imgHeight"
+      ></v-img-->
     </span>
   </v-card>
 </template>

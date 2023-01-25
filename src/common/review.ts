@@ -66,7 +66,7 @@ export interface ReviewFactor {
 }
 
 /** レビュー評点の表示サイズ */
-export type PointDisplaySize = 'smaller' | 'normal' | 'larger'
+export type PointDisplaySize = 'smaller' | 'normal' | 'large' | 'large2' | 'large3' | 'large4' | 'large5' | 'large6'
 
 /** レビュー全体 */
 export interface Review {

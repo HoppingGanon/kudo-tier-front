@@ -6,20 +6,24 @@
       class="edge"
     >
       <tr v-for="items, i in tierPivotList" :key="i">
-        <td :style="pivotColor" style="width: 0;white-space: nowrap;" :class="dark ? 'dark-left' : 'light-left'">
-          <span v-if="pointType === 'point'" :style="pivotColor" :class="dark ? 'dark-point' : 'light-point'">
+        <td v-if="pointType === 'point'" :style="pivotColor" style="width: 0px;white-space: nowrap;" :class="dark ? 'dark-left' : 'light-left'">
+          <span :style="pivotColor" :class="dark ? 'dark-point' : 'light-point'" class="">
             {{ (9 - i)*10 }}点～{{ (10 - i)*10 }}点
           </span>
-          <div v-else>
-            <review-value-display
-              :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h5' : ''"
-              :point-type="pointType"
-              :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
-              display-size="larger"
-              bar-width="100px"
-              :reverse="reverse"
-            />
-          </div>
+        </td>
+        <td
+          v-else-if="pointType === 'score' || pointType === 'stars' || (!dark && pointType === 'rank14') || (!dark && pointType === 'rank7')"
+          :style="pivotColor"
+          style="width: 0px;white-space: nowrap;"
+          :class="dark ? 'dark-left' : 'light-left'"
+        >
+          <review-value-display
+            :point-type="pointType"
+            :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
+            display-size="large2"
+            bar-width="100px"
+            :reverse="reverse"
+          />
         </td>
         <td :style="pivotColor" style="min-width: 80%;" :class="dark ? 'dark-right' : 'light-right'">
           <div v-for="item,j in items" :key="j" style="display: inline-block;">
@@ -90,6 +94,7 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+@import url("@/style/rank.css");
 .b-right {
   border-right: 1px solid #D3D3D3;
 }

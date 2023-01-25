@@ -1,0 +1,116 @@
+
+.rank {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.ss{
+  color: transparent;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255,0,0) 0% 14.29%,
+    rgb(255,160,0) 28.57% 28.57%,
+    rgb(0,160,0) 42.86% 42.86%,
+    rgb(0,160,255) 57.14% 57.14%,
+    rgb(0,0,255) 71.43% 71.43%,
+    rgb(255,0,255) 85.71% 85.71%,
+    rgb(255,0,0) 100% 100%
+  );
+  background-clip: text;
+}
+
+.s{
+  color: transparent;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255,150,0) 0% 25%,
+    rgb(255,240,80) 50% 50%,
+    rgb(255,150,0) 75% 100%
+  );
+  background-clip: text;
+}
+
+.a{
+  color: transparent;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(80,180,255) 0% 25%,
+    rgb(200,240,255) 50% 50%,
+    rgb(80,180,255) 75% 100%
+  );
+  background-clip: text;
+}
+
+.b{
+  color: rgb(60,160,60);
+}
+
+.c{
+  color: rgb(200,0,220);
+}
+
+.d{
+  color: rgb(160,80,0);
+}
+
+.e{
+  color: rgb(255,0,0);
+}
+
+.reverse {
+  color: black;
+  -webkit-text-stroke: 1px white;
+  text-stroke: 1px white;
+}
+
+.r-ss{
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255,0,0) 0% 14.29%,
+    rgb(255,160,0) 28.57% 28.57%,
+    rgb(0,160,0) 42.86% 42.86%,
+    rgb(0,160,255) 57.14% 57.14%,
+    rgb(0,0,255) 71.43% 71.43%,
+    rgb(255,0,255) 85.71% 85.71%,
+    rgb(255,0,0) 100% 100%
+  );
+}
+
+.r-s{
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(255,150,0) 0% 25%,
+    rgb(255,240,80) 50% 50%,
+    rgb(255,150,0) 75% 100%
+  );
+}
+
+.r-a{
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(80,180,255) 0% 25%,
+    rgb(200,240,255) 50% 50%,
+    rgb(80,180,255) 75% 100%
+  );
+}
+
+.r-b{
+  background: rgb(60,160,60);
+}
+
+.r-c{
+  background: rgb(200,0,220);
+}
+
+.r-d{
+  background: rgb(160,80,0);
+}
+
+.r-e{
+  background: rgb(255,0,0);
+}
+
+.bar{
+  background: linear-gradient(90deg, rgb(0, 255, 255, 0.5) 0% 0%, rgb(127, 127, 127, 0.5) 0% 100%);
+  transition: all 1s both;
+}

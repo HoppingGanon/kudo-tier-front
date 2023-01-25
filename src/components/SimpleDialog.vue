@@ -1,6 +1,6 @@
 <template>
   <v-dialog :persistent="persistent" :model-value="modelValue" @update:model-value="setValue" :fullscreen="fullscreen">
-    <div width="100%" class="d-flex align-center justify-center">
+    <v-container>
       <v-card :width="width" :height="height">
         <v-toolbar v-if="title !== undefined" color="secondary" class="font-weight-bold">
           <v-card-title v-text="title" />
@@ -30,7 +30,7 @@
           </slot>
         </v-card-actions>
       </v-card>
-  </div>
+    </v-container>
   </v-dialog>
 </template>
 

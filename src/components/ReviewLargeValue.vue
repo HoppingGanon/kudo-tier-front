@@ -19,14 +19,13 @@
             v-if="pointType === 'unlimited'"
             :point-type="pointType"
             :value="sum"
-            display-size="larger"
+            display-size="large3"
           />
           <review-value-display
             v-else
-            :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''"
             :point-type="pointType"
             :value="average"
-            display-size="larger"
+            display-size="large3"
           />
         </v-card>
       </td>
