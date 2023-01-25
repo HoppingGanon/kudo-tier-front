@@ -51,7 +51,6 @@
               <v-col cols="12" sm="12" md="8" lg="7" xl="6">
                 <image-selector
                   label="画像ファイルを指定してください"
-                  :aspect-ratio="(1 / 1)"
                   @update-cropped-url="$emit('updateParagBody', $event, index)"
                 />
               </v-col>
@@ -59,6 +58,7 @@
                 <v-img
                   v-if="parag.body"
                   :src="getImgSource(parag.body)"
+                  :max-height="imgHeight"
                 />
                 <v-card v-else height="100%" class="dahed-box" flat>
                   画像を選択するとここに表示されます
@@ -107,7 +107,11 @@
       <span v-if="parag.type === 'serviceLink'">
         <link-component :link="parag.body" />
       </span>
-      <v-img v-if="parag.type === 'imageLink' && parag.body != ''" :src="getImgSource(parag.body)" />
+      <v-img
+        v-if="parag.type === 'imageLink' && parag.body != ''"
+        :src="getImgSource(parag.body)"
+        :max-height="imgHeight"
+      ></v-img>
     </div>
   </v-card>
   <v-card v-else-if="displayType === 'summary'" class="no-break" flat>
@@ -120,7 +124,13 @@
       <span v-if="section.parags[0].type === 'serviceLink'">
         <link-component :link="section.parags[0].body" />
       </span>
-      <v-img v-if="section.parags[0].type === 'imageLink' && section.parags[0].body != ''" :src="section.parags[0].body"></v-img>
+      <div style="max-height: 100vw">
+        <v-img
+          v-if="section.parags[0].type === 'imageLink' && section.parags[0].body != ''"
+          :src="section.parags[0].body"
+          :max-height="imgHeight"
+        ></v-img>
+      </div>
     </span>
   </v-card>
 </template>
@@ -135,6 +145,7 @@ import ImageSelector from '@/components/ImageSelector.vue'
 import { SelectObject } from '@/common/page'
 import rules from '@/common/rules'
 import { getImgSource } from '@/common/restapi'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 export const additionalItems: SelectObject<ReviewParagraphType | 'section', string>[] = [
   {
@@ -222,12 +233,27 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const display = useDisplay()
     return {
       sectionValidation,
       rulesFunc: rules,
       reviewValidation,
       items: computed(() => props.hideSectionTitle ? additionalItems2 : additionalItems),
-      getImgSource
+      getImgSource,
+      imgHeight: computed(() => {
+        if (display.xs) {
+          return Math.max(360, display.height.value / 2)
+        } else if (display.sm) {
+          return Math.max(360, display.height.value / 2)
+        } else if (display.md) {
+          return Math.max(360, display.height.value / 2)
+        } else if (display.lg) {
+          return Math.max(360, display.height.value / 2)
+        } else if (display.xl) {
+          return Math.max(360, display.height.value / 2)
+        }
+        return Math.max(360, display.height.value / 2)
+      })
     }
   }
 })

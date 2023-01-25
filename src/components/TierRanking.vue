@@ -421,7 +421,9 @@ export default defineComponent({
     history.replaceState(null, '')
 
     onBeforeRouteLeave(() => {
-      toast.warning('Tierデータのダウンロードを中断しました')
+      if (isProcessing.value) {
+        toast.warning('Tierデータのダウンロードを中断しました')
+      }
       stopFlug.value = true
       return true
     })
