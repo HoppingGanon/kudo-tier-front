@@ -10,33 +10,8 @@
       <v-icon v-for="n of (5 - point)" :key="n" color="black" dark :small="displaySize === 'smaller'" > mdi-star </v-icon>
     </span>
   </div>
-  <div v-else-if="pointType == 'rank7'" :class="textsize">
-    <!--rank7の評価表示 -->
-    <div v-if="point <= 0" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E</div>
-    <div v-else-if="point == 1" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D</div>
-    <div v-else-if="point == 2" class="rank" :class="reverse ? 'reverse r-c' : 'c'">C</div>
-    <div v-else-if="point == 3" class="rank" :class="reverse ? 'reverse r-b' : 'b'">B</div>
-    <div v-else-if="point == 4" class="rank" :class="reverse ? 'reverse r-a' : 'a'">A</div>
-    <div v-else-if="point == 5" class="rank" :class="reverse ? 'reverse r-s' : 's'">S</div>
-    <div v-else-if="point > 5" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS</div>
-  </div>
-  <div v-else-if="pointType == 'rank14'" :class="textsize">
-    <!-- rank14の評価表示 -->
-    <div v-if="point <= 0" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E</div>
-    <div v-else-if="point == 1" class="rank" :class="reverse ? 'reverse r-e' : 'e'">E+</div>
-    <div v-else-if="point == 2" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D</div>
-    <div v-else-if="point == 3" class="rank" :class="reverse ? 'reverse r-d' : 'd'">D+</div>
-    <div v-else-if="point == 4" class="rank" :class="reverse ? 'reverse r-c' : 'c'">C</div>
-    <div v-else-if="point == 5" class="rank" :class="reverse ? 'reverse r-c' : 'c'">C+</div>
-    <div v-else-if="point == 6" class="rank" :class="reverse ? 'reverse r-b' : 'b'">B</div>
-    <div v-else-if="point == 7" class="rank" :class="reverse ? 'reverse r-b' : 'b'">B+</div>
-    <div v-else-if="point == 8" class="rank" :class="reverse ? 'reverse r-a' : 'a'">A</div>
-    <div v-else-if="point == 9" class="rank" :class="reverse ? 'reverse r-a' : 'a'">A+</div>
-    <div v-else-if="point == 10" class="rank" :class="reverse ? 'reverse r-s' : 's'">S</div>
-    <div v-else-if="point == 11" class="rank" :class="reverse ? 'reverse r-s' : 's'">S+</div>
-    <div v-else-if="point == 12" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS</div>
-    <div v-else-if="point > 12" class="rank" :class="reverse ? 'reverse r-ss' : 'ss'">SS+</div>
-  </div>
+    <!-- rank7, rank14の評価表示 -->
+  <div v-else-if="pointType == 'rank14' || pointType == 'rank7'" class="rank" :class="reverse ? `reverse ${textsize}` : `${calcRankClass(pointType, point)} ${textsize}`" v-text="calcRankText(pointType, point)"></div>
   <div v-else-if="compact">
     <!-- score, point, unlimitedのコンパクト評価表示 -->
     <span class="ml-1" v-text="point"></span>
@@ -62,6 +37,169 @@
 <script lang="ts">
 import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
+
+/** pointType scoreやpointの際に使用
+ */
+export const calcBarStyle = (p: number, max: number) => {
+  const percent = 100 * p / max
+  const r = percent < 50 ? percent < 10 ? 255 : 175 * (50 - percent) / 40 + 80 : 80
+  const g = percent < 25 ? percent < 10 ? 0 : 255 * percent / 25 : 255
+  const b = percent < 50 ? 0 : 255 * (percent - 50) / 50
+  return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 0.5) 0% ${percent}%, rgb(127, 127, 127, 0.5) ${percent}% 100%);`
+}
+
+export const calcRankClass = (pointType: ReviewPointType, point: number) => {
+  let style = ''
+
+  if (pointType === 'rank14') {
+    switch (point) {
+      case 0:
+        style += 'e'
+        break
+      case 1:
+        style += 'e'
+        break
+      case 2:
+        style += 'd'
+        break
+      case 3:
+        style += 'd'
+        break
+      case 4:
+        style += 'c'
+        break
+      case 5:
+        style += 'c'
+        break
+      case 6:
+        style += 'b'
+        break
+      case 7:
+        style += 'b'
+        break
+      case 8:
+        style += 'a'
+        break
+      case 9:
+        style += 'a'
+        break
+      case 10:
+        style += 's'
+        break
+      case 11:
+        style += 's'
+        break
+      case 12:
+        style += 'ss'
+        break
+      case 13:
+        style += 'ss'
+        break
+    }
+  } else if (pointType === 'rank7') {
+    switch (point) {
+      case 0:
+        style += 'e'
+        break
+      case 1:
+        style += 'd'
+        break
+      case 2:
+        style += 'c'
+        break
+      case 3:
+        style += 'b'
+        break
+      case 4:
+        style += 'a'
+        break
+      case 5:
+        style += 's'
+        break
+      case 6:
+        style += 'ss'
+        break
+    }
+  }
+
+  return style
+}
+export const calcRankText = (pointType: ReviewPointType, point: number) => {
+  let style = ''
+
+  if (pointType === 'rank14') {
+    switch (point) {
+      case 0:
+        style += 'E'
+        break
+      case 1:
+        style += 'E+'
+        break
+      case 2:
+        style += 'D'
+        break
+      case 3:
+        style += 'D+'
+        break
+      case 4:
+        style += 'C'
+        break
+      case 5:
+        style += 'C+'
+        break
+      case 6:
+        style += 'B'
+        break
+      case 7:
+        style += 'B+'
+        break
+      case 8:
+        style += 'A'
+        break
+      case 9:
+        style += 'A+'
+        break
+      case 10:
+        style += 'S'
+        break
+      case 11:
+        style += 'S+'
+        break
+      case 12:
+        style += 'SS'
+        break
+      case 13:
+        style += 'SS+'
+        break
+    }
+  } else if (pointType === 'rank7') {
+    switch (point) {
+      case 0:
+        style += 'E'
+        break
+      case 1:
+        style += 'D'
+        break
+      case 2:
+        style += 'C'
+        break
+      case 3:
+        style += 'B'
+        break
+      case 4:
+        style += 'A'
+        break
+      case 5:
+        style += 'S'
+        break
+      case 6:
+        style += 'SS'
+        break
+    }
+  }
+
+  return style
+}
 
 export default defineComponent({
   name: 'ReviewValueDisplay',
@@ -100,15 +238,6 @@ export default defineComponent({
     const point = computed(() => {
       return ReviewFunc.getReviewDisp(props.value, props.pointType)
     })
-
-    // スコアバーの表示色を決定する
-    const calcBarStyle = (p: number, max: number) => {
-      const percent = 100 * p / max
-      const r = percent < 50 ? percent < 10 ? 255 : 175 * (50 - percent) / 40 + 80 : 80
-      const g = percent < 25 ? percent < 10 ? 0 : 255 * percent / 25 : 255
-      const b = percent < 50 ? 0 : 255 * (percent - 50) / 50
-      return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 0.5) 0% ${percent}%, rgb(127, 127, 127, 0.5) ${percent}% 100%);`
-    }
 
     const sizeArray = [
       'text-caption',
@@ -169,7 +298,9 @@ export default defineComponent({
       point,
       calcBarStyle,
       textsize,
-      iconsize
+      iconsize,
+      calcRankClass,
+      calcRankText
     }
   }
 })

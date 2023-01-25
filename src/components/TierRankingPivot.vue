@@ -12,7 +12,21 @@
           </span>
         </td>
         <td
-          v-else-if="pointType === 'score' || pointType === 'stars' || (!dark && pointType === 'rank14') || (!dark && pointType === 'rank7')"
+          v-else-if="pointType === 'score'"
+          :style="pivotColor"
+          style="width: 0px;white-space: nowrap;"
+          :class="'light-left'"
+        >
+          <review-value-display
+            :point-type="pointType"
+            :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
+            :display-size="textSize"
+            bar-width="100px"
+            :reverse="reverse"
+          />
+        </td>
+        <td
+          v-else-if="pointType === 'stars'"
           :style="pivotColor"
           style="width: 0px;white-space: nowrap;"
           :class="dark ? 'dark-left' : 'light-left'"
@@ -20,7 +34,21 @@
           <review-value-display
             :point-type="pointType"
             :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
-            display-size="large2"
+            :display-size="textSize"
+            bar-width="100px"
+            :reverse="reverse"
+          />
+        </td>
+        <td
+          v-else-if="pointType === 'rank14' || pointType === 'rank7'"
+          :style="pivotColor"
+          style="width: 0px;white-space: nowrap;"
+          :class="(reverse ? 'r-' + calcRankClass(pointType, calcPoint(i)) : (dark ? 'dark-left' : 'light-left'))"
+        >
+          <review-value-display
+            :point-type="pointType"
+            :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
+            :display-size="textSize"
             bar-width="100px"
             :reverse="reverse"
           />
@@ -42,10 +70,10 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
+import { PointDisplaySize, ReviewFactorParam, ReviewFunc, ReviewPointType, TierPivotInfomation } from '@/common/review'
 import { computed, defineComponent, PropType } from 'vue'
 import PivotIcon from '@/components/PivotIcon.vue'
-import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
+import ReviewValueDisplay, { calcRankClass } from '@/components/ReviewValueDisplay.vue'
 
 export type RankingTheme = 'light' | 'dark' | 'light-reverse' | 'dark-reverse'
 
@@ -69,6 +97,10 @@ export default defineComponent({
       type: String,
       default: '48px'
     },
+    textSize: {
+      type: String as PropType<PointDisplaySize>,
+      default: 'large2'
+    },
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       reuired: true,
@@ -84,7 +116,12 @@ export default defineComponent({
     const pivotColor = ''
 
     return {
+      calcRankClass,
       pivotColor,
+      calcPoint: (index: number) => {
+        const v = (props.tierPivotList.length - index - 1) * (100 / (props.tierPivotList.length - 1))
+        return ReviewFunc.getReviewDisp(v, props.pointType)
+      },
       reverse: computed(() => props.theme === 'dark-reverse' || props.theme === 'light-reverse'),
       dark: computed(() => props.theme === 'dark-reverse' || props.theme === 'dark')
     }

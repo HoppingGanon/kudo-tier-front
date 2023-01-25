@@ -185,16 +185,18 @@
     :fullscreen="$vuetify.display.mobile"
   >
     <tier-to-picture
-      :theme="theme"
-      @update:theme="$emit('update:theme', $event)"
-      :point-type="pointType"
-      @update-point-type="$emit('updatePointType', $event)"
+      v-model:theme="picTheme"
+      v-model:point-type="picPointType"
+      v-model:icon-size="picIconSize"
+      v-model:text-size="picTextSize"
+      :params="params"
+      :tier-pivot-list="tierPivotList"
     />
   </simple-dialog>
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed, ref, onMounted, Ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
@@ -211,6 +213,56 @@ import { useToast } from 'vue-toast-notification'
 import { onBeforeRouteLeave } from 'vue-router'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+
+export const iconSizeList = [
+  {
+    text: '特大',
+    value: '96px'
+  },
+  {
+    text: '大',
+    value: '64px'
+  },
+  {
+    text: '普通',
+    value: '48px'
+  },
+  {
+    text: '小',
+    value: '32px'
+  },
+  {
+    text: '最小',
+    value: '24px'
+  }
+]
+
+export const textSizeList = [
+  {
+    text: '最大',
+    value: 'large5'
+  },
+  {
+    text: '特大',
+    value: 'large4'
+  },
+  {
+    text: '大',
+    value: 'large3'
+  },
+  {
+    text: '普通',
+    value: 'large2'
+  },
+  {
+    text: '小',
+    value: 'large'
+  },
+  {
+    text: '最小',
+    value: 'normal'
+  }
+] as SelectObject<PointDisplaySize>[]
 
 export default defineComponent({
   name: 'TierRanking',
@@ -362,28 +414,6 @@ export default defineComponent({
     })
 
     const iconSize = ref('48px' as string)
-    const iconSizeList = [
-      {
-        text: '特大',
-        value: '96px'
-      },
-      {
-        text: '大',
-        value: '64px'
-      },
-      {
-        text: '普通',
-        value: '48px'
-      },
-      {
-        text: '小',
-        value: '32px'
-      },
-      {
-        text: '最小',
-        value: '24px'
-      }
-    ]
 
     const menuItems: SelectObject[] = [
       {
@@ -400,9 +430,18 @@ export default defineComponent({
       }
     ]
 
+    const picTheme = ref(props.theme)
+    const picPointType = ref(props.pointType)
+    const picIconSize = ref(iconSizeList[1].value)
+    const picTextSize = ref(textSizeList[3].value)
+
     const selectMenu = (v: string) => {
       switch (v) {
         case 'to-picture':
+          picTheme.value = props.theme
+          picPointType.value = props.tier.pointType
+          picIconSize.value = iconSizeList[1].value
+          picTextSize.value = textSizeList[3].value
           toPictureDialog.value = true
           break
         case 'to-embedded':
@@ -570,6 +609,14 @@ export default defineComponent({
       iconSizeList,
       /** 三点リーダのメニュー */
       menuItems,
+      /** 画像化の際に使用するポイント表示方法 */
+      picPointType,
+      /** 画像化の際に使用するテーマカラー */
+      picTheme,
+      /** 画像化の際に使用するアイコンサイズ */
+      picIconSize,
+      /** 画像化の際に使用するテキストサイズ */
+      picTextSize,
       /** 三点リーダのメニュー選択イベント */
       selectMenu,
       /** 画像保存ダイアログ */
