@@ -1,5 +1,8 @@
 import CommonApi from './commonapi'
 import base64Api from './base64api'
+import RestApi, { getImgSource, Parser, ReviewDataWithParams, TierData, toastError } from './restapi'
+import { AxiosResponse } from 'axios'
+import { ToastPluginApi } from 'vue-toast-notification'
 
 /** レビュー構成要素のタイプ */
 export type ReviewParagraphType = 'text' | 'serviceLink' | 'imageLink'
@@ -551,5 +554,107 @@ export class ReviewFunc {
       })
     })
     return data
+  }
+
+  static async getTierBackup (
+    tier: Tier,
+    process1?: (index: number, max: number) => boolean,
+    end1?: (max: number) => boolean,
+    start2?: (max: number) => boolean,
+    process2?: (index: number, max: number) => boolean,
+    end2?: (max: number) => boolean
+  ) {
+    const cloneTier = ReviewFunc.cloneTier(tier)
+    cloneTier.reviews.splice(0)
+    let reviewData: AxiosResponse<ReviewDataWithParams>
+    let review: Review
+    let imgres: AxiosResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const images: Dictionary<Blob> = {}
+
+    let i = 0
+    for (const r of tier.reviews) {
+      if (process1 && !process1(i, tier.reviews.length)) {
+        return undefined
+      }
+      reviewData = await RestApi.getReview(r.reviewId)
+      review = Parser.parseReview(reviewData.data.review)
+      cloneTier.reviews.push(review)
+      i++
+    }
+
+    if (end1 && !end1(tier.reviews.length)) {
+      return undefined
+    }
+
+    const process2max = cloneTier.reviews.filter((v) => v.iconUrl).length + cloneTier.imageUrl ? 1 : 0
+    const process3max = cloneTier.parags.filter((v) => v.type === 'imageLink' && v.body).length
+
+    const process4max = cloneTier.reviews.reduce(
+      (a1, v1) => a1 + v1.sections.reduce(
+        (a2, v2) => a2 + v2.parags.filter(
+          (v3) => v3.type === 'imageLink' && v3.body).length, 0), 0)
+
+    const processmax = (cloneTier.imageUrl ? 1 : 0) + process2max + process3max + process4max
+    let index = 0
+
+    if (start2 && !start2(processmax)) {
+      return undefined
+    }
+
+    for (const p of cloneTier.parags) {
+      if (p.type === 'imageLink' && p.body) {
+        if (process2 && !process2(index, processmax)) {
+          return undefined
+        }
+        imgres = await RestApi.getImage(p.body)
+        images[p.body] = imgres.data
+        index++
+      }
+    }
+
+    for (const r of cloneTier.reviews) {
+      if (r.iconUrl) {
+        if (process2 && !process2(index, processmax)) {
+          return undefined
+        }
+        imgres = await RestApi.getImage(r.iconUrl)
+        images[r.iconUrl] = imgres.data
+        index++
+      }
+    }
+
+    if (cloneTier.imageUrl) {
+      if (process2 && !process2(index, processmax)) {
+        return undefined
+      }
+      imgres = await RestApi.getImage(cloneTier.imageUrl)
+      images[cloneTier.imageUrl] = imgres.data
+      index++
+    }
+
+    for (const r of cloneTier.reviews) {
+      for (const s of r.sections) {
+        for (const p of s.parags) {
+          if (p.type === 'imageLink' && p.body) {
+            if (process2 && !process2(index, processmax)) {
+              return undefined
+            }
+            imgres = await RestApi.getImage(p.body)
+            images[p.body] = imgres.data
+            index++
+          }
+        }
+      }
+    }
+
+    if (end2 && !end2(process2max)) {
+      return undefined
+    }
+
+    return {
+      tier: cloneTier,
+      images: images
+    }
   }
 }

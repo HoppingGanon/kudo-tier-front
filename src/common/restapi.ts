@@ -277,6 +277,10 @@ export default class RestApi {
   static deleteReview (reviewId: string) {
     return this.delete(`/review/${reviewId}`)
   }
+
+  static getImage (userFilePath: string) {
+    return axios.get(getImgSource(userFilePath), { responseType: 'blob' })
+  }
 }
 
 export class Parser {

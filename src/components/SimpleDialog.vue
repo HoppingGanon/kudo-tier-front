@@ -111,13 +111,13 @@ export default defineComponent({
     }
 
     const closeProxy = () => {
-      emit('colse')
       setValue(false)
+      emit('colse')
     }
 
     const submitProxy = () => {
-      emit('submit')
       setValue(false)
+      emit('submit')
     }
 
     return {

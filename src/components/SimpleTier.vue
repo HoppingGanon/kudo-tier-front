@@ -22,15 +22,21 @@
       <v-col class="d-flex">
         <v-list width="100%">
           <v-list-item v-for="review, index in tier.reviews" :key="index" class="cursor-pointer" @click="goReview(review.reviewId)">
-            <div style="width: 100%" class="d-flex align-center">
-              <v-card width="48px" height="48px">
-                <v-img v-if="review.iconUrl" :src="getImgSource(review.iconUrl)" />
-                <v-img v-else src="@/assets/common/noimage256.png"/>
-              </v-card>
-              <div class="ml-2">
-                <span v-text="review.name" />
-              </div>
-            </div>
+            <table style="width: 100%">
+              <tr>
+                <td width="48px">
+                  <v-card>
+                    <v-img v-if="review.iconUrl" :src="getImgSource(review.iconUrl)" />
+                    <v-img v-else src="@/assets/common/noimage256.png"/>
+                  </v-card>
+                </td>
+                <td class="d-flex justify-start align-center">
+                  <div class="no-break-box-2">
+                    <span v-text="review.name" />
+                  </div>
+                </td>
+              </tr>
+            </table>
           </v-list-item>
         </v-list>
       </v-col>

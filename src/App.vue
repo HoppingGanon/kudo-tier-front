@@ -107,7 +107,7 @@
     <v-app-bar app class="pink lighten-4 anime" :style="barStyle">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
-      <div class="d-flex align-center">
+      <div class="d-flex align-center" style="width: 100%;">
         <div>
           <v-img class="ml-1 mr-1" width="40px" src="@/assets/logo.png" />
         </div>
@@ -115,6 +115,11 @@
           <v-toolbar-title>
             TierReviews
           </v-toolbar-title>
+        </div>
+        <div style="width: 100%" class="d-flex justify-end">
+          <v-btn icon @click="clickHideBarIcon">
+            <v-icon dark class="anime" :class="barIsVisible ? 'arrow1' : 'arrow2'">mdi-chevron-up</v-icon>
+          </v-btn>
         </div>
       </div>
     </v-app-bar>
@@ -140,8 +145,7 @@
     </v-main>
 
     <v-avatar class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
-      <v-icon v-show="barIsVisible" dark>mdi-overscan</v-icon>
-      <v-icon v-show="!barIsVisible" dark>mdi-page-layout-header</v-icon>
+      <v-icon dark>mdi-page-layout-header</v-icon>
     </v-avatar>
   </v-app>
 </template>
@@ -289,7 +293,7 @@ export default defineComponent({
 }
 
 .icon1 {
-  top: 68px;
+  top: -60px;
 }
 
 .icon2 {
@@ -302,6 +306,14 @@ export default defineComponent({
 
 .anime {
   transition: all 0.25s ease-out;
+}
+
+.arrow1 {
+  rotate: 0deg;
+}
+
+.arrow2 {
+  rotate: 180deg;
 }
 
 </style>

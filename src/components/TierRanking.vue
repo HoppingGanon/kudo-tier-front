@@ -144,19 +144,57 @@
       </template>
     </EasyDataTable>
   </v-card>
+
+  <simple-dialog v-model="toJsonDialog" title="Tierのダウンロード" @submit="backup" :persistent="true">
+    <v-container>
+      <v-row>
+        <v-col>
+          TierをJSON形式に変換し、画像とともにzip形式でダウンロードします
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="ml-5">
+          ※この処理には数分間かかる可能性があります
+        </v-col>
+      </v-row>
+      <v-row v-show="isProcessing">
+        <v-col>
+          <loading-component />
+        </v-col>
+      </v-row>
+      <v-row v-show="isProcessing && processingMessage">
+        <v-col>
+          <span v-text="processingMessage" />
+        </v-col>
+      </v-row>
+      <v-row v-show="isProcessing && processingMax">
+        <v-col>
+          <span>
+            {{ processingIndex }}/{{ processingMax }}ファイル
+          </span>
+        </v-col>
+      </v-row>
+    </v-container>
+  </simple-dialog>
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType } from '@/common/review'
-import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier } from '@/common/review'
+import { defineComponent, PropType, computed, ref, onMounted, Ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import TierRankingPivot, { RankingTheme } from '@/components/TierRankingPivot.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import vuetify from '@/plugins/vuetify'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
 import { SelectObject } from '@/common/page'
+import { useToast } from 'vue-toast-notification'
+import { onBeforeRouteLeave } from 'vue-router'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
 
 export default defineComponent({
   name: 'TierRanking',
@@ -165,13 +203,14 @@ export default defineComponent({
     WeightSettings,
     PointTypeSelector,
     MenuButton,
-    TierRankingPivot
+    TierRankingPivot,
+    SimpleDialog,
+    LoadingComponent
   },
   props: {
-    tierId: {
-      type: String,
-      required: true,
-      default: ''
+    tier: {
+      type: Object as PropType<Tier>,
+      required: true
     },
     reviews: {
       type: Array as PropType<Review[]>,
@@ -210,6 +249,7 @@ export default defineComponent({
   },
   setup (props, { emit }) {
     const display = useDisplay()
+    const toast = useToast()
 
     // プロパティからテーブルヘッダを作成
     const headers = computed(() => {
@@ -300,7 +340,7 @@ export default defineComponent({
     }
 
     const tierPivotList = computed(() => {
-      const val = ReviewFunc.makeTierPivot(props.reviews, props.params, props.tierId, props.pointType)
+      const val = ReviewFunc.makeTierPivot(props.reviews, props.params, props.tier.tierId, props.pointType)
       return val
     })
 
@@ -338,26 +378,26 @@ export default defineComponent({
         value: 'to-embedded'
       },
       {
-        text: '情報をCSVとして保存(beta)',
-        value: 'to-csv'
-      },
-      {
-        text: '情報をJSONとして保存(beta)',
+        text: 'Tierのダウンロード(beta)',
         value: 'to-json'
       }
     ]
 
-    const selectMenu = (v: SelectObject) => {
-      switch (v.value) {
+    const selectMenu = (v: string) => {
+      switch (v) {
         case 'to-picture':
           break
         case 'to-embedded':
+          break
+        case 'to-json':
+          toJsonDialog.value = true
           break
       }
     }
 
     const toPictureDialog = ref(false)
     const toEmbeddedDialog = ref(false)
+    const toJsonDialog = ref(false)
 
     const goTierHash = (reviewId: string) => {
       window.location.href = `#rev${reviewId}`
@@ -376,6 +416,107 @@ export default defineComponent({
         iconSize.value = iconSizeList[2].value
       }
     })
+
+    // これがないとイベントが設定できない
+    history.replaceState(null, '')
+
+    onBeforeRouteLeave(() => {
+      toast.warning('Tierデータのダウンロードを中断しました')
+      stopFlug.value = true
+      return true
+    })
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const toJsonProcess: Ref<Promise<void> | undefined> = ref(undefined)
+    const isProcessing = ref(false)
+    const stopFlug = ref(false)
+    const processingMessage = ref('')
+    const processingIndex = ref(0)
+    const processingMax = ref(0)
+
+    const toJson = async () => {
+      processingMessage.value = 'レビュー情報をダウンロードしています...'
+      processingIndex.value = 0
+      processingMax.value = 0
+      stopFlug.value = false
+      const data = await ReviewFunc.getTierBackup(
+        props.tier,
+        (index, max) => {
+          // 1つめの処理中
+          processingIndex.value = index
+          processingMax.value = max
+          setTimeout(() => true, 250)
+          return !stopFlug.value
+        },
+        (max) => {
+          // 1つめの処理終了
+          processingIndex.value = max
+          processingMax.value = max
+          processingMessage.value = 'レビュー情報をダウンロードしました'
+          return !stopFlug.value
+        },
+        (max) => {
+          // 2つめの処理開始
+          processingMessage.value = '画像をダウンロードしています...'
+          processingIndex.value = 0
+          processingMax.value = max
+          return !stopFlug.value
+        },
+        (index, max) => {
+          // 2つめの処理中
+          processingIndex.value = index
+          processingMax.value = max
+          return !stopFlug.value
+        },
+        (max) => {
+          // 2つめの処理終了
+          processingIndex.value = max
+          processingMax.value = max
+          processingMessage.value = '画像をダウンロードしました'
+          return !stopFlug.value
+        }
+      )
+
+      if (stopFlug.value) {
+        toast.warning('Tierデータのダウンロードを中断しました')
+        stopFlug.value = false
+        isProcessing.value = false
+        return
+      } else if (!data) {
+        toast.warning('Tierデータのダウンロードを中断しました')
+        stopFlug.value = false
+        isProcessing.value = false
+        return
+      }
+
+      processingMessage.value = 'ZIPファイルを作成しています...'
+      processingIndex.value = 0
+      processingMax.value = 0
+      const zip = new JSZip()
+
+      zip.file(`tier/${props.tier.tierId}.json`, JSON.stringify(data.tier))
+
+      const keys = Object.keys(data.images)
+      keys.forEach((key) => {
+        zip.file(key, data.images[key])
+      })
+      const zipfile = await zip.generateAsync({ type: 'blob' })
+      saveAs(zipfile, `tier_${props.tier.tierId}.zip`)
+
+      processingMessage.value = ''
+      processingIndex.value = 0
+      processingMax.value = 0
+      isProcessing.value = false
+
+      toast.success('Tierデータのダウンロードが完了しました')
+      toJsonDialog.value = false
+    }
+
+    const backup = async () => {
+      toJsonDialog.value = true
+      isProcessing.value = true
+      toJsonProcess.value = toJson()
+    }
 
     return {
       /** ヘッダー情報を加工して列挙した配列 */
@@ -414,8 +555,17 @@ export default defineComponent({
       toPictureDialog,
       /** 埋め込みリンク生成ダイアログ */
       toEmbeddedDialog,
+      /** バックアップ前の選択ダイアログ */
+      toJsonDialog,
       /** Tierの指定したページへ移動する */
-      goTierHash
+      goTierHash,
+      /** バックアップ処理 */
+      backup,
+      isProcessing,
+      stopFlug,
+      processingMessage,
+      processingIndex,
+      processingMax
     }
   }
 })

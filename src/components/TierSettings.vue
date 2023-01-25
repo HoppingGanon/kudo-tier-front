@@ -197,18 +197,6 @@
         <v-row>
           <v-divider class="mt-3 mb-3"></v-divider>
         </v-row>
-        <v-row v-if="modelValue.parags.length === 0">
-          <v-col cols="8" sm="9" md="10" lg="10" xl="10" />
-          <v-col cols="4" sm="3" md="2" lg="2" xl="2">
-            <menu-button :items="additionalItems2" @select="addParagItemProxy($event, 0)">
-              <template v-slot:button="{ open, props }">
-                <v-btn @click="open" v-bind="props" icon flat>
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </template>
-            </menu-button>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col>
             <section-component
@@ -282,7 +270,6 @@ import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import SectionComponent, { additionalItems2 } from '@/components/SectionComponent.vue'
-import MenuButton from '@/components/MenuButton.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -297,8 +284,7 @@ export default defineComponent({
     PointTypeSelector,
     ReviewValueDisplay,
     ImageSelector,
-    SectionComponent,
-    MenuButton
+    SectionComponent
   },
   props: {
     modelValue: {

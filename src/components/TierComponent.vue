@@ -55,7 +55,7 @@
       <v-row v-if="displayType === 'all'">
         <v-col>
           <tier-ranking
-            :tier-id="tier.tierId"
+            :tier="tier"
             :reviews="tier.reviews"
             :params="tier.reviewFactorParams"
             :point-type="pointType"
