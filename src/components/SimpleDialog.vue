@@ -1,6 +1,6 @@
 <template>
   <v-dialog :persistent="persistent" :model-value="modelValue" @update:model-value="setValue" :fullscreen="fullscreen">
-    <v-container>
+    <v-container :fluid="fullscreen" :class="fullscreen ? 'ma-0 pa-0' : ''">
       <v-card :width="width" :height="height">
         <v-toolbar v-if="title !== undefined" color="secondary" class="font-weight-bold">
           <v-card-title v-text="title" />

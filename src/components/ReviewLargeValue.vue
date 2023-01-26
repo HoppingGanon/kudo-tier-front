@@ -14,20 +14,18 @@
         </v-card>
       </td>
       <td style="width:auto">
-        <v-card flat>
-          <review-value-display
-            v-if="pointType === 'unlimited'"
-            :point-type="pointType"
-            :value="sum"
-            display-size="large3"
-          />
-          <review-value-display
-            v-else
-            :point-type="pointType"
-            :value="average"
-            display-size="large3"
-          />
-        </v-card>
+        <review-value-display
+          v-if="pointType === 'unlimited'"
+          :point-type="pointType"
+          :value="sum"
+          display-size="large3"
+        />
+        <review-value-display
+          v-else
+          :point-type="pointType"
+          :value="average"
+          display-size="large3"
+        />
       </td>
     </tr>
   </table>

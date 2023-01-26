@@ -125,7 +125,7 @@
                 :compact="true"
                 :point-type="pointType"
                 :value="col"
-                display-size="large2"
+                display-size="normal"
               />
             </v-card>
             <v-card v-else-if="propsDic['' + j]" style="text-align: center;" flat :style="i % 2 === 0 ? rowColor : ''">
@@ -135,7 +135,7 @@
                   :compact="true"
                   :point-type="pointType"
                   :value="col"
-                  display-size="large2"
+                  display-size="normal"
                 />
               </v-card>
               <span v-else v-text="col"></span>
@@ -178,21 +178,36 @@
     </v-container>
   </simple-dialog>
 
-  <simple-dialog
+  <v-dialog
     v-model="toPictureDialog"
-    title="Tier表を画像で保存"
-    submit-button-text="保存"
-    :fullscreen="$vuetify.display.mobile"
+    :fullscreen="true"
   >
+  <v-card>
+    <v-toolbar color="secondary">
+      <v-card-title class="font-weight-bold">
+        Tier表を画像で保存
+      </v-card-title>
+      <div style="width: 100%" class="d-flex justify-end">
+        <v-btn @click="toPictureDialog = false" flat icon><v-icon> mdi-close </v-icon></v-btn>
+      </div>
+    </v-toolbar>
     <tier-to-picture
       v-model:theme="picTheme"
       v-model:point-type="picPointType"
       v-model:icon-size="picIconSize"
       v-model:text-size="picTextSize"
       :params="params"
-      :tier-pivot-list="tierPivotList"
-    />
-  </simple-dialog>
+      :tier-pivot-list="picPivotList"
+      />
+      <v-card-actions>
+        <div class="d-flex justify-end" style="width: 100%;" >
+          <v-btn flat @click="toPictureDialog = false">
+            閉じる
+          </v-btn>
+        </div>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts">
@@ -435,6 +450,11 @@ export default defineComponent({
     const picIconSize = ref(iconSizeList[1].value)
     const picTextSize = ref(textSizeList[3].value)
 
+    const picPivotList = computed(() => {
+      const val = ReviewFunc.makeTierPivot(props.reviews, props.params, props.tier.tierId, picPointType.value)
+      return val
+    })
+
     const selectMenu = (v: string) => {
       switch (v) {
         case 'to-picture':
@@ -617,6 +637,8 @@ export default defineComponent({
       picIconSize,
       /** 画像化の際に使用するテキストサイズ */
       picTextSize,
+      /** 画像化の際に使用するピボット済Tierデータ */
+      picPivotList,
       /** 三点リーダのメニュー選択イベント */
       selectMenu,
       /** 画像保存ダイアログ */

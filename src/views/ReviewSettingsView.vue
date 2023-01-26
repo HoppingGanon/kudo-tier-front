@@ -196,6 +196,7 @@
     append-text="既に入力がある場合は削除されます"
     submit-button-text="削除"
     close-button-text="キャンセル"
+    @submit="delAllSections"
   >
   </simple-dialog>
 </template>

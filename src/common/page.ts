@@ -47,3 +47,18 @@ export const tierContentTypeList: SelectObject<TierContentType>[] = [
  * error...検証の結果、入力エラー
  */
 export type ValidState = 'none' | 'unknown' | 'checked' | 'error'
+
+/** 基本的な保存画像の形式 */
+export type ImageFileFormat = 'jpg' | 'png'
+
+/** 基本的な保存画像のリスト */
+export const ImageFormatList: SelectObject<ImageFileFormat>[] = [
+  {
+    text: 'JPEGファイル',
+    value: 'jpg'
+  },
+  {
+    text: 'PNGァイル',
+    value: 'png'
+  }
+]

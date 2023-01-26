@@ -157,7 +157,7 @@
                                 :value="100 * (5 - num) / 4"
                                 :point-type="modelValue.pointType"
                                 bar-width="200px"
-                                display-size="larger"
+                                display-size="large2"
                               />
                             </td>
                           </tr>
@@ -259,6 +259,12 @@
       </v-btn>
     </v-row>
   </v-card-actions>
+
+  <simple-dialog v-model="cautionsDialog" title="警告" @submit="upload">
+    <div v-for="c, i of cautions" :key="i" class="ma-2">
+      <div><span class="error-style" v-text="c" /></div>
+    </div>
+  </simple-dialog>
 </template>
 
 <script lang="ts">
@@ -270,6 +276,7 @@ import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import SectionComponent, { additionalItems2 } from '@/components/SectionComponent.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -284,10 +291,15 @@ export default defineComponent({
     PointTypeSelector,
     ReviewValueDisplay,
     ImageSelector,
-    SectionComponent
+    SectionComponent,
+    SimpleDialog
   },
   props: {
     modelValue: {
+      type: Object as PropType<Tier>,
+      required: true
+    },
+    orgTier: {
       type: Object as PropType<Tier>,
       required: true
     },
@@ -356,6 +368,7 @@ export default defineComponent({
     const toast = useToast()
     const tab = ref(0)
     const tweetdialog = ref(false)
+    const cautionsDialog = ref(false)
     const isSubmitting = ref(false)
     const displayDeatails = ref(false)
 
@@ -410,13 +423,7 @@ export default defineComponent({
       return result
     }
 
-    const submit = async () => {
-      // 全タブでバリデーションチェックを行う
-      if (!await valid()) {
-        toast.warning('適切でない入力があります。')
-        tab.value = 0
-        return
-      }
+    const upload = () => {
       const data = ReviewFunc.createTierRequestData(props.modelValue)
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
@@ -434,6 +441,83 @@ export default defineComponent({
         }).catch((e) => {
           toastError(e, toast)
         })
+      }
+    }
+
+    const cautions = ref([] as string[])
+
+    const submit = async () => {
+      // 全タブでバリデーションチェックを行う
+      if (!await valid()) {
+        toast.warning('適切でない入力があります。')
+        tab.value = 0
+        return
+      }
+
+      cautions.value.splice(0)
+      if (props.modelValue.reviewFactorParams.filter((v) => v.isPoint).length < 3) {
+        cautions.value.push('項目の種類が「ポイント」に設定されている評価項目が2つ以下の場合、レビューを表示した際にレーダーチャートが表示されません。レーダーチャートを表示するには同項目を3つ以上設定する必要があります')
+      }
+      if (props.modelValue.pointType === 'unlimited') {
+        cautions.value.push('ポイント表示方法を「unlimited」に設定した場合、Tier表やレーダーチャートは表示されません(この仕様は将来改善する予定があります)')
+      }
+      if (!props.isNew && props.modelValue.reviews.length > 0) {
+        let f = true
+        let f2 = true
+        let f3 = true
+        props.orgTier.reviewFactorParams.forEach((param) => {
+          if (props.modelValue.reviewFactorParams.filter((param2) => param2.index === param.index).length === 0) {
+            // 編集前には存在したが編集後になくなったもの
+            if (param.isPoint) {
+              // そのうちオリジナルの種類がポイントのもの
+              f = false
+            }
+          } else {
+            if (props.modelValue.reviewFactorParams.filter((param2) => param2.index === param.index && (param.isPoint === param2.isPoint)).length === 0) {
+              // 編集前後で存在しているが、種類が変更されたもの
+              f2 = false
+            }
+          }
+        })
+
+        // indexが負数
+        if (props.modelValue.reviewFactorParams.filter((param) => param.index < 0).length !== 0) {
+          // 追加されたもの
+          f3 = false
+        }
+
+        if (!f || !f2 || !f3) {
+          let cstr = '評価にかかわる項目が'
+          if (!f3) {
+            cstr += '追加'
+            if (!f2) {
+              cstr += '・'
+            }
+          }
+          if (!f2) {
+            cstr += '変更'
+            if (!f) {
+              cstr += '・'
+            }
+          }
+          if (!f) {
+            cstr += '削除'
+          }
+          cautions.value.push(`${cstr}されました`)
+
+          if (!f3) {
+            cautions.value.push('新規に追加した項目は各レビューにて手動で再設定する必要があります')
+          }
+          if (!f2 || !f) {
+            cautions.value.push('Tier表が変動します レビューの評価が正しく表示されるか確認してください')
+          }
+        }
+      }
+
+      if (cautions.value.length === 0) {
+        upload()
+      } else {
+        cautionsDialog.value = true
       }
     }
 
@@ -471,6 +555,7 @@ export default defineComponent({
       displayDeatails,
       tab,
       tweetdialog,
+      cautionsDialog,
       updateWeightNameProxy,
       updateWeightIsPointProxy,
       updateWeightProxy,
@@ -481,6 +566,8 @@ export default defineComponent({
       form,
       submit,
       valid,
+      cautions,
+      upload,
       updateParams
     }
   }

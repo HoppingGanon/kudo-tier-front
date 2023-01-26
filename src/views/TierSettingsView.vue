@@ -7,6 +7,7 @@
     <v-card class="ma-0">
       <tier-settings
         :model-value="tier"
+        :orgTier="orgTier"
         :point-type="tier.pointType"
         :is-new="isNew"
         @updateTierName="updateTierName"
@@ -48,6 +49,7 @@ export default defineComponent({
     const toast = useToast()
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
+    const orgTier = ref(ReviewFunc.cloneTier(emptyTier))
     tier.value.reviewFactorParams.push({
       name: '',
       weight: 50,
@@ -120,6 +122,7 @@ export default defineComponent({
         RestApi.getTier(route.params.tid).then((res) => {
           // 成功の場合
           tier.value = Parser.parseTier(res.data)
+          orgTier.value = ReviewFunc.cloneTier(tier.value)
           isNew.value = false
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
@@ -214,6 +217,7 @@ export default defineComponent({
 
     return {
       tier,
+      orgTier,
       isNew,
       updateTierName,
       updateImageUrl,

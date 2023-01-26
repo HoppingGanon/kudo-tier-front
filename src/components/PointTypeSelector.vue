@@ -12,7 +12,7 @@
     </v-list-item>
   </v-list>
   <v-select
-    v-if="always && isSelect"
+    v-else-if="always"
     label="表示形式"
     @update:model-value="$emit('update', $event)"
     :model-value="modelValue"

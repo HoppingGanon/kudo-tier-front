@@ -11,20 +11,32 @@
     </span>
   </div>
     <!-- rank7, rank14の評価表示 -->
-  <div v-else-if="pointType == 'rank14' || pointType == 'rank7'" class="rank" :class="reverse ? `reverse ${textsize}` : `${calcRankClass(pointType, point)} ${textsize}`" v-text="calcRankText(pointType, point)"></div>
+  <div
+    v-else-if="pointType == 'rank14' || pointType == 'rank7'"
+    class="rank"
+    :class="reverse ? `reverse ${textsize}` : `${calcRankClass(pointType, point)} ${textsize}`" v-text="calcRankText(pointType, point)"
+  ></div>
   <div v-else-if="compact">
     <!-- score, point, unlimitedのコンパクト評価表示 -->
     <span class="ml-1" v-text="point"></span>
   </div>
+  <div v-else-if="pointType == 'score' && noFill" :style="barWidth !== undefined ? `width: ${barWidth}` : ''" :class="iconsize" class="bar">
+    <!-- scoreの評価表示 -->
+    <span class="ml-1" v-text="point"></span>
+  </div>
   <v-card v-else-if="pointType == 'score'" :width="barWidth" height="100%" :class="iconsize">
     <!-- scoreの評価表示 -->
-    <v-card flat :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 10)" height="100%">
+    <v-card flat class="bar" :style="calcBarStyle(point, 10)" height="100%">
       <span class="ml-1" v-text="point"></span>
     </v-card>
   </v-card>
+  <div v-else-if="pointType == 'point' && noFill" :style="barWidth !== undefined ? `width: ${barWidth}` : ''" class="bar">
+    <!-- pointの評価表示 -->
+    <span class="ml-1" v-text="point"></span>
+  </div>
   <v-card v-else-if="pointType == 'point'" :width="barWidth" height="100%"  :class="iconsize">
     <!-- pointの評価表示 -->
-    <v-card flat :class="compact ? '' : 'bar'" :style="calcBarStyle(point, 100)" height="100%" >
+    <v-card flat class="bar" :style="calcBarStyle(point, 100)" height="100%" >
       <span class="ml-1" v-text="point"></span>
     </v-card>
   </v-card>
@@ -38,14 +50,23 @@
 import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
 
-/** pointType scoreやpointの際に使用
+/**
+ * pointType scoreやpointの際に使用
  */
-export const calcBarStyle = (p: number, max: number) => {
+export const calcBarStyle = (p: number, max: number, isFluid?: boolean, dark?: boolean) => {
   const percent = 100 * p / max
   const r = percent < 50 ? percent < 10 ? 255 : 175 * (50 - percent) / 40 + 80 : 80
   const g = percent < 25 ? percent < 10 ? 0 : 255 * percent / 25 : 255
   const b = percent < 50 ? 0 : 255 * (percent - 50) / 50
-  return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 0.5) 0% ${percent}%, rgb(127, 127, 127, 0.5) ${percent}% 100%);`
+  if (isFluid) {
+    return `background: rgb(${r}, ${g}, ${b});`
+  } else {
+    if (dark) {
+      return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 1) 0% ${percent}%, rgb(64, 64, 64, 1) ${percent}% 100%);`
+    } else {
+      return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 1) 0% ${percent}%, rgb(192, 192, 192, 1) ${percent}% 100%);`
+    }
+  }
 }
 
 export const calcRankClass = (pointType: ReviewPointType, point: number) => {
@@ -230,6 +251,11 @@ export default defineComponent({
     },
     reverse: {
       /// ランクの表示色を反転する
+      type: Boolean,
+      default: false
+    },
+    noFill: {
+      /// スコア表示時に塗りつぶさない
       type: Boolean,
       default: false
     }

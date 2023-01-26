@@ -48,10 +48,27 @@
                 item-value="value"
               />
             </v-col>
+            <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+              <v-select
+                v-model="imageFormat"
+                label="画像の保存形式"
+                :items="ImageFormatList"
+                item-title="text"
+                item-value="value"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <span class="ma-3 text-caption">
+                この機能は特殊なレンダリングエンジンを使用して画像生成をしているため、ブラウザの種類によっては正しく出力されません<br/>
+                正しく出力されない場合はテーマを変更して出力してください
+              </span>
+            </v-col>
           </v-row>
           <v-row>
             <v-col class="d-flex justify-end">
-              <v-btn color="primary">
+              <v-btn color="primary" @click="save">
                 生成
               </v-btn>
             </v-col>
@@ -60,7 +77,7 @@
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="12" xl="6">
         【サンプル】
-        <v-card width="720px" flat>
+        <v-card flat id="tier-ranking-pivot" width="720px">
           <tier-ranking-pivot
             :tier-pivot-list="tierPivotList"
             :pointType="pointType"
@@ -77,10 +94,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
+import { toJpeg, toPng } from 'html-to-image'
+import { saveAs } from 'file-saver'
 import TierRankingPivot, { RankingTheme } from '@/components/TierRankingPivot.vue'
 import { iconSizeList, textSizeList } from '@/components/TierRanking.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
-import { SelectObject } from '@/common/page'
+import { ImageFileFormat, ImageFormatList, SelectObject } from '@/common/page'
 import { PointDisplaySize, ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
 
 export default defineComponent({
@@ -152,10 +171,30 @@ export default defineComponent({
       }
     ]
 
+    const save = () => {
+      const tierRankingPivot = document.getElementById('tier-ranking-pivot')
+      if (tierRankingPivot) {
+        if (imageFormat.value === 'jpg') {
+          toJpeg(tierRankingPivot).then((dataurl) => {
+            saveAs(dataurl, 'tier表.jpg')
+          })
+        } else if (imageFormat.value === 'png') {
+          toPng(tierRankingPivot).then((dataurl) => {
+            saveAs(dataurl, 'tier表.png')
+          })
+        }
+      }
+    }
+
+    const imageFormat = ref('jpg' as ImageFileFormat)
+
     return {
       iconSizeList,
       themeItems,
-      textSizeList
+      textSizeList,
+      ImageFormatList,
+      save,
+      imageFormat
     }
   }
 })

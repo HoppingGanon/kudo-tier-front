@@ -109,8 +109,3 @@
 .r-e{
   background: rgb(255,0,0);
 }
-
-.bar{
-  background: linear-gradient(90deg, rgb(0, 255, 255, 0.5) 0% 0%, rgb(127, 127, 127, 0.5) 0% 100%);
-  transition: all 1s both;
-}
