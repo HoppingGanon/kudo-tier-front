@@ -14,7 +14,7 @@
   <div
     v-else-if="pointType == 'rank14' || pointType == 'rank7'"
     class="rank"
-    :class="reverse ? `reverse ${textsize}` : `${calcRankClass(pointType, point)} ${textsize}`" v-text="calcRankText(pointType, point)"
+    :class="reverse ? `reverse ${textsize}` : `no-reverse ${calcRankClass(pointType, point)} ${textsize}`" v-text="calcRankText(pointType, point)"
   ></div>
   <div v-else-if="compact">
     <!-- score, point, unlimitedのコンパクト評価表示 -->
@@ -70,80 +70,80 @@ export const calcBarStyle = (p: number, max: number, isFluid?: boolean, dark?: b
 }
 
 export const calcRankClass = (pointType: ReviewPointType, point: number) => {
-  let style = ''
+  let classStr = ''
 
   if (pointType === 'rank14') {
     switch (point) {
       case 0:
-        style += 'e'
+        classStr += 'e'
         break
       case 1:
-        style += 'e'
+        classStr += 'e'
         break
       case 2:
-        style += 'd'
+        classStr += 'd'
         break
       case 3:
-        style += 'd'
+        classStr += 'd'
         break
       case 4:
-        style += 'c'
+        classStr += 'c'
         break
       case 5:
-        style += 'c'
+        classStr += 'c'
         break
       case 6:
-        style += 'b'
+        classStr += 'b'
         break
       case 7:
-        style += 'b'
+        classStr += 'b'
         break
       case 8:
-        style += 'a'
+        classStr += 'a'
         break
       case 9:
-        style += 'a'
+        classStr += 'a'
         break
       case 10:
-        style += 's'
+        classStr += 's'
         break
       case 11:
-        style += 's'
+        classStr += 's'
         break
       case 12:
-        style += 'ss'
+        classStr += 'ss'
         break
       case 13:
-        style += 'ss'
+        classStr += 'ss'
         break
     }
   } else if (pointType === 'rank7') {
     switch (point) {
       case 0:
-        style += 'e'
+        classStr += 'e'
         break
       case 1:
-        style += 'd'
+        classStr += 'd'
         break
       case 2:
-        style += 'c'
+        classStr += 'c'
         break
       case 3:
-        style += 'b'
+        classStr += 'b'
         break
       case 4:
-        style += 'a'
+        classStr += 'a'
         break
       case 5:
-        style += 's'
+        classStr += 's'
         break
       case 6:
-        style += 'ss'
+        classStr += 'ss'
         break
     }
   }
 
-  return style
+  return classStr
 }
 export const calcRankText = (pointType: ReviewPointType, point: number) => {
   let style = ''

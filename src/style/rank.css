@@ -4,6 +4,10 @@
   font-size: larger;
 }
 
+.no-reverse {
+  display: inline-block;
+}
+
 .ss{
   color: transparent;
   background: repeating-linear-gradient(
