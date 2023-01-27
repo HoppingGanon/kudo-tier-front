@@ -104,7 +104,7 @@
       </v-container>
     </v-navigation-drawer>
 
-    <v-app-bar app class="pink lighten-4 anime" :style="barStyle">
+    <v-app-bar v-if="!isEmbedded" app class="pink lighten-4 anime" :style="barStyle">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
       <div class="d-flex align-center" style="width: 100%;">
@@ -144,7 +144,7 @@
       <router-view :key="routeWatcher($route)" />
     </v-main>
 
-    <v-avatar class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
+    <v-avatar v-if="!isEmbedded" class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
       <v-icon dark>mdi-page-layout-header</v-icon>
     </v-avatar>
   </v-app>
@@ -157,7 +157,7 @@ import RestApi from '@/common/restapi'
 import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
-import { RouteLocationNormalizedLoaded } from 'vue-router'
+import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
@@ -166,6 +166,7 @@ export default defineComponent({
   },
   setup () {
     const toast = useToast()
+    const route = useRoute()
 
     const drawer = ref(false)
     const logoutDialog = ref(false)
@@ -174,6 +175,7 @@ export default defineComponent({
     const sessionUserId = computed(() => store.state.userId)
 
     const barIsVisible = ref(true)
+    const isEmbedded = ref(true)
 
     const clickHideBarIcon = () => {
       barIsVisible.value = !barIsVisible.value
@@ -234,7 +236,12 @@ export default defineComponent({
       store.commit('downloadUserData', store.state.userId)
     })
 
-    // routerがページ内リンクによる変化には反応しないように制御
+    /**
+     * routerがページ内リンクによる変化には反応しないように制御
+     * URI変更 → 更新
+     * ID変更 → 更新しない
+     * クエリパラメータ変更 → 更新(多くのページでonMount時にしか読み込んでいないため)
+    */
     const routeWatcher = (route: RouteLocationNormalizedLoaded) => {
       const len = route.fullPath.length
       const paramStart = route.fullPath.indexOf('?')
@@ -248,7 +255,20 @@ export default defineComponent({
       }
     }
 
-    onMounted(() => {
+    /** 埋め込みとして動作してるかどうか判定する */
+    const checkEmb = async () => {
+      await router.isReady()
+      if (route.name === 'tier-embedded') {
+        isEmbedded.value = true
+      } else {
+        isEmbedded.value = false
+      }
+    }
+
+    onMounted(async () => {
+      // 埋め込みかどうかの判定、非同期で行う
+      checkEmb()
+      // ユーザーデータの取得
       store.commit('downloadUserData', store.state.userId)
     })
 
@@ -262,6 +282,7 @@ export default defineComponent({
       tiersCount,
       sessionUserId,
       barIsVisible,
+      isEmbedded,
       drawer,
       barStyle,
       hasSession,

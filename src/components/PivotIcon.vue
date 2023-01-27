@@ -1,5 +1,11 @@
 <template>
-  <v-menu bottom v-model="isHover">
+  <v-card v-if="directLink" class="ma-1" :width="size" :height="size">
+    <a class="no-link" :href="link" target="_top">
+      <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
+      <v-img v-else src="@/assets/common/noimage256.png"/>
+    </a>
+  </v-card>
+  <v-menu v-else bottom v-model="isHover">
     <template v-slot:activator="{ props }">
       <v-card class="ma-1" :width="size" :height="size" @click="click" v-bind="props">
         <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
@@ -30,11 +36,11 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
+import { IconSize, ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
 import { getImgSource } from '@/common/restapi'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import router from '@/router'
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
   name: 'PivotIcon',
@@ -47,8 +53,8 @@ export default defineComponent({
       required: true
     },
     size: {
-      type: String as PropType<number | string>,
-      default: '64px' as string
+      type: String as PropType<IconSize>,
+      default: '64px' as IconSize
     },
     noHover: {
       type: Boolean,
@@ -62,6 +68,10 @@ export default defineComponent({
     reviewFactorParams: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true
+    },
+    directLink: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -69,13 +79,15 @@ export default defineComponent({
     const click = () => {
       isHover.value = !isHover.value
     }
+    const link = computed(() => `/review/${props.infomation.review.reviewId}`)
     const goReview = () => {
-      router.push(`/review/${props.infomation.review.reviewId}`)
+      router.push(link.value)
     }
     return {
       getImgSource,
       isHover,
       click,
+      link,
       goReview
     }
   }

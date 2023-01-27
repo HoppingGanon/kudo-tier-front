@@ -3,8 +3,11 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
+  <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
+  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true"/>
+
   <!-- サイズ調整のためfluidは入れない -->
-  <v-container v-if="isNotFound" class="pa-0">
+  <v-container v-else-if="isNotFound" class="pa-0">
     <v-row>
       <v-col>
         <v-card>
@@ -53,9 +56,6 @@
     submit-button-text="削除"
     @submit="deleteTier"
   />
-
-  <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
-  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true"/>
 </template>
 
 <script lang="ts">

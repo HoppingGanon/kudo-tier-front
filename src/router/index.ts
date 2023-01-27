@@ -76,6 +76,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/settings',
     name: 'settings',
     component: () => import('../views/SettingsView.vue')
+  },
+  {
+    path: '/tier-embedded/:tid',
+    name: 'tier-embedded',
+    component: () => import('../views/TierEmbeddedView.vue')
   }
 ]
 

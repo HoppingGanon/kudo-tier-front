@@ -65,7 +65,22 @@ export interface ReviewFactor {
 }
 
 /** レビュー評点の表示サイズ */
-export type PointDisplaySize = 'smaller' | 'normal' | 'large' | 'large2' | 'large3' | 'large4' | 'large5' | 'large6'
+export const PointDisplaySizeArray = [
+  'smaller', 'normal', 'large', 'large2', 'large3', 'large4', 'large5', 'large6'
+]
+export type PointDisplaySize = typeof PointDisplaySizeArray[number]
+
+/** レビューポイントの表現方法 */
+export const IconSizeArray = [
+  '96px', '64px', '48px', '32px', '24px'
+]
+export type IconSize = typeof IconSizeArray[number]
+
+/** ランキングテーマ */
+export const RankingThemeArray = [
+  'light', 'dark', 'light-reverse', 'dark-reverse'
+]
+export type RankingTheme = typeof RankingThemeArray[number]
 
 /** レビュー全体 */
 export interface Review {

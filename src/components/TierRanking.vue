@@ -58,7 +58,7 @@
             <v-list-item
               v-for="(item, i) in iconSizeList"
               :key="i"
-              @click="iconSize = item.value"
+              @click="$emit('update:iconSize', $event)"
               :items="reviewPointTypeArray"
               class="cursor-pointer"
             >
@@ -96,13 +96,28 @@
     </v-toolbar>
 
     <!-- ピボットしたTier -->
+    <a v-if="directLink" :href="tierlink" target="_top" class="no-link">
+      <tier-ranking-pivot
+        v-show="tabDisp === 0"
+        :tier-pivot-list="tierPivotList"
+        :params="params"
+        :icon-size="iconSize"
+        :point-type="pointType"
+        :theme="theme"
+        :direct-link="true"
+        :text-size="textSize"
+      />
+    </a>
     <tier-ranking-pivot
+      v-else
       v-show="tabDisp === 0"
       :tier-pivot-list="tierPivotList"
       :params="params"
       :icon-size="iconSize"
       :point-type="pointType"
       :theme="theme"
+      :direct-link="false"
+      :text-size="textSize"
     />
 
     <!-- Tierランキングテーブル -->
@@ -208,76 +223,52 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-dialog
+    v-model="toEmbeddedDialog"
+    :fullscreen="true"
+  >
+  <v-card>
+    <v-toolbar color="secondary">
+      <v-card-title class="font-weight-bold">
+        他サイトのHTMLへの埋め込み
+      </v-card-title>
+      <div style="width: 100%" class="d-flex justify-end">
+        <v-btn @click="toEmbeddedDialog = false" flat icon><v-icon> mdi-close </v-icon></v-btn>
+      </div>
+    </v-toolbar>
+    <tier-to-embedded
+      :tier-id="tier.tierId"
+      />
+      <v-card-actions>
+        <div class="d-flex justify-end" style="width: 100%;" >
+          <v-btn flat @click="toEmbeddedDialog = false">
+            閉じる
+          </v-btn>
+        </div>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize, IconSize, RankingTheme } from '@/common/review'
 import { defineComponent, PropType, computed, ref, onMounted, Ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import MenuButton from '@/components/MenuButton.vue'
-import TierRankingPivot, { RankingTheme } from '@/components/TierRankingPivot.vue'
+import TierRankingPivot from '@/components/TierRankingPivot.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import TierToPicture from '@/components/TierToPicture.vue'
+import TierToEmbedded from '@/components/TierToEmbedded.vue'
 import vuetify from '@/plugins/vuetify'
-import { useDisplay } from 'vuetify/lib/framework.mjs'
-import { SelectObject } from '@/common/page'
+import { iconSizeList, SelectObject, textSizeList } from '@/common/page'
 import { useToast } from 'vue-toast-notification'
 import { onBeforeRouteLeave } from 'vue-router'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-
-export const iconSizeList = [
-  {
-    text: '特大',
-    value: '96px'
-  },
-  {
-    text: '大',
-    value: '64px'
-  },
-  {
-    text: '普通',
-    value: '48px'
-  },
-  {
-    text: '小',
-    value: '32px'
-  },
-  {
-    text: '最小',
-    value: '24px'
-  }
-]
-
-export const textSizeList = [
-  {
-    text: '最大',
-    value: 'large5'
-  },
-  {
-    text: '特大',
-    value: 'large4'
-  },
-  {
-    text: '大',
-    value: 'large3'
-  },
-  {
-    text: '普通',
-    value: 'large2'
-  },
-  {
-    text: '小',
-    value: 'large'
-  },
-  {
-    text: '最小',
-    value: 'normal'
-  }
-] as SelectObject<PointDisplaySize>[]
 
 export default defineComponent({
   name: 'TierRanking',
@@ -289,7 +280,8 @@ export default defineComponent({
     TierRankingPivot,
     SimpleDialog,
     LoadingComponent,
-    TierToPicture
+    TierToPicture,
+    TierToEmbedded
   },
   props: {
     tier: {
@@ -321,6 +313,18 @@ export default defineComponent({
     hideBar: {
       type: Boolean,
       default: false
+    },
+    directLink: {
+      type: Boolean,
+      default: false
+    },
+    iconSize: {
+      type: String as PropType<IconSize>,
+      default: '48px' as IconSize
+    },
+    textSize: {
+      type: String as PropType<PointDisplaySize>,
+      default: 'large2' as PointDisplaySize
     }
   },
   emits: {
@@ -329,10 +333,15 @@ export default defineComponent({
       value: ReviewPointType) => true,
     'update:theme': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: RankingTheme) => true
+      value: RankingTheme) => true,
+    'update:iconSize': (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: IconSize) => true,
+    'update:textSize': (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: PointDisplaySize) => true
   },
   setup (props, { emit }) {
-    const display = useDisplay()
     const toast = useToast()
 
     // プロパティからテーブルヘッダを作成
@@ -428,15 +437,13 @@ export default defineComponent({
       return val
     })
 
-    const iconSize = ref('48px' as string)
-
     const menuItems: SelectObject[] = [
       {
         text: 'Tier表を画像で保存(beta)',
         value: 'to-picture'
       },
       {
-        text: '他サイトへの埋め込みリンク生成(beta)',
+        text: '他サイトのHTMLへの埋め込み(beta)',
         value: 'to-embedded'
       },
       {
@@ -480,20 +487,6 @@ export default defineComponent({
     const goTierHash = (reviewId: string) => {
       window.location.href = `#rev${reviewId}`
     }
-
-    onMounted(() => {
-      if (display.xl.value) {
-        iconSize.value = iconSizeList[1].value
-      } else if (display.lg.value) {
-        iconSize.value = iconSizeList[1].value
-      } else if (display.md.value) {
-        iconSize.value = iconSizeList[1].value
-      } else if (display.sm.value) {
-        iconSize.value = iconSizeList[2].value
-      } else if (display.xs.value) {
-        iconSize.value = iconSizeList[2].value
-      }
-    })
 
     // これがないとイベントが設定できない
     history.replaceState(null, '')
@@ -598,6 +591,8 @@ export default defineComponent({
       toJsonProcess.value = toJson()
     }
 
+    const tierlink = computed(() => `/tier/${props.tier.tierId}`)
+
     return {
       /** ヘッダー情報を加工して列挙した配列 */
       headers,
@@ -623,8 +618,6 @@ export default defineComponent({
       updatePointTypeProxy,
       /** tierの情報からピボットテーブルを作成する関数(ポイント表示方法が変わる度に再計算する) */
       tierPivotList,
-      /** tierピボットの表示サイズ */
-      iconSize,
       /** tierピボットの表示サイズリスト */
       iconSizeList,
       /** 三点リーダのメニュー */
@@ -660,7 +653,9 @@ export default defineComponent({
       /** 処理数 */
       processingIndex,
       /** 処理全数 */
-      processingMax
+      processingMax,
+      /** Tierへのリンク */
+      tierlink
     }
   }
 })

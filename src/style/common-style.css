@@ -79,6 +79,10 @@ td.minimum {
   color: red;
 }
 
+.success-style {
+  color: green;
+}
+
 a:link.no-link, a:visited.no-link, a:hover.no-link, a:active.no-link  {
   color: inherit;
   text-decoration: none;

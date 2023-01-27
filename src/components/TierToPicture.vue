@@ -14,7 +14,7 @@
                 :model-value="theme"
                 @update:model-value="$emit('update:theme', $event)"
                 label="テーマカラー"
-                :items="themeItems"
+                :items="tierThemeList"
                 item-title="text"
                 item-value="value"
               />
@@ -96,11 +96,10 @@
 import { defineComponent, PropType, ref } from 'vue'
 import { toJpeg, toPng } from 'html-to-image'
 import { saveAs } from 'file-saver'
-import TierRankingPivot, { RankingTheme } from '@/components/TierRankingPivot.vue'
-import { iconSizeList, textSizeList } from '@/components/TierRanking.vue'
+import TierRankingPivot from '@/components/TierRankingPivot.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
-import { ImageFileFormat, ImageFormatList, SelectObject } from '@/common/page'
-import { PointDisplaySize, ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
+import { iconSizeList, ImageFileFormat, ImageFormatList, textSizeList, tierThemeList } from '@/common/page'
+import { PointDisplaySize, RankingTheme, ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
 
 export default defineComponent({
   name: 'TierToPicture',
@@ -152,25 +151,6 @@ export default defineComponent({
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
-    const themeItems: SelectObject<RankingTheme>[] = [
-      {
-        text: 'ノーマルテーマ',
-        value: 'light'
-      },
-      {
-        text: 'ノーマルテーマ(反転)',
-        value: 'light-reverse'
-      },
-      {
-        text: 'ダークテーマ',
-        value: 'dark'
-      },
-      {
-        text: 'ダークテーマ(反転)',
-        value: 'dark-reverse'
-      }
-    ]
-
     const save = () => {
       const tierRankingPivot = document.getElementById('tier-ranking-pivot')
       if (tierRankingPivot) {
@@ -190,7 +170,7 @@ export default defineComponent({
 
     return {
       iconSizeList,
-      themeItems,
+      tierThemeList,
       textSizeList,
       ImageFormatList,
       save,

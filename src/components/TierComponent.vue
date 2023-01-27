@@ -62,6 +62,7 @@
             :no-menu-icon="noMenuIcon"
             @updatePointType="$emit('updatePointType', $event)"
             v-model:theme="theme"
+            v-model:icon-size="iconSize"
           />
         </v-col>
       </v-row>
@@ -92,8 +93,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, ref } from 'vue'
-import { ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, Tier } from '@/common/review'
+import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
+import { IconSize, RankingTheme, ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, Tier } from '@/common/review'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import CommonApi from '@/common/commonapi'
 import ReviewHeader from '@/components/ReviewHeader.vue'
@@ -102,11 +103,11 @@ import TierRanking from '@/components/TierRanking.vue'
 import SectionComponent from '@/components/SectionComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
-import { RankingTheme } from '@/components/TierRankingPivot.vue'
 import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
-import { SelectObject } from '@/common/page'
+import { iconSizeList, SelectObject } from '@/common/page'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 export default defineComponent({
   name: 'TierComponent',
@@ -156,6 +157,24 @@ export default defineComponent({
   },
   setup (props, { emit }) {
     const toast = useToast()
+    const display = useDisplay()
+
+    const iconSize = ref('48px' as IconSize)
+
+    onMounted(() => {
+      if (display.xl.value) {
+        iconSize.value = iconSizeList[1].value
+      } else if (display.lg.value) {
+        iconSize.value = iconSizeList[1].value
+      } else if (display.md.value) {
+        iconSize.value = iconSizeList[1].value
+      } else if (display.sm.value) {
+        iconSize.value = iconSizeList[2].value
+      } else if (display.xs.value) {
+        iconSize.value = iconSizeList[2].value
+      }
+    })
+
     const lastWriteTime = computed(() => {
       return CommonApi.dateToString(props.tier.updatedAt, true)
     })
@@ -248,6 +267,7 @@ export default defineComponent({
     const theme = ref('light' as RankingTheme)
 
     return {
+      iconSize,
       getImgSource,
       lastWriteTime,
       pointTypes,

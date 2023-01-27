@@ -60,6 +60,7 @@
             :size="iconSize"
             :point-type="pointType"
             :review-factor-params="params"
+            :direct-link="directLink"
             />
         </div>
       </td>
@@ -68,12 +69,10 @@
 </template>
 
 <script lang="ts">
-import { PointDisplaySize, ReviewFactorParam, ReviewFunc, ReviewPointType, TierPivotInfomation } from '@/common/review'
+import { IconSize, PointDisplaySize, RankingTheme, ReviewFactorParam, ReviewFunc, ReviewPointType, TierPivotInfomation } from '@/common/review'
 import { computed, defineComponent, PropType } from 'vue'
 import PivotIcon from '@/components/PivotIcon.vue'
 import ReviewValueDisplay, { calcRankClass, calcBarStyle } from '@/components/ReviewValueDisplay.vue'
-
-export type RankingTheme = 'light' | 'dark' | 'light-reverse' | 'dark-reverse'
 
 export default defineComponent({
   name: 'TierRankingPivot',
@@ -92,7 +91,7 @@ export default defineComponent({
       default: 'point' as ReviewPointType
     },
     iconSize: {
-      type: String,
+      type: String as PropType<IconSize>,
       default: '48px'
     },
     textSize: {
@@ -110,6 +109,10 @@ export default defineComponent({
     },
     width: {
       type: String
+    },
+    directLink: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {},
