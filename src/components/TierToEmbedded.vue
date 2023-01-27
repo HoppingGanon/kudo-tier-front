@@ -220,7 +220,7 @@ export default defineComponent({
       })
     }
 
-    const iconSizeListUndef: SelectObject<PointDisplaySize | ''>[] = textSizeList.filter(() => true)
+    const iconSizeListUndef: SelectObject<PointDisplaySize | ''>[] = iconSizeList.filter(() => true)
     iconSizeListUndef.unshift({
       text: '自動(フレームサイズにより決定)',
       value: 'auto'

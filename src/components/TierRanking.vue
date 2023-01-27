@@ -130,23 +130,20 @@
       :items-per-page="25"
     >
       <template v-slot:body="pageItems">
-        <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer" :style="i % 2 === 0 ? rowColor : ''">
+        <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer">
           <td v-for="col,j,k in row.dictionary" :key="j" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" @click="goTierHash(row.reviewId)">
-            <v-card v-if="'' + j == 'name'" v-text="col" flat :style="i % 2 === 0 ? rowColor : ''"></v-card>
-            <v-card v-else-if="'' + j == 'ave'" flat :style="i % 2 === 0 ? rowColor : ''">
+            <v-card v-if="'' + j == 'name'" v-text="col" flat></v-card>
+            <v-card v-else-if="'' + j == 'ave'" flat style="text-align: center;">
               <review-value-display
-                style="text-align: center;"
-                :style="i % 2 === 0 ? rowColor : ''"
                 :compact="true"
                 :point-type="pointType"
                 :value="col"
                 display-size="normal"
               />
             </v-card>
-            <v-card v-else-if="propsDic['' + j]" style="text-align: center;" flat :style="i % 2 === 0 ? rowColor : ''">
+            <v-card v-else-if="propsDic['' + j]" style="text-align: center;" flat>
               <v-card v-if="propsDic['' + j].isPoint" flat>
                 <review-value-display
-                  :style="i % 2 === 0 ? rowColor : ''"
                   :compact="true"
                   :point-type="pointType"
                   :value="col"
@@ -414,9 +411,6 @@ export default defineComponent({
       return list
     })
 
-    const rowColor = 'background: ' + vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry + ';'
-    const pivotColor = ''
-
     const tab = ref(0)
     const weightMenu = ref(false)
     const iconSizeMenu = ref(false)
@@ -602,10 +596,6 @@ export default defineComponent({
       propsDic,
       /** レビュー評点表示方法を並べた配列 */
       reviewPointTypeArray,
-      /** 行の色を含んだスタイル */
-      rowColor,
-      /** ピボットテーブルのスタイル */
-      pivotColor,
       /** tabの表示情報(0...ピボットTier, 1...評点一覧) */
       tab,
       /** unlimited状態を加味したtabの表示情報(0...ピボットTier, 1...評点一蘭) */
