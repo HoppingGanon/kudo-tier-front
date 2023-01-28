@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="12" md="6" lg="6" xl="6">
+      <v-col cols="12" sm="12" md="9" lg="9" xl="9">
         <v-text-field
           v-model="width"
           label="幅"
@@ -9,7 +9,7 @@
           :rules="widthRules"
         />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="6" xl="6">
+      <v-col cols="10" sm="6" md="3" lg="3" xl="3">
         <v-select
           v-model="embeddedWidthType"
           label="幅の調整単位"
@@ -18,7 +18,7 @@
           item-value="value"
         />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="6" xl="6">
+      <v-col cols="12" sm="12" md="9" lg="9" xl="9">
         <v-text-field
           v-model="height"
           label="高さ"
@@ -26,7 +26,7 @@
           :rules="heightRules"
         />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="6" xl="6">
+      <v-col cols="10" sm="6" md="3" lg="3" xl="3">
         <v-select
           v-model="embeddedHeightType"
           label="高さの調整単位"
