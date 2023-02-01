@@ -185,6 +185,14 @@ export default defineComponent({
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
+    },
+    pullingUp: {
+      type: Number,
+      required: true
+    },
+    pullingDown: {
+      type: Number,
+      required: true
     }
   },
   emits: {
@@ -196,7 +204,7 @@ export default defineComponent({
       v: string, i: number) => true
   },
   setup (props) {
-    const ave = () => ReviewFunc.calcAaverage(props.review, props.params)
+    const ave = () => ReviewFunc.calcAaverage(props.review, props.params, props.pullingUp, 100 - props.pullingDown, 0, 100)
     const primaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
     const secondaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.secondary
     const thirdryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry

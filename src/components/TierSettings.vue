@@ -92,10 +92,10 @@
             <v-divider />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="displayDeatails">
           <v-col>
             <v-container fluid class="ma-0 pa-0">
-              <v-row v-if="displayDeatails">
+              <v-row>
                 <v-col cols="12" sm="5" md="4" lg="3" xl="2">
                   <point-type-selector
                     :model-value="pointType"
@@ -173,7 +173,33 @@
             </v-container>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="displayDeatails">
+          <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+            <v-slider
+              :modelValue="modelValue.pullingUp"
+              @update:model-value="$emit('updatePullingUp', $event)"
+              class="mt-4 ml-4 mr-4 mb-2"
+              label="Tierを下位に寄せる"
+              color="primary"
+              :step="1"
+              thumb-label="always"
+              :min="0"
+              :max="40"
+            />
+          </v-col>
+          <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+            <v-slider
+              :modelValue="modelValue.pullingDown"
+              @update:model-value="$emit('updatePullingDown', $event)"
+              class="mt-4 ml-4 mr-4 mb-2"
+              label="Tierを上位に寄せる"
+              color="primary"
+              :step="1"
+              thumb-label="always"
+              :min="0"
+              :max="40"
+            />
+          </v-col>
         </v-row>
         <v-row>
           <v-col>
@@ -233,14 +259,18 @@
       </v-row>
       <v-row>
         <v-col>
-          <tier-component
-            :tier="modelValue"
-            :is-sample="true"
-            :point-type="pointType"
-            display-type="all"
-            :no-header="true"
-            :no-menu-icon="true"
-          />
+          <v-card>
+            <padding-component>
+              <tier-component
+                :tier="modelValue"
+                :is-sample="true"
+                :point-type="pointType"
+                display-type="all"
+                :no-header="true"
+                :no-menu-icon="true"
+              />
+            </padding-component>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -255,7 +285,8 @@
         情報の入力
       </v-btn>
       <v-btn @click="submit">
-        完了
+        <span v-if="isNew">作成</span>
+        <span v-else>更新</span>
       </v-btn>
     </v-row>
   </v-card-actions>
@@ -277,6 +308,7 @@ import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import SectionComponent, { additionalItems2 } from '@/components/SectionComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import PaddingComponent from '@/components/PaddingComponent.vue'
 import rules from '@/common/rules'
 import { useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -292,7 +324,8 @@ export default defineComponent({
     ReviewValueDisplay,
     ImageSelector,
     SectionComponent,
-    SimpleDialog
+    SimpleDialog,
+    PaddingComponent
   },
   props: {
     modelValue: {
@@ -361,7 +394,13 @@ export default defineComponent({
       value: string, index: number) => true,
     updateParams: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      value: ReviewFactorParam[]) => true
+      value: ReviewFactorParam[]) => true,
+    updatePullingUp: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      index: number) => true,
+    updatePullingDown: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      index: number) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
@@ -534,9 +573,6 @@ export default defineComponent({
           props.modelValue.parags[0].type === 'text') {
         } else {
           const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
-          if (!result) {
-            toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
-          }
           return result
         }
       }

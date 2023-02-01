@@ -4,12 +4,7 @@
       <td class="minimum">
         <v-card flat>
           <p class="mt-2">
-            <span v-if="pointType == 'stars'">総合：</span>
-            <span v-else-if="pointType == 'rank7'">総合ランク：</span>
-            <span v-else-if="pointType == 'rank14'">総合ランク：</span>
-            <span v-else-if="pointType == 'score'">総合スコア：</span>
-            <span v-else-if="pointType == 'point'">総合点：</span>
-            <span v-else-if="pointType == 'unlimited'">合計：</span>
+            <span v-text="`${label} : `" />
           </p>
         </v-card>
       </td>
@@ -32,8 +27,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { ReviewPointType } from '@/common/review'
+import { computed, defineComponent, PropType } from 'vue'
+import { ReviewFunc, ReviewPointType } from '@/common/review'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
@@ -56,8 +51,11 @@ export default defineComponent({
     }
   },
   emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () { }
+  setup (props) {
+    return {
+      label: computed(() => ReviewFunc.getLergeDisplayLabel(props.pointType))
+    }
+  }
 })
 </script>
 

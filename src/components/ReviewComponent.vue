@@ -24,6 +24,12 @@
       </v-col>
     </v-row>
 
+    <v-row v-if="displayType === 'all'">
+      <v-col>
+        <share-buttons :link="pageLink" :body="twitterBody" />
+      </v-col>
+    </v-row>
+
     <v-row><v-col><v-container class="pa-0 ma-0" fluid :class="isLink ? 'cursor-pointer' : ''" @click="goReview(isLink)">
       <v-row>
         <v-col cols="4" sm="3" md="3" lg="2" xl="2">
@@ -62,7 +68,7 @@
                 <review-large-value
                   :average="average"
                   :sum="sum"
-                  :point-type="getPointType()"
+                  :point-type="pointTypeEx"
                 />
               </v-col>
             </v-row>
@@ -86,7 +92,7 @@
               </v-row>
               <v-row>
                 <v-col
-                  v-if="(displayType === 'all' || displayType === 'list') && getPointType() !== 'unlimited' && chartLabels.length > 2"
+                  v-if="(displayType === 'all' || displayType === 'list') && pointTypeEx !== 'unlimited' && chartLabels.length > 2"
                   cols="12" sm="6" md="6" lg="5" xl="5"
                 >
                   <div>
@@ -105,7 +111,7 @@
                     v-if="displayType === 'all' || displayType === 'list'"
                     :factors="review.reviewFactors"
                     :display-type="displayType"
-                    :point-type="getPointType()"
+                    :point-type="pointTypeEx"
                     :review-factor-params="reviewFactorParams"
                     @update-point-type="$emit('updatePointType', $event)"
                   />
@@ -122,7 +128,14 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="displayType === 'summary'">
+      <v-row v-if="isLink">
+        <v-col>
+          <v-card class="ma-3" flat>
+            (クリックしてレビューの続きを読む)
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-else-if="displayType === 'summary'">
         <v-col>
           <v-card class="ma-3" flat v-if="review.sections.length > 0">
             <section-component :section="review.sections[0]" :display-type="displayType" />
@@ -149,7 +162,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, ref } from 'vue'
+import { defineComponent, PropType, computed, ref, ComputedRef } from 'vue'
 import { Review, ReviewDisplayType, ReviewPointType, ReviewFunc, ReviewFactorParam, pointTypeTierCountDic } from '@/common/review'
 import CommonApi from '@/common/commonapi'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -161,11 +174,13 @@ import RadarChart, { RadarChartData } from '@/components/RadarChart.vue'
 import ReviewLargeValue from '@/components/ReviewLargeValue.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import ShareButtons from '@/components/ShareButtons.vue'
 import vuetify from '@/plugins/vuetify'
 import router from '@/router'
 import { SelectObject } from '@/common/page'
 import { useToast } from 'vue-toast-notification'
 import store from '@/store'
+import { calcPointPlainText } from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'ReviewComponent',
@@ -177,7 +192,8 @@ export default defineComponent({
     RadarChart,
     ReviewLargeValue,
     MenuButton,
-    SimpleDialog
+    SimpleDialog,
+    ShareButtons
   },
   props: {
     review: {
@@ -219,6 +235,14 @@ export default defineComponent({
     /** ポイント表示方法を上書きする場合はこのpropを指定する */
     pointType: {
       type: String as PropType<ReviewPointType>
+    },
+    pullingUp: {
+      type: Number,
+      required: true
+    },
+    pullingDown: {
+      type: Number,
+      required: true
     }
   },
   emits: {
@@ -235,7 +259,7 @@ export default defineComponent({
     })
 
     const average = computed(() => {
-      return ReviewFunc.calcAaverage(props.review, props.reviewFactorParams)
+      return ReviewFunc.calcAaverage(props.review, props.reviewFactorParams, props.pullingUp, 100 + props.pullingDown, 0, 100)
     })
 
     const sum = computed(() => {
@@ -244,11 +268,11 @@ export default defineComponent({
 
     const expansion = ref(false)
 
-    const getPointType = () => {
+    const pointTypeEx: ComputedRef<ReviewPointType> = computed(() => {
       return props.pointType || props.review.pointType || 'point'
-    }
+    })
 
-    const chartStep = computed(() => 100 / (pointTypeTierCountDic[getPointType()] - 1))
+    const chartStep = computed(() => 100 / (pointTypeTierCountDic[pointTypeEx.value] - 1))
 
     const chartLabels = computed(() => props.reviewFactorParams.filter(v => v.isPoint).map(v => v.name))
 
@@ -314,6 +338,29 @@ export default defineComponent({
       return store.state.userId === props.review.userId
     })
 
+    const pageLink = computed(() => `${process.env.VUE_APP_BASE_URI}/review/${props.review.reviewId}`)
+    const twitterBody = computed(() => {
+      const list: string[] = []
+      if (isSelf.value) {
+        list.push('レビューを投稿しました')
+      } else {
+        list.push(`${props.review.userName}さんのレビューを共有しました`)
+      }
+
+      const val = ReviewFunc.getReviewDisp(pointTypeEx.value === 'unlimited' ? sum.value : average.value, pointTypeEx.value)
+      list.push(`${ReviewFunc.getLergeDisplayLabel(pointTypeEx.value)} : ${calcPointPlainText(pointTypeEx.value, val, true)}`)
+
+      list.push(`${props.review.name}`)
+      list.push(`${props.review.title}`)
+
+      const text = list.join('\n')
+      if (text.length > 100) {
+        return `${text.substring(0, 100)}...\n\n`
+      } else {
+        return `${text}\n\n`
+      }
+    })
+
     return {
       menuItems,
       getImgSource,
@@ -322,7 +369,7 @@ export default defineComponent({
       average,
       sum,
       expansion,
-      getPointType,
+      pointTypeEx,
       chartStep,
       chartLabels,
       chartDataList,
@@ -330,7 +377,9 @@ export default defineComponent({
       delDialog,
       goThere,
       deleteReview,
-      isSelf
+      isSelf,
+      pageLink,
+      twitterBody
     }
   }
 })

@@ -3,6 +3,11 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
+    path: '/home',
+    name: 'home-no-id',
+    component: () => import('../views/HomeView.vue')
+  },
+  {
     path: '/home/:id',
     name: 'home',
     component: () => import('../views/HomeView.vue')
@@ -36,11 +41,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/regist',
     name: 'regist',
     component: () => import('../views/RegistrationView.vue')
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: () => import('../views/TestView.vue')
   },
   {
     path: '/tier-settings-new',
@@ -81,11 +81,25 @@ const routes: Array<RouteRecordRaw> = [
     path: '/tier-embedded/:tid',
     name: 'tier-embedded',
     component: () => import('../views/TierEmbeddedView.vue')
+  },
+  {
+    path: '/welcome',
+    name: 'welcome',
+    component: () => import('../views/WelcomeView.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return {
+        top: 0
+      }
+    }
+  },
   routes
 })
 

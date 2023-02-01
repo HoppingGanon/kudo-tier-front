@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs, watch } from 'vue'
+import { defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import RestApi, { toastError, PostListItem } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
@@ -109,7 +109,7 @@ export default defineComponent({
     },
     targetUserId: {
       type: String,
-      required: true
+      default: ''
     }
   },
   setup (props) {
@@ -119,8 +119,7 @@ export default defineComponent({
     const isNotFound = ref(true)
     const targetUser = ref(emptyUser)
 
-    const { targetUserId } = toRefs(props)
-    watch(targetUserId, () => {
+    const download = () => {
       if (targetUserId.value !== '') {
         RestApi.getUserData(targetUserId.value).then((res) => {
           targetUser.value = res.data
@@ -134,7 +133,14 @@ export default defineComponent({
           reviews.value = res.data.reviews
         }).catch((e) => toastError(e, toast))
       }
+    }
+    const { targetUserId } = toRefs(props)
+
+    // 描画時とUserID変更時にユーザーデータをダウンロードする
+    onMounted(() => {
+      download()
     })
+    watch(targetUserId, download)
 
     const goTierSearch = (tab: TierContentType) => {
       router.push(`/tier-search/${targetUserId.value}?tab=${tab}`)

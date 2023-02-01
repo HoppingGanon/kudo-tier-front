@@ -23,6 +23,8 @@
         @updateParagType="updateParagType"
         @updateParagBody="updateParagBody"
         @update-params="updateParams"
+        @update-pulling-up="updatePullingUp"
+        @update-pulling-down="updatePullingDown"
       />
     </v-card>
   </v-container>
@@ -214,6 +216,12 @@ export default defineComponent({
       tier.value.reviewFactorParams.splice(0)
       tier.value.reviewFactorParams = value
     }
+    const updatePullingUp = (value: number) => {
+      tier.value.pullingUp = value
+    }
+    const updatePullingDown = (value: number) => {
+      tier.value.pullingDown = value
+    }
 
     return {
       tier,
@@ -231,7 +239,9 @@ export default defineComponent({
       removeParagItem,
       updateParagType,
       updateParagBody,
-      updateParams
+      updateParams,
+      updatePullingUp,
+      updatePullingDown
     }
   }
 })

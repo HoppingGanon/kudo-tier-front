@@ -108,10 +108,10 @@
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
       <div class="d-flex align-center" style="width: 100%;">
-        <div>
+        <div class="cursor-pointer" @click="goWelcome">
           <v-img class="ml-1 mr-1" width="40px" src="@/assets/logo.png" />
         </div>
-        <div>
+        <div class="cursor-pointer" @click="goWelcome">
           <v-toolbar-title>
             TierReviews
           </v-toolbar-title>
@@ -202,6 +202,7 @@ export default defineComponent({
 
     const goHome = () => {
       router.push(`/home/${store.state.userId}`)
+      drawer.value = false
     }
 
     const forceLogout = () => {
@@ -214,18 +215,27 @@ export default defineComponent({
 
     const goLogin = () => {
       router.push('/login')
+      drawer.value = false
     }
 
     const goTierSearch = () => {
       router.push(`/tier-search/${store.state.userId}`)
+      drawer.value = false
     }
 
     const goTierSettings = () => {
       router.push('/tier-settings-new')
+      drawer.value = false
     }
 
     const goSettings = () => {
       router.push('/settings')
+      drawer.value = false
+    }
+
+    const goWelcome = () => {
+      router.push('/welcome')
+      drawer.value = false
     }
 
     // セッションのユーザーIDに変化があればユーザーデータをダウンロードする
@@ -295,6 +305,7 @@ export default defineComponent({
       goTierSearch,
       goTierSettings,
       goSettings,
+      goWelcome,
       routeWatcher
     }
   }

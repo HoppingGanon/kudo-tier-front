@@ -49,6 +49,8 @@
             :point-type="pointType"
             @update-point-type="updatePointType"
             display-type="all"
+            :pulling-up="tier.pullingUp"
+            :pulling-down="tier.pullingDown"
           />
         </div>
       </v-card>
@@ -63,7 +65,7 @@
   </padding-component>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
-  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true"/>
+  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true" title="ユーザー情報を取得中..." />
 </template>
 
 <script lang="ts">

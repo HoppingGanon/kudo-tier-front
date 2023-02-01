@@ -102,14 +102,14 @@
               <v-card
                 flat
               >
-                <v-card v-if="tiers.length === 0 && reviews.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1" flat>
+                <v-card v-if="tiers.length === 0 && pairs.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1" flat>
                   <div style="text-align: center;">
                     レビューがありません<br />
                     レビューを作成するにはまずはTierを作成しましょう<br />
                     <v-btn color="primary" @click="goTierSettings">Tierを作成する</v-btn>
                   </div>
                 </v-card>
-                <v-card v-else-if="tiers.length !== 0 && reviews.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1">
+                <v-card v-else-if="tiers.length !== 0 && pairs.length === 0 && !isLoadingReviews" height="40vh" class="flex-center pa-1">
                   <div style="text-align: center;">
                     レビューがありません<br />
                     Tierからレビューを追加しましょう<br />
@@ -119,14 +119,13 @@
                 <review-list
                   v-else
                   class="pa-1"
-                  :reviews="reviews"
-                  :review-factor-params="params"
+                  :pairs="pairs"
                   :is-link="true"
                   display-type="summary"
                   :is-loading="isLoadingReviews"
                   @reload="reloadReviews"
                 />
-                <v-card v-if="reviews.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
+                <v-card v-if="pairs.length !== 0" flat class="pa-3 mb-3 d-flex flex-row-reverse cursor-pointer" @click="goSearch('review')">
                   もっと投稿を見る
                 </v-card>
               </v-card>
@@ -139,11 +138,11 @@
   </padding-component>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
-  <loading-component v-if="isLoadingUser" :is-loading="true" :is-floating="true" title="ユーザー情報の取得中..." />
+  <loading-component v-if="isLoadingUser" :is-loading="true" :is-floating="true" title="情報の取得中..." />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, Ref, ref } from 'vue'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
@@ -153,7 +152,7 @@ import ErrorComponent from '@/components/ErrorComponent.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import { useRoute } from 'vue-router'
-import { Tier, Review, ReviewFactorParam } from '@/common/review'
+import { Tier, ReviewWithParams } from '@/common/review'
 import { emptyUser } from '@/common/dummy'
 import { useToast } from 'vue-toast-notification'
 import router from '@/router'
@@ -182,11 +181,8 @@ export default defineComponent({
     const user = ref(emptyUser)
     const userId = ref('')
 
-    // テストデータ
-    const reviews = ref([] as Review[])
-
-    const tiers = ref([] as Tier[])
-    const params = ref([] as ReviewFactorParam[][])
+    const pairs: Ref<ReviewWithParams[]> = ref([] as ReviewWithParams[])
+    const tiers: Ref<Tier[]> = ref([] as Tier[])
 
     const isLoadingUser = ref(true)
     const isLoadingReviews = ref(true)
@@ -198,11 +194,9 @@ export default defineComponent({
 
     const reloadReviews = () => {
       RestApi.getReviewPairs(userId.value, '', 'updatedAtDesc', 1).then((res) => {
-        reviews.value.splice(0)
-        params.value.splice(0)
-        res.data.forEach((v) => {
-          reviews.value.push(Parser.parseReview(v.review))
-          params.value.push(v.params)
+        pairs.value.splice(0)
+        res.data.forEach((p) => {
+          pairs.value.push(Parser.parseReviewWithParams(p))
         })
         reloadUser()
       }).catch((e) => {
@@ -248,9 +242,11 @@ export default defineComponent({
 
         // 並行してレビューもダウンロードする
         reloadReviews()
+      } else if (store.getters.isRegistered) {
+        router.push(`/home/${store.state.userId}`)
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
-        isNotFound.value = true
+        router.push('welcome')
       }
     })
 
@@ -270,8 +266,7 @@ export default defineComponent({
       isNotFound,
       user,
       userId,
-      reviews,
-      params,
+      pairs,
       isLoadingUser,
       isLoadingReviews,
       isLoadingTiers,

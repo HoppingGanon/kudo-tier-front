@@ -140,8 +140,20 @@ export interface Tier {
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
 
+  /** Tierを上方向に引き上げる */
+  pullingUp: number
+  /** Tierを下方向に引き下げる */
+  pullingDown: number
+
   createdAt: Date
   updatedAt: Date
+}
+
+export interface ReviewWithParams {
+  review: Review
+  params: ReviewFactorParam[]
+  pullingUp: number
+  pullingDown: number
 }
 
 export const userValidation = {
@@ -173,9 +185,9 @@ export const sectionValidation = {
   /** セクションタイトルの文字数の上限 */
   sectionTitleLen: 100,
   /** 説明文の文字数の上限 */
-  paragTextLenMax: 400,
+  paragTextLenMax: 2000,
   /** リンクの文字数の長さの上限 */
-  paragLinkLenMax: 255,
+  paragLinkLenMax: 400,
   /** 説明文やリンクの合計数の上限 */
   paragsLenMax: 16
 }
@@ -190,6 +202,11 @@ export interface TierEditingData {
 
   /** 本文 */
   parags: ReviewParagraph[]
+
+  /** Tierを上方向に引き上げる */
+  pullingUp: number
+  /** Tierを下方向に引き下げる */
+  pullingDown: number
 
   /** レビューポイントの表示方法 */
   pointType: ReviewPointType
@@ -242,7 +259,7 @@ export const pointTypeTierCountDic = {
   rank14: 14,
   score: 11,
   point: 10,
-  unlimited: 1
+  unlimited: 5
 }
 
 /** Tierをピボット表示する際の情報 */
@@ -289,7 +306,7 @@ export class ReviewFunc {
   }
 
   /** 重みを考慮した評点の総合評価を算出する */
-  static calcAaverage (review: Review, reviewFactorParams: ReviewFactorParam[]) {
+  static calcAaverage (review: Review, reviewFactorParams: ReviewFactorParam[], min: number, max: number, orgMin: number, orgMax: number) {
     let ave = 0
     let sumWeight = 0
 
@@ -307,7 +324,18 @@ export class ReviewFunc {
         }
       }
     })
-    return ave
+
+    if (ave > max) {
+      ave = max - min
+    } else if (ave < min) {
+      ave = 0
+    } else {
+      ave = ave - min
+    }
+    const bottom = Math.min(orgMin, ave)
+    const top = ave - Math.min(orgMax, ave)
+    const point = (ave - top - bottom) * ((orgMax - orgMin) / (max - min))
+    return point
   }
 
   /**
@@ -340,7 +368,30 @@ export class ReviewFunc {
     return pointTypes
   }
 
-  static makeTierPivot (reviews: Review[], reviewFactorParams: ReviewFactorParam[], tierId: string, pointType: ReviewPointType) {
+  /** reviewsのポイントを算出し、ソートしたうえでTierPivotInfomation[]として返す */
+  static makePivotInfoList (reviews: Review[], reviewFactorParams: ReviewFactorParam[], min: number, max: number, orgMin: number, orgMax: number) : TierPivotInfomation[] {
+    const list: TierPivotInfomation[] = []
+    reviews.forEach((review) => {
+      list.push({
+        review: review,
+        point: ReviewFunc.calcAaverage(review, reviewFactorParams, min, max, orgMin, orgMax)
+      })
+    })
+    return list.sort((a, b) => a.point - b.point)
+  }
+
+  /**
+   * Tier表作成のためのピボットデータを作成
+   * @param pivotInfoList ピボット情報のデータリスト
+   * @param reviewFactorParams 評価項目の情報
+   * @param tierId TierID
+   * @param pointType ポイント表示方法
+   * @param min 出力するポイントの最小値
+   * @param max 出力するポイントの最大値
+   * @param orgMin 入力するポイントの最小値
+   * @param orgMax 入力するポイントの最大値
+   */
+  static makeTierPivot (pivotInfoList: TierPivotInfomation[], pointType: ReviewPointType) {
     const len = pointTypeTierCountDic[pointType] as number | undefined
     const list: TierPivotInfomation[][] = []
     if (len) {
@@ -351,24 +402,17 @@ export class ReviewFunc {
       }
 
       // ポイントの段階ごとにグルーピングする
-      reviews.forEach((review) => {
-        const point = ReviewFunc.calcAaverage(review, reviewFactorParams)
+      pivotInfoList.forEach((info) => {
+        // 上端と下端を切り取って引き延ばす
+
         // rankやscoreについては、getReviewDisp()の機能と同様
-        const index = list.length - Math.round(point / step) - 1
+        const index = list.length - Math.round(info.point / step) - 1
 
         if (index >= 0 && index < list.length) {
-          list[index].push({
-            review: review,
-            point: ReviewFunc.calcAaverage(review, reviewFactorParams)
-          })
+          list[index].push(info)
         }
       })
     }
-
-    // ソートを実行する
-    list.forEach((v, i) => {
-      list[i] = v.sort((a, b) => a.point - b.point)
-    })
     return list
   }
 
@@ -501,6 +545,8 @@ export class ReviewFunc {
       reviews: ReviewFunc.cloneReviews(org.reviews),
       pointType: org.pointType,
       reviewFactorParams: ReviewFunc.cloneFactorParams(org.reviewFactorParams),
+      pullingUp: org.pullingUp,
+      pullingDown: org.pullingDown,
       createdAt: org.createdAt,
       updatedAt: org.updatedAt
     }
@@ -516,14 +562,16 @@ export class ReviewFunc {
    */
   static createTierRequestData (tier: Tier) : TierEditingData {
     const img = base64Api.dataURLToBase64(tier.imageUrl)
-    const data = {
+    const data: TierEditingData = {
       name: tier.name,
       imageBase64: img.base64,
       imageIsChanged: img.isChanged,
       parags: ReviewFunc.cloneParags(tier.parags),
       pointType: tier.pointType,
-      reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams)
-    } as TierEditingData
+      reviewFactorParams: ReviewFunc.cloneFactorParams(tier.reviewFactorParams),
+      pullingUp: tier.pullingUp,
+      pullingDown: tier.pullingDown
+    }
 
     data.parags.forEach((parag) => {
       if (parag.type === 'imageLink') {
@@ -669,6 +717,23 @@ export class ReviewFunc {
     return {
       tier: cloneTier,
       images: images
+    }
+  }
+
+  static getLergeDisplayLabel (potinType: ReviewPointType) {
+    switch (potinType) {
+      case 'stars':
+        return '総合'
+      case 'rank7':
+        return '総合ランク'
+      case 'rank14':
+        return '総合ランク'
+      case 'score':
+        return '総合スコア'
+      case 'point':
+        return '総合点'
+      case 'unlimited':
+        return '合計'
     }
   }
 }

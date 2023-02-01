@@ -44,9 +44,8 @@
         />
         <review-search
           v-show="!isNotFound && tab === 1"
-          :reviews="reviews"
+          :pairs="pairs"
           :user-id="userId"
-          :params-list="paramsList"
           @clear-reviews-pair="clearReviewsPair"
           @update-reviews-pair="updateReviewsPair"
           @add-reviews-pair="addReviewsPair"
@@ -58,14 +57,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, Ref, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSearch from '@/components/TierSearch.vue'
 import ReviewSearch from '@/components/ReviewSearch.vue'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
-import { Review, ReviewFactorParam, Tier } from '@/common/review'
+import { ReviewWithParams, Tier } from '@/common/review'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 
 export default defineComponent({
@@ -86,9 +85,8 @@ export default defineComponent({
     const userId = ref('')
     const tab = ref(0)
 
-    const tiers = ref([] as Tier[])
-    const reviews = ref([] as Review[])
-    const paramsList = ref([] as ReviewFactorParam[][])
+    const tiers: Ref<Tier[]> = ref([] as Tier[])
+    const pairs: Ref<ReviewWithParams[]> = ref([] as ReviewWithParams[])
 
     const isReviewsLoading = ref(true)
     const isTiersLoading = ref(true)
@@ -117,12 +115,8 @@ export default defineComponent({
           RestApi.getReviewPairs(id, '', 'updatedAtDesc', 1).then((res) => {
             if (res.data.length !== 0) {
               // 取得件数1件以上
-              reviews.value.splice(0)
-              paramsList.value.splice(0)
-              res.data.forEach((v) => {
-                reviews.value.push(Parser.parseReview(v.review))
-                paramsList.value.push(v.params)
-              })
+              pairs.value.splice(0)
+              pairs.value = res.data.map((pair) => Parser.parseReviewWithParams(pair))
             }
             isReviewsLoading.value = false
           }).catch((e) => {
@@ -164,27 +158,23 @@ export default defineComponent({
     }
 
     const clearReviewsPair = () => {
-      reviews.value.splice(0)
-      paramsList.value.splice(0)
+      pairs.value.splice(0)
     }
 
-    const updateReviewsPair = (r: Review[], p: ReviewFactorParam[][]) => {
+    const updateReviewsPair = (v: ReviewWithParams[]) => {
       clearReviewsPair()
       setTimeout(() => {
-        reviews.value = r
-        paramsList.value = p
+        pairs.value = v
       }, 0)
     }
 
-    const addReviewsPair = (r: Review[], p: ReviewFactorParam[][]) => {
-      reviews.value = reviews.value.concat(r)
-      paramsList.value = paramsList.value.concat(p)
+    const addReviewsPair = (v: ReviewWithParams[]) => {
+      pairs.value = pairs.value.concat(v)
     }
 
     return {
       tiers,
-      reviews,
-      paramsList,
+      pairs,
       isNotFound,
       dispName,
       userId,

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
-import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData } from './review'
+import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData, ReviewWithParams } from './review'
 import { TierSortType } from './page'
 import { ToastPluginApi } from 'vue-toast-notification'
 import Base64Api from './base64api'
@@ -93,6 +93,8 @@ export interface ReviewData {
 export interface ReviewDataWithParams {
   review: ReviewData
   params: ReviewFactorParam[]
+  pullingUp: number
+  pullingDown: number
 }
 
 /** Tierをダウンロードする際の構造 */
@@ -121,6 +123,11 @@ export interface TierData {
   pointType: ReviewPointType
   /** レビュー評点に対する情報 */
   reviewFactorParams: ReviewFactorParam[]
+
+  /** Tierを上方向に引き上げる */
+  pullingUp: number
+  /** Tierを下方向に引き下げる */
+  pullingDown: number
 
   createdAt: string
   updatedAt: string
@@ -300,6 +307,8 @@ export class Parser {
       parags: tierData.parags,
       reviews: reviews,
       reviewFactorParams: tierData.reviewFactorParams,
+      pullingUp: tierData.pullingUp,
+      pullingDown: tierData.pullingDown,
       createdAt: new Date(tierData.createdAt),
       updatedAt: new Date(tierData.updatedAt)
     }
@@ -320,6 +329,15 @@ export class Parser {
       sections: reviewData.sections,
       createdAt: new Date(reviewData.createdAt),
       updatedAt: new Date(reviewData.updatedAt)
+    }
+  }
+
+  static parseReviewWithParams (pair: ReviewDataWithParams) : ReviewWithParams {
+    return {
+      review: Parser.parseReview(pair.review),
+      params: pair.params,
+      pullingUp: pair.pullingUp,
+      pullingDown: pair.pullingDown
     }
   }
 }

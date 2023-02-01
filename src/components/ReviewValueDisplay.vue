@@ -14,7 +14,7 @@
   <div
     v-else-if="pointType == 'rank14' || pointType == 'rank7'"
     class="rank"
-    :class="reverse ? `reverse ${textsize}` : `no-reverse ${calcRankClass(pointType, point)} ${textsize}`" v-text="calcRankText(pointType, point)"
+    :class="reverse ? `reverse ${textsize}` : `no-reverse ${calcRankClass(pointType, point)} ${textsize}`" v-text="calcPointPlainText(pointType, point)"
   ></div>
   <div v-else-if="compact">
     <!-- score, point, unlimitedのコンパクト評価表示 -->
@@ -145,81 +145,98 @@ export const calcRankClass = (pointType: ReviewPointType, point: number) => {
 
   return classStr
 }
-export const calcRankText = (pointType: ReviewPointType, point: number) => {
-  let style = ''
-
+export const calcPointPlainText = (pointType: ReviewPointType, point: number, multiByte?: boolean) => {
   if (pointType === 'rank14') {
     switch (point) {
       case 0:
-        style += 'E'
-        break
+        return 'E'
       case 1:
-        style += 'E+'
-        break
+        return 'E+'
       case 2:
-        style += 'D'
-        break
+        return 'D'
       case 3:
-        style += 'D+'
-        break
+        return 'D+'
       case 4:
-        style += 'C'
-        break
+        return 'C'
       case 5:
-        style += 'C+'
-        break
+        return 'C+'
       case 6:
-        style += 'B'
-        break
+        return 'B'
       case 7:
-        style += 'B+'
-        break
+        return 'B+'
       case 8:
-        style += 'A'
-        break
+        return 'A'
       case 9:
-        style += 'A+'
-        break
+        return 'A+'
       case 10:
-        style += 'S'
-        break
+        return 'S'
       case 11:
-        style += 'S+'
-        break
+        return 'S+'
       case 12:
-        style += 'SS'
-        break
+        return 'SS'
       case 13:
-        style += 'SS+'
-        break
+        return 'SS+'
+      default:
+        return 'SS+'
     }
   } else if (pointType === 'rank7') {
     switch (point) {
       case 0:
-        style += 'E'
-        break
+        return 'E'
       case 1:
-        style += 'D'
-        break
+        return 'D'
       case 2:
-        style += 'C'
-        break
+        return 'C'
       case 3:
-        style += 'B'
-        break
+        return 'B'
       case 4:
-        style += 'A'
-        break
+        return 'A'
       case 5:
-        style += 'S'
-        break
+        return 'S'
       case 6:
-        style += 'SS'
-        break
+        return 'SS'
+      default:
+        return 'SS'
     }
+  } else if (pointType === 'stars') {
+    if (multiByte) {
+      switch (point) {
+        case 0:
+          return '★★★★★ (0 / 5)'
+        case 1:
+          return '☆★★★★ (1 / 5)'
+        case 2:
+          return '☆☆★★★ (2 / 5)'
+        case 3:
+          return '☆☆☆★★ (3 / 5)'
+        case 4:
+          return '☆☆☆☆★ (4 / 5)'
+        case 5:
+          return '☆☆☆☆☆ (5 / 5)'
+        default:
+          return '☆☆☆☆☆ (5 / 5)'
+      }
+    } else {
+      switch (point) {
+        case 0:
+          return '0'
+        case 1:
+          return '1'
+        case 2:
+          return '2'
+        case 3:
+          return '3'
+        case 4:
+          return '4'
+        case 5:
+          return '5'
+        default:
+          return '5'
+      }
+    }
+  } else {
+    return point.toString()
   }
-
-  return style
 }
 
 export default defineComponent({
@@ -326,7 +343,7 @@ export default defineComponent({
       textsize,
       iconsize,
       calcRankClass,
-      calcRankText
+      calcPointPlainText
     }
   }
 })

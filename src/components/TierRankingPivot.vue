@@ -53,14 +53,15 @@
         />
       </td>
       <td :style="pivotColor" style="" :class="dark ? 'dark-right' : 'light-right'">
-        <div v-for="item,j in items" :key="j" style="display: inline-block;">
+        <div v-for="item,j in items" :key="j" style="display: inline-block;" class="ma-1">
           <pivot-icon
-            class="ma-1"
             :infomation="item"
             :size="iconSize"
             :point-type="pointType"
             :review-factor-params="params"
             :direct-link="directLink"
+            :pulling-up="pullingUp"
+            :pulling-down="pullingDown"
             />
         </div>
       </td>
@@ -113,6 +114,14 @@ export default defineComponent({
     directLink: {
       type: Boolean,
       default: false
+    },
+    pullingUp: {
+      type: Number,
+      required: true
+    },
+    pullingDown: {
+      type: Number,
+      required: true
     }
   },
   emits: {},

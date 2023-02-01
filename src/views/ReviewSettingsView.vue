@@ -104,6 +104,8 @@
                 :point-type="tier.pointType"
                 @update-point="updatePoint"
                 @update-info="updateInfo"
+                :pulling-up="tier.pullingUp"
+                :pulling-down="tier.pullingDown"
               />
             </v-col>
           </v-row>
@@ -162,14 +164,18 @@
         </v-row>
         <v-row>
           <v-col>
-            <review-component
-              :review="review"
-              :point-type="tier.pointType"
-              display-type="all"
-              :no-header="true"
-              :review-factor-params="tier.reviewFactorParams"
-              :no-change-point="true"
-            />
+            <padding-component>
+              <review-component
+                :review="review"
+                :point-type="tier.pointType"
+                display-type="all"
+                :no-header="true"
+                :review-factor-params="tier.reviewFactorParams"
+                :no-change-point="true"
+                :pulling-up="tier.pullingUp"
+                :pulling-down="tier.pullingDown"
+              />
+            </padding-component>
           </v-col>
         </v-row>
       </v-container>
@@ -182,7 +188,8 @@
             情報の入力
           </v-btn>
           <v-btn @click="submit">
-            完了
+            <span v-if="isNew">作成</span>
+            <span v-else>更新</span>
           </v-btn>
         </v-row>
       </v-card-actions>
@@ -210,6 +217,7 @@ import MenuButton from '@/components/MenuButton.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import PaddingComponent from '@/components/PaddingComponent.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
@@ -227,7 +235,8 @@ export default defineComponent({
     MenuButton,
     ImageSelector,
     ReviewComponent,
-    SimpleDialog
+    SimpleDialog,
+    PaddingComponent
   },
   setup () {
     const route = useRoute()
@@ -318,9 +327,6 @@ export default defineComponent({
           review.value.iconUrl === '') {
         } else {
           const result = window.confirm('入力途中のデータは破棄されます\nよろしいですか？')
-          if (!result) {
-            toast.warning('前の設定を変更したい場合は右下の「戻る」ボタンか、上部のタブを押してください')
-          }
           return result
         }
       }

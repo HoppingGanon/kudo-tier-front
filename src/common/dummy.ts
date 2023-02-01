@@ -12,6 +12,8 @@ export const emptyTier: Tier = {
   parags: [],
   reviews: [],
   reviewFactorParams: [],
+  pullingUp: 0,
+  pullingDown: 0,
   createdAt: new Date(),
   updatedAt: new Date()
 }

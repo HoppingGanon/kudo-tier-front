@@ -16,7 +16,7 @@
         <v-divider />
       </v-col>
     </v-row>
-    <v-row v-if="reviews.length == 0 && !isLoading && !isWaiting">
+    <v-row v-if="pairs.length == 0 && !isLoading && !isWaiting">
       <v-col>
         <v-card flat>
           <span>
@@ -28,7 +28,7 @@
     <v-row v-else>
       <v-col>
         <review-list
-          :reviews="reviews"
+          :pairs="pairs"
           :is-link="true"
           display-type="summary"
           :review-factor-params="paramsList"
@@ -41,8 +41,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
-import { Review, ReviewFactorParam } from '@/common/review'
+import { computed, defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
+import { ReviewWithParams } from '@/common/review'
 import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
 import SearchComponent from '@/components/SearchComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
@@ -57,12 +57,8 @@ export default defineComponent({
     ReviewList
   },
   props: {
-    reviews: {
-      type: Array as PropType<Review[]>,
-      required: true
-    },
-    paramsList: {
-      type: Array as PropType<ReviewFactorParam[][]>,
+    pairs: {
+      type: Array as PropType<ReviewWithParams[]>,
       required: true
     },
     userId: {
@@ -78,10 +74,10 @@ export default defineComponent({
     clearReviewsPair: () => true,
     addReviewsPair: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      tiers: Review[], params: ReviewFactorParam[][]) => true,
+      pairs :ReviewWithParams[]) => true,
     updateReviewsPair: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      tiers: Review[], params: ReviewFactorParam[][]) => true
+      pairs :ReviewWithParams[]) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
@@ -108,13 +104,7 @@ export default defineComponent({
       RestApi.getReviewPairs(props.userId, text.value, sortItem.value.value, 1).then((res) => {
         if (res.data.length !== 0) {
           // 取得件数1件以上
-          const reviews: Review[] = []
-          const params: ReviewFactorParam[][] = []
-          res.data.forEach((v) => {
-            reviews.push(Parser.parseReview(v.review))
-            params.push(v.params)
-          })
-          emit('updateReviewsPair', reviews, params)
+          emit('updateReviewsPair', res.data.map((pairs) => Parser.parseReviewWithParams(pairs)))
           // データ追加を可能に
           isStop.value = false
           page.value = 1
@@ -152,13 +142,7 @@ export default defineComponent({
         RestApi.getReviewPairs(props.userId, text.value, sortItem.value.value, page.value + 1).then((res) => {
           if (res.data.length !== 0) {
           // 取得件数1件以上
-            const reviews: Review[] = []
-            const params: ReviewFactorParam[][] = []
-            res.data.forEach((v) => {
-              reviews.push(Parser.parseReview(v.review))
-              params.push(v.params)
-            })
-            emit('addReviewsPair', reviews, params)
+            emit('addReviewsPair', res.data.map((pairs) => Parser.parseReviewWithParams(pairs)))
             page.value++
           } else {
             // 取得件数が0ならデータ追加を不能に
@@ -224,7 +208,9 @@ export default defineComponent({
       sortItem,
       updateSortItem,
       isWaiting,
-      update
+      update,
+      reviews: computed(() => props.pairs.map((v) => v.review)),
+      paramsList: computed(() => props.pairs.map((v) => v.params))
     }
   }
 })

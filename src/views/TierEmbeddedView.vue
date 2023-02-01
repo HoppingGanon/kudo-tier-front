@@ -1,7 +1,7 @@
 <template>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
-  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true"/>
+  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true" title="Tierを取得中..." />
 
   <!-- サイズ調整のためfluidは入れない -->
   <v-container v-else-if="isNotFound" class="pa-0">
@@ -43,7 +43,6 @@ import { useRoute } from 'vue-router'
 import RestApi, { Parser } from '@/common/restapi'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
 import { iconSizeList } from '@/common/page'
-import { Computed } from 'vuex'
 
 export default defineComponent({
   name: 'TierEmbeddedView',

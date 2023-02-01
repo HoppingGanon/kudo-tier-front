@@ -5,14 +5,14 @@
       <v-img v-else src="@/assets/common/noimage256.png"/>
     </a>
   </v-card>
-  <v-menu v-else bottom v-model="isHover">
+  <v-menu v-else-if="!$vuetify.display.mobile" bottom v-model="isHover">
     <template v-slot:activator="{ props }">
       <v-card class="ma-1" :width="size" :height="size" @click="click" v-bind="props">
         <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
         <v-img v-else src="@/assets/common/noimage256.png"/>
       </v-card>
     </template>
-    <v-card width="480px" class="no-scroll">
+    <v-card width="480px" class="no-scroll pa-1">
       <review-component
         :no-header="true"
         :review="infomation.review"
@@ -20,6 +20,8 @@
         display-type="summary"
         :point-type="pointType"
         :no-change-point="true"
+        :pulling-up="pullingUp"
+        :pulling-down="pullingDown"
       />
       <v-card-actions class="d-flex flex-row-reverse">
         <a :href="`#rev${infomation.review.reviewId}`" class="no-link">
@@ -33,6 +35,12 @@
       </v-card-actions>
     </v-card>
   </v-menu>
+  <v-card v-else class="ma-1" :width="size" :height="size">
+    <a :href="`#rev${infomation.review.reviewId}`" class="no-link">
+      <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
+      <v-img v-else src="@/assets/common/noimage256.png"/>
+    </a>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -72,6 +80,14 @@ export default defineComponent({
     directLink: {
       type: Boolean,
       default: false
+    },
+    pullingUp: {
+      type: Number,
+      required: true
+    },
+    pullingDown: {
+      type: Number,
+      required: true
     }
   },
   setup (props) {

@@ -24,6 +24,12 @@
       </v-col>
     </v-row>
 
+    <v-row v-if="displayType === 'all'">
+      <v-col>
+        <share-buttons :link="pageLink" :body="twitterBody" />
+      </v-col>
+    </v-row>
+
     <v-row><v-col><v-container fluid class="ma-0 pa-0" :class="isLink ? 'cursor-pointer' : ''" @click="goTier">
       <v-row>
         <v-col>
@@ -69,8 +75,7 @@
       <v-row v-if="displayType === 'all'">
         <v-col>
           <review-list
-            :reviews="tier.reviews"
-            :review-factor-params="tier.reviewFactorParams"
+            :pairs="pairs"
             :is-sample="isSample"
             :is-link="!isSample"
             :no-header="true"
@@ -94,7 +99,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, ref, onMounted } from 'vue'
-import { IconSize, RankingTheme, ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, Tier } from '@/common/review'
+import { IconSize, RankingTheme, ReviewDisplayType, ReviewFactorParam, ReviewPointType, ReviewSection, ReviewWithParams, Tier } from '@/common/review'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import CommonApi from '@/common/commonapi'
 import ReviewHeader from '@/components/ReviewHeader.vue'
@@ -103,6 +108,7 @@ import TierRanking from '@/components/TierRanking.vue'
 import SectionComponent from '@/components/SectionComponent.vue'
 import MenuButton from '@/components/MenuButton.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import ShareButtons from '@/components/ShareButtons.vue'
 import router from '@/router'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
@@ -117,7 +123,8 @@ export default defineComponent({
     TierRanking,
     SectionComponent,
     MenuButton,
-    SimpleDialog
+    SimpleDialog,
+    ShareButtons
   },
   props: {
     tier: {
@@ -160,6 +167,17 @@ export default defineComponent({
     const display = useDisplay()
 
     const iconSize = ref('48px' as IconSize)
+    const pairs = computed(() =>
+      props.tier.reviews.map((r) => {
+        const pair: ReviewWithParams = {
+          review: r,
+          params: props.tier.reviewFactorParams,
+          pullingDown: props.tier.pullingDown,
+          pullingUp: props.tier.pullingUp
+        }
+        return pair
+      })
+    )
 
     onMounted(() => {
       if (display.xl.value) {
@@ -266,8 +284,33 @@ export default defineComponent({
 
     const theme = ref('light' as RankingTheme)
 
+    const pageLink = computed(() => `${process.env.VUE_APP_BASE_URI}/tier/${props.tier.tierId}`)
+    const twitterBody = computed(() => {
+      const list: string[] = []
+      if (isSelf.value) {
+        list.push('Tierを投稿しました')
+      } else {
+        list.push(`${props.tier.userName}さんのTierを共有しました`)
+      }
+
+      list.push(`${props.tier.name}`)
+
+      const paragStrs = props.tier.parags.filter((p) => p.type === 'text' && p.body).map((p) => p.body)
+      if (paragStrs.length > 0) {
+        list.push(`\n${paragStrs.join('\n')}`)
+      }
+
+      const text = list.join('\n')
+      if (text.length > 100) {
+        return `${text.substring(0, 100)}...\n\n`
+      } else {
+        return `${text}\n\n`
+      }
+    })
+
     return {
       iconSize,
+      pairs,
       getImgSource,
       lastWriteTime,
       pointTypes,
@@ -280,7 +323,9 @@ export default defineComponent({
       goThere,
       isSelf,
       imageUrl,
-      theme
+      theme,
+      pageLink,
+      twitterBody
     }
   }
 })

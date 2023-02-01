@@ -85,6 +85,8 @@
             :theme="theme"
             :icon-size="iconSize"
             :text-size="textSize"
+            :pulling-up="pullingUp"
+            :pulling-down="pullingDown"
           />
         </v-card>
       </v-col>
@@ -133,6 +135,14 @@ export default defineComponent({
     textSize: {
       type: String as PropType<PointDisplaySize>,
       default: 'large2'
+    },
+    pullingUp: {
+      type: Number,
+      required: true
+    },
+    pullingDown: {
+      type: Number,
+      required: true
     }
   },
   emits: {

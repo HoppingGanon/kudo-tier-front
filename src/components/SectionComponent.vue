@@ -239,15 +239,15 @@ export default defineComponent({
       items: computed(() => props.hideSectionTitle ? additionalItems2 : additionalItems),
       getImgSource,
       imgHeight: computed(() => {
-        if (display.xs) {
+        if (display.xs.value) {
           return Math.max(360, display.height.value / 2)
-        } else if (display.sm) {
+        } else if (display.sm.value) {
           return Math.max(360, display.height.value / 2)
-        } else if (display.md) {
+        } else if (display.md.value) {
           return Math.max(360, display.height.value / 2)
-        } else if (display.lg) {
+        } else if (display.lg.value) {
           return Math.max(360, display.height.value / 2)
-        } else if (display.xl) {
+        } else if (display.xl.value) {
           return Math.max(360, display.height.value / 2)
         }
         return Math.max(360, display.height.value / 2)

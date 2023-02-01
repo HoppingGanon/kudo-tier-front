@@ -1,12 +1,12 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <v-row v-for="review,index in reviews" :key="index">
+    <v-row v-for="pair,index in pairs" :key="index">
       <v-col>
         <v-card class="pa-2">
           <review-component
             :no-header="noHeader"
-            :review="review"
-            :review-factor-params="makeParams(index)"
+            :review="pair.review"
+            :review-factor-params="pairs[index].params"
             :is-sample="isSample"
             :is-link="isLink"
             :display-type="displayType"
@@ -14,6 +14,8 @@
             @update-point-type="updatePointTypeEm($event, index)"
             :no-change-point="noChangePoint"
             @reload="$emit('reload')"
+            :pulling-up="pair.pullingUp"
+            :pulling-down="pair.pullingDown"
           />
         </v-card>
       </v-col>
@@ -29,7 +31,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
-import { Review, ReviewDisplayType, ReviewFactorParam, ReviewPointType } from '@/common/review'
+import { ReviewDisplayType, ReviewPointType, ReviewWithParams } from '@/common/review'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 
 export default defineComponent({
@@ -39,12 +41,8 @@ export default defineComponent({
     LoadingComponent
   },
   props: {
-    reviews: {
-      type: Array as PropType<Review[]>,
-      required: true
-    },
-    reviewFactorParams: {
-      type: Array as PropType<ReviewFactorParam[] | ReviewFactorParam[][]>,
+    pairs: {
+      type: Array as PropType<ReviewWithParams[]>,
       required: true
     },
     noHeader: {
@@ -86,22 +84,8 @@ export default defineComponent({
     const updatePointTypeEm = (value: ReviewPointType, index: number) => {
       emit('updatePointType', value, index)
     }
-
-    const makeParams = (index: number) => {
-      if (props.reviewFactorParams.length > 0) {
-        if (props.reviewFactorParams[0] instanceof Array) {
-          if (index < props.reviewFactorParams.length) {
-            return props.reviewFactorParams[index] as ReviewFactorParam[]
-          }
-        } else {
-          return props.reviewFactorParams as ReviewFactorParam[]
-        }
-      }
-      return [] as ReviewFactorParam[]
-    }
     return {
-      updatePointTypeEm,
-      makeParams
+      updatePointTypeEm
     }
   }
 })

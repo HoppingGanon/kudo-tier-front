@@ -106,6 +106,8 @@
         :theme="theme"
         :direct-link="true"
         :text-size="textSize"
+        :pulling-up="tier.pullingUp"
+        :pulling-down="tier.pullingDown"
       />
     </a>
     <tier-ranking-pivot
@@ -118,6 +120,8 @@
       :theme="theme"
       :direct-link="false"
       :text-size="textSize"
+      :pulling-up="tier.pullingUp"
+      :pulling-down="tier.pullingDown"
     />
 
     <!-- Tierランキングテーブル -->
@@ -172,7 +176,7 @@
       </v-row>
       <v-row v-show="isProcessing">
         <v-col>
-          <loading-component />
+          <loading-component title="Tier表を取得中..." />
         </v-col>
       </v-row>
       <v-row v-show="isProcessing && processingMessage">
@@ -210,6 +214,8 @@
       v-model:text-size="picTextSize"
       :params="params"
       :tier-pivot-list="picPivotList"
+      :pulling-up="tier.pullingUp"
+      :pulling-down="tier.pullingDown"
       />
       <v-card-actions>
         <div class="d-flex justify-end" style="width: 100%;" >
@@ -250,7 +256,7 @@
 
 <script lang="ts">
 import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize, IconSize, RankingTheme } from '@/common/review'
-import { defineComponent, PropType, computed, ref, onMounted, Ref } from 'vue'
+import { defineComponent, PropType, computed, ref, Ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
@@ -260,7 +266,6 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import TierToPicture from '@/components/TierToPicture.vue'
 import TierToEmbedded from '@/components/TierToEmbedded.vue'
-import vuetify from '@/plugins/vuetify'
 import { iconSizeList, SelectObject, textSizeList } from '@/common/page'
 import { useToast } from 'vue-toast-notification'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -378,7 +383,7 @@ export default defineComponent({
           let i = 0
           const rankingRow: Dictionary<string | number> = {
             name: review.name,
-            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params)
+            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params, props.tier.pullingUp, 100 + props.tier.pullingDown, 0, 100)
           }
           review.reviewFactors.forEach((factor) => {
             // ヘッダの行列数と突合
@@ -426,8 +431,10 @@ export default defineComponent({
       }
     }
 
+    const pivotInfoList = computed(() => ReviewFunc.makePivotInfoList(props.reviews, props.params, props.tier.pullingUp, 100 - props.tier.pullingDown, 0, 100))
+
     const tierPivotList = computed(() => {
-      const val = ReviewFunc.makeTierPivot(props.reviews, props.params, props.tier.tierId, props.pointType)
+      const val = ReviewFunc.makeTierPivot(pivotInfoList.value, props.pointType)
       return val
     })
 
@@ -451,8 +458,9 @@ export default defineComponent({
     const picIconSize = ref(iconSizeList[1].value)
     const picTextSize = ref(textSizeList[3].value)
 
+    const picPivotInfoList = computed(() => ReviewFunc.makePivotInfoList(props.reviews, props.params, props.tier.pullingUp, 100 - props.tier.pullingDown, 0, 100))
     const picPivotList = computed(() => {
-      const val = ReviewFunc.makeTierPivot(props.reviews, props.params, props.tier.tierId, picPointType.value)
+      const val = ReviewFunc.makeTierPivot(picPivotInfoList.value, picPointType.value)
       return val
     })
 
