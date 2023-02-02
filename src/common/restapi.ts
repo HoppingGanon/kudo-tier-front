@@ -173,7 +173,7 @@ export default class RestApi {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
       headers: {
-        sessionId: sessionId
+        Authorization: `Bearer ${sessionId}`
       }
     }
     return axios.get<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
@@ -183,7 +183,7 @@ export default class RestApi {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
       headers: {
-        sessionId: sessionId
+        Authorization: `Bearer ${sessionId}`
       }
     }
     return axios.patch<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
@@ -193,7 +193,7 @@ export default class RestApi {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
       headers: {
-        sessionId: sessionId
+        Authorization: `Bearer ${sessionId}`
       }
     }
     return axios.post<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
@@ -203,7 +203,7 @@ export default class RestApi {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
       headers: {
-        sessionId: sessionId
+        Authorization: `Bearer ${sessionId}`
       }
     }
     return axios.delete<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
@@ -215,13 +215,10 @@ export default class RestApi {
   }
 
   // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
-  static getSession (code: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return axios.get<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {
-      headers: {
-        code: code,
-        tempSessionId: tempSessionId
-      }
+  static postSession (code: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
+    return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {
+      codeChallenge: code,
+      sessionId: tempSessionId
     })
   }
 

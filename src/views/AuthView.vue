@@ -24,7 +24,7 @@ export default defineComponent({
       router.push(`/home/${store.state.userId}`)
     } else if (store.state.tempSessionId) {
       // 一時セッションを持っている場合
-      RestApi.getSession(code, store.state.tempSessionId).then((response) => {
+      RestApi.postSession(code, store.state.tempSessionId).then((response) => {
         store.commit('setTempSessionId', '')
         store.commit('setSessionId', response.data.sessionId)
         store.commit('setTwitterName', response.data.twitterName)

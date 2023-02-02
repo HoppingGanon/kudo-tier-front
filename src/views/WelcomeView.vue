@@ -39,12 +39,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
-import SimpleDialog from '@/components/SimpleDialog.vue'
 import WelcomeCarousel from '@/components/WelcomeCarousel.vue'
 import ExplanationSummary from '@/components/ExplanationSummary.vue'
 import store from '@/store'
-import { useToast } from 'vue-toast-notification'
-import RestApi from '@/common/restapi'
 import router from '@/router'
 
 export default defineComponent({
@@ -57,7 +54,6 @@ export default defineComponent({
   emits: {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
-    const toast = useToast()
     const logoutDialog = ref(false)
     const forceDialog = ref(false)
     const hasSession = computed(() => store.getters.isRegistered)
