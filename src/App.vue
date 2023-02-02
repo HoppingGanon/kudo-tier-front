@@ -76,35 +76,18 @@
         </v-row>
         <v-row v-if="hasSession">
           <v-list class="ml-3 mt-3" width="100%">
-            <v-dialog v-model="logoutDialog">
-              <template v-slot:activator>
-                <v-list-item @click="() => {logoutDialog = true}">
-                  <v-list-item-title>
-                    <v-icon class="mr-3">mdi-logout</v-icon>
-                    ログアウト
-                  </v-list-item-title>
-                </v-list-item>
-              </template>
-
-              <v-card>
-                <v-toolbar color="secondary" dark>
-                  <v-card-title>確認</v-card-title>
-                </v-toolbar>
-                <v-card-text>
-                  本当にログアウトしますか？
-                </v-card-text>
-                <v-card-actions class="justify-end">
-                  <v-btn @click="logout">はい</v-btn>
-                  <v-btn @click="() => { logoutDialog = false }">いいえ</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <v-list-item @click="logoutDialog = true">
+              <v-list-item-title>
+                <v-icon class="mr-3">mdi-logout</v-icon>
+                ログアウト
+              </v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-row>
       </v-container>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="!isEmbedded" app class="pink lighten-4 anime" :style="barStyle">
+    <v-app-bar v-if="!noBar" app class="pink lighten-4 anime" :style="barStyle">
       <v-app-bar-nav-icon @click="() => {drawer = !drawer}">
       </v-app-bar-nav-icon>
       <div class="d-flex align-center" style="width: 100%;">
@@ -128,15 +111,25 @@
       <router-view :key="routeWatcher($route)" />
     </v-main>
 
-    <v-avatar v-if="!isEmbedded" class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
+    <v-avatar v-if="!noBar" class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
       <v-icon dark>mdi-page-layout-header</v-icon>
     </v-avatar>
+
+    <simple-dialog
+      v-model="logoutDialog"
+      title="ログアウト"
+      text="本当にログアウトしますか？"
+      submit-button-text="ログアウト"
+      close-button-text="キャンセル"
+      @submit="goLogout"
+    />
   </v-app>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
@@ -144,7 +137,8 @@ import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
 export default defineComponent({
   name: 'App',
   components: {
-    ProfileComponent
+    ProfileComponent,
+    SimpleDialog
   },
   setup () {
     const route = useRoute()
@@ -156,7 +150,7 @@ export default defineComponent({
     const sessionUserId = computed(() => store.state.userId)
 
     const barIsVisible = ref(true)
-    const isEmbedded = ref(true)
+    const noBar = ref(true)
 
     const clickHideBarIcon = () => {
       barIsVisible.value = !barIsVisible.value
@@ -166,7 +160,7 @@ export default defineComponent({
     const hasSession = computed(() => store.getters.isRegistered)
     const isNew = computed(() => store.state.isNew)
 
-    const logout = () => {
+    const goLogout = () => {
       logoutDialog.value = false
       forceDialog.value = false
       router.push('/logout')
@@ -220,6 +214,10 @@ export default defineComponent({
       const len = route.fullPath.length
       const paramStart = route.fullPath.indexOf('?')
       const idStart = route.fullPath.indexOf('#')
+
+      // ページチェック
+      checkRouter()
+
       if (idStart === -1) {
         return route.fullPath
       } else if (paramStart === -1) {
@@ -229,19 +227,28 @@ export default defineComponent({
       }
     }
 
-    /** 埋め込みとして動作してるかどうか判定する */
-    const checkEmb = async () => {
-      await router.isReady()
+    /** ページチェック */
+    const checkRouter = async () => {
       if (route.name === 'tier-embedded') {
-        isEmbedded.value = true
+        // 埋め込みとして動作
+        noBar.value = true
+      } else if (route.name === 'welcome') {
+        // 埋め込みとして動作
+        noBar.value = true
       } else {
-        isEmbedded.value = false
+        noBar.value = false
       }
     }
 
+    /** 非同期ページチェック */
+    const checkRouterOnMounted = async () => {
+      await router.isReady()
+      checkRouter()
+    }
+
     onMounted(async () => {
-      // 埋め込みかどうかの判定、非同期で行う
-      checkEmb()
+      // ページごとの初期状態処理を、非同期で行う
+      checkRouterOnMounted()
       // ユーザーデータの取得
       store.commit('downloadUserData', store.state.userId)
     })
@@ -256,14 +263,14 @@ export default defineComponent({
       tiersCount,
       sessionUserId,
       barIsVisible,
-      isEmbedded,
+      noBar,
       drawer,
       barStyle,
       hasSession,
       isNew,
       clickHideBarIcon,
       goHome,
-      logout,
+      goLogout,
       goLogin,
       goTierSearch,
       goTierSettings,

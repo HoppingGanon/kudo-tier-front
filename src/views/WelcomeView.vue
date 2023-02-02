@@ -2,11 +2,16 @@
   <v-container fluid class="ma-0 pa-0">
     <v-row>
       <v-col>
-        <div style="width: 100%;" class="d-flex justify-end">
-          <v-btn v-if="hasSession" flat @click="logoutDialog = true">
+        <div v-if="hasSession" style="width: 100%;" class="d-flex justify-end">
+          <v-btn flat @click="goHome" class="ml-3">
+            ホームへ移動
+          </v-btn>
+          <v-btn flat @click="logoutDialog = true" class="ml-3">
             ログアウト
           </v-btn>
-          <v-btn v-else flat @click="goLogin">
+        </div>
+        <div v-else style="width: 100%;" class="d-flex justify-end">
+          <v-btn flat @click="goLogin" class="ml-3">
             ログイン/新規登録
           </v-btn>
         </div>
@@ -35,12 +40,22 @@
     </v-row>
   </v-container>
 
+  <simple-dialog
+    v-model="logoutDialog"
+    title="ログアウト"
+    text="本当にログアウトしますか？"
+    submit-button-text="ログアウト"
+    close-button-text="キャンセル"
+    @submit="goLogout"
+  />
+
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import WelcomeCarousel from '@/components/WelcomeCarousel.vue'
 import ExplanationSummary from '@/components/ExplanationSummary.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import store from '@/store'
 import router from '@/router'
 
@@ -48,14 +63,14 @@ export default defineComponent({
   name: 'WelcomeView',
   components: {
     WelcomeCarousel,
-    ExplanationSummary
+    ExplanationSummary,
+    SimpleDialog
   },
   props: {},
   emits: {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
     const logoutDialog = ref(false)
-    const forceDialog = ref(false)
     const hasSession = computed(() => store.getters.isRegistered)
 
     const goHome = () => {
@@ -73,7 +88,6 @@ export default defineComponent({
     return {
       hasSession,
       logoutDialog,
-      forceDialog,
       goHome,
       goLogin,
       goLogout

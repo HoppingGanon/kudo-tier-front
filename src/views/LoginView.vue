@@ -8,7 +8,7 @@
       <v-col cols="12" sm="12" md="6" lg="4" xl="4">
         <v-card class="margin-top">
           <v-toolbar color="secondary">
-            <v-card-title class="font-weight-bold">ログイン</v-card-title>
+            <v-card-title class="font-weight-bold">ログイン/新規登録</v-card-title>
           </v-toolbar>
           <v-container>
             <v-row>
