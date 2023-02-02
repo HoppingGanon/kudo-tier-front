@@ -57,14 +57,21 @@ export default defineComponent({
     const connectTemp = () => {
       if (!store.getters.isRegistered) {
         RestApi.getTempSession().then((response) => {
-          const session = response.data.codeChallenge
+          // URI
           const base = 'https://twitter.com/i/oauth2/authorize'
+          // OAuth2.0では"code"固定
           const code = 'response_type=code'
+          // 開発者ページで確認した固有ID
           const clientId = `client_id=${process.env.VUE_APP_CLIENT_ID}`
+          // リダイレクト先(AuthView)
           const redirectUri = `redirect_uri=${process.env.VUE_APP_REDIRECT}`
+          // 状態を渡す
           const state = 'state=' + 'review-maker-twittwer'
-          const codeChallenge = `code_challenge=${session}`
+          // バックエンドから渡されたコードチャレンジ(バックエンドで元のcode_verifierから計算した文字列)
+          const codeChallenge = `code_challenge=${response.data.codeChallenge}`
+          // コードチャレンジの計算アルゴリズム
           const codeChallengeMethod = 'code_challenge_method=s256'
+          // 使用する権限
           const scope = 'scope=tweet.read%20users.read'
 
           store.commit('setTempSessionId', response.data.sessionId)

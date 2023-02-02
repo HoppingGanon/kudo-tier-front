@@ -215,9 +215,9 @@ export default class RestApi {
   }
 
   // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
-  static postSession (code: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
+  static postSession (authorizationCode: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
     return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {
-      codeChallenge: code,
+      authorizationCode: authorizationCode,
       sessionId: tempSessionId
     })
   }
