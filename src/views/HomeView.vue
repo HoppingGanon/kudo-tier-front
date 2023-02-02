@@ -285,7 +285,4 @@ export default defineComponent({
 
 <style Modules>
 @import url("@/style/common-style.css");
-.scroll {
-  overflow-y: scroll;
-}
 </style>

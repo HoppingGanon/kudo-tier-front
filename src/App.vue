@@ -124,22 +124,6 @@
       </div>
     </v-app-bar>
 
-    <v-dialog v-model="forceDialog">
-      <v-card>
-        <v-toolbar color="primary">
-          <v-card-title>確認</v-card-title>
-        </v-toolbar>
-        <v-card-text>
-          ログアウトに失敗しました<br />
-          強制的にセッションを削除しますか？
-        </v-card-text>
-        <v-card-actions class="justify-end">
-          <v-btn @click="forceLogout">はい</v-btn>
-         <v-btn @click="() => { forceDialog = false }">いいえ</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <v-main>
       <router-view :key="routeWatcher($route)" />
     </v-main>
@@ -153,10 +137,8 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
-import RestApi from '@/common/restapi'
 import router from '@/router'
 import store from '@/store'
-import { useToast } from 'vue-toast-notification'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -165,7 +147,6 @@ export default defineComponent({
     ProfileComponent
   },
   setup () {
-    const toast = useToast()
     const route = useRoute()
 
     const drawer = ref(false)
@@ -186,56 +167,39 @@ export default defineComponent({
     const isNew = computed(() => store.state.isNew)
 
     const logout = () => {
-      if (store.getters.isRegistered) {
-        RestApi.delSession().then(() => {
-          logoutDialog.value = false
-          store.commit('initAllSession')
-          toast.success('ログアウトしました')
-          router.push('/login')
-        }).catch(() => {
-          logoutDialog.value = false
-          forceDialog.value = true
-          toast.error('ログアウトに失敗しました')
-        })
-      }
+      logoutDialog.value = false
+      forceDialog.value = false
+      router.push('/logout')
     }
 
     const goHome = () => {
-      router.push(`/home/${store.state.userId}`)
       drawer.value = false
-    }
-
-    const forceLogout = () => {
-      logoutDialog.value = false
-      forceDialog.value = false
-      store.commit('initAllSession')
-      toast.success('ログアウトしました')
-      router.push('/login')
+      router.push(`/home/${store.state.userId}`)
     }
 
     const goLogin = () => {
-      router.push('/login')
       drawer.value = false
+      router.push('/welcome')
     }
 
     const goTierSearch = () => {
-      router.push(`/tier-search/${store.state.userId}`)
       drawer.value = false
+      router.push(`/tier-search/${store.state.userId}`)
     }
 
     const goTierSettings = () => {
-      router.push('/tier-settings-new')
       drawer.value = false
+      router.push('/tier-settings-new')
     }
 
     const goSettings = () => {
-      router.push('/settings')
       drawer.value = false
+      router.push('/settings')
     }
 
     const goWelcome = () => {
-      router.push('/welcome')
       drawer.value = false
+      router.push('/welcome')
     }
 
     // セッションのユーザーIDに変化があればユーザーデータをダウンロードする
@@ -300,7 +264,6 @@ export default defineComponent({
       clickHideBarIcon,
       goHome,
       logout,
-      forceLogout,
       goLogin,
       goTierSearch,
       goTierSettings,

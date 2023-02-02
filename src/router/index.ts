@@ -28,6 +28,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/LoginView.vue')
   },
   {
+    path: '/logout',
+    name: 'logout',
+    component: () => import('../views/LogoutView.vue')
+  },
+  {
     path: '/auth',
     name: 'auth',
     component: () => import('../views/AuthView.vue')
@@ -96,7 +101,8 @@ const router = createRouter({
       return savedPosition
     } else {
       return {
-        top: 0
+        top: 0,
+        left: 0
       }
     }
   },
