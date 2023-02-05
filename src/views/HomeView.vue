@@ -1,6 +1,6 @@
 <template>
   <!-- セッション有効期限をチェックする -->
-  <session-checker :is-going="false" />
+  <session-checker />
 
   <v-container v-if="isNotFound">
     <v-row>

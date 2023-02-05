@@ -1,7 +1,7 @@
 <template>
 
   <!-- セッション有効期限をチェックする -->
-  <session-checker :is-going="true" :no-session-error="true" />
+  <session-checker :no-session-error="true" />
 
   <v-container class="pa-0">
     <v-card class="ma-0">

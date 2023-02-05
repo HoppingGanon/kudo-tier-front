@@ -3,7 +3,7 @@
     <v-card>
 
       <!-- セッション有効期限をチェックする -->
-      <session-checker :is-going="true" :no-temp-session-error="true" />
+      <session-checker :no-temp-session-error="true" />
       <v-toolbar color="secondary">
         <v-card-title class="font-weight-bold">
           ユーザー登録

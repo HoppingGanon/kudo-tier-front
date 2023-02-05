@@ -210,7 +210,6 @@ export default class RestApi {
   }
 
   static getTempSession () : Promise<AxiosResponse<TempSession>> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return axios.get<TempSession>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession`)
   }
 
@@ -224,6 +223,10 @@ export default class RestApi {
 
   static delSession () : Promise<AxiosResponse<Session>> {
     return this.delete('/auth/session')
+  }
+
+  static getCheckSession () {
+    return this.get('/auth/check-session')
   }
 
   static createUser (data: UserCreatingData) {

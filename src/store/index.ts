@@ -37,7 +37,7 @@ export default createStore<State>({
     barIsVisible: true
   },
   getters: {
-    /** ログイン状態かつユーザーIDを持っているかどうかチェック */
+    /** ログイン状態かつユーザーIDを持っていて、セッション有効期限内かどうかチェック */
     isRegistered: (state) => state.sessionId && state.userId && true
   },
   mutations: {

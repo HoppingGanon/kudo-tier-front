@@ -19,20 +19,20 @@
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
-          <span class="text-h6 font-weight-bold">Tierとは？</span>
+          <span class="text-h6 font-weight-bold">説明しつくせるTier</span>
         </p>
         <br />
         <p>
-          物事の強さや大きさを比較して、その大小を段階別に表にしたものを(狭義の)Tierといいます。
+          格闘ゲームや愉快なパーティゲームでよく見るアレが、細かい説明とともに作成できます。
         </p>
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">レビューがTierに</span>
+          <span class="text-h6 font-weight-bold">Tierの自動生成</span>
         </p>
         <br />
         <p>
-          TierReviewsでは詳細なレビューを横断的なTierとして表現することができます。
+          レビューを追加するとすぐに採点され、新しいTierを即座に構成します。
         </p>
       </v-col>
     </v-row>
@@ -59,24 +59,26 @@
     </v-row>
     <v-row class="mt-5 flex-row-reverse">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2"><v-img src="@/assets/welcome/reviewChart.png" max-height="480px" /></v-card>
+        <v-card class="pa-2"><v-img src="@/assets/welcome/reviewChart.png" max-height="540px" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
-          <span class="text-h6 font-weight-bold">グラフィカルなレビュー</span>
+          <span class="text-h6 font-weight-bold">グラフィカルな採点</span>
         </p>
         <br />
         <p>
-          レビューは自分で設定した採点基準で評価することができ、その点数をレーダーチャートで表示できます。
+          採点基準や表示形式を設定して、自分だけの見やすいレビューを作成しましょう。<br />
+          細かい評点はレーダーチャートで表示されます。
         </p>
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">多様な採点方法</span>
+          <span class="text-h6 font-weight-bold">しっかり伝わる説明文</span>
         </p>
         <br />
         <p>
-          採点方法はランク方式や、点数方式、スター数方式などがあり自由度の高い採点が可能です。
+          チーズ牛丼が主食の私は、動画も画像も載せられるくっそ細かいレビューを手軽に書きたい...と日頃から早口でごにょごにょ言っていました。<br />
+          このサービスは私と同じ願いを持つ人にピッタリなサービスです。
         </p>
       </v-col>
     </v-row>
@@ -111,7 +113,7 @@
         </p>
         <br />
         <p>
-          Tierやレビューのシェアボタンから簡単にSNSに共有できます。
+          シェアボタンからSNSに共有できます。現状、実家のような安心感のあるTwitterのみ対応しています。
         </p>
         <br />
         <br />
@@ -120,7 +122,7 @@
         </p>
         <br />
         <p>
-          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(beta版機能)。
+          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(beta版機能だけどヨシ!)。
         </p>
       </v-col>
     </v-row>

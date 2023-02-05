@@ -13,10 +13,6 @@ import { useStore } from '@/store'
 export default defineComponent({
   name: 'SessionChecker',
   props: {
-    isGoing: {
-      type: Boolean,
-      default: false
-    },
     noSessionError: {
       type: Boolean,
       default: false
@@ -32,34 +28,42 @@ export default defineComponent({
 
     onMounted(() => {
       try {
-        // noSessionErrorがあれば、セッションが無い場合に強制転送
-        if (props.noSessionError && !store.getters.isRegistered) {
-          toast.warning('セッションがありません。ログインしてください。')
-          router.push('/login')
-        } else if (props.noTempSessionError && !store.state.sessionId) {
-          toast.warning('セッションがありません。ユーザー登録のため、もう一度Twitter認証してください。')
-          router.push('/login')
-        }
-        if (store.getters.isRegistered && new Date(store.state.expiredTime) < new Date()) {
-          RestApi.delSession().then(() => {
+        if (props.noSessionError) {
+          // セッション必須
+          if (store.getters.isRegistered) {
+            RestApi.getCheckSession().then(() => true).catch(() => {
+              store.commit('initAllSession')
+              toast.warning('セッションの有効期限が切れました。ログインしてください。')
+              router.push('/welcome')
+            })
+          } else {
             store.commit('initAllSession')
-            toast.warning('セッションの有効期限が切れました。再度ログインしてください。')
-            if (props.isGoing) {
-              router.push('/login')
-            }
-          }).catch(() => {
+            toast.warning('セッションがありません。ログインしてください。')
+            router.push('/welcome')
+          }
+        } else if (props.noTempSessionError) {
+          // 一時セッション必須
+          if (store.state.tempSessionId !== '') {
             store.commit('initAllSession')
-            toast.warning('セッションの有効期限が切れました。再度ログインしてください。')
-            if (props.isGoing) {
-              router.push('/login')
+            toast.warning('一時セッションがありません。ログインしてください。')
+            router.push('/welcome')
+          }
+        } else {
+          // 必須セッション無し
+          if (store.getters.isRegistered) {
+            if (new Date() < new Date(store.state.expiredTime)) {
+              // セッション有効期限内
+            } else {
+              // セッション有効期限切れ
+              store.commit('initAllSession')
+              toast.warning('セッションの有効期限が切れました。再度ログインしてください。')
             }
-          })
+          }
         }
       } catch {
         store.commit('initAllSession')
         toast.warning('セッションが壊れています。再度ログインしてください。')
-        router.push('/login')
-        if (props.isGoing) {
+        if (props.noSessionError || props.noTempSessionError) {
           router.push('/login')
         }
       }

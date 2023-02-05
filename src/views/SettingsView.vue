@@ -1,5 +1,5 @@
 <template>
-  <session-checker :is-going="true" :no-session-error="true" />
+  <session-checker :no-session-error="true" />
   <v-container>
     <v-card>
       <v-toolbar color="secondary">
