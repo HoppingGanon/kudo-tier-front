@@ -4,9 +4,9 @@ module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PUBLIC_PATH ? process.env.VUE_APP_PUBLIC_PATH : '/',
 
   devServer: {
-    port: 8200,
+    port: Number.parseInt(process.env.VUE_APP_PORT),
     // host: 'localhost'
-    allowedHosts: ['localhost', 'tier-reviews.mydns.jp'],
+    allowedHosts: ['localhost', process.env.VUE_APP_ALLOW_HOST],
     compress: true
   },
 
