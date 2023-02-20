@@ -238,7 +238,15 @@ export default class RestApi {
   }
 
   static getUserData (userId: string) {
-    return this.get<UserData>('/user/' + userId)
+    return this.get<UserData>(`/user/${userId}`)
+  }
+
+  static deleteUser1 (userId: string) {
+    return this.delete<string>(`/user1/${userId}`)
+  }
+
+  static deleteUser2 (userId: string, delcode: string) {
+    return this.delete<null>(`/user2/${userId}?delcode=${delcode}`)
   }
 
   static getLatestPostLists (userId: string, length: number) {

@@ -89,6 +89,18 @@
               />
             </v-col>
           </v-row>
+          <v-row>
+            <v-col class="font-weight-bold mt-3">
+              アカウントの削除
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn flat color="red" width="100%" @click="openDel">
+                このアカウントを削除する
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-container>
       </div>
 
@@ -99,12 +111,27 @@
       </v-card-actions>
     </v-card>
   </v-container>
+
+  <simple-dialog
+    v-model="deleteDialog"
+      title="アカウントの削除"
+      @submit="commitDel"
+    >
+    <span>
+      アカウントの削除を確定させるには削除コード'<span v-text="receivedDelcode"></span>'を入力してください
+    </span>
+    <br/>
+    <v-text-field class="mt-5" v-model="delcode" label="削除コード" />
+    <br/>
+  </simple-dialog>
+
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
+import SimpleDialog from '@/components/SimpleDialog.vue'
 import store from '@/store'
 import RestApi, { toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
@@ -115,7 +142,8 @@ export default defineComponent({
   name: 'SettingsView',
   components: {
     SessionChecker,
-    RegistrationComponent
+    RegistrationComponent,
+    SimpleDialog
   },
   props: {},
   emits: {},
@@ -132,6 +160,9 @@ export default defineComponent({
     const iconUrl = ref('')
     const allowTwitterLink = ref(false)
     const keepSession = ref(120)
+    const deleteDialog = ref(false)
+    const delcode = ref('')
+    const receivedDelcode = ref('')
 
     const form = ref()
 
@@ -146,6 +177,24 @@ export default defineComponent({
         }).catch((e) => toastError(e, toast))
       }
     })
+
+    const openDel = () => {
+      RestApi.deleteUser1(store.state.userId).then((r) => {
+        receivedDelcode.value = r.data as string
+        deleteDialog.value = true
+      }).catch(e => toastError(e, toast))
+    }
+
+    const commitDel = () => {
+      RestApi.deleteUser2(store.state.userId, delcode.value).then(() => {
+        deleteDialog.value = false
+        toast.success('ユーザーを削除しました')
+        store.commit('initAllSession')
+        router.push('/')
+      }).catch(e => toastError(e, toast)).finally(() => {
+        delcode.value = ''
+      })
+    }
 
     const save = async () => {
       const validResult = await form.value.validate()
@@ -175,7 +224,12 @@ export default defineComponent({
       iconUrl,
       allowTwitterLink,
       keepSession,
+      deleteDialog,
+      delcode,
+      receivedDelcode,
       form,
+      openDel,
+      commitDel,
       save
     }
   }
