@@ -91,6 +91,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'welcome',
     component: () => import('../views/WelcomeView.vue')
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'not-found',
+    component: () => import('../views/NotFoundView.vue')
   }
 ]
 

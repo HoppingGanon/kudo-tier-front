@@ -1,4 +1,7 @@
 <template>
+  <!-- セッション有効期限をチェックする -->
+  <session-checker />
+
   <v-container fluid class="ma-0 pa-0">
     <v-row>
       <v-col>
@@ -56,6 +59,7 @@ import { computed, defineComponent, ref } from 'vue'
 import WelcomeCarousel from '@/components/WelcomeCarousel.vue'
 import ExplanationSummary from '@/components/ExplanationSummary.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import SessionChecker from '@/components/SessionChecker.vue'
 import store from '@/store'
 import router from '@/router'
 
@@ -64,7 +68,8 @@ export default defineComponent({
   components: {
     WelcomeCarousel,
     ExplanationSummary,
-    SimpleDialog
+    SimpleDialog,
+    SessionChecker
   },
   props: {},
   emits: {},

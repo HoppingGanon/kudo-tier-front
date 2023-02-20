@@ -2,7 +2,7 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <error-component />
+  <error-component title="ページが見つかりません" comment="URLが間違っていないかご確認ください" />
 </template>
 
 <script lang="ts">
