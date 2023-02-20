@@ -173,7 +173,7 @@ export default defineComponent({
 
     const goLogin = () => {
       drawer.value = false
-      router.push('/welcome')
+      router.push('/')
     }
 
     const goTierSearch = () => {
@@ -193,7 +193,7 @@ export default defineComponent({
 
     const goWelcome = () => {
       drawer.value = false
-      router.push('/welcome')
+      router.push('/')
     }
 
     // セッションのユーザーIDに変化があればユーザーデータをダウンロードする

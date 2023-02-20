@@ -88,7 +88,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/TierEmbeddedView.vue')
   },
   {
-    path: '/welcome',
+    path: '/',
     name: 'welcome',
     component: () => import('../views/WelcomeView.vue')
   }

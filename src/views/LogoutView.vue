@@ -24,15 +24,15 @@ export default defineComponent({
         RestApi.delSession().then(() => {
           store.commit('initAllSession')
           toast.success('ログアウトしました')
-          router.replace('/welcome')
+          router.replace('/')
         }).catch(() => {
           store.commit('initAllSession')
           toast.success('強制ログアウトしました')
-          router.replace('/welcome')
+          router.replace('/')
         })
       } else {
         toast.warning('セッションがありません')
-        router.push('/welcome')
+        router.push('/')
       }
     })
   }

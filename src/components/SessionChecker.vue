@@ -34,19 +34,19 @@ export default defineComponent({
             RestApi.getCheckSession().then(() => true).catch(() => {
               store.commit('initAllSession')
               toast.warning('セッションの有効期限が切れました。ログインしてください。')
-              router.push('/welcome')
+              router.push('/')
             })
           } else {
             store.commit('initAllSession')
             toast.warning('セッションがありません。ログインしてください。')
-            router.push('/welcome')
+            router.push('/')
           }
         } else if (props.noTempSessionError) {
           // 一時セッション必須
           if (store.state.tempSessionId !== '') {
             store.commit('initAllSession')
             toast.warning('一時セッションがありません。ログインしてください。')
-            router.push('/welcome')
+            router.push('/')
           }
         } else {
           // 必須セッション無し
