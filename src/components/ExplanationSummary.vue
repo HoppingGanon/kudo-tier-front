@@ -15,24 +15,25 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2"><v-img src="@/assets/welcome/tierTable.png" max-height="480px"/></v-card>
+        <v-card class="pa-2" flat><v-img src="@/assets/welcome/tierTable.png" max-height="480px"/></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
-          <span class="text-h6 font-weight-bold">説明しつくせるTier</span>
+          <span class="text-h6 font-weight-bold">Tier形式のレビュー</span>
         </p>
         <br />
         <p>
-          格闘ゲームや愉快なパーティゲームでよく見るアレが、細かい説明とともに作成できます。
+          格闘ゲームや愉快なパーティゲームでよく見るアレに長々とレビューをつけることができます。
         </p>
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">Tierの自動生成</span>
+          <span class="text-h6 font-weight-bold">評価のデータ化</span>
         </p>
         <br />
         <p>
-          レビューを追加するとすぐに採点され、新しいTierを即座に構成します。
+          評価に具体的な数値情報をつけることで、データの有効活用ができるようになる予定です。<br/>
+          まだやっていません。明日やる。
         </p>
       </v-col>
     </v-row>
@@ -59,7 +60,7 @@
     </v-row>
     <v-row class="mt-5 flex-row-reverse">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2"><v-img src="@/assets/welcome/reviewChart.png" max-height="540px" /></v-card>
+        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/reviewChart.png" max-height="540px" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -77,8 +78,9 @@
         </p>
         <br />
         <p>
-          チーズ牛丼が主食の私は、動画も画像も載せられるくっそ細かいレビューを手軽に書きたい...と日頃から早口でごにょごにょ言っていました。<br />
-          このサービスは私と同じ願いを持つ人にピッタリなサービスです。
+          動画や画像付きで細かいレビューを書いてTierにしたい...<br />
+          とチーズ牛丼を食べながら思った私はなんとなくこのサイトを作りました。<br />
+          早口で喋る博識者の皆さん、是非ご活用ください。
         </p>
       </v-col>
     </v-row>
@@ -99,13 +101,13 @@
         <br />
         <p>
           TierReviewsで作成したTierは他のサービスにシェアできます。<br />
-          投稿はTierReviewsに登録していない人でもシェア・閲覧ができるので、より多くの人に投稿を見てもらいましょう。
+          TierReviewsに登録していない人でもシェア・閲覧ができるので、より多くの人に投稿を見てもらいましょう。
         </p>
       </v-col>
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2"><v-img src="@/assets/welcome/tierTable.png" max-height="480px"/></v-card>
+        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/share.png" max-height="480px" class="shadow" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -122,7 +124,7 @@
         </p>
         <br />
         <p>
-          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(beta版機能だけどヨシ!)。
+          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(beta版機能だけどもう推せる機能無いし、動くからヨシ!)。
         </p>
       </v-col>
     </v-row>
@@ -167,4 +169,9 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+
+.shadow {
+  filter: drop-shadow(10px 10px 1px #FFC0F0);
+}
+
 </style>

@@ -28,6 +28,7 @@
         <div class="carousel-item-1-image" :style="carouselImage1Width">
           <v-img
             src="@/assets/welcome/mobile.png"
+            height="100%"
           ></v-img>
         </div>
         <div class="carousel-item-1-text">
@@ -179,7 +180,7 @@ export default defineComponent({
       loadings,
       loading,
       onLoad,
-      carouselImage1Width: computed(() => `width: ${carouselHeight.value * 0.65}px`),
+      carouselImage1Width: computed(() => `width: ${carouselHeight.value * 1.2}px`),
       carouselImage2Width: computed(() => `width: ${carouselHeight.value * 1.2}px`),
       carouselImage3Width: computed(() => `width: ${carouselHeight.value * 1.1}px`),
       titleClass: computed(() => (display.smAndDown.value ? 'text-h6' : display.md.value ? 'text-h5' : 'text-h4') + ' white--text'),
@@ -262,10 +263,12 @@ export default defineComponent({
 .carousel-item-1-image {
   position: absolute;
   display: block;
-  height: 120%;
+  height: 100%;
+  width: 100%;
   animation:carousel-item-1-image-anime 0.5s linear;
-  right: 5%;
-  filter: drop-shadow(5px 5px 5px #886038);
+  right: 0%;
+  bottom: 0px;
+  filter: drop-shadow(5px 5px 5px #FFF0F7);
 }
 
 @keyframes carousel-item-1-text-anime {
@@ -352,7 +355,7 @@ export default defineComponent({
     opacity: 50%;
   }
   100% {
-  margin-top: 50px;
+  margin-top: 30px;
     opacity: 100%;
   }
 }
@@ -363,8 +366,8 @@ export default defineComponent({
   height: 120%;
   animation:carousel-item-2-image-anime 0.5s linear;
   left: 5%;
-  margin-top: 50px;
-  filter: drop-shadow(5px 5px 5px #886038);
+  margin-top: 30px;
+  filter: drop-shadow(5px 5px 5px #FFF0F7);
 }
 
 @keyframes carousel-item-2-text-anime {
@@ -463,7 +466,7 @@ export default defineComponent({
   animation:carousel-item-3-image-anime 0.5s linear;
   right: 5%;
   image-rendering: crisp-edges;
-  filter: drop-shadow(5px 5px 5px #886038);
+  filter: drop-shadow(5px 5px 5px #FFF0F7);
 }
 
 @keyframes carousel-item-3-text-anime {
