@@ -278,11 +278,11 @@ export default class RestApi {
   }
 
   static deleteUser1 (userId: string) {
-    return this.delete<string>(`/user1/${userId}`)
+    return this.delete<string>(`/user/${userId}/try`)
   }
 
   static deleteUser2 (userId: string, delcode: string) {
-    return this.delete<null>(`/user2/${userId}?delcode=${delcode}`)
+    return this.delete<null>(`/user/${userId}/commit?delcode=${delcode}`)
   }
 
   static getLatestPostLists (userId: string, length: number) {

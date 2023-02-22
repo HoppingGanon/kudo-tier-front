@@ -1,24 +1,6 @@
 <template>
   <v-container flat>
     <v-row>
-      <v-col class="d-flex align-center">
-        <v-card flat class="ma-2">
-          <v-avatar>
-            <v-img :src="twitterIconUrl"/>
-          </v-avatar>
-        </v-card>
-        <div class="ma-2"><span class="font-weight-bold" v-text="twitterName" /></div>
-        <div class="ma-2"><span v-text="`@${twitterUserName}`" /></div>
-      </v-col>
-    </v-row>
-    <v-row>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-divider />
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="12" sm="12" md="8" lg="8" xl="8">
         <image-selector
           label="アイコン画像を選択してください"

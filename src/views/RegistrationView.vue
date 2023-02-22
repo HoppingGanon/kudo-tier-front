@@ -82,8 +82,7 @@ export default defineComponent({
           store.commit('setUserId', res.data.userId)
           router.push(`/home/${res.data.userId}`)
         }).catch((err) => {
-          toast.error('登録に失敗しました')
-          console.log(err)
+          toastError(err, toast)
         })
       } else {
         toast.warning('入力に誤りがあります')
