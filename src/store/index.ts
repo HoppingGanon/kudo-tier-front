@@ -1,9 +1,11 @@
-import RestApi from '@/common/restapi'
+import RestApi, { LoginServiceType, LoginVersionType } from '@/common/restapi'
 import { createStore, useStore as baseUseStore } from 'vuex'
 import persist from 'vuex-persistedstate'
 
 export type State = {
   tempSessionId: string
+  tempSessionService: LoginServiceType | ''
+  tempSessionVersion: LoginVersionType | ''
   sessionId: string
   userId: string
   userName: string
@@ -22,6 +24,8 @@ export type State = {
 export default createStore<State>({
   state: {
     tempSessionId: '',
+    tempSessionService: '',
+    tempSessionVersion: '',
     sessionId: '',
     userId: '',
     userName: '',
@@ -43,6 +47,12 @@ export default createStore<State>({
   mutations: {
     setTempSessionId (state, val: string) {
       state.tempSessionId = val
+    },
+    setTempSessionService (state, val: LoginServiceType | '') {
+      state.tempSessionService = val
+    },
+    setTempSessionVersion (state, val: LoginVersionType | '') {
+      state.tempSessionVersion = val
     },
     setSessionId (state, val: string) {
       state.sessionId = val
@@ -82,6 +92,8 @@ export default createStore<State>({
     },
     initAllSession (state) {
       state.tempSessionId = ''
+      state.tempSessionService = ''
+      state.tempSessionVersion = ''
       state.sessionId = ''
       state.twitterName = ''
       state.userId = ''

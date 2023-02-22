@@ -246,7 +246,7 @@ export default defineComponent({
         router.push(`/home/${store.state.userId}`)
       } else {
         // URIにIDが含まれていないうえ、セッションを持っていない場合
-        router.push('welcome')
+        router.push('/')
       }
     })
 

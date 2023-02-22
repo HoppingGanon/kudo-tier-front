@@ -6,10 +6,9 @@ import { ToastPluginApi } from 'vue-toast-notification'
 import Base64Api from './base64api'
 
 export interface TempSession {
-  // eslint-disable-next-line camelcase
   sessionId: string
-  // eslint-disable-next-line camelcase
   codeChallenge: string
+  url: string
 }
 
 export interface TwitterAuthCode {
@@ -148,6 +147,9 @@ export interface ErrorResponse {
   message: string
 }
 
+export type LoginServiceType = 'twitter' | 'google'
+export type LoginVersionType = '1' | '2'
+
 export const getImgSource = (uri: string) => {
   switch (Base64Api.isDataUrl(uri)) {
     case true:
@@ -166,6 +168,38 @@ export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => v
   if (func) {
     func(err)
   }
+}
+
+export const goOAuth1 = (url: string) => {
+  window.location.href = url
+}
+
+export const goOAuth2 = (
+  base: string,
+  code: string,
+  clientId: string,
+  redirectUri: string,
+  state: string,
+  codeChallenge: string,
+  codeChallengeMethod: string,
+  scope: string
+) => {
+  // OAuth2.0では"code"固定
+  const code2 = `response_type=${code}`
+  // 開発者ページで確認した固有ID
+  const clientId2 = `client_id=${clientId}`
+  // リダイレクト先(AuthView)
+  const redirectUri2 = `redirect_uri=${redirectUri}`
+  // 状態を渡す
+  const state2 = `state=${state}`
+  // バックエンドから渡されたコードチャレンジ(バックエンドで元のcode_verifierから計算した文字列)
+  const codeChallenge2 = `code_challenge=${codeChallenge}`
+  // コードチャレンジの計算アルゴリズム
+  const codeChallengeMethod2 = `code_challenge_method=${codeChallengeMethod}`
+  // 使用する権限
+  const scope2 = `scope=${scope}`
+
+  window.location.href = `${base}?${code2}&${clientId2}&${redirectUri2}&${state2}&${codeChallenge2}&${codeChallengeMethod2}&${scope2}`
 }
 
 export default class RestApi {
@@ -209,15 +243,17 @@ export default class RestApi {
     return axios.delete<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
   }
 
-  static getTempSession () : Promise<AxiosResponse<TempSession>> {
-    return axios.get<TempSession>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession`)
+  static getTempSession (service: LoginServiceType, version: LoginVersionType) : Promise<AxiosResponse<TempSession>> {
+    return axios.get<TempSession>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession/${service}/${version}`)
   }
 
   // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
-  static postSession (authorizationCode: string, tempSessionId: string) : Promise<AxiosResponse<Session>> {
-    return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session`, {
+  static postSession (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string) : Promise<AxiosResponse<Session>> {
+    return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session/${service}/${version}`, {
+      sessionId: tempSessionId,
       authorizationCode: authorizationCode,
-      sessionId: tempSessionId
+      oAuthToken: oAuthToken,
+      oAuthVerifier: oAuthVerifier
     })
   }
 
