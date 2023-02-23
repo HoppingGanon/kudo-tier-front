@@ -50,7 +50,7 @@ export interface UserData {
   userId: string
   name: string
   profile: string
-  /** Teittwrの表示名 */
+  /** Teitterの表示名 */
   twitterId: string
   /** ログイン状態の保持時間 */
   keepSession?: number
