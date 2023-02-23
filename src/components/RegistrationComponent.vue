@@ -77,11 +77,11 @@ export default defineComponent({
     ImageSelector
   },
   props: {
-    twitterName: {
+    twitterUserName: {
       type: String,
       required: true
     },
-    twitterUserName: {
+    twitterName: {
       type: String,
       required: true
     },

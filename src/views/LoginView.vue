@@ -56,7 +56,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store/index'
-import RestApi, { goOAuth1, goOAuth2, LoginServiceType, LoginVersionType, toastError } from '@/common/restapi'
+import RestApi, { LoginServiceType, LoginVersionType, toastError } from '@/common/restapi'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
 import { useToast } from 'vue-toast-notification'
@@ -81,42 +81,7 @@ export default defineComponent({
           store.commit('setTempSessionId', response.data.sessionId)
           store.commit('setTempSessionService', service)
           store.commit('setTempSessionVersion', version)
-          if (version === '1') {
-            switch (service) {
-              case 'twitter':
-                goOAuth1(
-                  response.data.url
-                )
-                break
-            }
-          } else if (version === '2') {
-            switch (service) {
-              case 'twitter':
-                goOAuth2(
-                  'https://twitter.com/i/oauth2/authorize',
-                  'code',
-                  process.env.VUE_APP_TW_CLIENT_ID || '',
-                  process.env.VUE_APP_OAUTH_REDIRECT || '',
-                  'review-maker-twittwer',
-                  response.data.codeChallenge,
-                  's256',
-                  'tweet.read%20users.read'
-                )
-                break
-              case 'google':
-                goOAuth2(
-                  'https://',
-                  'code',
-                  process.env.VUE_APP_GG_CLIENT_ID || '',
-                  process.env.VUE_APP_OAUTH_REDIRECT || '',
-                  'review-maker-twittwer',
-                  response.data.codeChallenge,
-                  's256',
-                  'tweet.read%20users.read'
-                )
-                break
-            }
-          }
+          window.location.href = response.data.url
         }).catch((e) => {
           toastError(e, toast)
         })

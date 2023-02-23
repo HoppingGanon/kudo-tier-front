@@ -41,7 +41,7 @@
               :reviews-count="user.reviewsCount"
               :user-id="userId"
               :allow-twitter-link="user.allowTwitterLink"
-              :twitter-name="user.twitterName"
+              :twitter-id="user.twitterId"
             />
           </v-card>
         </v-col>

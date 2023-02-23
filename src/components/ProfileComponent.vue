@@ -109,7 +109,7 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    twitterName: {
+    twitterId: {
       type: String,
       default: ''
     }
@@ -125,7 +125,7 @@ export default defineComponent({
         router.push(`/tier-search/${props.userId}?tab=${tab}`)
       },
       goTwitter: () => {
-        window.open(`https://twitter.com/intent/user?user_id=${props.twitterName}`)
+        window.open(`https://twitter.com/intent/user?user_id=${props.twitterId}`)
       }
     }
   }

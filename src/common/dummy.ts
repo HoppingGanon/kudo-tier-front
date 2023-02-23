@@ -38,7 +38,7 @@ export const emptyUser: UserData = {
   name: '',
   profile: '',
   iconUrl: '',
-  twitterName: '',
+  twitterId: '',
   allowTwitterLink: false,
   keepSession: 3600,
   tiersCount: 0,

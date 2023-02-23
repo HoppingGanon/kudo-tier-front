@@ -19,10 +19,12 @@ export interface TwitterAuthCode {
 export interface Session {
   sessionId: string
   userId: string
+  /** セッション期限 */
   expiredTime: string
-  twitterName: string
-  /** 俗にいうTeittwrのユーザーID */
+  /** twitter @ 名 */
   twitterUserName: string
+  /** twitter表示名  */
+  twitterName: string
   twitterIconUrl: string
   iconUrl: string
   isNew: string
@@ -49,7 +51,7 @@ export interface UserData {
   name: string
   profile: string
   /** Teittwrの表示名 */
-  twitterName: string
+  twitterId: string
   /** ログイン状態の保持時間 */
   keepSession?: number
   iconUrl: string
@@ -170,38 +172,6 @@ export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => v
   }
 }
 
-export const goOAuth1 = (url: string) => {
-  window.location.href = url
-}
-
-export const goOAuth2 = (
-  base: string,
-  code: string,
-  clientId: string,
-  redirectUri: string,
-  state: string,
-  codeChallenge: string,
-  codeChallengeMethod: string,
-  scope: string
-) => {
-  // OAuth2.0では"code"固定
-  const code2 = `response_type=${code}`
-  // 開発者ページで確認した固有ID
-  const clientId2 = `client_id=${clientId}`
-  // リダイレクト先(AuthView)
-  const redirectUri2 = `redirect_uri=${redirectUri}`
-  // 状態を渡す
-  const state2 = `state=${state}`
-  // バックエンドから渡されたコードチャレンジ(バックエンドで元のcode_verifierから計算した文字列)
-  const codeChallenge2 = `code_challenge=${codeChallenge}`
-  // コードチャレンジの計算アルゴリズム
-  const codeChallengeMethod2 = `code_challenge_method=${codeChallengeMethod}`
-  // 使用する権限
-  const scope2 = `scope=${scope}`
-
-  window.location.href = `${base}?${code2}&${clientId2}&${redirectUri2}&${state2}&${codeChallenge2}&${codeChallengeMethod2}&${scope2}`
-}
-
 export default class RestApi {
   static get <T> (uri: string) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
@@ -248,12 +218,13 @@ export default class RestApi {
   }
 
   // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
-  static postSession (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string) : Promise<AxiosResponse<Session>> {
+  static postSession (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string, state: string) : Promise<AxiosResponse<Session>> {
     return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session/${service}/${version}`, {
       sessionId: tempSessionId,
       authorizationCode: authorizationCode,
       oAuthToken: oAuthToken,
-      oAuthVerifier: oAuthVerifier
+      oAuthVerifier: oAuthVerifier,
+      state: state
     })
   }
 
