@@ -16,9 +16,8 @@
           v-model:disp-name="dispName"
           v-model:profile="profile"
           v-model:is-checked-terms="isCheckedTerms"
-          :twitter-name="twitterName"
           :twitter-user-name="twitterUserName"
-          :twitter-icon-url="twitterIconUrl"
+          :google-email="googleEmail"
           :is-new="true"
         />
 
@@ -54,9 +53,8 @@ export default defineComponent({
     RegistrationComponent
   },
   setup () {
-    const twitterName = computed(() => store.state.twitterName)
     const twitterUserName = computed(() => store.state.twitterUserName)
-    const twitterIconUrl = computed(() => store.state.twitterIconUrl)
+    const googleEmail = computed(() => store.state.googleEmail)
     const dispName = ref('')
     const profile = ref('')
     const iconUrl = ref('')
@@ -105,9 +103,8 @@ export default defineComponent({
     })
 
     return {
-      twitterName,
       twitterUserName,
-      twitterIconUrl,
+      googleEmail,
       dispName,
       profile,
       iconUrl,

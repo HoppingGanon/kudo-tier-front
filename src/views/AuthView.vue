@@ -8,9 +8,40 @@ import { defineComponent, onMounted } from 'vue'
 import { useStore } from '@/store/index'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
-import RestApi, { toastError } from '@/common/restapi'
+import RestApi, { Session, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
+import { Store } from 'vuex'
 
+/**
+ * 受け取ったセッションを保存する関数
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function saveSession (data: Session, store: Store<any>) {
+  store.commit('setSessionId', data.sessionId)
+  store.commit('setUserId', data.userId)
+  store.commit('setExpiredTime', data.expiredTime)
+  store.commit('setIsNew', data.isNew)
+}
+
+/**
+ * 受け取ったTwitterアカウントの情報を保存する関数
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function saveTwitterSession (data: Session, store: Store<any>) {
+  store.commit('setTwitterUserName', data.twitterUserName)
+  store.commit('setTwitterName', data.twitterName)
+  store.commit('setTwitterIconUrl', data.twitterIconUrl)
+}
+
+/**
+ * 受け取ったGoogleアカウントの情報を保存する関数
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function saveGoogleSession (data: Session, store: Store<any>) {
+  store.commit('setTwitterUserName', data.twitterUserName)
+  store.commit('setTwitterName', data.twitterName)
+  store.commit('setTwitterIconUrl', data.twitterIconUrl)
+}
 export default defineComponent({
   name: 'AuthView',
   component: { },
@@ -25,90 +56,50 @@ export default defineComponent({
       const oAuthVerifier = (route.query.oauth_verifier || '') as string
       const oAuthToken = (route.query.oauth_token || '') as string
       const state = (route.query.state || '') as string
-      if (!store.getters.isRegistered && store.state.tempSessionId) {
-        // 一時セッションを持っている場合
-        if (store.state.tempSessionVersion === '1') {
+      if (store.getters.isRegistered && store.state.tempSessionId && store.state.tempSessionAdditioning) {
+        // 既存のセッションとユーザーに新しいサービスを連携する場合
+        RestApi.updateService(store.state.tempSessionId, store.state.tempSessionService, store.state.tempSessionVersion, code, oAuthToken, oAuthVerifier, state).then((response) => {
+          // 一時セッション情報のクリア
+          store.commit('initTempsSession')
+          router.replace('/settings?tab=detail')
+        }).catch((err) => {
+          toastError(err, toast)
+          router.replace('/settings?tab=detail')
+        })
+      } else if (!store.getters.isRegistered && store.state.tempSessionId && !store.state.setTempSessionAdditioning) {
+        // 通常ログイン
+        RestApi.postSession(store.state.tempSessionId, store.state.tempSessionService, store.state.tempSessionVersion, code, oAuthToken, oAuthVerifier, state).then((response) => {
+          // 一時セッション情報のクリア
+          store.commit('initTempsSession')
+
+          // セッションの保存
+          saveSession(response.data, store)
+
+          // 連携サービスの情報を保存
           switch (store.state.tempSessionService) {
             case 'twitter':
-              RestApi.postSession(store.state.tempSessionId, 'twitter', '1', code, oAuthToken, oAuthVerifier, '').then((response) => {
-                store.commit('setTempSessionId', '')
-                store.commit('setTempSessionService', '')
-                store.commit('setTempSessionVersion', '')
-                store.commit('setSessionId', response.data.sessionId)
-
-                store.commit('setTwitterUserName', response.data.twitterUserName)
-                store.commit('setTwitterName', response.data.twitterName)
-                store.commit('setTwitterIconUrl', response.data.twitterIconUrl)
-
-                store.commit('setUserId', response.data.userId)
-                store.commit('setExpiredTime', response.data.expiredTime)
-                store.commit('setIsNew', response.data.isNew)
-                if (response.data.isNew) {
-                  router.replace('/regist')
-                } else {
-                  router.replace(`/home/${response.data.userId}`)
-                }
-              }).catch((err) => {
-                toastError(err, toast)
-                store.commit('initAllSession')
-                router.replace('/login')
-              })
-              break
-          }
-          return
-        } else if (store.state.tempSessionVersion === '2') {
-          switch (store.state.tempSessionService) {
-            case 'twitter':
-              RestApi.postSession(store.state.tempSessionId, 'twitter', '2', code, '', '', state).then((response) => {
-                store.commit('setTempSessionId', '')
-                store.commit('setTempSessionService', '')
-                store.commit('setTempSessionVersion', '')
-
-                store.commit('setSessionId', response.data.sessionId)
-                store.commit('setUserId', response.data.userId)
-                store.commit('setExpiredTime', response.data.expiredTime)
-                store.commit('setIsNew', response.data.isNew)
-
-                store.commit('setTwitterUserName', response.data.twitterUserName)
-                store.commit('setTwitterName', response.data.twitterName)
-                store.commit('setTwitterIconUrl', response.data.twitterIconUrl)
-
-                if (response.data.isNew) {
-                  router.replace('/regist')
-                } else {
-                  router.replace(`/home/${response.data.userId}`)
-                }
-              }).catch((err) => {
-                toastError(err, toast)
-                store.commit('initAllSession')
-                router.replace('/login')
-              })
+              saveTwitterSession(response.data, store)
               break
             case 'google':
-              RestApi.postSession(store.state.tempSessionId, 'google', '2', code, '', '', state).then((response) => {
-                store.commit('setTempSessionId', '')
-                store.commit('setTempSessionService', '')
-                store.commit('setTempSessionVersion', '')
-                store.commit('setSessionId', response.data.sessionId)
-                store.commit('setUserId', response.data.userId)
-                store.commit('setExpiredTime', response.data.expiredTime)
-                store.commit('setIsNew', response.data.isNew)
-                if (response.data.isNew) {
-                  router.replace('/regist')
-                } else {
-                  router.replace(`/home/${response.data.userId}`)
-                }
-              }).catch((err) => {
-                toastError(err, toast)
-                store.commit('initAllSession')
-                router.replace('/login')
-              })
+              saveGoogleSession(response.data, store)
               break
           }
-          return
-        }
+
+          if (response.data.isNew) {
+            router.replace('/regist')
+          } else {
+            router.replace(`/home/${response.data.userId}`)
+          }
+        }).catch((err) => {
+          toastError(err, toast)
+          store.commit('initAllSession')
+          router.replace('/login')
+        })
+      } else {
+        // 組み合わせエラー
+        toast.error('クライアントの一時セッションの状態が異常です')
+        router.replace('/')
       }
-      router.replace('/login')
     }
 
     onMounted(() => {

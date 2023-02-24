@@ -224,6 +224,7 @@ export default defineComponent({
         // URIにIDが含まれている場合、ユーザーの情報をダウンロード
         RestApi.getUserData(route.params.id).then((res) => {
           user.value = res.data
+          isSelf.value = res.data.isSelf
         }).catch(() => {
           isNotFound.value = true
         }).finally(() => { isLoadingUser.value = false })
@@ -232,7 +233,6 @@ export default defineComponent({
 
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
-        isSelf.value = store.state.userId === route.params.id
         userId.value = route.params.id
 
         reloadUser()

@@ -27,6 +27,11 @@ export default defineComponent({
     const store = useStore()
 
     onMounted(() => {
+      // セッションチェッカーが存在するページに一時セッションは不要
+      if (store.state.tempSessionId || store.state.tempSessionService || store.state.tempSessionVersion) {
+        store.commit('initTempsSession')
+      }
+
       try {
         if (props.noSessionError) {
           // セッション必須

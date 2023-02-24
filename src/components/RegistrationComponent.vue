@@ -1,5 +1,38 @@
 <template>
   <v-container flat>
+    <v-row v-show="false">
+      <!-- UI整理により現状表示しない -->
+      <v-col>
+        <table>
+          <tr>
+            <td>
+              Twitter:
+            </td>
+            <td>
+              <span v-if="twitterUserName">
+                連携済み(<span v-text="twitterUserName"></span>)
+              </span>
+              <span v-else>
+                未連携
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Google:
+            </td>
+            <td>
+              <span v-if="googleEmail">
+                連携済み(<span v-text="googleEmail"></span>)
+              </span>
+              <span v-else>
+                未連携
+              </span>
+            </td>
+          </tr>
+        </table>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col cols="12" sm="12" md="8" lg="8" xl="8">
         <image-selector
@@ -79,11 +112,11 @@ export default defineComponent({
   props: {
     twitterUserName: {
       type: String,
-      required: true
+      default: ''
     },
-    twitterName: {
+    googleEmail: {
       type: String,
-      required: true
+      default: ''
     },
     dispName: {
       type: String,
@@ -97,10 +130,6 @@ export default defineComponent({
       type: Boolean
     },
     iconUrl: {
-      type: String,
-      required: true
-    },
-    twitterIconUrl: {
       type: String,
       required: true
     },

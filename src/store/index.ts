@@ -3,9 +3,15 @@ import { createStore, useStore as baseUseStore } from 'vuex'
 import persist from 'vuex-persistedstate'
 
 export type State = {
+  /** 受け取った一時セッション（普段は空文字列） */
   tempSessionId: string
+  /** 一時セッションの要求中に指定している連携サービス（普段は空文字列） */
   tempSessionService: LoginServiceType | ''
+  /** 一時セッションの要求中に指定しているOAuthバージョン（普段は空文字列） */
   tempSessionVersion: LoginVersionType | ''
+  /** 連携サービス追加のために一時セッションを要求している（普段は空文字列） */
+  tempSessionAdditioning: boolean
+
   sessionId: string
   userId: string
   userName: string
@@ -13,12 +19,16 @@ export type State = {
   userIconUrl: string
   tiersCount: number
   reviewsCount: number
+
   twitterName: string
   twitterUserName: string
   twitterIconUrl: string
+
+  googleEmail: string
+  googleImageUrl: string
+
   expiredTime: string
   isNew: boolean
-  barIsVisible: boolean
 }
 
 export default createStore<State>({
@@ -26,6 +36,7 @@ export default createStore<State>({
     tempSessionId: '',
     tempSessionService: '',
     tempSessionVersion: '',
+    tempSessionAdditioning: false,
     sessionId: '',
     userId: '',
     userName: '',
@@ -36,9 +47,10 @@ export default createStore<State>({
     twitterName: '',
     twitterUserName: '',
     twitterIconUrl: '',
+    googleEmail: '',
+    googleImageUrl: '',
     expiredTime: '',
-    isNew: true,
-    barIsVisible: true
+    isNew: true
   },
   getters: {
     /** ログイン状態かつユーザーIDを持っていて、セッション有効期限内かどうかチェック */
@@ -53,6 +65,9 @@ export default createStore<State>({
     },
     setTempSessionVersion (state, val: LoginVersionType | '') {
       state.tempSessionVersion = val
+    },
+    setTempSessionAdditioning (state, val: boolean) {
+      state.tempSessionAdditioning = val
     },
     setSessionId (state, val: string) {
       state.sessionId = val
@@ -90,20 +105,32 @@ export default createStore<State>({
     setTwitterIconUrl (state, val: string) {
       state.twitterIconUrl = val
     },
+    setGoogleEmail (state, val: string) {
+      state.googleEmail = val
+    },
+    setGoogleImageUrl (state, val: string) {
+      state.googleImageUrl = val
+    },
+    initTempsSession (state) {
+      state.tempSessionId = ''
+      state.tempSessionService = ''
+      state.tempSessionVersion = ''
+      state.tempSessionAdditioning = false
+    },
     initAllSession (state) {
       state.tempSessionId = ''
       state.tempSessionService = ''
       state.tempSessionVersion = ''
+      state.tempSessionAdditioning = false
       state.sessionId = ''
       state.twitterName = ''
       state.userId = ''
       state.twitterUserName = ''
       state.twitterIconUrl = ''
+      state.googleEmail = ''
+      state.googleImageUrl = ''
       state.expiredTime = ''
       state.isNew = false
-    },
-    setBarIsVisible (state, val: boolean) {
-      state.barIsVisible = val
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     downloadUserData (state, userId?: string, success?: (v: any) => void, failure?: (v: any) => void) {

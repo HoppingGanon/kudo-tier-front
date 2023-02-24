@@ -35,12 +35,15 @@ export const emptyReviwew: Review = {
 
 export const emptyUser: UserData = {
   userId: '',
+  isSelf: false,
   name: '',
   profile: '',
   iconUrl: '',
-  twitterId: '',
   allowTwitterLink: false,
   keepSession: 3600,
+  twitterId: '',
+  twitterUserName: '',
+  googleEmail: '',
   tiersCount: 0,
   reviewsCount: 0
 }

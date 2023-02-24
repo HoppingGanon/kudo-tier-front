@@ -17,17 +17,29 @@ export interface TwitterAuthCode {
 }
 
 export interface Session {
+  /** セッションID */
   sessionId: string
+  /** ユーザーID */
   userId: string
   /** セッション期限 */
   expiredTime: string
+  /** 新規作成状態かどうか */
+  isNew: string
+  /** ユーザーアイコン */
+  iconUrl: string
+
   /** twitter @ 名 */
   twitterUserName: string
   /** twitter表示名  */
   twitterName: string
+  /** twitterアイコン */
   twitterIconUrl: string
-  iconUrl: string
-  isNew: string
+
+  /** Google Email */
+  googleEmail: string
+  /** Googleアイコン */
+  googleImageUrl: string
+
 }
 
 export interface UserCreatingData {
@@ -47,17 +59,33 @@ export interface UserEditingData {
 }
 
 export interface UserData {
+  /** ユーザーID */
   userId: string
+  /** ログインユーザー自分自身かどうか */
+  isSelf: boolean
+  /** ユーザー名 */
   name: string
+  /** プロフィール文 */
   profile: string
-  /** Teitterの表示名 */
-  twitterId: string
   /** ログイン状態の保持時間 */
   keepSession?: number
-  iconUrl: string
-  reviewsCount: number
-  tiersCount: number
+  /** Twitterリンクをホームに表示するかどうか */
   allowTwitterLink: boolean
+
+  /** Twitterの固有ID（allowTwitterLinkがtrueの時または本人がリクエストした場合以外は空白） */
+  twitterId: string
+  /** Twitterの@ 名 */
+  twitterUserName: string
+
+  /** GoogleのGmailアドレス（本人がリクエストした場合のみ含まれる） */
+  googleEmail?: string
+  /** ユーザーアイコン */
+  iconUrl: string
+
+  /** 今まで投稿したレビューの合計数 */
+  reviewsCount: number
+  /** 今まで投稿したTierの合計数 */
+  tiersCount: number
 }
 
 /** レビューをダウンロードする際の構造 */
@@ -150,6 +178,10 @@ export interface ErrorResponse {
 }
 
 export type LoginServiceType = 'twitter' | 'google'
+export const LoginServiceTypeNames = {
+  twitter: 'Twitter',
+  google: 'Google'
+}
 export type LoginVersionType = '1' | '2'
 
 export const getImgSource = (uri: string) => {
@@ -165,8 +197,12 @@ export const getImgSource = (uri: string) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
-  const v = err.response.data
-  toast.error(`${v.message} (${v.code})`)
+  if (err && err.response && err.response.data) {
+    const v = err.response.data
+    toast.error(`${v.message} (${v.code})`)
+  } else {
+    toast.error('fatal APIサーバーと正常な通信が確立出来ません')
+  }
   if (func) {
     func(err)
   }
@@ -218,7 +254,7 @@ export default class RestApi {
   }
 
   // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
-  static postSession (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string, state: string) : Promise<AxiosResponse<Session>> {
+  static postSession (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string, state: string) {
     return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session/${service}/${version}`, {
       sessionId: tempSessionId,
       authorizationCode: authorizationCode,
@@ -226,6 +262,22 @@ export default class RestApi {
       oAuthVerifier: oAuthVerifier,
       state: state
     })
+  }
+
+  // ユーザー情報に連携サービスを追加する
+  static updateService (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string, state: string) {
+    return this.update(`/auth/service/${service}/${version}`, {
+      sessionId: tempSessionId,
+      authorizationCode: authorizationCode,
+      oAuthToken: oAuthToken,
+      oAuthVerifier: oAuthVerifier,
+      state: state
+    })
+  }
+
+  // ユーザー情報に連携サービスを追加する
+  static deleteService (service: LoginServiceType) {
+    return this.delete(`/auth/service/${service}`)
   }
 
   static delSession () : Promise<AxiosResponse<Session>> {

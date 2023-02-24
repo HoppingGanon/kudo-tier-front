@@ -30,9 +30,8 @@
             v-model:icon-url="iconUrl"
             v-model:disp-name="dispName"
             v-model:profile="profile"
-            :twitter-name="twitterName"
             :twitter-user-name="twitterUserName"
-            :twitter-icon-url="twitterIconUrl"
+            :google-email="googleEmail"
             :is-new="false"
           />
         </v-form>
@@ -62,6 +61,7 @@
               />
             </v-col>
           </v-row>
+
           <v-row>
             <v-col class="font-weight-bold mt-3">
               セッション保持時間(分)
@@ -89,6 +89,66 @@
               />
             </v-col>
           </v-row>
+
+          <v-row>
+            <v-col class="font-weight-bold mt-3">
+              連携サービス
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <div class="mt-1 ml-1">
+                <span class="text-caption">
+                  ログインに使用できる連携サービスを変更できます。
+                </span>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-container fluid class="pa-0 ml-2 mr-0 mt-0 mb-0">
+                <v-row>
+                  <v-col cols="12" sm="3" md="2" lg="1" xl="1">
+                    Twitter:
+                  </v-col>
+                  <v-col cols="12" sm="9" md="8" lg="11" xl="11">
+                    <span v-if="twitterUserName">
+                      <span class="no-break">連携済み(@<span v-text="twitterUserName"></span>)</span>
+                      <v-btn flat @click="openRemoveServiceDialog('twitter')">
+                        解除する
+                      </v-btn>
+                    </span>
+                    <span v-else>
+                      未連携
+                      <v-btn flat @click="addServiceDialog = true">
+                        連携する
+                      </v-btn>
+                    </span>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="3" md="2" lg="1" xl="1">
+                    Google:
+                  </v-col>
+                  <v-col cols="12" sm="9" md="8" lg="11" xl="11">
+                    <span v-if="googleEmail">
+                      <span class="no-break">連携済み(<span v-text="googleEmail"></span>)</span>
+                      <v-btn flat @click="openRemoveServiceDialog('google')">
+                        解除する
+                      </v-btn>
+                    </span>
+                    <span v-else>
+                      未連携
+                      <v-btn flat @click="addServiceDialog = true">
+                        連携する
+                      </v-btn>
+                    </span>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-col>
+          </v-row>
+
           <v-row>
             <v-col class="font-weight-bold mt-3">
               アカウントの削除
@@ -114,9 +174,9 @@
 
   <simple-dialog
     v-model="deleteDialog"
-      title="アカウントの削除"
-      @submit="commitDel"
-    >
+    title="アカウントの削除"
+    @submit="commitDel"
+  >
     <span>
       アカウントの削除を確定させるには削除コード'<span v-text="receivedDelcode"></span>'を入力してください
     </span>
@@ -125,17 +185,30 @@
     <br/>
   </simple-dialog>
 
+<simple-dialog v-model="addServiceDialog" title="サービス連携" :show-submit-button="false" >
+  <login-component :is-update="true" :disable-twitter="!!twitterUserName" :disable-google="!!googleEmail" />
+</simple-dialog>
+
+<simple-dialog
+  v-model="removeServiceDialog"
+  title="サービス連携の解除"
+  :text="`本当に'${removeServiceTarget ? LoginServiceTypeNames[removeServiceTarget] : ''}'との連携を解除しますか？`"
+  @submit="removeService"
+/>
+
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, Ref, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import LoginComponent from '@/components/LoginComponent.vue'
 import store from '@/store'
-import RestApi, { toastError } from '@/common/restapi'
+import RestApi, { LoginServiceType, LoginServiceTypeNames, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import Base64Api from '@/common/base64api'
+import { useRoute } from 'vue-router'
 import router from '@/router'
 
 export default defineComponent({
@@ -143,40 +216,49 @@ export default defineComponent({
   components: {
     SessionChecker,
     RegistrationComponent,
-    SimpleDialog
+    SimpleDialog,
+    LoginComponent
   },
-  props: {},
-  emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
     const toast = useToast()
+    const route = useRoute()
 
     const tab = ref(0)
-    const twitterName = computed(() => store.state.twitterName)
-    const twitterUserName = computed(() => store.state.twitterUserName)
-    const twitterIconUrl = computed(() => store.state.twitterIconUrl)
     const dispName = ref('')
     const profile = ref('')
     const iconUrl = ref('')
     const allowTwitterLink = ref(false)
     const keepSession = ref(120)
+    const twitterUserName = ref('')
+    const googleEmail = ref('')
+
     const deleteDialog = ref(false)
+    const addServiceDialog = ref(false)
+    const removeServiceDialog = ref(false)
+    const removeServiceTarget: Ref<'' | LoginServiceType> = ref('')
+
     const delcode = ref('')
     const receivedDelcode = ref('')
 
     const form = ref()
 
-    onMounted(() => {
+    const load = () => {
+      if (route.query.tab === 'detail') {
+        tab.value = 1
+      }
       if (store.getters.isRegistered) {
         RestApi.getUserData(store.state.userId).then((res) => {
           dispName.value = res.data.name
           profile.value = res.data.profile
           iconUrl.value = res.data.iconUrl
+          twitterUserName.value = res.data.twitterUserName || ''
+          googleEmail.value = res.data.googleEmail || ''
           allowTwitterLink.value = res.data.allowTwitterLink
           keepSession.value = res.data.keepSession || 120
         }).catch((e) => toastError(e, toast))
       }
-    })
+    }
+    onMounted(load)
 
     const openDel = () => {
       RestApi.deleteUser1(store.state.userId).then((r) => {
@@ -214,23 +296,51 @@ export default defineComponent({
       }
     }
 
+    const openRemoveServiceDialog = (service: LoginServiceType) => {
+      let cnt = 0
+      cnt += twitterUserName.value ? 1 : 0
+      cnt += googleEmail.value ? 1 : 0
+      if (cnt > 1) {
+        removeServiceDialog.value = true
+        removeServiceTarget.value = service
+      } else {
+        toast.warning('連携サービスは最低でも一つ必要です')
+      }
+    }
+
+    const removeService = () => {
+      if (removeServiceTarget.value !== '') {
+        RestApi.deleteService(removeServiceTarget.value).then(() => {
+          toast.success('連携の解除に成功しました')
+          load()
+        }).catch((e) => {
+          toastError(e, toast)
+        })
+      }
+    }
+
     return {
+      LoginServiceTypeNames,
       tab,
-      twitterName,
       twitterUserName,
-      twitterIconUrl,
+      googleEmail,
       dispName,
       profile,
       iconUrl,
       allowTwitterLink,
       keepSession,
       deleteDialog,
+      addServiceDialog,
+      removeServiceDialog,
+      removeServiceTarget,
       delcode,
       receivedDelcode,
       form,
       openDel,
       commitDel,
-      save
+      save,
+      openRemoveServiceDialog,
+      removeService
     }
   }
 })
