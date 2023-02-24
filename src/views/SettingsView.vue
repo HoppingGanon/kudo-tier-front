@@ -114,13 +114,13 @@
                   <v-col cols="12" sm="9" md="8" lg="11" xl="11">
                     <span v-if="twitterUserName">
                       <span class="no-break">連携済み(@<span v-text="twitterUserName"></span>)</span>
-                      <v-btn flat @click="openRemoveServiceDialog('twitter')">
+                      <v-btn flat @click="openRemoveServiceDialog('twitter')" style="color: red;">
                         解除する
                       </v-btn>
                     </span>
                     <span v-else>
                       未連携
-                      <v-btn flat @click="addServiceDialog = true">
+                      <v-btn flat @click="addServiceDialog = true" style="color: green;">
                         連携する
                       </v-btn>
                     </span>
@@ -133,13 +133,13 @@
                   <v-col cols="12" sm="9" md="8" lg="11" xl="11">
                     <span v-if="googleEmail">
                       <span class="no-break">連携済み(<span v-text="googleEmail"></span>)</span>
-                      <v-btn flat @click="openRemoveServiceDialog('google')">
+                      <v-btn flat @click="openRemoveServiceDialog('google')" style="color: red;">
                         解除する
                       </v-btn>
                     </span>
                     <span v-else>
                       未連携
-                      <v-btn flat @click="addServiceDialog = true">
+                      <v-btn flat @click="addServiceDialog = true" style="color: green;">
                         連携する
                       </v-btn>
                     </span>
@@ -312,6 +312,11 @@ export default defineComponent({
       if (removeServiceTarget.value !== '') {
         RestApi.deleteService(removeServiceTarget.value).then(() => {
           toast.success('連携の解除に成功しました')
+          if (removeServiceTarget.value === 'twitter') {
+            store.commit('initTwitter')
+          } else if (removeServiceTarget.value === 'google') {
+            store.commit('initGoogle')
+          }
           load()
         }).catch((e) => {
           toastError(e, toast)

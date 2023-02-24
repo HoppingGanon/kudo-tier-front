@@ -20,12 +20,23 @@ export type State = {
   tiersCount: number
   reviewsCount: number
 
+  // ======================================================================
+  // ログイン時にのみ更新、現状は/settingsでのサービス連携解除時とログアウト時に削除
+  // 基本的に今使用するのはユーザー登録時のみ
+  // 将来使用するかもしれないデータ
+
+  /** Twitter 表示名 */
   twitterName: string
+  /** Twitter @ 名 */
   twitterUserName: string
+  /** Twitterアイコン */
   twitterIconUrl: string
 
+  /** Google メールアドレス */
   googleEmail: string
+  /** Google アイコン */
   googleImageUrl: string
+  // ======================================================================
 
   expiredTime: string
   isNew: boolean
@@ -111,7 +122,7 @@ export default createStore<State>({
     setGoogleImageUrl (state, val: string) {
       state.googleImageUrl = val
     },
-    initTempsSession (state) {
+    initTempSession (state) {
       state.tempSessionId = ''
       state.tempSessionService = ''
       state.tempSessionVersion = ''
@@ -131,6 +142,15 @@ export default createStore<State>({
       state.googleImageUrl = ''
       state.expiredTime = ''
       state.isNew = false
+    },
+    initTwitter (state) {
+      state.twitterName = ''
+      state.twitterUserName = ''
+      state.twitterIconUrl = ''
+    },
+    initGoogle (state) {
+      state.googleEmail = ''
+      state.googleImageUrl = ''
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     downloadUserData (state, userId?: string, success?: (v: any) => void, failure?: (v: any) => void) {

@@ -198,8 +198,12 @@ export const getImgSource = (uri: string) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
   if (err && err.response && err.response.data) {
-    const v = err.response.data
-    toast.error(`${v.message} (${v.code})`)
+    if (err.response.data.code) {
+      const v = err.response.data
+      toast.error(`${v.message} (${v.code})`)
+    } else {
+      toast.warning('fatal エラーが発生しました')
+    }
   } else {
     toast.error('fatal APIサーバーと正常な通信が確立出来ません')
   }

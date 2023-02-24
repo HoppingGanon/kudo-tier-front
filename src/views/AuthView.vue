@@ -38,9 +38,9 @@ function saveTwitterSession (data: Session, store: Store<any>) {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveGoogleSession (data: Session, store: Store<any>) {
-  store.commit('setTwitterUserName', data.twitterUserName)
-  store.commit('setTwitterName', data.twitterName)
-  store.commit('setTwitterIconUrl', data.twitterIconUrl)
+  console.log(store.state)
+  store.commit('setGoogleImageUrl', data.googleImageUrl)
+  store.commit('setGoogleEmail', data.googleEmail)
 }
 export default defineComponent({
   name: 'AuthView',
@@ -56,11 +56,22 @@ export default defineComponent({
       const oAuthVerifier = (route.query.oauth_verifier || '') as string
       const oAuthToken = (route.query.oauth_token || '') as string
       const state = (route.query.state || '') as string
+
+      if (code === '' && oAuthVerifier === '' && oAuthToken === '') {
+        if (store.state.tempSessionAdditioning) {
+          router.replace('/settings?tab=detail')
+          return
+        } else {
+          router.replace('/login')
+          return
+        }
+      }
+
       if (store.getters.isRegistered && store.state.tempSessionId && store.state.tempSessionAdditioning) {
         // 既存のセッションとユーザーに新しいサービスを連携する場合
-        RestApi.updateService(store.state.tempSessionId, store.state.tempSessionService, store.state.tempSessionVersion, code, oAuthToken, oAuthVerifier, state).then((response) => {
+        RestApi.updateService(store.state.tempSessionId, store.state.tempSessionService, store.state.tempSessionVersion, code, oAuthToken, oAuthVerifier, state).then(() => {
           // 一時セッション情報のクリア
-          store.commit('initTempsSession')
+          store.commit('initTempSession')
           router.replace('/settings?tab=detail')
         }).catch((err) => {
           toastError(err, toast)
@@ -69,9 +80,6 @@ export default defineComponent({
       } else if (!store.getters.isRegistered && store.state.tempSessionId && !store.state.setTempSessionAdditioning) {
         // 通常ログイン
         RestApi.postSession(store.state.tempSessionId, store.state.tempSessionService, store.state.tempSessionVersion, code, oAuthToken, oAuthVerifier, state).then((response) => {
-          // 一時セッション情報のクリア
-          store.commit('initTempsSession')
-
           // セッションの保存
           saveSession(response.data, store)
 
@@ -84,6 +92,9 @@ export default defineComponent({
               saveGoogleSession(response.data, store)
               break
           }
+
+          // 一時セッション情報のクリア
+          store.commit('initTempSession')
 
           if (response.data.isNew) {
             router.replace('/regist')

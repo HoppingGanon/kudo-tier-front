@@ -1,32 +1,25 @@
 <template>
   <v-container flat>
-    <v-row v-show="false">
-      <!-- UI整理により現状表示しない -->
+    <v-row v-show="isNew">
       <v-col>
         <table>
-          <tr>
+          <tr v-if="twitterUserName">
             <td>
-              Twitter:
+              Twitterでログイン中:
             </td>
             <td>
-              <span v-if="twitterUserName">
-                連携済み(<span v-text="twitterUserName"></span>)
-              </span>
-              <span v-else>
-                未連携
+              <span>
+                (<span v-text="twitterUserName"></span>)
               </span>
             </td>
           </tr>
-          <tr>
+          <tr v-if="googleEmail">
             <td>
-              Google:
+              Googleでログイン中:
             </td>
             <td>
-              <span v-if="googleEmail">
-                連携済み(<span v-text="googleEmail"></span>)
-              </span>
-              <span v-else>
-                未連携
+              <span>
+                <span v-text="googleEmail"></span>
               </span>
             </td>
           </tr>

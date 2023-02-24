@@ -29,7 +29,7 @@ export default defineComponent({
     onMounted(() => {
       // セッションチェッカーが存在するページに一時セッションは不要
       if (store.state.tempSessionId || store.state.tempSessionService || store.state.tempSessionVersion) {
-        store.commit('initTempsSession')
+        store.commit('initTempSession')
       }
 
       try {

@@ -4,6 +4,7 @@
 
       <!-- セッション有効期限をチェックする -->
       <session-checker :no-temp-session-error="true" />
+
       <v-toolbar color="secondary">
         <v-card-title class="font-weight-bold">
           ユーザー登録
