@@ -3,6 +3,11 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
+    path: '/',
+    name: 'welcome',
+    component: () => import('../views/WelcomeView.vue')
+  },
+  {
     path: '/home',
     name: 'home-no-id',
     component: () => import('../views/HomeView.vue')
@@ -38,14 +43,19 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/AuthView.vue')
   },
   {
-    path: '/tier/:tid',
-    name: 'tier',
-    component: () => import('../views/TierView.vue')
-  },
-  {
     path: '/regist',
     name: 'regist',
     component: () => import('../views/RegistrationView.vue')
+  },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: () => import('../views/NotificationsView.vue')
+  },
+  {
+    path: '/tier/:tid',
+    name: 'tier',
+    component: () => import('../views/TierView.vue')
   },
   {
     path: '/tier-settings-new',
@@ -78,19 +88,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/ReviewSettingsView.vue')
   },
   {
-    path: '/settings',
-    name: 'settings',
-    component: () => import('../views/SettingsView.vue')
-  },
-  {
     path: '/tier-embedded/:tid',
     name: 'tier-embedded',
     component: () => import('../views/TierEmbeddedView.vue')
   },
   {
-    path: '/',
-    name: 'welcome',
-    component: () => import('../views/WelcomeView.vue')
+    path: '/settings',
+    name: 'settings',
+    component: () => import('../views/SettingsView.vue')
   },
   {
     path: '/:catchAll(.*)',

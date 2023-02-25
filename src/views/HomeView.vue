@@ -200,8 +200,7 @@ export default defineComponent({
         })
         reloadUser()
       }).catch((e) => {
-        const v = e.response.data
-        toast.error(`${v.message} (${v.code})`)
+        toastError(e, toast)
       }).finally(() => { isLoadingReviews.value = false })
     }
 

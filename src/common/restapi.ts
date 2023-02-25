@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
 import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData, ReviewWithParams } from './review'
+import CommonApi from './commonapi'
 import { TierSortType } from './page'
 import { ToastPluginApi } from 'vue-toast-notification'
 import Base64Api from './base64api'
@@ -184,6 +185,27 @@ export const LoginServiceTypeNames = {
 }
 export type LoginVersionType = '1' | '2'
 
+/** サーバーから受け取る通知データ */
+export interface NotificationData {
+  /** 通知ID */
+  id: number
+  /** 表示する文章 */
+  content: string
+  /** 既読フラグ */
+  isRead: boolean
+  /** 重要情報フラグ */
+  isImportant: boolean
+  /** クリックした際に飛ぶURL */
+  url: string
+  /** 発信日時 */
+  createdAt: string
+}
+
+/** 件数カウントのみ受け取る場合に使用 */
+export interface CountData {
+  count: number
+}
+
 export const getImgSource = (uri: string) => {
   switch (Base64Api.isDataUrl(uri)) {
     case true:
@@ -200,7 +222,7 @@ export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => v
   if (err && err.response && err.response.data) {
     if (err.response.data.code) {
       const v = err.response.data
-      toast.error(`${v.message} (${v.code})`)
+      toast.warning(`${v.message} (${v.code})`)
     } else {
       toast.warning('fatal エラーが発生しました')
     }
@@ -359,9 +381,42 @@ export default class RestApi {
   static getImage (userFilePath: string) {
     return axios.get(getImgSource(userFilePath), { responseType: 'blob' })
   }
+
+  /** 通知リストを取得する */
+  static getNotifications () {
+    return this.get<NotificationData[]>('/common/notifications')
+  }
+
+  /** 通知リストを取得する */
+  static getNotificationsCount () {
+    return this.get<CountData>('/common/notifications-count')
+  }
+
+  /** 通知既読状態を更新する */
+  static updateNotificationRead (notificationId: number, isRead: boolean) {
+    return this.update(`/common/notification-read/${notificationId}`, {
+      isRead: isRead
+    })
+  }
 }
 
 export class Parser {
+  static parseNotificationsStr (notifications: NotificationData[]) {
+    const converted: NotificationData[] = []
+    notifications.forEach((v) => {
+      converted.push({
+        id: v.id,
+        content: v.content,
+        isRead: v.isRead,
+        isImportant: v.isImportant,
+        url: v.url,
+        createdAt: CommonApi.dateToString(new Date(v.createdAt), true)
+      })
+    })
+
+    return converted
+  }
+
   static parseTier (tierData: TierData) : Tier {
     const reviews: Review[] = []
     tierData.reviews.forEach((v) => {

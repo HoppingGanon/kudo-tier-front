@@ -66,6 +66,7 @@ export default defineComponent({
           }
         }
       } catch {
+        // 不明なエラー
         store.commit('initAllSession')
         toast.warning('セッションが壊れています。再度ログインしてください。')
         if (props.noSessionError || props.noTempSessionError) {

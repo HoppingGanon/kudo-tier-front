@@ -38,7 +38,6 @@ function saveTwitterSession (data: Session, store: Store<any>) {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveGoogleSession (data: Session, store: Store<any>) {
-  console.log(store.state)
   store.commit('setGoogleImageUrl', data.googleImageUrl)
   store.commit('setGoogleEmail', data.googleEmail)
 }

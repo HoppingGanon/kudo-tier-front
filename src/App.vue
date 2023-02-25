@@ -45,6 +45,13 @@
                 ホーム
               </v-list-item-title>
             </v-list-item>
+            <v-list-item v-if="hasSession" @click="goNotifications">
+              <v-list-item-title>
+                <v-icon class="mr-3">mdi-bell-outline</v-icon>
+                通知
+                <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
+              </v-list-item-title>
+            </v-list-item>
             <v-list-item v-else @click="goLogin">
               <v-list-item-title>
                 <v-icon class="mr-3">mdi-login</v-icon>
@@ -171,6 +178,11 @@ export default defineComponent({
       router.push(`/home/${store.state.userId}`)
     }
 
+    const goNotifications = () => {
+      drawer.value = false
+      router.push('/notifications')
+    }
+
     const goLogin = () => {
       drawer.value = false
       router.push('/')
@@ -197,7 +209,7 @@ export default defineComponent({
     }
 
     // セッションのユーザーIDに変化があればユーザーデータをダウンロードする
-    const { userId, userName, userProfile, userIconUrl, reviewsCount, tiersCount } = toRefs(store.state)
+    const { userId, userName, userProfile, userIconUrl, reviewsCount, tiersCount, notificationsCount } = toRefs(store.state)
 
     // ユーザーIDが変更したときはダウンロード
     watch(userId, () => {
@@ -261,6 +273,7 @@ export default defineComponent({
       userIconUrl,
       reviewsCount,
       tiersCount,
+      notificationsCount,
       sessionUserId,
       barIsVisible,
       noBar,
@@ -270,6 +283,7 @@ export default defineComponent({
       isNew,
       clickHideBarIcon,
       goHome,
+      goNotifications,
       goLogout,
       goLogin,
       goTierSearch,

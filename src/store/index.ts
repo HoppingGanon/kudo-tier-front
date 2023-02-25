@@ -19,6 +19,8 @@ export type State = {
   userIconUrl: string
   tiersCount: number
   reviewsCount: number
+  /** 通知の数 */
+  notificationsCount: number
 
   // ======================================================================
   // ログイン時にのみ更新、現状は/settingsでのサービス連携解除時とログアウト時に削除
@@ -55,6 +57,7 @@ export default createStore<State>({
     userIconUrl: '',
     tiersCount: 0,
     reviewsCount: 0,
+    notificationsCount: 0,
     twitterName: '',
     twitterUserName: '',
     twitterIconUrl: '',
@@ -106,6 +109,9 @@ export default createStore<State>({
     },
     setTiersCount (state, val: number) {
       state.tiersCount = val
+    },
+    setNotificationsCount (state, val: number) {
+      state.notificationsCount = val
     },
     setTwitterName (state, val: string) {
       state.twitterName = val
@@ -172,6 +178,11 @@ export default createStore<State>({
           state.tiersCount = res.data.tiersCount
         }).then(success).catch(failure)
       }
+
+      // 通知の未読数を取得する
+      RestApi.getNotificationsCount().then((res) => {
+        state.notificationsCount = res.data.count
+      })
     }
   },
   actions: {

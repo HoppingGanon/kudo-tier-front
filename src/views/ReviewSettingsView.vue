@@ -356,8 +356,7 @@ export default defineComponent({
           isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {
-          const v = e.response.data as ErrorResponse
-          toast.error(`${v.message}(${v.code})`)
+          toastError(e, toast)
         })
       } else {
         // 編集
@@ -367,8 +366,7 @@ export default defineComponent({
           isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {
-          const v = e.response.data as ErrorResponse
-          toast.error(`${v.message}(${v.code})`)
+          toastError(e, toast)
         })
       }
     }
