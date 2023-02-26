@@ -182,7 +182,7 @@ export default defineComponent({
       onLoad,
       carouselImage1Width: computed(() => `width: ${carouselHeight.value * 1.2}px`),
       carouselImage2Width: computed(() => `width: ${carouselHeight.value * 1.2}px`),
-      carouselImage3Width: computed(() => `width: ${carouselHeight.value * 1.1}px`),
+      carouselImage3Width: computed(() => `width: ${carouselHeight.value * 0.8}px`),
       titleClass: computed(() => (display.smAndDown.value ? 'text-h6' : display.md.value ? 'text-h5' : 'text-h4') + ' white--text'),
       textClass: computed(() => (display.smAndDown.value ? 'text-subtitle-2' : display.md.value ? 'text-subtitle-1' : 'text-h6') + ' white--text')
     }

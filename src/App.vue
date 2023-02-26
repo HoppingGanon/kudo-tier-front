@@ -38,45 +38,47 @@
           <v-divider />
         </v-row>
         <v-row>
-          <v-list class="ml-3 mt-3" width="100%">
-            <v-list-item v-if="hasSession" @click="goHome">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-home-account</v-icon>
-                ホーム
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="hasSession" @click="goNotifications">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-bell-outline</v-icon>
-                通知
-                <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-else @click="goLogin">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-login</v-icon>
-                ログイン/登録
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="hasSession"  @click="goTierSearch">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-table-account</v-icon>
-                Tier一覧
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="hasSession"  @click="goTierSettings">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-table-plus</v-icon>
-                Tier追加
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="hasSession" @click="goSettings">
-              <v-list-item-title>
-                <v-icon class="mr-3">mdi-cog-outline</v-icon>
-                ユーザー設定
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
+          <v-col>
+            <v-list class="ml-3 mt-3" width="100%">
+              <v-list-item v-if="hasSession" @click="goHome">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-home-account</v-icon>
+                  ホーム
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="hasSession" @click="goNotifications">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-bell-outline</v-icon>
+                  通知
+                  <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-else @click="goLogin">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-login</v-icon>
+                  ログイン/登録
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="hasSession"  @click="goTierSearch">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-table-account</v-icon>
+                  Tier一覧
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="hasSession"  @click="goTierSettings">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-table-plus</v-icon>
+                  Tier追加
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="hasSession" @click="goSettings">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-cog-outline</v-icon>
+                  ユーザー設定
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-col>
         </v-row>
         <v-row v-if="hasSession">
           <v-divider class="mt-3" />
@@ -92,6 +94,16 @@
           </v-list>
         </v-row>
       </v-container>
+
+      <div style="position: absolute;bottom: 0px;">
+        <v-list class="ml-3 mt-3" width="100%">
+          <v-list-item @click="goAbout">
+            <v-list-item-title>
+              このサイトについて
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </div>
     </v-navigation-drawer>
 
     <v-app-bar v-if="!noBar" app class="pink lighten-4 anime" :style="barStyle">
@@ -140,6 +152,7 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
+import RestApi from './common/restapi'
 
 export default defineComponent({
   name: 'App',
@@ -208,12 +221,24 @@ export default defineComponent({
       router.push('/')
     }
 
+    const goAbout = () => {
+      drawer.value = false
+      router.push('/about')
+    }
+
     // セッションのユーザーIDに変化があればユーザーデータをダウンロードする
     const { userId, userName, userProfile, userIconUrl, reviewsCount, tiersCount, notificationsCount } = toRefs(store.state)
 
     // ユーザーIDが変更したときはダウンロード
     watch(userId, () => {
       store.commit('downloadUserData', store.state.userId)
+
+      // ログイン状態なら未読通知数を取得
+      if (store.getters.isRegistered) {
+        RestApi.getNotificationsCount().then((res) => {
+          store.commit('setNotificationsCount', res.data.count)
+        })
+      }
     })
 
     /**
@@ -263,6 +288,13 @@ export default defineComponent({
       checkRouterOnMounted()
       // ユーザーデータの取得
       store.commit('downloadUserData', store.state.userId)
+
+      // ログイン状態なら未読通知数を取得
+      if (store.getters.isRegistered) {
+        RestApi.getNotificationsCount().then((res) => {
+          store.commit('setNotificationsCount', res.data.count)
+        })
+      }
     })
 
     return {
@@ -290,6 +322,7 @@ export default defineComponent({
       goTierSettings,
       goSettings,
       goWelcome,
+      goAbout,
       routeWatcher
     }
   }

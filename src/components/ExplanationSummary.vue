@@ -107,7 +107,7 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/share.png" max-height="480px" class="shadow" /></v-card>
+        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/share.png" max-height="280px" class="shadow" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>

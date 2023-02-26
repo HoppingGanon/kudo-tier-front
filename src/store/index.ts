@@ -178,11 +178,6 @@ export default createStore<State>({
           state.tiersCount = res.data.tiersCount
         }).then(success).catch(failure)
       }
-
-      // 通知の未読数を取得する
-      RestApi.getNotificationsCount().then((res) => {
-        state.notificationsCount = res.data.count
-      })
     }
   },
   actions: {

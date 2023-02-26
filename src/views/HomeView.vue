@@ -48,7 +48,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-card>
+          <v-card flat>
             <v-toolbar color="secondary">
               <v-card-title>
                 投稿
