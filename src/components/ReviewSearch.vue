@@ -94,6 +94,11 @@ export default defineComponent({
     /** データ追加終了フラグ */
     const isStop = ref(false)
 
+    /** 最後に読み込んだTierのID */
+    const lastItemId = ref('')
+    /** 最後に読み込んだTierの要素 */
+    const lastItemElement = computed(() => document.getElementById(`rev${lastItemId.value}`))
+
     /** データ更新 */
     const update = (isInputed: boolean) => {
       if (props.userId === '') {
@@ -105,6 +110,7 @@ export default defineComponent({
         if (res.data.length !== 0) {
           // 取得件数1件以上
           emit('updateReviewsPair', res.data.map((pairs) => Parser.parseReviewWithParams(pairs)))
+          lastItemId.value = res.data[res.data.length - 1].review.reviewId
           // データ追加を可能に
           isStop.value = false
           page.value = 1
@@ -143,6 +149,7 @@ export default defineComponent({
           if (res.data.length !== 0) {
           // 取得件数1件以上
             emit('addReviewsPair', res.data.map((pairs) => Parser.parseReviewWithParams(pairs)))
+            lastItemId.value = res.data[res.data.length - 1].review.reviewId
             page.value++
           } else {
             // 取得件数が0ならデータ追加を不能に
@@ -160,6 +167,7 @@ export default defineComponent({
       }
     }
 
+    /** 検索ワードが変更されたか2秒まって検知する */
     const updateText = (v: string) => {
       isInputing.value = true
       text.value = v
@@ -183,8 +191,10 @@ export default defineComponent({
     })
 
     const onScroll = () => {
-      if (window.scrollY > (document.documentElement.scrollHeight - document.documentElement.clientHeight - 100)) {
-        add()
+      if (lastItemElement.value) {
+        if (lastItemElement.value.getBoundingClientRect().top - document.documentElement.clientHeight < 0) {
+          add()
+        }
       }
     }
 

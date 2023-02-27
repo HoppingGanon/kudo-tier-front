@@ -292,7 +292,6 @@ export default defineComponent({
     ]
 
     const textsize = computed(() => {
-      console.log(props.displaySize)
       switch (props.displaySize) {
         case 'smaller':
           return sizeArray[0]
@@ -315,7 +314,6 @@ export default defineComponent({
     })
 
     const iconsize = computed(() => {
-      console.log(props.displaySize)
       switch (props.displaySize) {
         case 'smaller':
           return sizeArray[0]

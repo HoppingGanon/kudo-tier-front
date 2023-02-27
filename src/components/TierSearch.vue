@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
 import { Tier } from '@/common/review'
 import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
 import TierList from '@/components/TierList.vue'
@@ -87,6 +87,11 @@ export default defineComponent({
     /** データ追加終了フラグ */
     const isStop = ref(false)
 
+    /** 最後に読み込んだTierのID */
+    const lastItemId = ref('')
+    /** 最後に読み込んだTierの要素 */
+    const lastItemElement = computed(() => document.getElementById(`tir${lastItemId.value}`))
+
     /** データ更新 */
     const update = (isInputed: boolean) => {
       if (props.userId === '') {
@@ -101,6 +106,7 @@ export default defineComponent({
           res.data.forEach((v) => {
             tiers.push(Parser.parseTier(v))
           })
+          lastItemId.value = tiers[tiers.length - 1].tierId
           emit('updateTiers', tiers)
           // データ追加を可能に
           isStop.value = false
@@ -143,6 +149,7 @@ export default defineComponent({
             res.data.forEach((v) => {
               tiers.push(Parser.parseTier(v))
             })
+            lastItemId.value = tiers[tiers.length - 1].tierId
             emit('addTiers', tiers)
             page.value++
           } else {
@@ -161,6 +168,7 @@ export default defineComponent({
       }
     }
 
+    /** 検索ワードが変更されたか2秒まって検知する */
     const updateText = (v: string) => {
       isInputing.value = true
       text.value = v
@@ -184,8 +192,10 @@ export default defineComponent({
     })
 
     const onScroll = () => {
-      if (window.scrollY > (document.documentElement.scrollHeight - document.documentElement.clientHeight - 100)) {
-        add()
+      if (lastItemElement.value) {
+        if (lastItemElement.value.getBoundingClientRect().top - document.documentElement.clientHeight < 0) {
+          add()
+        }
       }
     }
 

@@ -411,7 +411,6 @@ export class ReviewFunc {
       // ポイントの段階ごとにグルーピングする
       pivotInfoList.forEach((info) => {
         // rankやscoreについては、getReviewDisp()の機能と同様
-        console.log(info.review.name + ' ' + info.point)
         const index = list.length - Math.round(info.point / step) - 1
 
         if (index >= 0 && index < list.length) {

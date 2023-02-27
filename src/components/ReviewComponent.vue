@@ -43,6 +43,7 @@
             <v-row>
               <v-col class="d-flex">
                 <div style="width: 100%">
+                  <!-- Tierで参照したり、Search等でスクロール検知をするためにIDを振る -->
                   <a :id="`rev${review.reviewId}`">
                     <p :class="$vuetify.display.md || $vuetify.display.lg || $vuetify.display.xl ? 'text-h6' : 'text-subtitle-1'"><span v-text="review.name"></span></p>
                   </a>
