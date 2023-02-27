@@ -206,6 +206,30 @@ export interface CountData {
   count: number
 }
 
+/** ライセンス情報 */
+export interface LicenseData {
+  /** インストール済みバージョンを含めたパッケージの名称 */
+  fullName: string,
+  /** ライセンスの種類 */
+  license: string,
+  /** ライセンスファイルの名前 */
+  licenseName: string
+  /** ライセンスファイルの内容 */
+  content: string,
+}
+export interface LicenseFrontData extends LicenseData {
+  /** パッケージの名称 */
+  name: string,
+  /** パッケージのバージョン */
+  needed: string
+}
+export interface LicenseBackData extends LicenseData {
+  /** パッケージの名称 */
+  name: string,
+  /** パッケージのバージョン */
+  version: string
+}
+
 export const getImgSource = (uri: string) => {
   switch (Base64Api.isDataUrl(uri)) {
     case true:
