@@ -6,22 +6,23 @@
   >
     <tr v-for="items, i in tierPivotList" :key="i">
       <td v-if="pointType === 'point'" :style="pivotColor" style="width: 0px;white-space: nowrap;" :class="dark ? 'dark-left' : 'light-left'">
-        <span :style="pivotColor" :class="dark ? 'dark-point' : 'light-point'" class="">
-          {{ (9 - i)*10 }}点～{{ (10 - i)*10 }}点
-        </span>
+        <review-value-display
+          :point-type="pointType"
+          :value="(tierPivotList.length - i) * 10"
+          :display-size="textSize"
+          :reverse="reverse"
+        />
       </td>
       <td
         v-else-if="pointType === 'score'"
         style="width: 0px;height: 100%;white-space: nowrap;"
-        :style="'background-color: white;' + pivotColor + calcBarStyle(calcPoint(i), 10, false, dark)"
+        :class="dark ? 'dark-left' : 'light-left'"
       >
         <review-value-display
           :point-type="pointType"
           :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
           :display-size="textSize"
-          bar-width="100px"
           :reverse="reverse"
-          :no-fill="true"
         />
       </td>
       <td
@@ -34,7 +35,6 @@
           :point-type="pointType"
           :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
           :display-size="textSize"
-          bar-width="100px"
           :reverse="reverse"
         />
       </td>
@@ -42,13 +42,12 @@
         v-else-if="pointType === 'rank14' || pointType === 'rank7'"
         :style="pivotColor"
         style="width: 0px;white-space: nowrap;"
-        :class="(reverse ? 'r-' + calcRankClass(pointType, calcPoint(i)) : (dark ? 'dark-left' : 'light-left'))"
+        :class="dark ? 'dark-left' : 'light-left'"
       >
         <review-value-display
           :point-type="pointType"
           :value="(tierPivotList.length - i - 1) * (100 / (tierPivotList.length - 1))"
           :display-size="textSize"
-          bar-width="100px"
           :reverse="reverse"
         />
       </td>
@@ -73,7 +72,7 @@
 import { IconSize, PointDisplaySize, RankingTheme, ReviewFactorParam, ReviewFunc, ReviewPointType, TierPivotInfomation } from '@/common/review'
 import { computed, defineComponent, PropType } from 'vue'
 import PivotIcon from '@/components/PivotIcon.vue'
-import ReviewValueDisplay, { calcRankClass, calcBarStyle } from '@/components/ReviewValueDisplay.vue'
+import ReviewValueDisplay, { calcClass } from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'TierRankingPivot',
@@ -129,13 +128,8 @@ export default defineComponent({
     const pivotColor = ''
 
     return {
-      calcRankClass,
-      calcBarStyle,
+      calcClass,
       pivotColor,
-      calcPoint: (index: number) => {
-        const v = (props.tierPivotList.length - index - 1) * (100 / (props.tierPivotList.length - 1))
-        return ReviewFunc.getReviewDisp(v, props.pointType)
-      },
       reverse: computed(() => props.theme === 'dark-reverse' || props.theme === 'light-reverse'),
       dark: computed(() => props.theme === 'dark-reverse' || props.theme === 'dark'),
       divStyle: computed(() => props.width === undefined ? '' : `width: ${props.width};`)

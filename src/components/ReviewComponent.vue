@@ -259,7 +259,7 @@ export default defineComponent({
     })
 
     const average = computed(() => {
-      return ReviewFunc.calcAaverage(props.review, props.reviewFactorParams, props.pullingUp, 100 + props.pullingDown, 0, 100)
+      return ReviewFunc.calcAaverage(props.review, props.reviewFactorParams, props.pullingUp, props.pullingDown, 0, 100)
     })
 
     const sum = computed(() => {

@@ -305,8 +305,26 @@ export class ReviewFunc {
     }
   }
 
+  /**
+   * ポイントを上下に動かして調整する
+   * @param point ポイントを調整する
+   * @param pullingUp ポイントを下げる
+   * @param pullingDown ポイントを上げる
+   * @param orgMin 元々のポイント最大値
+   * @param orgMax 元々のポイント最小値
+   * @returns 調整後のポイント
+   */
+  static ajustPoint (point: number, pullingUp: number, pullingDown: number, orgMin: number, orgMax: number) {
+    const min = orgMin + pullingDown
+    const max = orgMax - pullingUp
+    const size = max - min
+    const blank = orgMax - min
+    const result = Math.min((Math.max(point, min) - min) * (blank / size) + min, max)
+    return result
+  }
+
   /** 重みを考慮した評点の総合評価を算出する */
-  static calcAaverage (review: Review, reviewFactorParams: ReviewFactorParam[], min: number, max: number, orgMin: number, orgMax: number) {
+  static calcAaverage (review: Review, reviewFactorParams: ReviewFactorParam[], pullingUp: number, pullingDown: number, orgMin: number, orgMax: number) {
     let ave = 0
     let sumWeight = 0
 
@@ -320,22 +338,11 @@ export class ReviewFunc {
       if (param.isPoint && index < review.reviewFactors.length) {
         const factor = review.reviewFactors[index]
         if (factor.point !== undefined) {
-          ave += factor.point * param.weight / sumWeight
+          ave += ReviewFunc.ajustPoint(factor.point, pullingUp, pullingDown, orgMin, orgMax) * param.weight / sumWeight
         }
       }
     })
-
-    if (ave > max) {
-      ave = max - min
-    } else if (ave < min) {
-      ave = 0
-    } else {
-      ave = ave - min
-    }
-    const bottom = Math.min(orgMin, ave)
-    const top = ave - Math.min(orgMax, ave)
-    const point = (ave - top - bottom) * ((orgMax - orgMin) / (max - min))
-    return point
+    return ave
   }
 
   /**
@@ -369,12 +376,12 @@ export class ReviewFunc {
   }
 
   /** reviewsのポイントを算出し、ソートしたうえでTierPivotInfomation[]として返す */
-  static makePivotInfoList (reviews: Review[], reviewFactorParams: ReviewFactorParam[], min: number, max: number, orgMin: number, orgMax: number) : TierPivotInfomation[] {
+  static makePivotInfoList (reviews: Review[], reviewFactorParams: ReviewFactorParam[], pullingUp: number, pullingDown: number, orgMin: number, orgMax: number) : TierPivotInfomation[] {
     const list: TierPivotInfomation[] = []
     reviews.forEach((review) => {
       list.push({
         review: review,
-        point: ReviewFunc.calcAaverage(review, reviewFactorParams, min, max, orgMin, orgMax)
+        point: ReviewFunc.calcAaverage(review, reviewFactorParams, pullingUp, pullingDown, orgMin, orgMax)
       })
     })
     return list.sort((a, b) => a.point - b.point)
@@ -403,9 +410,8 @@ export class ReviewFunc {
 
       // ポイントの段階ごとにグルーピングする
       pivotInfoList.forEach((info) => {
-        // 上端と下端を切り取って引き延ばす
-
         // rankやscoreについては、getReviewDisp()の機能と同様
+        console.log(info.review.name + ' ' + info.point)
         const index = list.length - Math.round(info.point / step) - 1
 
         if (index >= 0 && index < list.length) {

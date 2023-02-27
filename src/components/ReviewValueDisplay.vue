@@ -1,6 +1,7 @@
 <template>
+
+  <!-- starsの評価表示 -->
   <div v-if="pointType == 'stars'" :class="iconsize">
-    <!-- starsの評価表示 -->
     <span v-if="compact">
       <v-icon color="orange" dark  :small="displaySize === 'smaller'"> mdi-star </v-icon>
       <span v-text="point"></span>
@@ -10,39 +11,15 @@
       <v-icon v-for="n of (5 - point)" :key="n" color="black" dark :small="displaySize === 'smaller'" > mdi-star </v-icon>
     </span>
   </div>
-    <!-- rank7, rank14の評価表示 -->
-  <div
-    v-else-if="pointType == 'rank14' || pointType == 'rank7'"
-    class="rank"
-    :class="reverse ? `reverse ${textsize}` : `no-reverse ${calcRankClass(pointType, point)} ${textsize}`" v-text="calcPointPlainText(pointType, point)"
-  ></div>
+
+  <!-- コンパクト評価表示 -->
   <div v-else-if="compact">
-    <!-- score, point, unlimitedのコンパクト評価表示 -->
-    <span class="ml-1" v-text="point"></span>
+    <span class="ml-1" v-text="calcPointPlainText(pointType, point)" :class="calcClass(pointType, point, reverse) + ' ' + textsize"></span>
   </div>
-  <div v-else-if="pointType == 'score' && noFill" :style="barWidth !== undefined ? `width: ${barWidth}` : ''" :class="iconsize" class="bar">
-    <!-- scoreの評価表示 -->
-    <span class="ml-1" v-text="point"></span>
-  </div>
-  <v-card v-else-if="pointType == 'score'" :width="barWidth" height="100%" :class="iconsize">
-    <!-- scoreの評価表示 -->
-    <v-card flat class="bar" :style="calcBarStyle(point, 10)" height="100%">
-      <span class="ml-1" v-text="point"></span>
-    </v-card>
-  </v-card>
-  <div v-else-if="pointType == 'point' && noFill" :style="barWidth !== undefined ? `width: ${barWidth}` : ''" class="bar">
-    <!-- pointの評価表示 -->
-    <span class="ml-1" v-text="point"></span>
-  </div>
-  <v-card v-else-if="pointType == 'point'" :width="barWidth" height="100%"  :class="iconsize">
-    <!-- pointの評価表示 -->
-    <v-card flat class="bar" :style="calcBarStyle(point, 100)" height="100%" >
-      <span class="ml-1" v-text="point"></span>
-    </v-card>
-  </v-card>
-  <div v-else-if="pointType == 'unlimited'" :width="barWidth" :class="iconsize">
-    <!-- unlimitedの評価表示 -->
-    <b><span class="ml-1" v-text="point"></span></b>
+
+  <!-- コンパクト評価表示以外 -->
+  <div v-else>
+    <span class="ml-1" v-text="calcPointPlainText(pointType, point)" :class="calcClass(pointType, point, reverse) + ' ' + textsize" ></span>
   </div>
 </template>
 
@@ -50,101 +27,125 @@
 import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
 
-/**
- * pointType scoreやpointの際に使用
- */
-export const calcBarStyle = (p: number, max: number, isFluid?: boolean, dark?: boolean) => {
-  const percent = 100 * p / max
-  const r = percent < 50 ? percent < 10 ? 255 : 175 * (50 - percent) / 40 + 80 : 80
-  const g = percent < 25 ? percent < 10 ? 0 : 255 * percent / 25 : 255
-  const b = percent < 50 ? 0 : 255 * (percent - 50) / 50
-  if (isFluid) {
-    return `background: rgb(${r}, ${g}, ${b});`
-  } else {
-    if (dark) {
-      return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 1) 0% ${percent}%, rgb(64, 64, 64, 1) ${percent}% 100%);`
-    } else {
-      return `background: linear-gradient(90deg, rgb(${r}, ${g}, ${b}, 1) 0% ${percent}%, rgb(192, 192, 192, 1) ${percent}% 100%);`
-    }
-  }
-}
-
-export const calcRankClass = (pointType: ReviewPointType, point: number) => {
-  let classStr = ''
-
+export const calcClass = (pointType: ReviewPointType, point: number, reverse: boolean) => {
+  let classText = reverse ? 'font-weight-bold ' : 'font-weight-bold r-'
   if (pointType === 'rank14') {
     switch (point) {
       case 0:
-        classStr += 'e'
+        classText += 'red'
         break
       case 1:
-        classStr += 'e'
+        classText += 'red'
         break
       case 2:
-        classStr += 'd'
+        classText += 'brown'
         break
       case 3:
-        classStr += 'd'
+        classText += 'brown'
         break
       case 4:
-        classStr += 'c'
+        classText += 'purple'
         break
       case 5:
-        classStr += 'c'
+        classText += 'purple'
         break
       case 6:
-        classStr += 'b'
+        classText += 'green'
         break
       case 7:
-        classStr += 'b'
+        classText += 'green'
         break
       case 8:
-        classStr += 'a'
+        classText += 'metal'
         break
       case 9:
-        classStr += 'a'
+        classText += 'metal'
         break
       case 10:
-        classStr += 's'
+        classText += 'gold'
         break
       case 11:
-        classStr += 's'
+        classText += 'gold'
         break
       case 12:
-        classStr += 'ss'
+        classText += 'rainbow'
         break
       case 13:
-        classStr += 'ss'
+        classText += 'rainbow'
         break
     }
   } else if (pointType === 'rank7') {
     switch (point) {
       case 0:
-        classStr += 'e'
+        classText += 'red'
         break
       case 1:
-        classStr += 'd'
+        classText += 'brown'
         break
       case 2:
-        classStr += 'c'
+        classText += 'purple'
         break
       case 3:
-        classStr += 'b'
+        classText += 'green'
         break
       case 4:
-        classStr += 'a'
+        classText += 'metal'
         break
       case 5:
-        classStr += 's'
+        classText += 'gold'
         break
       case 6:
-        classStr += 'ss'
+        classText += 'rainbow'
+        break
+    }
+  } else if (pointType === 'score' || pointType === 'point') {
+    const pointProxt = pointType === 'point' ? Math.floor(point / 10) : point
+    switch (pointProxt) {
+      case 0:
+        classText += 'deep-red'
+        break
+      case 1:
+        classText += 'red'
+        break
+      case 2:
+        classText += 'brown'
+        break
+      case 3:
+        classText += 'deep-purple'
+        break
+      case 4:
+        classText += 'purple'
+        break
+      case 5:
+        classText += 'green'
+        break
+      case 6:
+        classText += 'blue-green'
+        break
+      case 7:
+        classText += 'metal'
+        break
+      case 8:
+        classText += 'gold'
+        break
+      case 9:
+        classText += 'rainbow'
+        break
+      case 10:
+        classText += 'rainbow'
         break
     }
   }
 
-  return classStr
+  return classText
 }
+
+/**
+ * ポイントから平文を出力する
+ * @param pointType ポイント表示方法
+ * @param point 集計済みポイント
+ * @param multiByte 'stars'表示の際にASCIIコード以外の文字を使用する
+ */
 export const calcPointPlainText = (pointType: ReviewPointType, point: number, multiByte?: boolean) => {
   if (pointType === 'rank14') {
     switch (point) {
@@ -262,17 +263,8 @@ export default defineComponent({
       type: Boolean,
       default: false as boolean
     },
-    barWidth: {
-      type: String as PropType<number | string | undefined>,
-      default: undefined
-    },
     reverse: {
       /// ランクの表示色を反転する
-      type: Boolean,
-      default: false
-    },
-    noFill: {
-      /// スコア表示時に塗りつぶさない
       type: Boolean,
       default: false
     }
@@ -339,10 +331,9 @@ export default defineComponent({
 
     return {
       point,
-      calcBarStyle,
       textsize,
       iconsize,
-      calcRankClass,
+      calcClass,
       calcPointPlainText
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <v-divider></v-divider>
+  <v-divider class="ma-5"></v-divider>
   <v-footer
     class="text-center d-flex flex-column"
   >

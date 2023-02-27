@@ -156,7 +156,6 @@
                               <review-value-display
                                 :value="100 * (5 - num) / 4"
                                 :point-type="modelValue.pointType"
-                                bar-width="200px"
                                 display-size="large2"
                               />
                             </td>

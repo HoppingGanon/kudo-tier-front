@@ -383,7 +383,7 @@ export default defineComponent({
           let i = 0
           const rankingRow: Dictionary<string | number> = {
             name: review.name,
-            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params, props.tier.pullingUp, 100 + props.tier.pullingDown, 0, 100)
+            ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params, props.tier.pullingUp, props.tier.pullingDown, 0, 100)
           }
           review.reviewFactors.forEach((factor) => {
             // ヘッダの行列数と突合
@@ -431,7 +431,7 @@ export default defineComponent({
       }
     }
 
-    const pivotInfoList = computed(() => ReviewFunc.makePivotInfoList(props.reviews, props.params, props.tier.pullingUp, 100 - props.tier.pullingDown, 0, 100))
+    const pivotInfoList = computed(() => ReviewFunc.makePivotInfoList(props.reviews, props.params, props.tier.pullingUp, props.tier.pullingDown, 0, 100))
 
     const tierPivotList = computed(() => {
       const val = ReviewFunc.makeTierPivot(pivotInfoList.value, props.pointType)
