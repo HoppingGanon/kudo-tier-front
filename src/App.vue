@@ -236,14 +236,18 @@ export default defineComponent({
     // ユーザーIDが変更したときはダウンロード
     watch(userId, () => {
       store.commit('downloadUserData', store.state.userId)
+    })
 
+    const downloadNotifications = () => {
       // ログイン状態なら未読通知数を取得
       if (store.getters.isRegistered) {
         RestApi.getNotificationsCount().then((res) => {
           store.commit('setNotificationsCount', res.data.count)
         })
       }
-    })
+    }
+
+    const prePath = ref('')
 
     /**
      * routerがページ内リンクによる変化には反応しないように制御
@@ -259,13 +263,23 @@ export default defineComponent({
       // ページチェック
       checkRouter()
 
+      let path = ''
       if (idStart === -1) {
-        return route.fullPath
+        path = route.fullPath
       } else if (paramStart === -1) {
-        return route.fullPath.substring(0, idStart)
+        path = route.fullPath.substring(0, idStart)
       } else {
-        return route.fullPath.substring(0, idStart) + route.fullPath.substring(paramStart, len)
+        path = route.fullPath.substring(0, idStart) + route.fullPath.substring(paramStart, len)
       }
+
+      if (prePath.value !== path) {
+        // パス変更を検知したら通知数を更新
+        downloadNotifications()
+      }
+
+      prePath.value = path
+
+      return path
     }
 
     /** ページチェック */

@@ -62,6 +62,7 @@ export default defineComponent({
     const sel = ref(-1)
 
     if (store.getters.isRegistered) {
+      // ログイン状態なら通知を取得
       RestApi.getNotifications().then((res) => {
         const a = Parser.parseNotificationsStr(res.data)
         notifications.value = a
@@ -74,14 +75,24 @@ export default defineComponent({
       if (index < notifications.value.length) {
         sel.value = index
         notifications.value[index].isRead = true
-        RestApi.updateNotificationRead(notification.id, true)
+        RestApi.updateNotificationRead(notification.id, true).then(() => {
+          // 成功したら通知数を更新
+          RestApi.getNotificationsCount().then((res) => {
+            store.commit('setNotificationsCount', res.data.count)
+          })
+        })
       }
     }
 
     const updateRead = (notification: NotificationData, index: number, isRead: boolean) => {
       if (index < notifications.value.length) {
         notifications.value[index].isRead = isRead
-        RestApi.updateNotificationRead(notification.id, isRead)
+        RestApi.updateNotificationRead(notification.id, isRead).then(() => {
+          // 成功したら通知数を更新
+          RestApi.getNotificationsCount().then((res) => {
+            store.commit('setNotificationsCount', res.data.count)
+          })
+        })
       }
     }
 
