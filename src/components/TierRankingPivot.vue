@@ -5,7 +5,12 @@
     class="edge"
   >
     <tr v-for="items, i in tierPivotList" :key="i">
-      <td v-if="pointType === 'point'" :style="pivotColor" style="width: 0px;white-space: nowrap;" :class="dark ? 'dark-left' : 'light-left'">
+      <td
+        v-if="pointType === 'point'"
+        :style="pivotColor"
+        style="width: 0px;white-space: nowrap;"
+        :class="reverse ? calcColor(pointType, (tierPivotList.length - i) * 10) : (dark ? 'dark-left' : 'light-left')"
+      >
         <review-value-display
           :point-type="pointType"
           :value="(tierPivotList.length - i) * 10"
@@ -16,7 +21,7 @@
       <td
         v-else-if="pointType === 'score'"
         style="width: 0px;height: 100%;white-space: nowrap;"
-        :class="dark ? 'dark-left' : 'light-left'"
+        :class="reverse ? calcColor(pointType, 10 - i) : (dark ? 'dark-left' : 'light-left')"
       >
         <review-value-display
           :point-type="pointType"
@@ -42,7 +47,7 @@
         v-else-if="pointType === 'rank14' || pointType === 'rank7'"
         :style="pivotColor"
         style="width: 0px;white-space: nowrap;"
-        :class="dark ? 'dark-left' : 'light-left'"
+        :class="reverse ? calcColor(pointType, tierPivotList.length - i - 1) : (dark ? 'dark-left' : 'light-left')"
       >
         <review-value-display
           :point-type="pointType"
@@ -69,10 +74,10 @@
 </template>
 
 <script lang="ts">
-import { IconSize, PointDisplaySize, RankingTheme, ReviewFactorParam, ReviewFunc, ReviewPointType, TierPivotInfomation } from '@/common/review'
+import { IconSize, PointDisplaySize, RankingTheme, ReviewFactorParam, ReviewPointType, TierPivotInfomation } from '@/common/review'
 import { computed, defineComponent, PropType } from 'vue'
 import PivotIcon from '@/components/PivotIcon.vue'
-import ReviewValueDisplay, { calcClass } from '@/components/ReviewValueDisplay.vue'
+import ReviewValueDisplay, { calcColor } from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'TierRankingPivot',
@@ -128,7 +133,7 @@ export default defineComponent({
     const pivotColor = ''
 
     return {
-      calcClass,
+      calcColor,
       pivotColor,
       reverse: computed(() => props.theme === 'dark-reverse' || props.theme === 'light-reverse'),
       dark: computed(() => props.theme === 'dark-reverse' || props.theme === 'dark'),

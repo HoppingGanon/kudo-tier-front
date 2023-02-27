@@ -19,7 +19,7 @@
 
   <!-- コンパクト評価表示以外 -->
   <div v-else>
-    <span class="ml-1" v-text="calcPointPlainText(pointType, point)" :class="calcClass(pointType, point, reverse) + ' ' + textsize" ></span>
+    <span class="ml-1 mr-4" v-text="calcPointPlainText(pointType, point)" :class="calcClass(pointType, point, reverse) + ' ' + textsize" ></span>
   </div>
 </template>
 
@@ -27,8 +27,8 @@
 import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
 
-export const calcClass = (pointType: ReviewPointType, point: number, reverse: boolean) => {
-  let classText = reverse ? 'font-weight-bold ' : 'font-weight-bold r-'
+export const calcColor = (pointType: ReviewPointType, point: number) => {
+  let classText = ''
   if (pointType === 'rank14') {
     switch (point) {
       case 0:
@@ -136,8 +136,14 @@ export const calcClass = (pointType: ReviewPointType, point: number, reverse: bo
         break
     }
   }
-
   return classText
+}
+
+export const calcClass = (pointType: ReviewPointType, point: number, reverse: boolean) => {
+  if (reverse) {
+    return 'font-weight-bold reverse'
+  }
+  return `font-weight-bold r-${calcColor(pointType, point)}`
 }
 
 /**
@@ -286,6 +292,7 @@ export default defineComponent({
     ]
 
     const textsize = computed(() => {
+      console.log(props.displaySize)
       switch (props.displaySize) {
         case 'smaller':
           return sizeArray[0]
@@ -308,6 +315,7 @@ export default defineComponent({
     })
 
     const iconsize = computed(() => {
+      console.log(props.displaySize)
       switch (props.displaySize) {
         case 'smaller':
           return sizeArray[0]

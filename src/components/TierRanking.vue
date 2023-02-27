@@ -255,7 +255,7 @@
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize, IconSize, RankingTheme } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize, IconSize, RankingTheme, TierPivotInfomation } from '@/common/review'
 import { defineComponent, PropType, computed, ref, Ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'
@@ -458,11 +458,8 @@ export default defineComponent({
     const picIconSize = ref(iconSizeList[1].value)
     const picTextSize = ref(textSizeList[3].value)
 
-    const picPivotInfoList = computed(() => ReviewFunc.makePivotInfoList(props.reviews, props.params, props.tier.pullingUp, 100 - props.tier.pullingDown, 0, 100))
-    const picPivotList = computed(() => {
-      const val = ReviewFunc.makeTierPivot(picPivotInfoList.value, picPointType.value)
-      return val
-    })
+    const picPivotInfoList = computed(() => ReviewFunc.makePivotInfoList(props.reviews, props.params, props.tier.pullingUp, props.tier.pullingDown, 0, 100))
+    const picPivotList = computed(() => ReviewFunc.makeTierPivot(picPivotInfoList.value, picPointType.value))
 
     const selectMenu = (v: string) => {
       switch (v) {
