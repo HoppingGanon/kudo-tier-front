@@ -130,6 +130,8 @@
       <router-view :key="routeWatcher($route)" />
     </v-main>
 
+    <footer-component />
+
     <v-avatar v-if="!noBar" class="anime overlay baricon" :class="barIsVisible ? 'icon1' : 'icon2'" color="primary" @click="clickHideBarIcon">
       <v-icon dark>mdi-page-layout-header</v-icon>
     </v-avatar>
@@ -149,6 +151,7 @@
 import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
@@ -158,7 +161,8 @@ export default defineComponent({
   name: 'App',
   components: {
     ProfileComponent,
-    SimpleDialog
+    SimpleDialog,
+    FooterComponent
   },
   setup () {
     const route = useRoute()

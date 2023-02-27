@@ -8,7 +8,7 @@
     title="利用規約"
     :show-submit-button="false"
     :fullscreen="$vuetify.display.smAndDown"
-    :width="$vuetify.display.smAndDown ? '100%' : '800px'"
+    width="100%"
   >
     <iframe :src="url" style="width: 100%; height: 60vh"></iframe>
   </simple-dialog>

@@ -4,7 +4,7 @@
       <th>
         パッケージ名@バージョン
       </th>
-      <th>
+      <th v-show="false">
         ライセンス
       </th>
       <th>
@@ -15,7 +15,7 @@
       <td>
         <span v-text="l.fullName"></span>
       </td>
-      <td>
+      <td v-show="false">
         <span v-text="l.license"></span>
       </td>
       <td class="centering-x">
