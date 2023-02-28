@@ -196,6 +196,25 @@
   @submit="removeService"
 />
 
+<simple-dialog
+  v-model="dialogAfterRemoveService"
+  title="サービス連携の解除"
+  text="サービス連携を解除しました。"
+  append-text="連携していたサービスに本アプリの情報が残っている可能性があります。お手数ですが該当サービスの設定より手動で削除してください。"
+  :show-cancel-button="false"
+  :show-top-close-button="false"
+/>
+
+<simple-dialog
+  v-model="dialogAfterDeleteUser"
+  title="アカウントの削除"
+  text="アカウントを削除しました。"
+  append-text="連携していたサービスに本アプリの情報が残っている可能性があります。お手数ですが該当サービスの設定より手動で削除してください。"
+  :show-cancel-button="false"
+  :show-top-close-button="false"
+  @submit="goWelcome"
+/>
+
 </template>
 
 <script lang="ts">
@@ -233,8 +252,10 @@ export default defineComponent({
     const googleEmail = ref('')
 
     const deleteDialog = ref(false)
+    const dialogAfterDeleteUser = ref(false)
     const addServiceDialog = ref(false)
     const removeServiceDialog = ref(false)
+    const dialogAfterRemoveService = ref(false)
     const removeServiceTarget: Ref<'' | LoginServiceType> = ref('')
 
     const delcode = ref('')
@@ -272,10 +293,14 @@ export default defineComponent({
         deleteDialog.value = false
         toast.success('ユーザーを削除しました')
         store.commit('initAllSession')
-        router.push('/')
+        dialogAfterDeleteUser.value = true
       }).catch(e => toastError(e, toast)).finally(() => {
         delcode.value = ''
       })
+    }
+
+    const goWelcome = () => {
+      router.push('/')
     }
 
     const save = async () => {
@@ -311,12 +336,13 @@ export default defineComponent({
     const removeService = () => {
       if (removeServiceTarget.value !== '') {
         RestApi.deleteService(removeServiceTarget.value).then(() => {
-          toast.success('連携の解除に成功しました')
+          toast.success('サービス連携の解除に成功しました')
           if (removeServiceTarget.value === 'twitter') {
             store.commit('initTwitter')
           } else if (removeServiceTarget.value === 'google') {
             store.commit('initGoogle')
           }
+          dialogAfterRemoveService.value = true
           load()
         }).catch((e) => {
           toastError(e, toast)
@@ -337,12 +363,15 @@ export default defineComponent({
       deleteDialog,
       addServiceDialog,
       removeServiceDialog,
+      dialogAfterDeleteUser,
       removeServiceTarget,
+      dialogAfterRemoveService,
       delcode,
       receivedDelcode,
       form,
       openDel,
       commitDel,
+      goWelcome,
       save,
       openRemoveServiceDialog,
       removeService
