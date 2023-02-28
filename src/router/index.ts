@@ -1,3 +1,4 @@
+import RestApi from '@/common/restapi'
 import store from '@/store'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
@@ -68,11 +69,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/TierSettingsView.vue')
   },
   {
-    path: '/tier-search/:id',
-    name: 'tier-search',
-    component: () => import('../views/TierSearchView.vue')
-  },
-  {
     path: '/review/:rid',
     name: 'review',
     component: () => import('../views/ReviewView.vue')
@@ -113,11 +109,15 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
+      console.log('saved')
+      console.log(savedPosition)
       return savedPosition
     } else {
+      console.log('top')
+      console.log(savedPosition)
       return {
-        top: 0,
-        left: 0
+        left: 0,
+        top: 0
       }
     }
   },
@@ -127,7 +127,12 @@ const router = createRouter({
 // 画面遷移時の処理
 router.afterEach(() => {
   if (store.getters.isRegistered) {
+    // ユーザーデータの更新
     store.commit('downloadUserData')
+    // 通知数の更新
+    RestApi.getNotificationsCount().then((res) => {
+      store.commit('setNotificationsCount', res.data.count)
+    })
   }
 })
 

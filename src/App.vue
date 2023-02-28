@@ -59,12 +59,6 @@
                   ログイン/登録
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="hasSession"  @click="goTierSearch">
-                <v-list-item-title>
-                  <v-icon class="mr-3">mdi-table-account</v-icon>
-                  Tier一覧
-                </v-list-item-title>
-              </v-list-item>
               <v-list-item v-if="hasSession"  @click="goTierSettings">
                 <v-list-item-title>
                   <v-icon class="mr-3">mdi-table-plus</v-icon>
@@ -206,11 +200,6 @@ export default defineComponent({
       router.push('/')
     }
 
-    const goTierSearch = () => {
-      drawer.value = false
-      router.push(`/tier-search/${store.state.userId}`)
-    }
-
     const goTierSettings = () => {
       drawer.value = false
       router.push('/tier-settings-new')
@@ -239,17 +228,6 @@ export default defineComponent({
       store.commit('downloadUserData', store.state.userId)
     })
 
-    const downloadNotifications = () => {
-      // ログイン状態なら未読通知数を取得
-      if (store.getters.isRegistered) {
-        RestApi.getNotificationsCount().then((res) => {
-          store.commit('setNotificationsCount', res.data.count)
-        })
-      }
-    }
-
-    const prePath = ref('')
-
     /**
      * routerがページ内リンクによる変化には反応しないように制御
      * URI変更 → 更新
@@ -272,13 +250,6 @@ export default defineComponent({
       } else {
         path = route.fullPath.substring(0, idStart) + route.fullPath.substring(paramStart, len)
       }
-
-      if (prePath.value !== path) {
-        // パス変更を検知したら通知数を更新
-        downloadNotifications()
-      }
-
-      prePath.value = path
 
       return path
     }
@@ -338,7 +309,6 @@ export default defineComponent({
       goNotifications,
       goLogout,
       goLogin,
-      goTierSearch,
       goTierSettings,
       goSettings,
       goWelcome,

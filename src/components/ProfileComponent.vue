@@ -22,19 +22,19 @@
           <v-row>
             <v-col>
               <div :class="isSummary ? 'no-break-box' : 'text-h5'">
-                <span class="font-weight-bold cursor-pointer" @click="goHome" v-text="dispName"/>
+                <span class="font-weight-bold cursor-pointer" @click="goHome()" v-text="dispName"/>
               </div>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
               <span v-if="isSummary" class="text-subtitle-1 cursor-pointer">
-                <span @click="goTierSearch('tier')">Tier数: <span v-text="tiersCount" /></span><br/>
-                <span @click="goTierSearch('review')">レビュー数: <span v-text="reviewsCount" /></span>
+                <span @click="goHome('tier')">Tier数: <span v-text="tiersCount" /></span><br/>
+                <span @click="goHome('review')">レビュー数: <span v-text="reviewsCount" /></span>
               </span>
               <span v-else class="text-subtitle-1 cursor-pointer">
-                <span @click="goTierSearch('tier')">Tier数: <span v-text="tiersCount" /></span>
-                <span @click="goTierSearch('review')">レビュー数: <span v-text="reviewsCount" /></span>
+                <span @click="goHome('tier')">Tier数: <span v-text="tiersCount" /></span>
+                <span @click="goHome('review')">レビュー数: <span v-text="reviewsCount" /></span>
               </span>
             </v-col>
           </v-row>
@@ -118,11 +118,12 @@ export default defineComponent({
   setup (props) {
     return {
       imgSource: computed(() => getImgSource(props.iconUrl)),
-      goHome: () => {
-        router.push(`/home/${props.userId}`)
-      },
-      goTierSearch: (tab: TierContentType) => {
-        router.push(`/tier-search/${props.userId}?tab=${tab}`)
+      goHome: (tab?: TierContentType) => {
+        if (tab) {
+          router.push(`/home/${props.userId}?tab=${tab}`)
+        } else {
+          router.push(`/home/${props.userId}`)
+        }
       },
       goTwitter: () => {
         window.open(`https://twitter.com/intent/user?user_id=${props.twitterId}`)

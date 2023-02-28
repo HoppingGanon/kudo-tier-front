@@ -65,7 +65,7 @@
   </padding-component>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
-  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true" title="ユーザー情報を取得中..." />
+  <loading-component :is-loading="isLoading" :is-floating="true" :is-force="true" title="レビュー情報を取得中..." />
 </template>
 
 <script lang="ts">
@@ -123,6 +123,7 @@ export default defineComponent({
     onMounted(() => {
       if (route.params.rid && typeof route.params.rid === 'string') {
         // URIにIDが含まれている場合
+        isLoading.value = true
         RestApi.getReview(route.params.rid).then((res) => {
           review.value = Parser.parseReview(res.data.review)
           params.value = res.data.params

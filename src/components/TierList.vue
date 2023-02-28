@@ -3,13 +3,16 @@
     <v-row v-for="tier,index in tiers" :key="index">
       <v-col>
         <v-card class="pa-2">
-          <tier-component
-            :tier="tier"
-            :is-link="isLink"
-            display-type="summary"
-            @update-point-type="updatePointTypeEm($event, index)"
-            @reload="$emit('reload')"
-          />
+          <!-- Tierで参照したり、Search等でスクロール検知をするためにIDを振る -->
+          <a :id="`tir${tier.tierId}`">
+            <tier-component
+              :tier="tier"
+              :is-link="isLink"
+              display-type="summary"
+              @update-point-type="updatePointTypeEm($event, index)"
+              @reload="$emit('reload')"
+            />
+          </a>
         </v-card>
       </v-col>
     </v-row>

@@ -34,10 +34,7 @@
       <v-row>
         <v-col>
           <v-card flat>
-            <!-- Tierで参照したり、Search等でスクロール検知をするためにIDを振る -->
-            <a :id="`tir${tier.tierId}`">
-              <p class="text-h6" :class="displayType === 'summary' ? 'no-break' : ''"><b><span v-text="tier.name"></span></b></p>
-            </a>
+            <p class="text-h6" :class="displayType === 'summary' ? 'no-break' : ''"><b><span v-text="tier.name"></span></b></p>
           </v-card>
         </v-col>
       </v-row>

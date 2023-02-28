@@ -3,57 +3,46 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <padding-component :target-user-id="userId" title="ユーザー情報">
-    <v-container class="pa-0 ma-0" fluid>
-      <v-card class="ma-0" flat>
-        <v-toolbar color="secondary" class="d-flex" dark>
-          <div class="no-break-box">
-            <v-card-title class="font-weight-bold">
-              <span v-text="dispName" />
-            </v-card-title>
-          </div>
-          <div>
-            <v-card-title class="font-weight-bold">
-              <span>さんの投稿</span>
-            </v-card-title>
-          </div>
-          <template v-slot:extension>
-            <v-tabs v-model="tab" centered slider-color="primary" grow>
-              <v-tab class="text-no-transform">
-                Tier
-              </v-tab>
-              <v-tab>
-                レビュー
-              </v-tab>
-            </v-tabs>
-          </template>
-        </v-toolbar>
-        <v-card v-if="isNotFound" flat>
-          <span>
-            ユーザーが存在しません
-          </span>
-        </v-card>
-        <tier-search
-          v-show="!isNotFound && tab === 0"
-          :tiers="tiers"
-          :user-id="userId"
-          @clear-tiers="clearTiers"
-          @update-tiers="updateTiers"
-          @add-tiers="addTiers"
-          :is-loading="isTiersLoading"
-        />
-        <review-search
-          v-show="!isNotFound && tab === 1"
-          :pairs="pairs"
-          :user-id="userId"
-          @clear-reviews-pair="clearReviewsPair"
-          @update-reviews-pair="updateReviewsPair"
-          @add-reviews-pair="addReviewsPair"
-          :is-loading="isReviewsLoading"
-        />
+  <v-container class="pa-0 ma-0" fluid>
+    <v-card class="ma-0" flat>
+      <v-toolbar color="secondary" class="d-flex" dark>
+        <slot name="title"></slot>
+        <template v-slot:extension>
+          <v-tabs v-model="tab" centered slider-color="primary" grow>
+            <v-tab class="text-no-transform">
+              Tier
+            </v-tab>
+            <v-tab>
+              レビュー
+            </v-tab>
+          </v-tabs>
+        </template>
+      </v-toolbar>
+      <v-card v-if="isNotFound" flat>
+        <span>
+          ユーザーが存在しません
+        </span>
       </v-card>
-    </v-container>
-  </padding-component>
+      <tier-search
+        v-show="!isNotFound && tab === 0"
+        :tiers="tiers"
+        :user-id="userId"
+        @clear-tiers="clearTiers"
+        @update-tiers="updateTiers"
+        @add-tiers="addTiers"
+        :is-loading="isTiersLoading"
+      />
+      <review-search
+        v-show="!isNotFound && tab === 1"
+        :pairs="pairs"
+        :user-id="userId"
+        @clear-reviews-pair="clearReviewsPair"
+        @update-reviews-pair="updateReviewsPair"
+        @add-reviews-pair="addReviewsPair"
+        :is-loading="isReviewsLoading"
+      />
+    </v-card>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -65,23 +54,18 @@ import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { ReviewWithParams, Tier } from '@/common/review'
-import PaddingComponent from '@/components/PaddingComponent.vue'
 
 export default defineComponent({
-  name: 'TierSearchView',
+  name: 'TierReviewSearch',
   components: {
     SessionChecker,
     TierSearch,
-    ReviewSearch,
-    PaddingComponent
+    ReviewSearch
   },
-  props: {},
-  emits: {},
   setup () {
     const route = useRoute()
     const toast = useToast()
     const isNotFound = ref(true)
-    const dispName = ref('')
     const userId = ref('')
     const tab = ref(0)
 
@@ -95,8 +79,7 @@ export default defineComponent({
       if (route.params.id && typeof route.params.id === 'string') {
         const id = route.params.id
         // URIにIDが含まれている場合
-        RestApi.getUserData(id).then((res) => {
-          dispName.value = res.data.name
+        RestApi.getUserData(id).then(() => {
           userId.value = id
           // ユーザーが存在する場合は、Tierの検索(初動)
           RestApi.getTierList(id, '', 'updatedAtDesc', 1).then((res) => {
@@ -176,7 +159,6 @@ export default defineComponent({
       tiers,
       pairs,
       isNotFound,
-      dispName,
       userId,
       tab,
       isReviewsLoading,

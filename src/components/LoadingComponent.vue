@@ -56,14 +56,17 @@ export default defineComponent({
   name: 'LoadingComponent',
   components: {},
   props: {
+    /** ロード中かどうか */
     isLoading: {
       type: Boolean,
       default: true
     },
+    /** trueにすると絶対位置でフローティング表示 */
     isFloating: {
       type: Boolean,
       default: false
     },
+    /** trueにすると他の操作を受け付けない */
     isForce: {
       type: Boolean,
       default: false

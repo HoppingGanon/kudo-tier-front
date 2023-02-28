@@ -1,9 +1,7 @@
 <template>
-  <v-card v-if="directLink" class="ma-1" :width="size" :height="size">
-    <a class="no-link" :href="link" target="_top">
-      <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
-      <v-img v-else src="@/assets/common/noimage256.png"/>
-    </a>
+  <v-card v-if="directLink" class="ma-1 cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
+    <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
+    <v-img v-else src="@/assets/common/noimage256.png"/>
   </v-card>
   <v-menu v-else-if="!$vuetify.display.mobile" bottom v-model="isHover">
     <template v-slot:activator="{ props }">
@@ -24,22 +22,18 @@
         :pulling-down="pullingDown"
       />
       <v-card-actions class="d-flex flex-row-reverse">
-        <a :href="`#rev${infomation.review.reviewId}`" class="no-link">
-          <v-btn flat>
-            移動
-          </v-btn>
-        </a>
+        <v-btn flat v-scroll-to="`#rev${infomation.review.reviewId}`">
+          移動
+        </v-btn>
         <v-btn flat @click="goReview">
           レビューを開く
         </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>
-  <v-card v-else class="ma-1" :width="size" :height="size">
-    <a :href="`#rev${infomation.review.reviewId}`" class="no-link">
-      <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
-      <v-img v-else src="@/assets/common/noimage256.png"/>
-    </a>
+  <v-card v-else class="ma-1 cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
+    <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
+    <v-img v-else src="@/assets/common/noimage256.png"/>
   </v-card>
 </template>
 

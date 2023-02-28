@@ -52,7 +52,7 @@
                     </div>
                   </v-list-item>
                   <v-list-item>
-                    <v-btn flat @click="goTierSearch('tier')">もっと見る</v-btn>
+                    <v-btn flat @click="goHome('tier')">もっと見る</v-btn>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -72,7 +72,7 @@
                     </div>
                   </v-list-item>
                   <v-list-item>
-                    <v-btn flat @click="goTierSearch('review')">もっと見る</v-btn>
+                    <v-btn flat @click="goHome('review')">もっと見る</v-btn>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -142,8 +142,8 @@ export default defineComponent({
     })
     watch(targetUserId, download)
 
-    const goTierSearch = (tab: TierContentType) => {
-      router.push(`/tier-search/${targetUserId.value}?tab=${tab}`)
+    const goHome = (tab: TierContentType) => {
+      router.push(`/home/${targetUserId.value}?tab=${tab}`)
     }
 
     const goTier = (id: string) => {
@@ -159,7 +159,7 @@ export default defineComponent({
       reviews,
       targetUser,
       isNotFound,
-      goTierSearch,
+      goHome,
       goTier,
       goReview
     }

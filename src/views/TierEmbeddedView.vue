@@ -1,7 +1,7 @@
 <template>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
-  <loading-component v-if="isLoading" :is-loading="true" :is-floating="true" title="Tierを取得中..." />
+  <loading-component v-if="isLoading" :is-loading="isLoading" :is-floating="true" title="Tierを取得中..." />
 
   <!-- サイズ調整のためfluidは入れない -->
   <v-container v-else-if="isNotFound" class="pa-0">

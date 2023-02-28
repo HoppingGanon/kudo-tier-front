@@ -3,20 +3,23 @@
     <v-row v-for="pair,index in pairs" :key="index">
       <v-col>
         <v-card class="pa-2">
-          <review-component
-            :no-header="noHeader"
-            :review="pair.review"
-            :review-factor-params="pairs[index].params"
-            :is-sample="isSample"
-            :is-link="isLink"
-            :display-type="displayType"
-            :point-type="pointTypes === undefined ? undefined : (index < pointTypes.length ? pointTypes[index] : 'point')"
-            @update-point-type="updatePointTypeEm($event, index)"
-            :no-change-point="noChangePoint"
-            @reload="$emit('reload')"
-            :pulling-up="pair.pullingUp"
-            :pulling-down="pair.pullingDown"
-          />
+          <!-- Tierで参照したり、Search等でスクロール検知をするためにIDを振る -->
+          <a :id="`rev${pair.review.reviewId}`">
+            <review-component
+              :no-header="noHeader"
+              :review="pair.review"
+              :review-factor-params="pairs[index].params"
+              :is-sample="isSample"
+              :is-link="isLink"
+              :display-type="displayType"
+              :point-type="pointTypes === undefined ? undefined : (index < pointTypes.length ? pointTypes[index] : 'point')"
+              @update-point-type="updatePointTypeEm($event, index)"
+              :no-change-point="noChangePoint"
+              @reload="$emit('reload')"
+              :pulling-up="pair.pullingUp"
+              :pulling-down="pair.pullingDown"
+            />
+          </a>
         </v-card>
       </v-col>
     </v-row>
