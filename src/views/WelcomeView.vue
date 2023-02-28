@@ -5,6 +5,13 @@
   <v-container fluid class="ma-0 pa-0">
     <v-row>
       <v-col>
+        <div class="d-flex align-center">
+          <div style="width: 40px;">
+            <v-img class="ml-2 mt-2" width="40px" src="@/assets/logo.png" />
+          </div>
+        </div>
+      </v-col>
+      <v-col>
         <div v-if="hasSession" style="width: 100%;" class="d-flex justify-end">
           <v-btn flat @click="goHome" class="ml-3">
             ホームへ移動
@@ -31,7 +38,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <v-btn v-if="hasSession" color="primary" class="text-no-transform" @click="goHome">{{ appName }}のホーム画面へ</v-btn>
         <v-btn v-else color="primary" class="text-no-transform" @click="goLogin">{{ appName }}をはじめる</v-btn>
       </v-col>
