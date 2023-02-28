@@ -41,11 +41,11 @@
             <br />
             <p :class="textClass">
               <span>
-                ようこそ、TierReviewsへ。
+                ようこそ、{{ appName }}へ。
               </span>
               <br />
               <span>
-                TierReviewsはスマホやパソコンからレビューを投稿して、その情報をTierとして共有できるサービスです。
+                {{ appName }}はスマホやパソコンからレビューを投稿して、その情報をTierとして共有できるサービスです。
               </span>
             </p>
           </div>
@@ -69,7 +69,7 @@
             <br />
             <p :class="textClass">
               <span>
-                TierReviewsは数値化された情報をグラフィカルなインターフェースで共有できます。
+                {{ appName }}は数値化された情報をグラフィカルなインターフェースで共有できます。
               </span>
               <br />
               <span>
@@ -97,11 +97,11 @@
             <br />
             <p :class="textClass">
               <span>
-                TierReviewsで作成したTierは他のサービスにシェアできます。
+                {{ appName }}で作成したTierは他のサービスにシェアできます。
               </span>
               <br />
               <span>
-                投稿はTierReviewsに登録していない人でもシェア・閲覧ができるので、より多くの人に投稿を見てもらいましょう。
+                投稿は{{ appName }}に登録していない人でもシェア・閲覧ができるので、より多くの人に投稿を見てもらいましょう。
               </span>
             </p>
           </div>
@@ -115,6 +115,7 @@
 import { computed, defineComponent, onMounted, Ref, ref } from 'vue'
 import vuetify from '@/plugins/vuetify'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
+import { appName } from '@/common/names'
 
 export default defineComponent({
   name: 'WelcomeCarousel',
@@ -173,6 +174,7 @@ export default defineComponent({
     })
 
     return {
+      appName,
       primaryStyle,
       secondaryStyle,
       thirdryStyle,

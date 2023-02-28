@@ -4,7 +4,7 @@
     class="text-center d-flex flex-column"
   >
     <div>
-      <span v-text="buildDate"></span> <span class="font-weight-bold">TierReviews</span> version <span v-text="version"></span><br />
+      <span v-text="buildDate"></span> <span class="font-weight-bold" v-text="appName"></span> version <span v-text="version"></span><br />
       built by <span v-text="myName"></span>
     </div>
     <div>
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { buildDate, myName, version } from '@/common/names'
+import { buildDate, myName, version, appName } from '@/common/names'
 import { defineComponent } from 'vue'
 import TermOfServise from '@/components/TermOfServise.vue'
 
@@ -41,7 +41,8 @@ export default defineComponent({
     return {
       myName,
       version,
-      buildDate
+      buildDate,
+      appName
     }
   }
 })

@@ -19,7 +19,7 @@ module.exports = defineConfig({
   pages: {
     index: {
       entry: 'src/main.ts',
-      title: 'TierReviews'
+      title: 'くどくどTier'
     }
   },
   chainWebpack: config => {

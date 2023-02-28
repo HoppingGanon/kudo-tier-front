@@ -115,7 +115,7 @@
         </div>
         <div class="cursor-pointer" @click="goWelcome">
           <v-toolbar-title>
-            TierReviews
+            {{ appName }}
           </v-toolbar-title>
         </div>
         <div style="width: 100%" class="d-flex justify-end">
@@ -155,7 +155,8 @@ import FooterComponent from '@/components/FooterComponent.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
-import RestApi from './common/restapi'
+import RestApi from '@/common/restapi'
+import { appName } from '@/common/names'
 
 export default defineComponent({
   name: 'App',
@@ -316,6 +317,7 @@ export default defineComponent({
     })
 
     return {
+      appName,
       logoutDialog,
       forceDialog,
       userName,

@@ -9,7 +9,7 @@
         </p>
         <br />
         <p>
-          TierReviewsはスマホやパソコンからレビューを投稿して、その情報をTierとして共有できる無料のサービスです。
+          {{ appName }}はスマホやパソコンからレビューを投稿して、その情報をTierとして共有できる無料のサービスです。
         </p>
       </v-col>
     </v-row>
@@ -53,7 +53,7 @@
         </p>
         <br />
         <p>
-          TierReviewsは数値化された情報をグラフィカルなインターフェースで共有できます。<br />
+          {{ appName }}は数値化された情報をグラフィカルなインターフェースで共有できます。<br />
           文章だけでは表せない評価や画像だけでは伝えられない情報を表現してみましょう。
         </p>
       </v-col>
@@ -100,8 +100,8 @@
         </p>
         <br />
         <p>
-          TierReviewsで作成したTierは他のサービスにシェアできます。<br />
-          TierReviewsに登録していない人でもシェア・閲覧ができるので、より多くの人に投稿を見てもらいましょう。
+          {{ appName }}で作成したTierは他のサービスにシェアできます。<br />
+          {{ appName }}に登録していない人でもシェア・閲覧ができるので、より多くの人に投稿を見てもらいましょう。
         </p>
       </v-col>
     </v-row>
@@ -140,11 +140,11 @@
     <v-row>
       <v-col style="text-align: center;">
         <p>
-          <span class="text-h5 font-weight-bold">TierReviewsをはじめよう</span>
+          <span class="text-h5 font-weight-bold">{{ appName }}をはじめよう</span>
         </p>
         <br />
         <p>
-          TierReviewsは、Twitterからログインします。<br />
+          {{ appName }}は、Twitterからログインします。<br />
           Twitterのアカウントをお持ちであれば誰でも無料でTierやレビューが投稿できます。
         </p>
       </v-col>
@@ -155,13 +155,15 @@
 <script lang="ts">
 import router from '@/router'
 import { defineComponent } from 'vue'
+import { appName } from '@/common/names'
 
 export default defineComponent({
   name: 'ExplanationSummary',
   components: {},
   setup () {
     return {
-      goLogin: () => router.push('/login')
+      goLogin: () => router.push('/login'),
+      appName
     }
   }
 })

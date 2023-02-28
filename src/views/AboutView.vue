@@ -11,12 +11,12 @@
 
     <v-row class="title-row">
       <v-col class="text-h5">
-        TierReviewsについて
+        {{ appName }}について
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        TierReviewsは、開発者である<span v-text="myName"></span>が「一度はゼロからwebシステム作って運用してみたいな～」という欲求のために作成したサイトです。
+        {{ appName }}は、開発者である<span v-text="myName"></span>が「一度はゼロからwebシステム作って運用してみたいな～」という欲求のために作成したサイトです。
       </v-col>
     </v-row>
 
@@ -181,7 +181,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Names, { myName } from '@/common/names'
+import Names, { myName, appName } from '@/common/names'
 import vuetify from '@/plugins/vuetify'
 import LicenseList from '@/components/LicenseList.vue'
 import ServiceColmun from '@/components/ServiceColmun.vue'
@@ -203,6 +203,7 @@ border: 10px solid ${vuetify.theme.themes._rawValue.myCustomLightTheme.colors.th
 `
 
     return {
+      appName,
       myName,
       contributors: Names.contributors,
       bgStyle,

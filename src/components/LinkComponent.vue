@@ -19,7 +19,7 @@
     </div>
     <a v-else-if="isInLink" :href="link" style="text-decoration: none;">
       <v-card height="96px" class="pa-3 ma-1">
-        <span>TierReviews</span>
+        <span v-text="appName"></span>
         <div class="no-break-box-2">
           <span v-text="link" class="text-caption" />
         </div>
@@ -43,7 +43,7 @@
 
   <simple-dialog v-model="dialog"
     title="外部リンクへのアクセス"
-    prepend-text="TierReviewsのサイト外へ移動しようとしています。"
+    :prepend-text="`${appName}のサイト外へ移動しようとしています。`"
     text="以下のリンクが安全でないと判断した場合は「閉じる」を押して前の画面に戻ってください"
     submit-button-text="移動"
     :append-text="link"
@@ -63,6 +63,7 @@ import { computed, defineComponent, ref, toRefs, watch } from 'vue'
 import Tweet from 'vue-tweet'
 import Youtube from 'vue3-youtube'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import { appName } from '@/common/names'
 
 export const linkReg = /^((http)|(https)):\/\/.*/
 export const twitterReg = /^https:\/\/twitter\.com\/.*/
@@ -126,6 +127,7 @@ export default defineComponent({
     }
 
     return {
+      appName,
       isInLink,
       isExLink,
       dialog,

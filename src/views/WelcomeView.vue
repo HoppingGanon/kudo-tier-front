@@ -32,8 +32,8 @@
     </v-row>
     <v-row>
       <v-col style="text-align: center;">
-        <v-btn v-if="hasSession" color="primary" class="text-no-transform" @click="goHome">TierReviewsのホーム画面へ</v-btn>
-        <v-btn v-else color="primary" class="text-no-transform" @click="goLogin">TierReviewsをはじめる</v-btn>
+        <v-btn v-if="hasSession" color="primary" class="text-no-transform" @click="goHome">{{ appName }}のホーム画面へ</v-btn>
+        <v-btn v-else color="primary" class="text-no-transform" @click="goLogin">{{ appName }}をはじめる</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -62,6 +62,7 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import store from '@/store'
 import router from '@/router'
+import { appName } from '@/common/names'
 
 export default defineComponent({
   name: 'WelcomeView',
@@ -91,6 +92,7 @@ export default defineComponent({
     }
 
     return {
+      appName,
       hasSession,
       logoutDialog,
       goHome,

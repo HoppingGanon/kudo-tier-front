@@ -5,6 +5,7 @@ interface Names {
   }[]
 }
 
+export const appName = 'くどくどTier'
 export const myName = 'Tanaka'
 export const version = '1.0.0'
 export const buildDate = '2023'
