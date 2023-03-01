@@ -21,8 +21,9 @@
         href="https://github.com/HoppingGanon"
       ></v-btn>
     </div>
-    <div>
+    <div class="d-flex">
       <term-of-servise />
+      <v-btn flat><router-link class="no-link" to="/about"> このサイトについて</router-link></v-btn>
     </div>
   </v-footer>
 </template>

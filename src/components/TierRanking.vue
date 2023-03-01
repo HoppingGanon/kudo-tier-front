@@ -255,7 +255,7 @@
 </template>
 
 <script lang="ts">
-import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize, IconSize, RankingTheme, TierPivotInfomation } from '@/common/review'
+import { Review, Dictionary, ReviewFactorParam, DataTableHeader, ReviewFunc, reviewPointTypeArray, ReviewPointType, Tier, PointDisplaySize, IconSize, RankingTheme } from '@/common/review'
 import { defineComponent, PropType, computed, ref, Ref } from 'vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import WeightSettings from '@/components/WeightSettings.vue'

@@ -7,7 +7,7 @@ interface Names {
 
 export const appName = 'くどくどTier'
 export const myName = 'Tanaka'
-export const version = '1.0.0'
+export const version = '0.5.0-beta'
 export const buildDate = '2023'
 
 const names: Names = {

@@ -1,7 +1,7 @@
 <template>
-  <v-card class="body-1" flat @click="() => { dialog = true }">
+  <v-btn class="body-1" flat @click="() => { dialog = true }">
     利用規約を読む
-  </v-card>
+  </v-btn>
 
   <simple-dialog
     v-model="dialog"

@@ -55,17 +55,46 @@
 
     <v-row class="title-row">
       <v-col class="text-h6 centering-x">
-        サービスと技術
+        サービス
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        このサイトの作成・運営にあたって利用させていただいている主なサービスや技術を感謝を込めて以下に記載します。<br/>
-        ただし、下記に含まれるサービスが当サイトを支援する関係にあるわけではございません。また、当サイトの直接の運営に関与する関係でもありません。<br/>
-        また、感謝の気持ちは順不同であり、ここに書ききれなかったいくつものサービス・技術にも感謝してます本当に。
+        このサイトを作成・運営にあたって利用させていただいている主なサービスです。<br/>
+        ただし、下記のサービスに関わる組織・団体が当サイトを支援しているわけではございません。また、当サイトの直接の運営に関与する関係でもありません。
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
+      <service-colmun
+        subtitle="インフラストラクチャ"
+        text="サーバー（EC2）、ストレージ（S3）、データベース（RDS）"
+      >
+        <template v-slot:image>
+          <a href="https://aws.amazon.com/what-is-cloud-computing"><img src="https://d0.awsstatic.com/logos/powered-by-aws.png" alt="Powered by AWS Cloud Computing"></a>
+        </template>
+      </service-colmun>
+      <service-colmun
+        subtitle="開発プラットフォーム"
+        text="バージョン管理"
+      >
+        <template v-slot:image>
+          <v-img src="@/assets/external/github.png"></v-img>
+        </template>
+      </service-colmun>
+    </v-row>
+
+    <v-row class="title-row">
+      <v-col class="text-h6 centering-x">
+        技術
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        このサイトの作成・運営にあたって利用させていただいている主な技術です。<br/>
+        ただし、下記の技術に関わる組織・団体が当サイトを支援しているわけではございません。また、当サイトの直接の運営に関与する関係でもありません。
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
       <!-- AWS-->
       <!-- 規約OK 変更禁止 link可 https://d1.awsstatic.com/legal/trademarkguidelines/trademark%20guidelines_jp.pdf -->
       <!-- https://aws.amazon.com/jp/co-marketing/ -->
@@ -116,14 +145,14 @@
         text="バックエンドアプリケーションのAPI"
       />
       <service-colmun
+        title="GORM"
+        subtitle="Go ORMライブラリ"
+        text="バックエンドアプリケーションのデータベース操作"
+      />
+      <service-colmun
         title="Git"
         subtitle="バージョン管理システム"
         text="ソースコードのバージョン管理"
-      />
-      <service-colmun
-        title="GitHub"
-        subtitle="開発プラットフォーム"
-        text="ソースコードのバージョン管理およびリリース管理、デプロイ"
       />
     </v-row>
 
@@ -134,12 +163,12 @@
     </v-row>
     <v-row>
       <v-col class="d-flex justify-center">
-        このサイトを作成するにあたって使用させていただいたライブラリ・パッケージの一覧です。
+        このサイトを作成するにあたって使用させていただいたパッケージ・モジュール等の一覧です。
       </v-col>
     </v-row>
     <v-row>
       <v-col class="mt-5 d-flex justify-center">
-        フロントエンド
+        フロントエンドのパッケージ
       </v-col>
     </v-row>
     <v-row>
@@ -149,7 +178,17 @@
     </v-row>
     <v-row>
       <v-col class="mt-5 d-flex justify-center">
-        バックエンド
+        フロントエンドの開発用パッケージ
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="d-flex justify-center">
+        <license-list :licenses="licensesFrontDev" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="mt-5 d-flex justify-center">
+        バックエンドのモジュール
       </v-col>
     </v-row>
     <v-row>
@@ -186,6 +225,7 @@ import vuetify from '@/plugins/vuetify'
 import LicenseList from '@/components/LicenseList.vue'
 import ServiceColmun from '@/components/ServiceColmun.vue'
 import licensesFront from '@/assets/licenses-front.json'
+import licensesFrontDev from '@/assets/licenses-front-dev.json'
 import licensesBack from '@/assets/licenses-back.json'
 import licensesFramework from '@/assets/licenses-framework.json'
 import { LicenseData } from '@/common/restapi'
@@ -209,6 +249,7 @@ border: 10px solid ${vuetify.theme.themes._rawValue.myCustomLightTheme.colors.th
       bgStyle,
       licensesFront: licensesFront as LicenseData[],
       licensesBack: licensesBack as LicenseData[],
+      licensesFrontDev: licensesFrontDev as LicenseData[],
       licensesFramework
     }
   }

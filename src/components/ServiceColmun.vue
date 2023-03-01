@@ -1,7 +1,7 @@
 <template>
   <v-col cols="6" sm="6" md="3" lg="3" xl="2">
     <v-card flat>
-      <div class="image-block">
+      <div v-if="$slots.image != undefined" class="image-block">
         <slot name="image"></slot>
       </div>
       <div style="bottom: 0px;">

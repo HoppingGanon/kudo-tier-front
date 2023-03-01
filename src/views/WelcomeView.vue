@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import WelcomeCarousel from '@/components/WelcomeCarousel.vue'
 import ExplanationSummary from '@/components/ExplanationSummary.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
@@ -97,6 +97,10 @@ export default defineComponent({
     const goLogout = () => {
       router.push('/logout')
     }
+
+    onMounted(() => {
+      document.documentElement.scrollTop = 0
+    })
 
     return {
       appName,
