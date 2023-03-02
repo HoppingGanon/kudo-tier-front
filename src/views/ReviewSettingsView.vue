@@ -104,11 +104,6 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col class="font-weight-bold">
-              説明文の追加
-            </v-col>
-          </v-row>
-          <v-row>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
               <section-editor-component
                 :sections="review.sections"
@@ -122,6 +117,7 @@
                 @del-parag="delParag"
                 @submit="submit"
                 @preview="toggleTab"
+                title="詳しい説明分の追加"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -439,7 +435,7 @@ export default defineComponent({
     }
 
     const infoToastConfig: ToastProps = {
-      duration: 500,
+      duration: 750,
       position: 'top',
       queue: false
     }

@@ -1,6 +1,6 @@
 <template>
-  <v-card class="anime" :class="floatingStyle ? 'floating-style' : 'fixed-style'">
-    <div class="d-flex pt-5" mb-2>
+  <v-card class="anime" :flat="!floatingStyle" :class="floatingStyle ? 'floating-style' : 'fixed-style'">
+    <div class="d-flex" :class="floatingStyle ? 'pt-5' : ''" mb-2>
       <v-btn v-if="!hideParag" icon flat @click="$emit('addObject', 'imageLink')">
         <v-icon>
           mdi-image-outline

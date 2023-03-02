@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="down">
     <v-toolbar color="secondary">
       <v-card-title v-if="isNew" class="font-weight-bold">
         Tier新規作成
@@ -218,6 +218,10 @@
               @update-parag-body="(v, i, j) => $emit('updateParagBody', v, j)"
               @add-parag="(t, i, j) => { addParagItemProxy(t, j) }"
               @del-parag="$emit('removeParagItem', $event)"
+              :no-section="true"
+              @submit="submit"
+              @preview="toggleTab"
+              title="説明文の追加"
             />
           </v-col>
         </v-row>
@@ -248,6 +252,15 @@
           </v-card>
         </v-col>
       </v-row>
+
+      <editor-tools
+        :floatingStyle="true"
+        @submit="submit"
+        @preview="toggleTab"
+        :allow-toggle="false"
+        :hide-section="true"
+        :hide-parag="true"
+      />
     </v-container>
 
   </v-card>
@@ -284,8 +297,9 @@ import ImageSelector from '@/components/ImageSelector.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
+import EditorTools from '@/components/EditorTools.vue'
 import rules from '@/common/rules'
-import { useToast } from 'vue-toast-notification'
+import { ToastProps, useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -300,7 +314,8 @@ export default defineComponent({
     ImageSelector,
     SectionEditorComponent,
     SimpleDialog,
-    PaddingComponent
+    PaddingComponent,
+    EditorTools
   },
   props: {
     modelValue: {
@@ -558,6 +573,21 @@ export default defineComponent({
       emit('updateParams', value)
     }
 
+    const infoToastConfig: ToastProps = {
+      duration: 750,
+      position: 'top',
+      queue: false
+    }
+    const toggleTab = () => {
+      if (tab.value === 0) {
+        tab.value = 1
+        toast.info('プレビュー', infoToastConfig)
+      } else {
+        tab.value = 0
+        toast.info('レビュー情報の入力', infoToastConfig)
+      }
+    }
+
     return {
       getImgSource,
       sectionValidation,
@@ -579,7 +609,8 @@ export default defineComponent({
       valid,
       cautions,
       upload,
-      updateParams
+      updateParams,
+      toggleTab
     }
   }
 })
@@ -587,4 +618,8 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+
+.down {
+  margin-top: 60px;
+}
 </style>

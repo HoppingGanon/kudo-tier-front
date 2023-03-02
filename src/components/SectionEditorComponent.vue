@@ -2,6 +2,11 @@
   <v-container class="ma-0 pa-0" fulid>
     <v-row>
       <v-col>
+        <span v-if="title" class="text-title font-weight-bold" v-text="title"></span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <editor-tools
           :floatingStyle="true"
           @add-object="addObject"
@@ -10,6 +15,7 @@
           @preview="$emit('preview')"
           :allow-toggle="false"
           @toggle-pin="$emit('togglePin')"
+          :hide-section="noSection"
         />
         <editor-tools
           :floatingStyle="false"
@@ -19,6 +25,7 @@
           @preview="$emit('preview')"
           :allow-toggle="false"
           @toggle-pin="$emit('togglePin')"
+          :hide-section="noSection"
         />
       </v-col>
     </v-row>
@@ -26,6 +33,7 @@
       <v-col>
         <div class="bordered-box" :class="selSection === i ? 'bordered-box-focus' : 'bordered-box-no-focus'">
           <auto-text-area
+            v-if="!noSection"
             :model-value="section.title"
             @update:model-value="(v) => $emit('updateSectionTitle', v, i)"
             class="font-weight-bold"
@@ -35,7 +43,7 @@
             @focusin="() => focusinProxy(i, -1)"
             @focusout="() => focusoutProxy(i, -1)"
           />
-          <v-divider></v-divider>
+          <v-divider v-if="!noSection"></v-divider>
           <parags-editor-component
             :parags="section.parags"
             @update:parags="(v) => $emit('update:parags', v, i)"
@@ -75,6 +83,10 @@ export default defineComponent({
     noSection: {
       type: Boolean,
       default: false
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   emits: {
