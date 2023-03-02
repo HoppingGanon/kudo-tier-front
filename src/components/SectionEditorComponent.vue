@@ -16,7 +16,7 @@
             @update:model-value="(v) => $emit('updateSectionTitle', v, i)"
             class="font-weight-bold"
             :multi-lines="false"
-            title="説明の見出し"
+            title="説明の見出しを入力してください"
             :no-outline="true"
             @focusin="() => focusinProxy(i, -1)"
             @focusout="() => focusoutProxy(i, -1)"
@@ -190,10 +190,11 @@ export default defineComponent({
 }
 .bordered-box-focus {
   border-color: rgb(var(--v-theme-primary));
+  background-color: rgba(var(--v-theme-thirdry));
 }
 .bordered-box-no-focus {
   border-color: #CCC;
-  background-color: rgba(var(--v-theme-thirdry), 0.5);
+  background-color: white;
 }
 
 </style>

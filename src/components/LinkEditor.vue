@@ -7,27 +7,16 @@
           :pre-link="modelValue"
         />
       </v-col>
-      <v-col
-        :col="removable ? 10 : 12"
-        :sm="removable ? 4 : 5"
-        :md="removable ? 5 : 6"
-        :lg="removable ? 6 : 7"
-        :xl="removable ? 6 : 7"
-      >
+      <v-col col="12" sm="5" md="6" lg="7" xl="7">
         <v-text-field
           label="リンク"
           hint="埋め込みたいリンクを指定してください。"
           :model-value="modelValue"
           @update:model-value="updateProxy"
           :rules="rules ? rules.concat(linkrule) : linkrule"
+          :clearable="true"
+          @click:clear="$emit('clear')"
         />
-      </v-col>
-      <v-col v-if="removable" cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-btn icon flat @click="$emit('remove')">
-          <v-icon>
-            mdi-close
-          </v-icon>
-        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -50,17 +39,13 @@ export default defineComponent({
     rules: {
       type: Array as PropType<((v: string) => string | boolean)[]>,
       default: undefined
-    },
-    removable: {
-      type: Boolean,
-      default: false
     }
   },
   emits: {
     update: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string) => true,
-    remove: () => true
+    clear: () => true
   },
   setup (props, { emit }) {
     const twitterLink = ref(props.modelValue)

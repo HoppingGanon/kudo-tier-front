@@ -27,31 +27,15 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="12" md="8" lg="8" xl="8">
+      <v-col cols="8" sm="6" md="5" lg="4" xl="3">
         <image-selector
           label="アイコン画像を選択してください"
+          :cropped-url="iconUrl"
           :aspect-ratio="(1 / 1)"
           @update-cropped-url="$emit('update:iconUrl', $event)"
-        />
-      </v-col>
-      <v-col cols="4" sm="4" md="3" lg="3" xl="3">
-        <v-avatar v-if="iconUrl === ''" size="100%" class="dahed-box">
-          <v-card flat style="aspect-ratio: 1;width: 100%;" class="d-flex align-center justify-center">
-            <div>
-              画像を選択するとここに表示されます
-            </div>
-          </v-card>
-        </v-avatar>
-        <v-avatar v-else size="100%">
-          <v-img style="border: 1px solid" height="100%" :src="imgSource" />
-        </v-avatar>
-      </v-col>
-      <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-btn icon flat @click="$emit('update:iconUrl', '')">
-          <v-icon>
-            mdi-close
-          </v-icon>
-        </v-btn>
+          img-max-height="320px"
+        >
+        </image-selector>
       </v-col>
     </v-row>
     <v-row>

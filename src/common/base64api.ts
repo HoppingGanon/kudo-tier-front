@@ -161,15 +161,17 @@ export default class Base64Api {
    * @param v DataURL
    * @returns データかどうか(true...base64, false...base64ではない, undefined...空文字列)
    */
-  static isDataUrl (v: string) : boolean | undefined {
+  static isDataUrl (v: string) : 'base64' | 'blob' | 'link' | 'empty' {
     if (v === '') {
-      return undefined
+      return 'empty'
     }
     const splitedStr = v.split(',')
     if (splitedStr.length > 1 && splitedStr[0].includes('base64')) {
-      return true
-    } else {
-      return false
+      return 'base64'
     }
+    if (v.substring(0, Math.min(v.length, 5)) === 'blob:') {
+      return 'blob'
+    }
+    return 'link'
   }
 }

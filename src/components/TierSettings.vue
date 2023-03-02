@@ -69,22 +69,11 @@
           <v-col cols="12" sm="12" md="7" lg="7" xl="7">
             <image-selector
               label="Tierのトップに表示する画像を選択してください"
+              :cropped-url="modelValue.imageUrl"
               :aspect-ratio="(10 / 3)"
               @update-cropped-url="$emit('updateImageUrl', $event)"
+              img-max-height="320px"
             />
-          </v-col>
-          <v-col cols="10" sm="6" md="4" lg="4" xl="4">
-            <v-card v-if="modelValue.imageUrl === ''" height="100%" class="dahed-box" flat>
-              画像を選択するとここに表示されます
-            </v-card>
-            <v-img v-else style="border: 1px solid" height="100%" :src="getImgSource(modelValue.imageUrl)" />
-          </v-col>
-          <v-col v-if="!isNew" cols="2" sm="1" md="1" lg="1" xl="1">
-            <v-btn icon flat @click="$emit('updateImageUrl', '')">
-              <v-icon>
-                mdi-close
-              </v-icon>
-            </v-btn>
           </v-col>
         </v-row>
         <v-row>

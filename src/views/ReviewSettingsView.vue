@@ -70,25 +70,14 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" sm="12" md="7" lg="7" xl="7">
+            <v-col cols="8" sm="6" md="5" lg="4" xl="3">
               <image-selector
                 label="レビューのアイコンを設定してください"
+                :cropped-url="review.iconUrl"
                 :aspect-ratio="(1 / 1)"
                 @update-cropped-url="review.iconUrl = $event"
+                img-max-height="320px"
               />
-            </v-col>
-            <v-col cols="10" sm="6" md="4" lg="3" xl="2">
-              <v-card v-if="review.iconUrl === ''" height="100%" class="dahed-box" flat>
-                画像を選択するとここに表示されます
-              </v-card>
-              <v-img v-else style="border: 1px solid" height="100%" :src="getImgSource(review.iconUrl)" />
-            </v-col>
-            <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-              <v-btn v-if="!isNew" icon flat @click="review.iconUrl = ''">
-                <v-icon>
-                  mdi-close
-                </v-icon>
-              </v-btn>
             </v-col>
           </v-row>
           <v-row>

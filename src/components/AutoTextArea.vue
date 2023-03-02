@@ -77,16 +77,15 @@ export default defineComponent({
   setup (props, { emit }) {
     const tRef = ref<HTMLTextAreaElement>()
 
-    const { modelValue } = toRefs(props)
-
     onMounted(() => {
       if (tRef.value) {
         tRef.value.style.height = 'auto'
       }
+      adjust()
     })
 
     // テキストフィールドの高さを入力ごとに自動調整する
-    watch(modelValue, () => {
+    const adjust = () => {
       if (tRef.value) {
         new Promise((resolve) => {
           if (tRef.value) {
@@ -98,7 +97,11 @@ export default defineComponent({
           }
         })
       }
-    })
+    }
+
+    // 入力値を監視して、変更があれば調整
+    const { modelValue } = toRefs(props)
+    watch(modelValue, adjust)
 
     const focusinProxy = () => {
       moveCursorProxy()
@@ -163,8 +166,11 @@ export default defineComponent({
   outline: none;
 }
 
+.filled {
+}
+
 .filled:focus {
-  background-color: rgb(var(--v-theme-thirdry));
+  background-color: white;
 }
 
 .anime {
