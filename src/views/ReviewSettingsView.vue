@@ -104,6 +104,11 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col class="font-weight-bold">
+              説明文の追加
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
               <section-editor-component
                 :sections="review.sections"
@@ -132,19 +137,17 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col>
-            <padding-component>
-              <review-component
-                :review="review"
-                :point-type="tier.pointType"
-                display-type="all"
-                :no-header="true"
-                :review-factor-params="tier.reviewFactorParams"
-                :no-change-point="true"
-                :pulling-up="tier.pullingUp"
-                :pulling-down="tier.pullingDown"
-              />
-            </padding-component>
+          <v-col col="12" sm="12" md="12" lg="10" xl="8">
+            <review-component
+              :review="review"
+              :point-type="tier.pointType"
+              display-type="all"
+              :no-header="true"
+              :review-factor-params="tier.reviewFactorParams"
+              :no-change-point="true"
+              :pulling-up="tier.pullingUp"
+              :pulling-down="tier.pullingDown"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -164,17 +167,6 @@
       </v-card-actions>
     </v-card>
   </v-container>
-
-  <simple-dialog
-    v-model="confirmdialog"
-    title="確認"
-    text="見出しがない場合、説明文やリンクは追加できません"
-    append-text="既に入力がある場合は削除されます"
-    submit-button-text="削除"
-    close-button-text="キャンセル"
-    @submit="delAllSections"
-  >
-  </simple-dialog>
 </template>
 
 <script lang="ts">
@@ -183,8 +175,6 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
-import SimpleDialog from '@/components/SimpleDialog.vue'
-import PaddingComponent from '@/components/PaddingComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
@@ -201,8 +191,6 @@ export default defineComponent({
     ReviewValuesSettings,
     ImageSelector,
     ReviewComponent,
-    SimpleDialog,
-    PaddingComponent,
     SectionEditorComponent
   },
   setup () {
@@ -212,7 +200,6 @@ export default defineComponent({
     const isNew = ref(true)
 
     const tab = ref(0)
-    const confirmdialog = ref(false)
     const isSubmitting = ref(false)
     const form = ref()
 
@@ -428,30 +415,9 @@ export default defineComponent({
       review.value.sections[sectionIndex].parags.splice(paragIndex, 1)
     }
 
-    const delAllSections = () => {
-      review.value.sections.splice(0)
-      confirmdialog.value = false
-    }
-
     const delSection = (sectionIndex: number) => {
       if (review.value.sections.length === 0) {
-
-      } else if (review.value.sections.length === 1) {
-        if (review.value.sections[0].parags.length > 0) {
-          if (review.value.sections[0].parags.filter((v) => v.body !== '').length !== 0) {
-            // paragsの中に、bodyへの書き込みがあるparagがひとつでもあれば傾向を表示
-            confirmdialog.value = true
-            return
-          }
-        }
-        delAllSections()
         return
-      }
-
-      if (sectionIndex === 0) {
-        review.value.sections[1].parags.splice(0, 0, ...review.value.sections[0].parags)
-      } else {
-        review.value.sections[sectionIndex - 1].parags.splice(0, 0, ...review.value.sections[sectionIndex].parags)
       }
       review.value.sections.splice(sectionIndex, 1)
     }
@@ -462,7 +428,6 @@ export default defineComponent({
       reviewValidation,
       isNew,
       tab,
-      confirmdialog,
       form,
       submit,
       valid,
@@ -476,8 +441,7 @@ export default defineComponent({
       addSection,
       addParag,
       delParag,
-      delSection,
-      delAllSections
+      delSection
     }
   }
 })

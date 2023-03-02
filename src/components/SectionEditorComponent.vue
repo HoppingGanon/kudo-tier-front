@@ -5,6 +5,7 @@
         <editor-tools
           :floatingStyle="$vuetify.display.mobile"
           @add-object="addObject"
+          @del-section="delSectionProxy"
         />
       </v-col>
     </v-row>
@@ -16,7 +17,7 @@
             @update:model-value="(v) => $emit('updateSectionTitle', v, i)"
             class="font-weight-bold"
             :multi-lines="false"
-            title="説明の見出しを入力してください"
+            title="説明の見出しを入力できます"
             :no-outline="true"
             @focusin="() => focusinProxy(i, -1)"
             @focusout="() => focusoutProxy(i, -1)"
@@ -44,6 +45,7 @@ import { defineComponent, PropType, ref } from 'vue'
 import ParagsEditorComponent from '@/components/ParagsEditorComponent.vue'
 import AutoTextArea from '@/components/AutoTextArea.vue'
 import EditorTools from '@/components/EditorTools.vue'
+import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'SectionEditorComponent',
@@ -91,6 +93,7 @@ export default defineComponent({
       sectionIndex: number, paragIndex: number) => true
   },
   setup (props, { emit }) {
+    const toast = useToast()
     const selSection = ref(-1)
     const selParag = ref(-1)
     const cursorIndex = ref(0)
@@ -162,6 +165,16 @@ export default defineComponent({
       }
     }
 
+    const delSectionProxy = () => {
+      if (selSection.value !== -1) {
+        emit('delSection', selSection.value)
+        toast.info('セクションを削除しました')
+        selSection.value = selSection.value - 1
+      } else {
+        toast.info('セクションが選択されていません')
+      }
+    }
+
     const moveCursor = (index: number) => {
       cursorIndex.value = index
     }
@@ -172,6 +185,7 @@ export default defineComponent({
       focusinProxy,
       focusoutProxy,
       addObject,
+      delSectionProxy,
       moveCursor
     }
   }

@@ -9,7 +9,7 @@
           @focusout="$emit('focusout', i)"
           @move-cursor="$emit('moveCursor', $event)"
           @clear="() => clear(i)"
-          :title="parags.length === 1 && i === 0 ? '説明文を入力してください' : ''"
+          title="説明文を入力できます"
         />
       </v-col>
     </v-row>
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { ReviewParagraph, ReviewParagraphType } from '@/common/review'
-import { computed, defineComponent, PropType } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import ParagEditorComponent from '@/components/ParagEditorComponent.vue'
 
 export default defineComponent({
