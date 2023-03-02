@@ -58,6 +58,10 @@ export default defineComponent({
     noOutline: {
       type: Boolean,
       default: false
+    },
+    noFill: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -111,8 +115,9 @@ export default defineComponent({
       tRef,
       customClass: computed(() => {
         const cls = `${props.class} `
-        const ol = props.noOutline ? 'no-outline ' : 'outlined '
-        return `${cls}${ol}`
+        const outline = props.noOutline ? 'no-outline ' : 'outlined '
+        const fill = props.noFill ? '' : 'filled '
+        return `${cls}${outline}${fill}`
       }),
       customStyle: computed(() =>
         `${props.style}`
@@ -156,6 +161,10 @@ export default defineComponent({
 .no-outline {
   border: none;
   outline: none;
+}
+
+.filled:focus {
+  background-color: rgb(var(--v-theme-thirdry));
 }
 
 .anime {

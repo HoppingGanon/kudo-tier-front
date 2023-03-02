@@ -16,6 +16,11 @@
       ツール
     </span>
     <div class="d-flex">
+      <v-btn icon flat @click="$emit('addObject', 'section')">
+        <v-icon>
+        mdi-text-box-plus-outline
+        </v-icon>
+      </v-btn>
       <v-btn icon flat @click="$emit('addObject', 'imageLink')">
         <v-icon>
           mdi-image-outline
@@ -27,11 +32,6 @@
         </v-icon>
       </v-btn>
       <div class="d-flex justify-end" style="width: 100%;">
-        <v-btn icon flat @click="$emit('addObject', 'section')">
-          <v-icon>
-          mdi-text-box-plus-outline
-          </v-icon>
-        </v-btn>
       </div>
     </div>
   </div>

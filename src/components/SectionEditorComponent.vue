@@ -131,7 +131,6 @@ export default defineComponent({
           paragIndex = selParag.value < 0 ? 0 : selParag.value
 
           target = props.sections[sectionIndex].parags[paragIndex]
-          console.log(selParag.value, target.type, target.body.length)
           if (selSection.value >= 0 && selParag.value >= 0 && target.type === 'text' && target.body.length > 0) {
             // Parag選択状態かつテキストタイプで1文字以上の入力がある場合
             if (cursorIndex.value === target.body.length) {
@@ -191,7 +190,6 @@ export default defineComponent({
 }
 .bordered-box-focus {
   border-color: rgb(var(--v-theme-primary));
-  background-color: rgb(var(--v-theme-thirdry));
 }
 .bordered-box-no-focus {
   border-color: #CCC;
