@@ -1,6 +1,6 @@
 <template>
   <v-container class="ma-0 pa-0">
-    <v-row>
+    <v-row class="mb-3">
       <v-col
         cols="3"
         sm="2"
@@ -30,11 +30,6 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-divider class="mt-3 mb-3" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
         <v-card>
           <v-container class="ma-0 pa-1" fluid>
             <v-row :style="`background-color: ${secondaryColor};`">
@@ -57,34 +52,7 @@
               </v-col>
               <v-col v-if="index < params.length && params[index].isPoint">
                 <v-container class="pa-0 ma-0" fluid>
-                  <v-row v-if="index < params.length && params[index].isPoint">
-                    <v-col
-                      cols="4"
-                      sm="3"
-                      md="2"
-                      lg="2"
-                      xl="2"
-                    >
-                      <span v-if="pointType === 'stars'">スター数：</span>
-                      <span v-else-if="pointType === 'rank7'">ランク</span>
-                      <span v-else-if="pointType === 'rank14'">ランク</span>
-                      <span v-else-if="pointType === 'score'">スコア</span>
-                      <span v-else-if="pointType === 'point'">点数</span>
-                      <span v-else-if="pointType === 'unlimited'">数値</span>
-                    </v-col>
-                    <v-col class="d-flex">
-                      <div class="ml-1 mr-2">:</div>
-                      <div style="width: 100%">
-                        <review-value-display
-                          v-if="factor.point !== undefined"
-                          :value="factor.point"
-                          :point-type="pointType"
-                          display-size="large2"
-                        />
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
+                  <v-row class="mt-3">
                     <v-col>
                       <v-text-field
                         v-if="pointType === 'unlimited'"
@@ -101,7 +69,7 @@
                         :max="100"
                         :step="1"
                         label="評点"
-                        thumb-label
+                        thumb-label="always"
                       />
                       <v-slider
                         v-else-if="pointType === 'stars'"
@@ -113,7 +81,7 @@
                         :max="100"
                         :step="step"
                         label="評点"
-                        thumb-label
+                        thumb-label="always"
                       >
                         <template v-slot:thumb-label>
                           <span v-text="factor.point !== undefined ? (factor.point / step) : ''" />
@@ -129,7 +97,7 @@
                         :max="100"
                         :step="step"
                         label="評点"
-                        thumb-label
+                        thumb-label="always"
                       >
                         <template v-slot:thumb-label>
                           <review-value-display

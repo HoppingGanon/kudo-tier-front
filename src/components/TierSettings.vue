@@ -224,25 +224,12 @@
         </v-row>
         <v-row>
           <v-col>
-            <section-component
-              :section="section"
-              display-type="all"
-              :editable="true"
-              :hide-section-title="true"
-              @update-parag-body="(v, i) => $emit('updateParagBody', v, i)"
-              @add-object="addParagItemProxy"
+            <section-editor-component
+              :sections="sections"
+              @update-parag-body="(v, i, j) => $emit('updateParagBody', v, j)"
+              @add-parag="(t, i, j) => { addParagItemProxy(t, j) }"
               @del-parag="$emit('removeParagItem', $event)"
             />
-          </v-col>
-        </v-row>
-        <v-row v-if="modelValue.parags.length === 0">
-          <v-col>
-            <v-card flat class="ma-3">
-              <b>
-                説明文がありません<br />
-                右上の[<v-icon>mdi-plus</v-icon>]をクリックして、説明文を追加しましょう
-              </b>
-            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -292,20 +279,20 @@
 
   <simple-dialog v-model="cautionsDialog" title="警告" @submit="upload">
     <div v-for="c, i of cautions" :key="i" class="ma-2">
-      <div><span class="error-style" v-text="c" /></div>
+      <div><span class="error-style" v-text="c"></span></div>
     </div>
   </simple-dialog>
 </template>
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierValidation, sectionValidation, ReviewSection } from '@/common/review'
-import { computed, defineComponent, PropType, ref } from 'vue'
+import { computed, ComputedRef, defineComponent, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TierComponent from '@/components/TierComponent.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
 import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
-import SectionComponent, { additionalItems2 } from '@/components/SectionComponent.vue'
+import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import rules from '@/common/rules'
@@ -322,7 +309,7 @@ export default defineComponent({
     PointTypeSelector,
     ReviewValueDisplay,
     ImageSelector,
-    SectionComponent,
+    SectionEditorComponent,
     SimpleDialog,
     PaddingComponent
   },
@@ -404,6 +391,7 @@ export default defineComponent({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const toast = useToast()
+
     const tab = ref(0)
     const tweetdialog = ref(false)
     const cautionsDialog = ref(false)
@@ -434,7 +422,7 @@ export default defineComponent({
       }
     }
 
-    const addParagItemProxy = (type: ReviewParagraphType | 'section', index: number) => {
+    const addParagItemProxy = (type: ReviewParagraphType, index: number) => {
       if (props.modelValue.parags.length < sectionValidation.paragsLenMax) {
         emit('addParagItem', type, index)
       } else {
@@ -442,11 +430,11 @@ export default defineComponent({
       }
     }
 
-    const section = computed(() => {
-      return {
+    const sections: ComputedRef<ReviewSection[]> = computed(() => {
+      return [{
         title: '',
         parags: props.modelValue.parags
-      } as ReviewSection
+      }]
     })
 
     const form = ref()
@@ -583,7 +571,6 @@ export default defineComponent({
 
     return {
       getImgSource,
-      additionalItems2,
       sectionValidation,
       rulesFunc: rules,
       tierValidation,
@@ -597,7 +584,7 @@ export default defineComponent({
       removeWeightItemProxy,
       addWeightItemProxy,
       addParagItemProxy,
-      section,
+      sections,
       form,
       submit,
       valid,

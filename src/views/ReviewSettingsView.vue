@@ -77,7 +77,7 @@
                 @update-cropped-url="review.iconUrl = $event"
               />
             </v-col>
-            <v-col cols="10" sm="6" md="4" lg="4" xl="4">
+            <v-col cols="10" sm="6" md="4" lg="3" xl="2">
               <v-card v-if="review.iconUrl === ''" height="100%" class="dahed-box" flat>
                 画像を選択するとここに表示されます
               </v-card>
@@ -115,41 +115,20 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="8" sm="9" md="10" lg="10" xl="10" />
-            <v-col cols="4" sm="3" md="2" lg="2" xl="2">
-              <menu-button :items="additionalItems" @select="addObject($event, 0, 0, true)">
-                <template v-slot:button="{ open, props }">
-                  <v-btn @click="open" v-bind="props" icon flat>
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-                </template>
-              </menu-button>
-            </v-col>
-          </v-row>
-          <v-row v-for="section, index in review.sections" :key="index">
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
-              <section-component
-                :section="section"
-                :editable="true"
-                @update-title="updateSectionTitle($event, index)"
-                @update-parag-body="(v: string, j: number) => {updateParagBody(v, index, j)}"
-                @add-object="(v, j) => addObject(v, index, j, false)"
-                @del-section="() => delSection(index)"
-                @del-parag="(i) => delParag(index, i)"
+              <section-editor-component
+                :sections="review.sections"
+                @update-title="updateSectionTitle"
+                @update-section-title="updateSectionTitle"
+                @update:parags="(v, i) => review.sections[i].parags = v"
+                @update-parag-body="updateParagBody"
+                @add-object="addObject"
+                @del-section="delSection"
+                @del-parag="delParag"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
               <v-divider class="ml-2 mr-2" />
-            </v-col>
-          </v-row>
-          <v-row v-if="review.sections.length === 0">
-            <v-col>
-              <v-card flat class="ma-3">
-                <b>
-                  説明文がありません<br />
-                  右上の[<v-icon>mdi-plus</v-icon>]をクリックして、説明文を追加しましょう
-                </b>
-              </v-card>
             </v-col>
           </v-row>
         </v-container>
@@ -212,12 +191,11 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
-import SectionComponent, { additionalItems } from '@/components/SectionComponent.vue'
-import MenuButton from '@/components/MenuButton.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
+import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
@@ -231,12 +209,11 @@ export default defineComponent({
   components: {
     SessionChecker,
     ReviewValuesSettings,
-    SectionComponent,
-    MenuButton,
     ImageSelector,
     ReviewComponent,
     SimpleDialog,
-    PaddingComponent
+    PaddingComponent,
+    SectionEditorComponent
   },
   setup () {
     const route = useRoute()
@@ -482,7 +459,6 @@ export default defineComponent({
       review,
       updatePoint,
       updateInfo,
-      additionalItems,
       addObject,
       updateSectionTitle,
       updateParagBody,

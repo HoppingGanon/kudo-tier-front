@@ -7,9 +7,6 @@
     prepend-icon="mdi-camera"
     accept="image/png, image/jpeg"
   >
-    <template>
-      aaa
-    </template>
     <template v-slot:append>
       <v-dialog v-model="cropMenu" persistent :fullscreen="true">
         <template v-slot:activator>
