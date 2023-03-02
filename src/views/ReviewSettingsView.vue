@@ -2,7 +2,7 @@
 
   <!-- セッション有効期限をチェックする -->
   <session-checker :no-session-error="true" />
-  <v-container class="pa-0">
+  <v-container class="pa-0 down">
     <v-card class="ma-0">
       <v-toolbar color="secondary">
         <v-card-title v-if="isNew" class="font-weight-bold">
@@ -120,6 +120,8 @@
                 @add-parag="addParag"
                 @del-section="delSection"
                 @del-parag="delParag"
+                @submit="submit"
+                @preview="toggleTab"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -150,6 +152,18 @@
             />
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <editor-tools
+              :floatingStyle="true"
+              @submit="submit"
+              @preview="toggleTab"
+              :allow-toggle="false"
+              :hide-section="true"
+              :hide-parag="true"
+            />
+          </v-col>
+        </v-row>
       </v-container>
       <v-card-actions>
         <v-row class="justify-end ma-5">
@@ -176,10 +190,11 @@ import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
+import EditorTools from '@/components/EditorTools.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
-import { useToast } from 'vue-toast-notification'
+import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
 import router from '@/router'
@@ -191,7 +206,8 @@ export default defineComponent({
     ReviewValuesSettings,
     ImageSelector,
     ReviewComponent,
-    SectionEditorComponent
+    SectionEditorComponent,
+    EditorTools
   },
   setup () {
     const route = useRoute()
@@ -422,6 +438,21 @@ export default defineComponent({
       review.value.sections.splice(sectionIndex, 1)
     }
 
+    const infoToastConfig: ToastProps = {
+      duration: 500,
+      position: 'top',
+      queue: false
+    }
+    const toggleTab = () => {
+      if (tab.value === 0) {
+        tab.value = 1
+        toast.info('プレビュー', infoToastConfig)
+      } else {
+        tab.value = 0
+        toast.info('レビュー情報の入力', infoToastConfig)
+      }
+    }
+
     return {
       getImgSource,
       rulesFunc: rules,
@@ -441,7 +472,8 @@ export default defineComponent({
       addSection,
       addParag,
       delParag,
-      delSection
+      delSection,
+      toggleTab
     }
   }
 })
@@ -453,5 +485,9 @@ export default defineComponent({
 .limit-bottom-2 {
   box-sizing: content-box;
   margin: 0;
+}
+
+.down {
+  margin-top: 60px;
 }
 </style>

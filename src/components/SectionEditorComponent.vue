@@ -3,9 +3,22 @@
     <v-row>
       <v-col>
         <editor-tools
-          :floatingStyle="$vuetify.display.mobile"
+          :floatingStyle="true"
           @add-object="addObject"
           @del-section="delSectionProxy"
+          @submit="$emit('submit')"
+          @preview="$emit('preview')"
+          :allow-toggle="false"
+          @toggle-pin="$emit('togglePin')"
+        />
+        <editor-tools
+          :floatingStyle="false"
+          @add-object="addObject"
+          @del-section="delSectionProxy"
+          @submit="$emit('submit')"
+          @preview="$emit('preview')"
+          :allow-toggle="false"
+          @toggle-pin="$emit('togglePin')"
         />
       </v-col>
     </v-row>
@@ -58,6 +71,10 @@ export default defineComponent({
     sections: {
       type: Object as PropType<ReviewSection[]>,
       required: true
+    },
+    noSection: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -90,7 +107,10 @@ export default defineComponent({
       sectionIndex: number, paragIndex: number) => true,
     focusout: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      sectionIndex: number, paragIndex: number) => true
+      sectionIndex: number, paragIndex: number) => true,
+    submit: () => true,
+    preview: () => true,
+    togglePin: () => true
   },
   setup (props, { emit }) {
     const toast = useToast()

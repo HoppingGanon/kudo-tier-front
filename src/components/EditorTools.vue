@@ -1,34 +1,22 @@
 <template>
-  <div v-if="floatingStyle" class="floating-style d-flex flex-column">
-    <v-btn class="ma-1" color="primary" icon @click="$emit('addObject', 'imageLink')">
-      <v-icon>
-        mdi-image-plus-outline
-      </v-icon>
-    </v-btn>
-    <v-btn class="ma-1" color="primary" icon @click="$emit('submit')">
-      <v-icon>
-        mdi-send
-      </v-icon>
-    </v-btn>
-  </div>
-  <div v-else class="fixed-style">
-    <div class="d-flex">
-      <v-btn icon flat @click="$emit('addObject', 'imageLink')">
+  <v-card class="anime" :class="floatingStyle ? 'floating-style' : 'fixed-style'">
+    <div class="d-flex pt-5" mb-2>
+      <v-btn v-if="!hideParag" icon flat @click="$emit('addObject', 'imageLink')">
         <v-icon>
           mdi-image-outline
         </v-icon>
       </v-btn>
-      <v-btn icon flat @click="$emit('addObject', 'serviceLink')">
+      <v-btn v-if="!hideParag" icon flat @click="$emit('addObject', 'serviceLink')">
         <v-icon>
           mdi-link
         </v-icon>
       </v-btn>
-      <v-btn icon flat @click="$emit('addObject', 'section')">
+      <v-btn v-if="!hideSection" icon flat @click="$emit('addObject', 'section')">
         <v-icon>
         mdi-text-box-plus-outline
         </v-icon>
       </v-btn>
-      <v-menu location="top center">
+      <v-menu v-if="!hideSection" :location="floatingStyle ? 'top center' : 'bottom center'">
         <template v-slot:activator="{ props }">
           <v-btn icon flat v-bind="props">
             <v-icon>
@@ -42,9 +30,17 @@
         </v-card>
       </v-menu>
       <div class="d-flex justify-end" style="width: 100%;">
+        <v-btn v-if="allowToggle" icon flat @click="$emit('togglePin')">
+          <v-icon v-show="floatingStyle">
+            mdi-pin-off
+          </v-icon>
+          <v-icon v-show="!floatingStyle">
+            mdi-pin
+          </v-icon>
+        </v-btn>
         <v-btn icon flat @click="$emit('preview')">
           <v-icon>
-            mdi-eye
+            mdi-swap-horizontal
           </v-icon>
         </v-btn>
         <v-btn icon flat @click="$emit('submit')">
@@ -54,7 +50,7 @@
         </v-btn>
       </div>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -67,6 +63,18 @@ export default defineComponent({
     floatingStyle: {
       type: Boolean,
       default: false
+    },
+    hideSection: {
+      type: Boolean,
+      default: false
+    },
+    hideParag: {
+      type: Boolean,
+      default: false
+    },
+    allowToggle: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -76,17 +84,24 @@ export default defineComponent({
     ) => true,
     submit: () => true,
     preview: () => true,
-    delSection: () => true
+    delSection: () => true,
+    togglePin: () => true
   }
 })
 </script>
 
 <style scoped>
 @import url("@/style/common-style.css");
+
+.anime {
+  transition: all 0.25s;
+}
+
 .floating-style {
-  position:fixed;
-  bottom: 0px;
-  right: 0px;
+  width: 100%;
+  position: fixed;
+  top: 50px;
+  left: 0px;
   z-index: 1;
 }
 
