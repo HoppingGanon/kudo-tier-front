@@ -122,7 +122,8 @@
                 @update-section-title="updateSectionTitle"
                 @update:parags="(v, i) => review.sections[i].parags = v"
                 @update-parag-body="updateParagBody"
-                @add-object="addObject"
+                @add-section="addSection"
+                @add-parag="addParag"
                 @del-section="delSection"
                 @del-parag="delParag"
               />
@@ -196,7 +197,7 @@ import ReviewComponent from '@/components/ReviewComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
-import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
+import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
@@ -413,6 +414,27 @@ export default defineComponent({
       review.value.sections[sectionIndex].title = v
     }
 
+    const addSection = (sectionIndex: number) => {
+      const newSection: ReviewSection = {
+        title: '',
+        parags: [
+          {
+            type: 'text',
+            body: ''
+          }
+        ]
+      }
+      review.value.sections.splice(sectionIndex, 0, newSection)
+    }
+
+    const addParag = (paragType: ReviewParagraphType, sectionIndex: number, paragIndex: number) => {
+      const newParag: ReviewParagraph = {
+        type: paragType,
+        body: ''
+      }
+      review.value.sections[sectionIndex].parags.splice(paragIndex, 0, newParag)
+    }
+
     const delParag = (sectionIndex: number, paragIndex: number) => {
       review.value.sections[sectionIndex].parags.splice(paragIndex, 1)
     }
@@ -462,6 +484,8 @@ export default defineComponent({
       addObject,
       updateSectionTitle,
       updateParagBody,
+      addSection,
+      addParag,
       delParag,
       delSection,
       delAllSections

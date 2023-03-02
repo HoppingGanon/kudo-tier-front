@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { ReviewDisplayType, ReviewParagraphType, ReviewSection, reviewValidation, sectionValidation } from '@/common/review'
+import { ReviewDisplayType, ReviewSection } from '@/common/review'
 import LinkComponent from '@/components/LinkComponent.vue'
 import rules from '@/common/rules'
 import { getImgSource } from '@/common/restapi'
@@ -61,37 +61,11 @@ export default defineComponent({
       dafault: false
     }
   },
-  emits: {
-    updateTitle: (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: string) => true,
-    updateParagBody: (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: string, i: number) => true,
-    addObject: (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: ReviewParagraphType | 'section', i: number) => true,
-    delParag: (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      i: number) => true,
-    delSection: () => true
-  },
-  computed: {
-    title: {
-      get () : string {
-        return this.section.title
-      },
-      set (v: string) {
-        this.$emit('updateTitle', v)
-      }
-    }
-  },
-  setup () {
+  setup (props) {
     const display = useDisplay()
     return {
-      sectionValidation,
+      title: computed(() => props.section.title),
       rulesFunc: rules,
-      reviewValidation,
       getImgSource,
       imgHeight: computed(() => {
         if (display.xs.value) {

@@ -7,6 +7,7 @@
           @update-parag-body="$emit('updateParagBody',$event, i)"
           @focusin="$emit('focusin', i)"
           @focusout="$emit('focusout', i)"
+          @move-cursor="$emit('moveCursor', $event)"
         />
       </v-col>
     </v-row>
@@ -47,7 +48,10 @@ export default defineComponent({
       paragIndex: number) => true,
     focusout: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      paragIndex: number) => true
+      paragIndex: number) => true,
+    moveCursor: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      index: number) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () { }

@@ -7,8 +7,10 @@
     ref="tRef"
     :placeholder="title"
     spellcheck="false"
-    @focusin="$emit('focusin')"
+    @focusin="focusinProxy()"
     @focusout="$emit('focusout')"
+    @click="moveCursorProxy()"
+    @keyup="moveCursorProxy()"
   ></textarea>
 </template>
 
@@ -63,10 +65,13 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
     focusin: () => true,
-    focusout: () => true
+    focusout: () => true,
+    moveCursor: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      index: number) => true
   },
-  setup (props) {
-    const tRef = ref<HTMLImageElement>()
+  setup (props, { emit }) {
+    const tRef = ref<HTMLTextAreaElement>()
 
     const { modelValue } = toRefs(props)
 
@@ -90,6 +95,18 @@ export default defineComponent({
         })
       }
     })
+
+    const focusinProxy = () => {
+      moveCursorProxy()
+      emit('focusin')
+    }
+
+    const moveCursorProxy = () => {
+      if (tRef.value) {
+        emit('moveCursor', tRef.value.selectionStart)
+      }
+    }
+
     return {
       tRef,
       customClass: computed(() => {
@@ -99,7 +116,9 @@ export default defineComponent({
       }),
       customStyle: computed(() =>
         `${props.style}`
-      )
+      ),
+      focusinProxy,
+      moveCursorProxy
     }
   }
 })

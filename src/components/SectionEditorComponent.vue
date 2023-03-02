@@ -2,7 +2,10 @@
   <v-container class="ma-0 pa-0" fulid>
     <v-row>
       <v-col>
-        <editor-tools :floatingStyle="$vuetify.display.mobile" />
+        <editor-tools
+          :floatingStyle="$vuetify.display.mobile"
+          @add-object="addObject"
+        />
       </v-col>
     </v-row>
     <v-row v-for="section, i of sections" :key="i">
@@ -27,6 +30,7 @@
             @del-parag="(j) => $emit('delParag', i, j)"
             @focusin="(j) => focusinProxy(i, j)"
             @focusout="(j) => focusoutProxy(i, j)"
+            @move-cursor="moveCursor"
           />
         </div>
       </v-col>
@@ -86,24 +90,90 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sectionIndex: number, paragIndex: number) => true
   },
-  setup () {
+  setup (props, { emit }) {
     const selSection = ref(-1)
     const selParag = ref(-1)
+    const cursorIndex = ref(0)
     const focusinProxy = (sectionIndex: number, paragIndex: number) => {
       selSection.value = sectionIndex
       selParag.value = paragIndex
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const focusoutProxy = (sectionIndex: number, paragIndex: number) => {
-      selSection.value = -1
-      selParag.value = -1
+      // selSection.value = -1
+      // selParag.value = -1
+    }
+
+    const addObject = (pType: ReviewParagraphType | 'section') => {
+      let sectionIndex = -1
+      let paragIndex = -1
+      let target: ReviewParagraph
+      let targetBody1: string
+      let targetBody2: string
+      switch (pType) {
+        case 'section':
+          // セクション追加
+          if (selParag.value === -1) {
+            sectionIndex = Math.max(selSection.value, 0)
+            emit('addSection', sectionIndex)
+          } else {
+            sectionIndex = Math.min(props.sections.length, selSection.value + 1)
+            emit('addSection', sectionIndex)
+          }
+          break
+        default:
+          // Parag追加
+          if (props.sections.length === 0) {
+            // セクションがなければ追加
+            emit('addSection', 0)
+          }
+          sectionIndex = selSection.value < 0 ? 0 : selSection.value
+          paragIndex = selParag.value < 0 ? 0 : selParag.value
+
+          target = props.sections[sectionIndex].parags[paragIndex]
+          console.log(selParag.value, target.type, target.body.length)
+          if (selSection.value >= 0 && selParag.value >= 0 && target.type === 'text' && target.body.length > 0) {
+            // Parag選択状態かつテキストタイプで1文字以上の入力がある場合
+            if (cursorIndex.value === target.body.length) {
+              // カーソルが末尾を指してる場合
+              targetBody1 = target.body
+              targetBody2 = ''
+            } else if (cursorIndex.value >= 0 && cursorIndex.value < target.body.length) {
+              // カーソルが末尾以外を指してる場合
+              targetBody1 = target.body.substring(0, cursorIndex.value)
+              targetBody2 = target.body.substring(cursorIndex.value, target.body.length)
+            } else {
+              // カーソルが場所を指していない場合
+              targetBody1 = ''
+              targetBody2 = target.body
+            }
+
+            // 文字列を分割しつつ、Parag追加
+            emit('updateParagBody', targetBody2, selSection.value, selParag.value)
+            emit('addParag', pType, sectionIndex, paragIndex)
+            emit('addParag', 'text', sectionIndex, paragIndex)
+            emit('updateParagBody', targetBody1, selSection.value, selParag.value)
+          } else {
+            // それ以外の場合
+            // Parag追加
+            emit('addParag', pType, sectionIndex, paragIndex)
+            emit('addParag', 'text', sectionIndex, paragIndex)
+          }
+          break
+      }
+    }
+
+    const moveCursor = (index: number) => {
+      cursorIndex.value = index
     }
 
     return {
       selSection,
       selParag,
       focusinProxy,
-      focusoutProxy
+      focusoutProxy,
+      addObject,
+      moveCursor
     }
   }
 })
