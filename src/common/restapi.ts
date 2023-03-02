@@ -232,11 +232,14 @@ export interface LicenseBackData extends LicenseData {
 
 export const getImgSource = (uri: string) => {
   switch (Base64Api.isDataUrl(uri)) {
-    case true:
+    case 'base64':
       return uri
-    case false:
+    case 'blob':
+      console.log('blobdayo')
+      return uri
+    case 'link':
       return `${process.env.VUE_APP_BACK_BASE_URI}/${uri}`
-    case undefined:
+    case 'empty':
       return ''
   }
 }

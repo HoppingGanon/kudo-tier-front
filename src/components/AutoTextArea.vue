@@ -7,8 +7,10 @@
     ref="tRef"
     :placeholder="title"
     spellcheck="false"
-    @focusin="$emit('focusin')"
+    @focusin="focusinProxy()"
     @focusout="$emit('focusout')"
+    @click="moveCursorProxy()"
+    @keyup="moveCursorProxy()"
   ></textarea>
 </template>
 
@@ -56,6 +58,10 @@ export default defineComponent({
     noOutline: {
       type: Boolean,
       default: false
+    },
+    noFill: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -63,21 +69,23 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
     focusin: () => true,
-    focusout: () => true
+    focusout: () => true,
+    moveCursor: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      index: number) => true
   },
-  setup (props) {
-    const tRef = ref<HTMLImageElement>()
-
-    const { modelValue } = toRefs(props)
+  setup (props, { emit }) {
+    const tRef = ref<HTMLTextAreaElement>()
 
     onMounted(() => {
       if (tRef.value) {
         tRef.value.style.height = 'auto'
       }
+      adjust()
     })
 
     // テキストフィールドの高さを入力ごとに自動調整する
-    watch(modelValue, () => {
+    const adjust = () => {
       if (tRef.value) {
         new Promise((resolve) => {
           if (tRef.value) {
@@ -89,17 +97,36 @@ export default defineComponent({
           }
         })
       }
-    })
+    }
+
+    // 入力値を監視して、変更があれば調整
+    const { modelValue } = toRefs(props)
+    watch(modelValue, adjust)
+
+    const focusinProxy = () => {
+      moveCursorProxy()
+      emit('focusin')
+    }
+
+    const moveCursorProxy = () => {
+      if (tRef.value) {
+        emit('moveCursor', tRef.value.selectionStart)
+      }
+    }
+
     return {
       tRef,
       customClass: computed(() => {
         const cls = `${props.class} `
-        const ol = props.noOutline ? 'no-outline ' : 'outlined '
-        return `${cls}${ol}`
+        const outline = props.noOutline ? 'no-outline ' : 'outlined '
+        const fill = props.noFill ? '' : 'filled '
+        return `${cls}${outline}${fill}`
       }),
       customStyle: computed(() =>
         `${props.style}`
-      )
+      ),
+      focusinProxy,
+      moveCursorProxy
     }
   }
 })
@@ -137,6 +164,13 @@ export default defineComponent({
 .no-outline {
   border: none;
   outline: none;
+}
+
+.filled {
+}
+
+.filled:focus {
+  background-color: white;
 }
 
 .anime {

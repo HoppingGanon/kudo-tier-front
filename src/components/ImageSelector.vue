@@ -1,16 +1,38 @@
 <template>
-  <v-file-input
-    :modelValue="imgFiles"
-    @update:modelValue="updateFile"
-    @click:clear="clearFile"
-    :label="label"
-    prepend-icon="mdi-camera"
-    accept="image/png, image/jpeg"
-  >
-    <template v-slot:append>
+  <div style="display: none;">
+    <v-file-input
+      ref="fileInputRef"
+      :modelValue="imgFiles"
+      @update:modelValue="updateFile"
+      :label="label"
+      prepend-icon="mdi-camera"
+      accept="image/png, image/jpeg"
+    />
+  </div>
+
+  <div v-if="!croppedUrlProxy" class="dahed-box pa-5">
+    <div>
+      <span v-text="label"></span>
+    </div>
+    <v-btn @click="inputFile" color="primary">画像を開く</v-btn>
+  </div>
+  <div v-else class="d-flex">
+    <div class="image-style" :style="imgMaxHeight ? `max-height: ${imgMaxHeight};` : ''">
+      <slot name="image">
+        <v-img :src="croppedUrlProxy">
+        </v-img>
+      </slot>
+    </div>
+    <div class="d-flex flex-column">
+      <v-btn flat icon @click="clearFile" color="#FFF0">
+        <v-icon>
+          mdi-close
+        </v-icon>
+      </v-btn>
       <v-dialog v-model="cropMenu" persistent :fullscreen="true">
+        <!-- 画像の切り取りダイアログ -->
         <template v-slot:activator>
-          <v-btn :disabled="imageUrl === ''" icon flat @click="openCropMenu">
+          <v-btn icon flat @click="openCropMenu" color="#FFF0">
             <v-icon>
               mdi-crop
             </v-icon>
@@ -38,11 +60,10 @@
               <v-col class="d-flex justify-center">
                 <div :style="canvasSize">
                   <vue-cropper
-                    v-if="imageUrl !== ''"
                     class="ba-5"
                     ref="cropper"
                     :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
-                    :src="imageUrl"
+                    :src="fileUrlProxy"
                     dragMode="move"
                     :class="canvasSize"
                   />
@@ -52,8 +73,14 @@
           </v-container>
         </v-card>
       </v-dialog>
-    </template>
-  </v-file-input>
+      <v-btn flat icon @click="inputFile" color="#FFF0">
+        <v-icon>
+          mdi-folder-open-outline
+        </v-icon>
+      </v-btn>
+    </div>
+  </div>
+
 </template>
 
 <script lang="ts">
@@ -62,6 +89,7 @@ import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 import base64api from '@/common/base64api'
 import { computed } from '@vue/reactivity'
+import { getImgSource } from '@/common/restapi'
 
 export default defineComponent({
   name: 'ImageSelector',
@@ -76,27 +104,62 @@ export default defineComponent({
     label: {
       type: String,
       default: '画像ファイルを選択してください'
+    },
+    croppedUrl: {
+      type: String,
+      default: ''
+    },
+    imgMaxHeight: {
+      type: String,
+      default: ''
     }
   },
   emits: {
+    /** クロップ前のURL */
     updateFileUrl: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
+    /** クロップ後のURL */
     updateCroppedUrl: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: string) => true
+      v: string) => true,
+    /** 画像のクリア後に呼ばれる処理 */
+    clear: () => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const cropMenu = ref(false)
+    /** Inpuut時の受け皿 */
     const imgFiles = ref([] as File[])
+    /** Inpuutをキャンセルしたときに前回分に戻すための退避 */
     const preImgFiles = ref([] as File[])
-    const imageUrl = ref('')
-
     const cropper = ref()
+    const fileInputRef = ref()
+    const fileUrl = ref('')
+    const croppedUrlProxy = computed(() => {
+      if (props.croppedUrl !== '') {
+        return getImgSource(props.croppedUrl)
+      } else {
+        return getImgSource(fileUrl.value)
+      }
+    })
+    const fileUrlProxy = computed(() => {
+      return getImgSource(fileUrl.value)
+    })
 
     const openCropMenu = () => {
+      if (!fileUrl.value) {
+        // ファイルのURLが空ならcroppedUrlを入れる
+        fileUrl.value = props.croppedUrl
+      }
       cropMenu.value = true
+    }
+
+    /** ファイルを開くボタンをクリックした際にv-file-inputのクリックイベントを起こす */
+    const inputFile = () => {
+      if (fileInputRef.value) {
+        fileInputRef.value.click()
+      }
     }
 
     const updateFile = (v: File[]) => {
@@ -105,8 +168,8 @@ export default defineComponent({
         preImgFiles.value = imgFiles.value
         imgFiles.value = v
         // 入力されたファイルをのURLを取得する
-        imageUrl.value = base64api.getFileUrl(v[0])
-        emit('updateFileUrl', imageUrl.value)
+        fileUrl.value = base64api.getFileUrl(v[0])
+        emit('updateFileUrl', base64api.getFileUrl(v[0]))
         openCropMenu()
       }
     }
@@ -114,9 +177,10 @@ export default defineComponent({
     const clearFile = () => {
       preImgFiles.value.splice(0)
       imgFiles.value.splice(0)
-      imageUrl.value = ''
+      fileUrl.value = ''
       emit('updateFileUrl', '')
       emit('updateCroppedUrl', '')
+      emit('clear')
     }
 
     const closeCrop = () => {
@@ -127,8 +191,8 @@ export default defineComponent({
     const enterCrop = () => {
       cropMenu.value = false
       const canvas = cropper.value.getCroppedCanvas() as HTMLCanvasElement
-      const url = canvas.toDataURL('image/jpeg')
-      emit('updateCroppedUrl', url)
+      const dataurl = canvas.toDataURL('image/jpeg')
+      emit('updateCroppedUrl', dataurl)
     }
 
     const canvasSize = computed(() => {
@@ -142,14 +206,17 @@ export default defineComponent({
     return {
       cropMenu,
       imgFiles,
-      imageUrl,
+      cropper,
+      canvasSize,
+      fileInputRef,
+      croppedUrlProxy,
+      fileUrlProxy,
       openCropMenu,
+      inputFile,
       updateFile,
       clearFile,
       closeCrop,
-      enterCrop,
-      cropper,
-      canvasSize
+      enterCrop
     }
   }
 })
@@ -166,6 +233,10 @@ export default defineComponent({
 .canvas-size-h {
   width: -webkit-calc(100vh - 100px);
   height: -webkit-calc(100vh - 100px);
+}
+
+.image-style {
+  width: 100%;
 }
 
 </style>

@@ -7,6 +7,9 @@
           @update-parag-body="$emit('updateParagBody',$event, i)"
           @focusin="$emit('focusin', i)"
           @focusout="$emit('focusout', i)"
+          @move-cursor="$emit('moveCursor', $event)"
+          @clear="() => clear(i)"
+          title="説明文を入力できます"
         />
       </v-col>
     </v-row>
@@ -41,16 +44,36 @@ export default defineComponent({
       paragType: ReviewParagraphType, sectionIndex: number, paragIndex: number) => true,
     delParag: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      sectionIndex: number, paragIndex: number) => true,
+      paragIndex: number) => true,
     focusin: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       paragIndex: number) => true,
     focusout: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      paragIndex: number) => true
+      paragIndex: number) => true,
+    moveCursor: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      index: number) => true
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () { }
+  setup (props, { emit }) {
+    const clear = (paragIndex: number) => {
+      if (props.parags.length > 2 &&
+        paragIndex > 0 && paragIndex < props.parags.length - 1 &&
+        props.parags[paragIndex - 1].type === 'text' && props.parags[paragIndex + 1].type === 'text'
+      ) {
+        const body = props.parags[paragIndex - 1].body + '\n' + props.parags[paragIndex + 1].body
+        emit('delParag', paragIndex - 1)
+        emit('delParag', paragIndex - 1)
+        emit('updateParagBody', body, paragIndex - 1)
+      } else {
+        emit('delParag', paragIndex)
+      }
+    }
+
+    return {
+      clear
+    }
+  }
 })
 </script>
 

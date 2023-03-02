@@ -2,7 +2,7 @@
 
   <!-- セッション有効期限をチェックする -->
   <session-checker :no-session-error="true" />
-  <v-container class="pa-0">
+  <v-container class="pa-0 down">
     <v-card class="ma-0">
       <v-toolbar color="secondary">
         <v-card-title v-if="isNew" class="font-weight-bold">
@@ -70,25 +70,14 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" sm="12" md="7" lg="7" xl="7">
+            <v-col cols="8" sm="6" md="5" lg="4" xl="3">
               <image-selector
                 label="レビューのアイコンを設定してください"
+                :cropped-url="review.iconUrl"
                 :aspect-ratio="(1 / 1)"
                 @update-cropped-url="review.iconUrl = $event"
+                img-max-height="320px"
               />
-            </v-col>
-            <v-col cols="10" sm="6" md="4" lg="3" xl="2">
-              <v-card v-if="review.iconUrl === ''" height="100%" class="dahed-box" flat>
-                画像を選択するとここに表示されます
-              </v-card>
-              <v-img v-else style="border: 1px solid" height="100%" :src="getImgSource(review.iconUrl)" />
-            </v-col>
-            <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-              <v-btn v-if="!isNew" icon flat @click="review.iconUrl = ''">
-                <v-icon>
-                  mdi-close
-                </v-icon>
-              </v-btn>
             </v-col>
           </v-row>
           <v-row>
@@ -122,9 +111,13 @@
                 @update-section-title="updateSectionTitle"
                 @update:parags="(v, i) => review.sections[i].parags = v"
                 @update-parag-body="updateParagBody"
-                @add-object="addObject"
+                @add-section="addSection"
+                @add-parag="addParag"
                 @del-section="delSection"
                 @del-parag="delParag"
+                @submit="submit"
+                @preview="toggleTab"
+                title="詳しい説明分の追加"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -142,19 +135,29 @@
           </v-col>
         </v-row>
         <v-row>
+          <v-col col="12" sm="12" md="12" lg="10" xl="8">
+            <review-component
+              :review="review"
+              :point-type="tier.pointType"
+              display-type="all"
+              :no-header="true"
+              :review-factor-params="tier.reviewFactorParams"
+              :no-change-point="true"
+              :pulling-up="tier.pullingUp"
+              :pulling-down="tier.pullingDown"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col>
-            <padding-component>
-              <review-component
-                :review="review"
-                :point-type="tier.pointType"
-                display-type="all"
-                :no-header="true"
-                :review-factor-params="tier.reviewFactorParams"
-                :no-change-point="true"
-                :pulling-up="tier.pullingUp"
-                :pulling-down="tier.pullingDown"
-              />
-            </padding-component>
+            <editor-tools
+              :floatingStyle="true"
+              @submit="submit"
+              @preview="toggleTab"
+              :allow-toggle="false"
+              :hide-section="true"
+              :hide-parag="true"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -174,17 +177,6 @@
       </v-card-actions>
     </v-card>
   </v-container>
-
-  <simple-dialog
-    v-model="confirmdialog"
-    title="確認"
-    text="見出しがない場合、説明文やリンクは追加できません"
-    append-text="既に入力がある場合は削除されます"
-    submit-button-text="削除"
-    close-button-text="キャンセル"
-    @submit="delAllSections"
-  >
-  </simple-dialog>
 </template>
 
 <script lang="ts">
@@ -193,13 +185,12 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import ReviewValuesSettings from '@/components/ReviewValuesSettings.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
-import SimpleDialog from '@/components/SimpleDialog.vue'
-import PaddingComponent from '@/components/PaddingComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
-import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation } from '@/common/review'
+import EditorTools from '@/components/EditorTools.vue'
+import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
-import { useToast } from 'vue-toast-notification'
+import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
 import router from '@/router'
@@ -211,9 +202,8 @@ export default defineComponent({
     ReviewValuesSettings,
     ImageSelector,
     ReviewComponent,
-    SimpleDialog,
-    PaddingComponent,
-    SectionEditorComponent
+    SectionEditorComponent,
+    EditorTools
   },
   setup () {
     const route = useRoute()
@@ -222,7 +212,6 @@ export default defineComponent({
     const isNew = ref(true)
 
     const tab = ref(0)
-    const confirmdialog = ref(false)
     const isSubmitting = ref(false)
     const form = ref()
 
@@ -413,36 +402,51 @@ export default defineComponent({
       review.value.sections[sectionIndex].title = v
     }
 
+    const addSection = (sectionIndex: number) => {
+      const newSection: ReviewSection = {
+        title: '',
+        parags: [
+          {
+            type: 'text',
+            body: ''
+          }
+        ]
+      }
+      review.value.sections.splice(sectionIndex, 0, newSection)
+    }
+
+    const addParag = (paragType: ReviewParagraphType, sectionIndex: number, paragIndex: number) => {
+      const newParag: ReviewParagraph = {
+        type: paragType,
+        body: ''
+      }
+      review.value.sections[sectionIndex].parags.splice(paragIndex, 0, newParag)
+    }
+
     const delParag = (sectionIndex: number, paragIndex: number) => {
       review.value.sections[sectionIndex].parags.splice(paragIndex, 1)
     }
 
-    const delAllSections = () => {
-      review.value.sections.splice(0)
-      confirmdialog.value = false
-    }
-
     const delSection = (sectionIndex: number) => {
       if (review.value.sections.length === 0) {
-
-      } else if (review.value.sections.length === 1) {
-        if (review.value.sections[0].parags.length > 0) {
-          if (review.value.sections[0].parags.filter((v) => v.body !== '').length !== 0) {
-            // paragsの中に、bodyへの書き込みがあるparagがひとつでもあれば傾向を表示
-            confirmdialog.value = true
-            return
-          }
-        }
-        delAllSections()
         return
       }
-
-      if (sectionIndex === 0) {
-        review.value.sections[1].parags.splice(0, 0, ...review.value.sections[0].parags)
-      } else {
-        review.value.sections[sectionIndex - 1].parags.splice(0, 0, ...review.value.sections[sectionIndex].parags)
-      }
       review.value.sections.splice(sectionIndex, 1)
+    }
+
+    const infoToastConfig: ToastProps = {
+      duration: 750,
+      position: 'top',
+      queue: false
+    }
+    const toggleTab = () => {
+      if (tab.value === 0) {
+        tab.value = 1
+        toast.info('プレビュー', infoToastConfig)
+      } else {
+        tab.value = 0
+        toast.info('レビュー情報の入力', infoToastConfig)
+      }
     }
 
     return {
@@ -451,7 +455,6 @@ export default defineComponent({
       reviewValidation,
       isNew,
       tab,
-      confirmdialog,
       form,
       submit,
       valid,
@@ -462,9 +465,11 @@ export default defineComponent({
       addObject,
       updateSectionTitle,
       updateParagBody,
+      addSection,
+      addParag,
       delParag,
       delSection,
-      delAllSections
+      toggleTab
     }
   }
 })
@@ -476,5 +481,9 @@ export default defineComponent({
 .limit-bottom-2 {
   box-sizing: content-box;
   margin: 0;
+}
+
+.down {
+  margin-top: 60px;
 }
 </style>
