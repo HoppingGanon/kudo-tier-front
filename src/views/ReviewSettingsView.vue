@@ -179,6 +179,7 @@
   </v-container>
 
   <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
+  <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="レビューを取得中..." />
 </template>
 
 <script lang="ts">
@@ -218,6 +219,7 @@ export default defineComponent({
     const tab = ref(0)
     const isSubmitting = ref(false)
     const form = ref()
+    const loading = ref(true)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -257,7 +259,11 @@ export default defineComponent({
           // 失敗の場合は通知を表示して、新規作成
           toastError(e, toast)
           router.push('/home')
+        }).finally(() => {
+          loading.value = false
         })
+      } else {
+        loading.value = false
       }
 
       if (route.params.rid && typeof route.params.rid === 'string') {
@@ -274,12 +280,15 @@ export default defineComponent({
             toastError(e, toast)
             toast.warning('レビューを新規作成します')
             isNew.value = true
+          }).finally(() => {
+            loading.value = false
           })
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
           toastError(e, toast)
           toast.warning('レビューを新規作成します')
           isNew.value = true
+          loading.value = false
         })
       }
     })
@@ -463,6 +472,7 @@ export default defineComponent({
       tab,
       isSubmitting,
       form,
+      loading,
       submit,
       valid,
       tier,

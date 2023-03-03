@@ -44,32 +44,43 @@
       </div>
     </v-list-item>
   </v-list>
+
+  <!-- 待機 -->
+  <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="通知を取得中..." />
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from 'vue'
+import { defineComponent, onMounted, Ref, ref } from 'vue'
 import RestApi, { NotificationData, toastError, Parser } from '@/common/restapi'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'NotificationsComponent',
-  components: {},
+  components: {
+    LoadingComponent
+  },
   setup () {
     const toast = useToast()
 
+    const loading = ref(true)
     const notifications: Ref<NotificationData[]> = ref([])
     const sel = ref(-1)
 
-    if (store.getters.isRegistered) {
-      // ログイン状態なら通知を取得
-      RestApi.getNotifications().then((res) => {
-        const a = Parser.parseNotificationsStr(res.data)
-        notifications.value = a
-      }).catch((err) => {
-        toastError(err, toast)
-      })
-    }
+    onMounted(() => {
+      if (store.getters.isRegistered) {
+        // ログイン状態なら通知を取得
+        RestApi.getNotifications().then((res) => {
+          const a = Parser.parseNotificationsStr(res.data)
+          notifications.value = a
+        }).catch((err) => {
+          toastError(err, toast)
+        }).finally(() => {
+          loading.value = false
+        })
+      }
+    })
 
     const selectItem = (notification: NotificationData, index: number) => {
       if (index < notifications.value.length) {
@@ -97,6 +108,7 @@ export default defineComponent({
     }
 
     return {
+      loading,
       notifications,
       sel,
       selectItem,

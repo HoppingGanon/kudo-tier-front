@@ -28,12 +28,16 @@
       />
     </v-card>
   </v-container>
+
+  <!-- 情報の取得時のみ表示-->
+  <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="Tierを取得中..." />
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
@@ -44,11 +48,14 @@ export default defineComponent({
   name: 'TierSettingsView',
   components: {
     SessionChecker,
-    TierSettings
+    TierSettings,
+    LoadingComponent
   },
   setup () {
     const route = useRoute()
     const toast = useToast()
+
+    const loading = ref(true)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const orgTier = ref(ReviewFunc.cloneTier(emptyTier))
@@ -131,7 +138,11 @@ export default defineComponent({
           toastError(e, toast)
           toast.warning('Tierを新規作成します')
           isNew.value = true
+        }).finally(() => {
+          loading.value = false
         })
+      } else {
+        loading.value = false
       }
     })
 
@@ -224,6 +235,7 @@ export default defineComponent({
     }
 
     return {
+      loading,
       tier,
       orgTier,
       isNew,
