@@ -28,6 +28,7 @@
           :model-value="parag.body"
           @update="$emit('updateParagBody', $event)"
           @clear="$emit('clear')"
+          :rules="rules"
         />
       </v-col>
     </v-row>
@@ -35,12 +36,12 @@
 </template>
 
 <script lang="ts">
-import { ReviewParagraph } from '@/common/review'
-import { defineComponent, PropType } from 'vue'
+import { ReviewParagraph, sectionValidation } from '@/common/review'
+import { computed, defineComponent, PropType } from 'vue'
 import AutoTextArea from '@/components/AutoTextArea.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import LinkEditor from '@/components/LinkEditor.vue'
-import rules from '@/common/rules'
+import ruleFunc from '@/common/rules'
 
 export default defineComponent({
   name: 'ParagEditorComponent',
@@ -74,7 +75,7 @@ export default defineComponent({
   },
   setup () {
     return {
-      rulesFunc: rules
+      rules: computed(() => [ruleFunc.maxLen(sectionValidation.paragLinkLenMax)])
     }
   }
 })

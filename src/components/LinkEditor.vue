@@ -13,7 +13,7 @@
           hint="埋め込みたいリンクを指定してください。"
           :model-value="modelValue"
           @update:model-value="updateProxy"
-          :rules="rules ? rules.concat(linkrule) : linkrule"
+          :rules="customRules"
           :clearable="true"
           @click:clear="$emit('clear')"
         />
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import LinkComponent, { twitterReg, youtubeReg, linkReg } from '@/components/LinkComponent.vue'
 
 export default defineComponent({
@@ -66,10 +66,14 @@ export default defineComponent({
     const linkrule = [(v: string) => {
       return twitterReg.test(v) || youtubeReg.test(v) || linkReg.test(v) || '不正なリンクです'
     }]
+
+    const customRules = computed(() => props.rules ? props.rules.concat(linkrule) : linkrule)
+
     return {
       twitterLink,
       updateProxy,
-      linkrule
+      linkrule,
+      customRules
     }
   }
 })
