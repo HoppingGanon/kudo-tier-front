@@ -135,7 +135,7 @@
     >
       <template v-slot:body="pageItems">
         <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer">
-          <td v-for="col,j,k in row.dictionary" :key="j" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" @click="goTierHash(row.reviewId)">
+          <td v-for="col,j,k in row" :key="j" v-show="('' + j) !== 'reviewId'" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" @click="goTierHash(row.reviewId)">
             <v-card v-if="'' + j == 'name'" v-text="col" flat></v-card>
             <v-card v-else-if="'' + j == 'ave'" flat style="text-align: center;">
               <review-value-display
@@ -374,7 +374,7 @@ export default defineComponent({
 
     // プロパティからテーブルの表示内容を作成
     const reviewValues = computed(() => {
-      const rankingTable: { reviewId: string, dictionary:Dictionary<string | number> }[] = []
+      const rankingTable: Dictionary<string | number>[] = []
       if (props.reviews) {
         const reviews = props.reviews as Review[]
 
@@ -382,6 +382,7 @@ export default defineComponent({
         reviews.forEach((review) => {
           let i = 0
           const rankingRow: Dictionary<string | number> = {
+            reviewId: review.reviewId,
             name: review.name,
             ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params, props.tier.pullingUp, props.tier.pullingDown, 0, 100)
           }
@@ -397,12 +398,10 @@ export default defineComponent({
             }
             i++
           })
-          rankingTable.push({
-            dictionary: rankingRow,
-            reviewId: review.reviewId
-          })
+          rankingTable.push(rankingRow)
         })
       }
+      console.log(rankingTable)
       return rankingTable
     })
 
