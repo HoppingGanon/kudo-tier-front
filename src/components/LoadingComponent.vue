@@ -10,7 +10,7 @@
         />
       </div>
       <div style="width: 100%" class="d-flex justify-center">
-        <span v-if="title !== undefined" v-text="title"></span>
+        <span v-if="title !== undefined" v-text="title" class="force-title"></span>
       </div>
     </div>
   </v-dialog>
@@ -91,4 +91,9 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+
+.force-title {
+  text-shadow: 1px 1px 3px black, -1px 1px 3px black, -1px -1px 3px black, 1px -1px 3px black;
+  color: white;
+}
 </style>

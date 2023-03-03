@@ -33,6 +33,8 @@
       </v-card-actions>
     </v-card>
   </v-container>
+
+  <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="ユーザー情報を送信中..." />
 </template>
 
 <script lang="ts">
@@ -43,6 +45,7 @@ import { useToast } from 'vue-toast-notification'
 import router from '@/router'
 import SessionChecker from '@/components/SessionChecker.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import base64Api from '@/common/base64api'
 
@@ -51,7 +54,8 @@ export default defineComponent({
 
   components: {
     SessionChecker,
-    RegistrationComponent
+    RegistrationComponent,
+    LoadingComponent
   },
   setup () {
     const twitterUserName = computed(() => store.state.twitterUserName)
@@ -62,13 +66,14 @@ export default defineComponent({
     const isCheckedTerms = ref(false)
 
     const form = ref()
-    const isSumitting = ref(false)
+    const isSubmitting = ref(false)
 
     const toast = useToast()
 
     const submit = async () => {
       const validResult = await form.value.validate()
       if (validResult.valid) {
+        isSubmitting.value = true
         const img = base64Api.dataURLToBase64(iconUrl.value)
         RestApi.createUser({
           name: dispName.value,
@@ -76,12 +81,13 @@ export default defineComponent({
           iconBase64: img.base64,
           accept: isCheckedTerms.value
         }).then((res) => {
-          isSumitting.value = true
           toast.success('登録しました')
           store.commit('setUserId', res.data.userId)
           router.push(`/home/${res.data.userId}`)
         }).catch((err) => {
           toastError(err, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       } else {
         toast.warning('入力に誤りがあります')
@@ -97,7 +103,7 @@ export default defineComponent({
 
     // ページを離れた時にセッションを削除する
     onBeforeRouteLeave(() => {
-      if (!isSumitting.value) {
+      if (!isSubmitting.value) {
         RestApi.delSession().catch((e) => toastError(e, toast))
         store.commit('initAllSession')
       }
@@ -111,6 +117,7 @@ export default defineComponent({
       iconUrl,
       isCheckedTerms,
       form,
+      isSubmitting,
       submit,
       cancel
     }

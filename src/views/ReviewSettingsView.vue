@@ -177,6 +177,8 @@
       </v-card-actions>
     </v-card>
   </v-container>
+
+  <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
 </template>
 
 <script lang="ts">
@@ -187,9 +189,10 @@ import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import EditorTools from '@/components/EditorTools.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
+import RestApi, { Parser, toastError, getImgSource } from '@/common/restapi'
 import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
@@ -203,7 +206,8 @@ export default defineComponent({
     ImageSelector,
     ReviewComponent,
     SectionEditorComponent,
-    EditorTools
+    EditorTools,
+    LoadingComponent
   },
   setup () {
     const route = useRoute()
@@ -251,9 +255,8 @@ export default defineComponent({
           isNew.value = true
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
-          const v = e.response.data as ErrorResponse
-          toast.warning(`${v.message}(${v.code}) Tierが存在しません`)
-          isNew.value = true
+          toastError(e, toast)
+          router.push('/home')
         })
       }
 
@@ -314,25 +317,28 @@ export default defineComponent({
         tab.value = 0
         return
       }
+      isSubmitting.value = true
       if (isNew.value) {
         // 新規作成
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.postReview(data).then((v) => {
           toast.success('レビューを作成しました')
-          isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       } else {
         // 編集
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.updateReview(review.value.reviewId, data).then((v) => {
           toast.success('レビューを更新しました')
-          isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       }
     }
@@ -455,6 +461,7 @@ export default defineComponent({
       reviewValidation,
       isNew,
       tab,
+      isSubmitting,
       form,
       submit,
       valid,

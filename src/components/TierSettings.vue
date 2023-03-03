@@ -284,6 +284,7 @@
       <div><span class="error-style" v-text="c"></span></div>
     </div>
   </simple-dialog>
+  <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="Tierを送信中..." />
 </template>
 
 <script lang="ts">
@@ -298,6 +299,7 @@ import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import EditorTools from '@/components/EditorTools.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import rules from '@/common/rules'
 import { ToastProps, useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -315,7 +317,8 @@ export default defineComponent({
     SectionEditorComponent,
     SimpleDialog,
     PaddingComponent,
-    EditorTools
+    EditorTools,
+    LoadingComponent
   },
   props: {
     modelValue: {
@@ -455,21 +458,24 @@ export default defineComponent({
 
     const upload = () => {
       const data = ReviewFunc.createTierRequestData(props.modelValue)
+      isSubmitting.value = true
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
-          isSubmitting.value = true
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       } else {
         RestApi.updateTier(data, props.modelValue.tierId).then((v) => {
           toast.success('Tierを更新しました')
-          isSubmitting.value = true
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       }
     }
@@ -597,6 +603,7 @@ export default defineComponent({
       tab,
       tweetdialog,
       cautionsDialog,
+      isSubmitting,
       updateWeightNameProxy,
       updateWeightIsPointProxy,
       updateWeightProxy,

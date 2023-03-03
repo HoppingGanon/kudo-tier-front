@@ -215,6 +215,8 @@
   @submit="goWelcome"
 />
 
+<loading-component :is-loading="isloading" :is-force="true" class="mt-5" title="処理中です..." />
+
 </template>
 
 <script lang="ts">
@@ -223,6 +225,7 @@ import SessionChecker from '@/components/SessionChecker.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import LoginComponent from '@/components/LoginComponent.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import store from '@/store'
 import RestApi, { LoginServiceType, LoginServiceTypeNames, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
@@ -236,13 +239,15 @@ export default defineComponent({
     SessionChecker,
     RegistrationComponent,
     SimpleDialog,
-    LoginComponent
+    LoginComponent,
+    LoadingComponent
   },
   setup () {
     const toast = useToast()
     const route = useRoute()
 
     const tab = ref(0)
+    const isloading = ref(false)
     const dispName = ref('')
     const profile = ref('')
     const iconUrl = ref('')
@@ -282,13 +287,17 @@ export default defineComponent({
     onMounted(load)
 
     const openDel = () => {
+      isloading.value = true
       RestApi.deleteUser1(store.state.userId).then((r) => {
         receivedDelcode.value = r.data as string
         deleteDialog.value = true
-      }).catch(e => toastError(e, toast))
+      }).catch(e => toastError(e, toast)).finally(() => {
+        isloading.value = false
+      })
     }
 
     const commitDel = () => {
+      isloading.value = true
       RestApi.deleteUser2(store.state.userId, delcode.value).then(() => {
         deleteDialog.value = false
         toast.success('ユーザーを削除しました')
@@ -296,6 +305,9 @@ export default defineComponent({
         dialogAfterDeleteUser.value = true
       }).catch(e => toastError(e, toast)).finally(() => {
         delcode.value = ''
+        isloading.value = false
+      }).finally(() => {
+        isloading.value = false
       })
     }
 
@@ -304,6 +316,7 @@ export default defineComponent({
     }
 
     const save = async () => {
+      isloading.value = true
       const validResult = await form.value.validate()
       if (validResult.valid) {
         const img = Base64Api.dataURLToBase64(iconUrl.value)
@@ -317,7 +330,11 @@ export default defineComponent({
         }, store.state.userId).then((res) => {
           toast.success('ユーザー設定を更新しました')
           router.push(`/home/${res.data}`)
-        }).catch((e) => toastError(e, toast))
+        }).catch((e) => toastError(e, toast)).finally(() => {
+          isloading.value = false
+        })
+      } else {
+        isloading.value = false
       }
     }
 
@@ -335,6 +352,7 @@ export default defineComponent({
 
     const removeService = () => {
       if (removeServiceTarget.value !== '') {
+        isloading.value = true
         RestApi.deleteService(removeServiceTarget.value).then(() => {
           toast.success('サービス連携の解除に成功しました')
           if (removeServiceTarget.value === 'twitter') {
@@ -346,6 +364,8 @@ export default defineComponent({
           load()
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isloading.value = false
         })
       }
     }
@@ -353,6 +373,7 @@ export default defineComponent({
     return {
       LoginServiceTypeNames,
       tab,
+      isloading,
       twitterUserName,
       googleEmail,
       dispName,
