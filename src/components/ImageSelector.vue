@@ -10,7 +10,14 @@
     />
   </div>
 
-  <div v-if="!croppedUrlProxy" class="dahed-box pa-5">
+  <div v-if="!fileUrlProxy" class="dahed-box pa-5">
+    <div>
+      <v-btn flat icon @click="clearFile" color="#FFF0">
+        <v-icon>
+          mdi-close
+        </v-icon>
+      </v-btn>
+    </div>
     <div>
       <span v-text="label"></span>
     </div>
@@ -140,11 +147,15 @@ export default defineComponent({
       if (props.croppedUrl !== '') {
         return getImgSource(props.croppedUrl)
       } else {
-        return getImgSource(fileUrl.value)
+        return ''
       }
     })
     const fileUrlProxy = computed(() => {
-      return getImgSource(fileUrl.value)
+      if (fileUrl.value !== '') {
+        return getImgSource(fileUrl.value)
+      } else {
+        return getImgSource(props.croppedUrl)
+      }
     })
 
     const openCropMenu = () => {

@@ -430,11 +430,7 @@ export default defineComponent({
     }
 
     const addParagItemProxy = (type: ReviewParagraphType, index: number) => {
-      if (props.modelValue.parags.length < sectionValidation.paragsLenMax) {
-        emit('addParagItem', type, index)
-      } else {
-        toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
-      }
+      emit('addParagItem', type, index)
     }
 
     const sections: ComputedRef<ReviewSection[]> = computed(() => {

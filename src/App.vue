@@ -62,7 +62,13 @@
               <v-list-item v-if="hasSession"  @click="goTierSettings">
                 <v-list-item-title>
                   <v-icon class="mr-3">mdi-table-plus</v-icon>
-                  Tier追加
+                  Tierの追加
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="hasSession"  @click="reviewDialog = true">
+                <v-list-item-title>
+                  <v-icon class="mr-3">mdi-book-plus-outline</v-icon>
+                  レビューの追加
                 </v-list-item-title>
               </v-list-item>
               <v-list-item v-if="hasSession" @click="goSettings">
@@ -138,6 +144,15 @@
       close-button-text="キャンセル"
       @submit="goLogout"
     />
+
+    <simple-dialog
+      v-model="reviewDialog"
+      title="レビューの追加"
+      text="レビューを追加したいTierを選んでください"
+      :show-submit-button="false"
+    >
+      <quick-review @close="reviewDialog = false" />
+    </simple-dialog>
   </v-app>
 </template>
 
@@ -146,6 +161,7 @@ import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import QuickReview from '@/components/QuickReview.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
@@ -157,7 +173,8 @@ export default defineComponent({
   components: {
     ProfileComponent,
     SimpleDialog,
-    FooterComponent
+    FooterComponent,
+    QuickReview
   },
   setup () {
     const route = useRoute()
@@ -165,6 +182,7 @@ export default defineComponent({
     const drawer = ref(false)
     const logoutDialog = ref(false)
     const forceDialog = ref(false)
+    const reviewDialog = ref(false)
 
     const sessionUserId = computed(() => store.state.userId)
 
@@ -291,6 +309,7 @@ export default defineComponent({
       appName,
       logoutDialog,
       forceDialog,
+      reviewDialog,
       userName,
       userProfile,
       userIconUrl,

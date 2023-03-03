@@ -42,7 +42,7 @@
 <script lang="ts">
 import { ReviewFactor, ReviewPointType, ReviewDisplayType, ReviewFactorParam, ReviewFunc } from '@/common/review'
 import { defineComponent, PropType } from 'vue'
-import ReviewValueDisplay from './ReviewValueDisplay.vue'
+import ReviewValueDisplay from '@/components/ReviewValueDisplay.vue'
 
 export default defineComponent({
   name: 'ReviewValues',

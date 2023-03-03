@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewParagraph, ReviewParagraphType, ReviewSection } from '@/common/review'
+import { ReviewParagraph, ReviewParagraphType, ReviewSection, reviewValidation, sectionValidation } from '@/common/review'
 import { defineComponent, PropType, ref } from 'vue'
 import ParagsEditorComponent from '@/components/ParagsEditorComponent.vue'
 import AutoTextArea from '@/components/AutoTextArea.vue'
@@ -148,7 +148,9 @@ export default defineComponent({
       switch (pType) {
         case 'section':
           // セクション追加
-          if (selParag.value === -1) {
+          if (props.sections.length >= reviewValidation.sectionLenMax) {
+            toast.info(`追加できるセクションは${reviewValidation.sectionLenMax}個までです`)
+          } else if (selParag.value === -1) {
             sectionIndex = Math.max(selSection.value, 0)
             emit('addSection', sectionIndex)
           } else {
@@ -166,7 +168,9 @@ export default defineComponent({
           paragIndex = selParag.value < 0 ? 0 : selParag.value
 
           target = props.sections[sectionIndex].parags[paragIndex]
-          if (selSection.value >= 0 && selParag.value >= 0 && target.type === 'text' && target.body.length > 0) {
+          if (props.sections[sectionIndex].parags.length >= sectionValidation.paragsLenMax - 1) {
+            toast.info('説明文・画像・リンクが最大数になりました これ以上追加できません')
+          } else if (selSection.value >= 0 && selParag.value >= 0 && target.type === 'text' && target.body.length > 0) {
             // Parag選択状態かつテキストタイプで1文字以上の入力がある場合
             if (cursorIndex.value === target.body.length) {
               // カーソルが末尾を指してる場合

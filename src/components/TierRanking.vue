@@ -135,7 +135,7 @@
     >
       <template v-slot:body="pageItems">
         <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer">
-          <td v-for="col,j,k in row" :key="j" v-show="('' + j) !== 'reviewId'" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" @click="goTierHash(row.reviewId)">
+          <td v-for="col,j,k in row" :key="j" v-show="('' + j) !== 'reviewId'" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" v-scroll-to="`#rev${row.reviewId}`">
             <v-card v-if="'' + j == 'name'" v-text="col" flat></v-card>
             <v-card v-else-if="'' + j == 'ave'" flat style="text-align: center;">
               <review-value-display
@@ -401,7 +401,6 @@ export default defineComponent({
           rankingTable.push(rankingRow)
         })
       }
-      console.log(rankingTable)
       return rankingTable
     })
 
@@ -481,10 +480,6 @@ export default defineComponent({
     const toPictureDialog = ref(false)
     const toEmbeddedDialog = ref(false)
     const toJsonDialog = ref(false)
-
-    const goTierHash = (reviewId: string) => {
-      window.location.href = `#rev${reviewId}`
-    }
 
     onBeforeRouteLeave(() => {
       if (isProcessing.value) {
@@ -631,8 +626,6 @@ export default defineComponent({
       toEmbeddedDialog,
       /** バックアップ前の選択ダイアログ */
       toJsonDialog,
-      /** Tierの指定したページへ移動する */
-      goTierHash,
       /** バックアップ処理 */
       backup,
       /** ダウンロード処理中のフラグ */

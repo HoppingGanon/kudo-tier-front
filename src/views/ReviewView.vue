@@ -156,7 +156,7 @@ export default defineComponent({
         {
           value: 'original',
           text: '元のTierを開く',
-          icon: 'mdi-book-plus-outline'
+          icon: 'mdi-table-arrow-left'
         }
       ]
       if (isSelf.value) {

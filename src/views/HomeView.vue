@@ -63,8 +63,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, Ref, ref } from 'vue'
-import RestApi, { Parser, toastError } from '@/common/restapi'
+import { defineComponent, onMounted, ref } from 'vue'
+import RestApi from '@/common/restapi'
 import SessionChecker from '@/components/SessionChecker.vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
@@ -72,9 +72,7 @@ import PaddingComponent from '@/components/PaddingComponent.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import TierReviewSearch from '@/components/TierReviewSearch.vue'
 import { useRoute } from 'vue-router'
-import { Tier, ReviewWithParams } from '@/common/review'
 import { emptyUser } from '@/common/dummy'
-import { useToast } from 'vue-toast-notification'
 import router from '@/router'
 import { TierContentType } from '@/common/page'
 import store from '@/store'
@@ -94,48 +92,16 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    const toast = useToast()
 
     const isNotFound = ref(false)
     const user = ref(emptyUser)
     const userId = ref('')
 
-    const pairs: Ref<ReviewWithParams[]> = ref([] as ReviewWithParams[])
-    const tiers: Ref<Tier[]> = ref([] as Tier[])
-
     const isLoadingUser = ref(true)
-    const isLoadingReviews = ref(true)
-    const isLoadingTiers = ref(true)
 
     const isSelf = ref(false)
 
     const tab = ref(0)
-
-    const reloadReviews = () => {
-      RestApi.getReviewPairs(userId.value, '', 'updatedAtDesc', 1).then((res) => {
-        pairs.value.splice(0)
-        res.data.forEach((p) => {
-          pairs.value.push(Parser.parseReviewWithParams(p))
-        })
-        reloadUser()
-      }).catch((e) => {
-        toastError(e, toast)
-      }).finally(() => { isLoadingReviews.value = false })
-    }
-
-    const reloadTiers = () => {
-      RestApi.getTierList(userId.value, '', 'updatedAtDesc', 1).then((res) => {
-        const tierDataList = res.data
-        tiers.value.splice(0)
-        tierDataList.forEach((v) => {
-          tiers.value.push(Parser.parseTier(v))
-        })
-        reloadUser()
-      }).catch((e) => toastError(e, toast)).finally(() => { isLoadingTiers.value = false })
-
-      // レビューもリロードする
-      reloadReviews()
-    }
 
     const reloadUser = () => {
       if (route.params.id && typeof route.params.id === 'string') {
@@ -152,14 +118,7 @@ export default defineComponent({
     onMounted(() => {
       if (route.params.id && typeof route.params.id === 'string') {
         userId.value = route.params.id
-
         reloadUser()
-
-        // 並行してTierもダウンロードする
-        reloadTiers()
-
-        // 並行してレビューもダウンロードする
-        reloadReviews()
       } else if (store.getters.isRegistered) {
         // 自分のホームへリダイレクト
         router.replace(`/home/${store.state.userId}`)
@@ -177,34 +136,18 @@ export default defineComponent({
       }
     })
 
-    const goTierSettings = () => {
-      router.push('/tier-settings-new')
-    }
-
     const goSettings = () => {
       router.push('/settings')
-    }
-
-    const goHome = (tab: TierContentType) => {
-      router.push(`/home?tab=${tab}`)
     }
 
     return {
       isNotFound,
       user,
       userId,
-      pairs,
       isLoadingUser,
-      isLoadingReviews,
-      isLoadingTiers,
-      tiers,
       isSelf,
       tab,
-      goTierSettings,
-      goSettings,
-      reloadTiers,
-      reloadReviews,
-      goHome
+      goSettings
     }
   }
 })

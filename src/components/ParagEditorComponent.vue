@@ -17,7 +17,6 @@
       <v-col v-else-if="parag.type === 'imageLink'" cols="8" sm="6" md="5" lg="4" xl="3">
         <image-selector
           :cropped-url="parag.body"
-          @update-file-url="$emit('updateParagBody', $event)"
           @update-cropped-url="$emit('updateParagBody', $event)"
           img-max-height="320px"
           @clear="$emit('clear')"

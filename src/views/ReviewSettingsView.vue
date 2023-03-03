@@ -38,6 +38,7 @@
                 レビュー情報の入力
               </v-card-title>
               <v-card-text>
+                Tier（<span v-text="tier.name" class="font-weight-bold"></span>）に紐づくレビューを<span v-text="isNew ? '新規作成' : '編集'"></span>します。
                 このレビューの情報を入力してください。
               </v-card-text>
             </v-col>
@@ -117,7 +118,7 @@
                 @del-parag="delParag"
                 @submit="submit"
                 @preview="toggleTab"
-                title="詳しい説明分の追加"
+                title="説明セクションの追加"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">

@@ -3,7 +3,7 @@
     <v-row>
       <v-col v-if="isVertical" cols="12" sm="12" md="12" lg="12" xl="12">
         <div class="avatar-space">
-          <v-avatar size="100%" @click="goHome" class="cursor-pointer">
+          <v-avatar size="100%" @click="() => goHome()" class="cursor-pointer">
             <v-img v-if="imgSource" :src="imgSource" />
             <v-img v-else src="@/assets/common/nouserimage256.png" />
           </v-avatar>
@@ -11,7 +11,7 @@
       </v-col>
       <v-col v-else cols="3" sm="2" md="2" lg="2" xl="2">
         <div>
-          <v-avatar size="100%" @click="goHome" class="cursor-pointer">
+          <v-avatar size="100%" @click="() => goHome()" class="cursor-pointer">
             <v-img v-if="imgSource" :src="imgSource" />
             <v-img v-else src="@/assets/common/nouserimage256.png" />
           </v-avatar>
@@ -22,7 +22,7 @@
           <v-row>
             <v-col>
               <div :class="isSummary ? 'no-break-box' : 'text-h5'">
-                <span class="font-weight-bold cursor-pointer" @click="goHome()" v-text="dispName"/>
+                <span class="font-weight-bold cursor-pointer" @click="() => goHome()" v-text="dispName"/>
               </div>
             </v-col>
           </v-row>

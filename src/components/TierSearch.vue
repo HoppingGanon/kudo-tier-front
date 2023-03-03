@@ -18,10 +18,11 @@
     </v-row>
     <v-row v-if="tiers.length == 0 && !isLoading && !isWaiting">
       <v-col>
-        <v-card flat>
-          <span>
-            Tierが存在しません
-          </span>
+        <v-card flat v-if="isSelf">
+          <empty-component type="tier" />
+        </v-card>
+        <v-card flat v-else>
+          レビューが存在しません
         </v-card>
       </v-col>
     </v-row>
@@ -39,15 +40,18 @@ import { Tier } from '@/common/review'
 import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
 import TierList from '@/components/TierList.vue'
 import SearchComponent from '@/components/SearchComponent.vue'
+import EmptyComponent from '@/components/EmptyComponent.vue'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { onBeforeRouteLeave } from 'vue-router'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSearch',
   components: {
     SearchComponent,
-    TierList
+    TierList,
+    EmptyComponent
   },
   props: {
     tiers: {
@@ -91,6 +95,9 @@ export default defineComponent({
     const lastItemId = ref('')
     /** 最後に読み込んだTierの要素 */
     const lastItemElement = computed(() => document.getElementById(`tir${lastItemId.value}`))
+
+    /** 自身のユーザーIDと一致しているかどうか */
+    const isSelf = computed(() => store.getters.isRegistered && store.state.userId === props.userId)
 
     /** データ更新 */
     const update = (isInputed: boolean) => {
@@ -213,6 +220,7 @@ export default defineComponent({
       tierSortTypeList,
       tierContentTypeList,
       isWaiting,
+      isSelf,
       updateText,
       sortItem,
       updateSortItem,
