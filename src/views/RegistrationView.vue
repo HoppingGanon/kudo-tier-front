@@ -98,9 +98,6 @@ export default defineComponent({
       router.push('/login')
     }
 
-    // これがないとページを離れる際のイベントが設定できない
-    history.replaceState(null, '')
-
     // ページを離れた時にセッションを削除する
     onBeforeRouteLeave(() => {
       if (!isSubmitting.value) {

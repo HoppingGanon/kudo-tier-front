@@ -203,9 +203,6 @@ export default defineComponent({
       window.addEventListener('scroll', onScroll)
     })
 
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
-
     // ページを離れた時にイベントを削除するように予定する
     onBeforeRouteLeave(() => {
       window.removeEventListener('scroll', onScroll)

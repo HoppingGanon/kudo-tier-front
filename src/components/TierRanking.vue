@@ -487,9 +487,6 @@ export default defineComponent({
       window.location.href = `#rev${reviewId}`
     }
 
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
-
     onBeforeRouteLeave(() => {
       if (isProcessing.value) {
         toast.warning('Tierデータのダウンロードを中断しました')

@@ -293,9 +293,6 @@ export default defineComponent({
       }
     })
 
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
-
     // ページを離れた時に警告する
     onBeforeRouteLeave(() => {
       if (!isSubmitting.value) {
