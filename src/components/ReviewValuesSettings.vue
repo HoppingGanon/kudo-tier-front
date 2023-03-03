@@ -84,7 +84,7 @@
                         thumb-label="always"
                       >
                         <template v-slot:thumb-label>
-                          <span v-text="factor.point !== undefined ? (factor.point / step) : ''" />
+                          <span v-text="factor.point !== undefined ? (factor.point / step).toFixed(1) : ''" />
                         </template>
                       </v-slider>
                       <v-slider
