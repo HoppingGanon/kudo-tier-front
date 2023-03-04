@@ -48,7 +48,8 @@
             <v-col>
               <div class="mt-1 ml-1">
                 <span class="text-caption">
-                  有効にすると、他ユーザーがプロフィールを参照したときに、Twitterアカウントにアクセスできるリンクボタンを表示します
+                  有効にすると、他ユーザーがプロフィールを参照したときに、Twitterアカウントにアクセスできるリンクボタンを表示します。<br />
+                  この設定を変更するには、Twitterと連携する必要があります。
                 </span>
               </div>
             </v-col>
@@ -58,6 +59,7 @@
               <v-checkbox
                 v-model="allowTwitterLink"
                 label="有効"
+                :disabled="!twitterUserName"
               />
             </v-col>
           </v-row>

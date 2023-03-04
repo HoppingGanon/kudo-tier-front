@@ -38,7 +38,7 @@
               </span>
             </v-col>
           </v-row>
-          <v-row v-if="allowTwitterLink">
+          <v-row v-if="allowTwitterLink && twitterId">
             <v-col>
               <v-btn @click="goTwitter" flat color="#00acee" class="text-no-transform pa-2">
                 <v-icon class="mr-1" color="white">
