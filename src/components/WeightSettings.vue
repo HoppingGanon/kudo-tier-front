@@ -66,7 +66,7 @@
                               :rules="rules"
                             />
                           </v-col>
-                          <v-col v-else cols="12" sm="12" md="7" lg="8" xl="9">
+                          <v-col v-else cols="12" sm="12" :md="showDetails ? 7 : 10" :lg="showDetails ? 8 : 10" :xl="showDetails ? 8 : 10">
                             <!-- ポイントの説明欄 -->
                             <div v-if="readonly" class="d-flex align-center" style="height: 100%">
                               <span v-text="element.name"></span>
@@ -82,7 +82,7 @@
                               :rules="rules"
                             />
                           </v-col>
-                          <v-col cols="12" sm="6" md="3" lg="2" xl="2">
+                          <v-col cols="12" sm="6" md="3" lg="2" xl="2" v-show="showDetails">
                             <!-- ポイントの説明欄 -->
                             <div v-if="readonly" class="d-flex align-center" style="height: 100%">
                               <span v-text="element.isPoint ? 'ポイント' : '情報'"></span>

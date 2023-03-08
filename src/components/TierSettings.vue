@@ -152,13 +152,15 @@
                         </table>
                       </v-col>
                     </v-row>
-                    <v-col>
-                      <v-divider />
-                    </v-col>
                   </v-container>
                 </v-col>
               </v-row>
             </v-container>
+          </v-col>
+        </v-row>
+        <v-row v-if="displayDeatails">
+          <v-col>
+            <v-divider />
           </v-col>
         </v-row>
         <v-row v-if="displayDeatails">
@@ -187,6 +189,11 @@
               :min="0"
               :max="40"
             />
+          </v-col>
+        </v-row>
+        <v-row v-if="displayDeatails">
+          <v-col>
+            <v-divider />
           </v-col>
         </v-row>
         <v-row>
@@ -403,6 +410,7 @@ export default defineComponent({
     const tweetdialog = ref(false)
     const cautionsDialog = ref(false)
     const isSubmitting = ref(false)
+    /** 詳細表示 */
     const displayDeatails = ref(false)
 
     const updateWeightNameProxy = (value: string, index: number) => {
