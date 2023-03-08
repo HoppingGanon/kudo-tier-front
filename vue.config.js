@@ -19,9 +19,7 @@ module.exports = defineConfig({
   pages: {
     index: {
       entry: 'src/main.ts',
-      title: 'くどくどTier',
-      twittercard: 'summary_large_image',
-      twittersite: '@hoppingganonapp'
+      title: 'くどくどTier'
     }
   },
   chainWebpack: config => {
