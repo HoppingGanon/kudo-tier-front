@@ -1,11 +1,11 @@
 <template>
-  <v-card v-if="directLink" class="ma-1 cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
+  <v-card v-if="directLink" class="cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
     <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
     <v-img v-else src="@/assets/common/noimage256.png"/>
   </v-card>
   <v-menu v-else-if="!$vuetify.display.mobile" bottom v-model="isHover">
     <template v-slot:activator="{ props }">
-      <v-card class="ma-1" :width="size" :height="size" @click="click" v-bind="props">
+      <v-card class="" :width="size" :height="size" @click="click" v-bind="props">
         <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
         <v-img v-else src="@/assets/common/noimage256.png"/>
       </v-card>
@@ -31,7 +31,7 @@
       </v-card-actions>
     </v-card>
   </v-menu>
-  <v-card v-else class="ma-1 cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
+  <v-card v-else class=" cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
     <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
     <v-img v-else src="@/assets/common/noimage256.png"/>
   </v-card>

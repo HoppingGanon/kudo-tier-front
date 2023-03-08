@@ -69,6 +69,7 @@
             @updatePointType="$emit('updatePointType', $event)"
             v-model:theme="theme"
             v-model:icon-size="iconSize"
+            text-size="large2"
           />
         </v-col>
       </v-row>

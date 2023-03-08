@@ -58,7 +58,7 @@
             <v-list-item
               v-for="(item, i) in iconSizeList"
               :key="i"
-              @click="$emit('update:iconSize', $event)"
+              @click="$emit('update:iconSize', item.value)"
               :items="reviewPointTypeArray"
               class="cursor-pointer"
             >

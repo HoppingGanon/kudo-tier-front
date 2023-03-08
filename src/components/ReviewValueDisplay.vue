@@ -18,6 +18,9 @@
   </div>
 
   <!-- コンパクト評価表示以外 -->
+  <div v-else-if="pointType === 'rank7' || pointType === 'rank14'">
+    <span class="ml-1 mr-4" v-text="calcPointPlainText(pointType, point)" :class="calcClass(pointType, point, reverse) + ' ' + ranksize" ></span>
+  </div>
   <div v-else>
     <span class="ml-1 mr-4" v-text="calcPointPlainText(pointType, point)" :class="calcClass(pointType, point, reverse) + ' ' + textsize" ></span>
   </div>
@@ -313,6 +316,28 @@ export default defineComponent({
       return ''
     })
 
+    const ranksize = computed(() => {
+      switch (props.displaySize) {
+        case 'smaller':
+          return sizeArray[1]
+        case 'normal':
+          return sizeArray[2]
+        case 'large':
+          return sizeArray[3]
+        case 'large2':
+          return sizeArray[4]
+        case 'large3':
+          return sizeArray[5]
+        case 'large4':
+          return sizeArray[6]
+        case 'large5':
+          return sizeArray[7]
+        case 'large6':
+          return sizeArray[7]
+      }
+      return ''
+    })
+
     const iconsize = computed(() => {
       switch (props.displaySize) {
         case 'smaller':
@@ -338,6 +363,7 @@ export default defineComponent({
     return {
       point,
       textsize,
+      ranksize,
       iconsize,
       calcClass,
       calcPointPlainText
