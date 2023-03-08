@@ -5,13 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!-- OGPの設定 -->
-    <meta name="twitter:card" content="<%= htmlWebpackPlugin.options.twittercard %>" />
-    <meta name="twitter:site" content="<%= htmlWebpackPlugin.options.twittersite %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="くどくどTier" />
+    <meta property="og:description" content="Tierを作成できる" />
+    <meta property="og:url" content="https://kd-tier.hopgn.com" />
+    <meta property="og:site_name" content="くどくどTier" />
+    <meta property="og:image" content="https://kd-tier.hopgn.com/card/og-image.png" />
 
     <!-- Twitterカードを設定する -->
     <meta name="twitter:card" content="<%= htmlWebpackPlugin.options.twittercard %>" />
     <meta name="twitter:site" content="<%= htmlWebpackPlugin.options.twittersite %>" />
-
 
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
