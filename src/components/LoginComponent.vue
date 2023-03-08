@@ -88,8 +88,10 @@ export default defineComponent({
           store.commit('setTempSessionId', response.data.sessionId)
           store.commit('setTempSessionService', service)
           store.commit('setTempSessionVersion', version)
+          isloading.value = false
           window.location.href = response.data.url
         }).catch((e) => {
+          isloading.value = false
           toastError(e, toast)
         })
       }
