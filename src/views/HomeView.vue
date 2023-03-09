@@ -2,61 +2,59 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <v-container v-if="isNotFound">
-    <v-row>
-      <v-col>
-        <v-card>
-          <error-component
-            comment="ユーザーが見つかりません"
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
-
-  <padding-component v-else :target-user-id="userId" title="ユーザー">
-    <v-container fluid class="ma-0 pa-0">
-      <v-row>
-        <v-col>
-          <v-card>
-            <v-toolbar color="secondary" dark>
-              <v-card-title>
-                <b>
-                  プロフィール
-                </b>
-              </v-card-title>
-              <v-spacer />
-              <v-btn v-if="isSelf" @click="goSettings">
-                <v-icon>
-                  mdi-pencil-box-outline
-                </v-icon>
-                編集
-              </v-btn>
-            </v-toolbar>
-            <profile-component
-              :disp-name="user.name"
-              :icon-url="user.iconUrl"
-              :profile="user.profile"
-              :tiers-count="user.tiersCount"
-              :reviews-count="user.reviewsCount"
-              :user-id="userId"
-              :allow-twitter-link="user.allowTwitterLink"
-              :twitter-id="user.twitterId"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <tier-review-search>
-            <template v-slot:title>
-              <v-card-title>投稿</v-card-title>
-            </template>
-          </tier-review-search>
-        </v-col>
-      </v-row>
+  <v-card width="100%" flat>
+    <v-container v-if="isNotFound">
+      <v-card>
+        <error-component
+          comment="ユーザーが見つかりません"
+        />
+      </v-card>
     </v-container>
-  </padding-component>
+
+    <padding-component v-else :target-user-id="userId" title="ユーザー">
+      <v-container fluid class="ma-0 pa-0">
+        <v-row>
+          <v-col>
+            <v-card>
+              <v-toolbar color="secondary" dark>
+                <v-card-title>
+                  <b>
+                    プロフィール
+                  </b>
+                </v-card-title>
+                <v-spacer />
+                <v-btn v-if="isSelf" @click="goSettings">
+                  <v-icon>
+                    mdi-pencil-box-outline
+                  </v-icon>
+                  編集
+                </v-btn>
+              </v-toolbar>
+              <profile-component
+                :disp-name="user.name"
+                :icon-url="user.iconUrl"
+                :profile="user.profile"
+                :tiers-count="user.tiersCount"
+                :reviews-count="user.reviewsCount"
+                :user-id="userId"
+                :allow-twitter-link="user.allowTwitterLink"
+                :twitter-id="user.twitterId"
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <tier-review-search>
+              <template v-slot:title>
+                <v-card-title>投稿</v-card-title>
+              </template>
+            </tier-review-search>
+          </v-col>
+        </v-row>
+      </v-container>
+    </padding-component>
+  </v-card>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
   <loading-component :is-loading="isLoadingUser" :is-floating="true" :is-force="true" title="ユーザー情報の取得中..." />

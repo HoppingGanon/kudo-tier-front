@@ -19,36 +19,38 @@
     </v-row>
   </v-container>
 
-  <padding-component v-else :target-user-id="tier.userId">
-    <v-container fluid class="pa-0 ma-0">
-      <v-card class="block-center">
-        <v-toolbar color="secondary" dark>
-          <v-card-title>
-            Tier
-          </v-card-title>
-          <v-spacer />
-          <v-card-actions v-if="isSelf">
-            <menu-button :items="menuItems" @select="goThere" :return-object="true">
-              <template v-slot:button="{ open, props }">
-                <v-btn @click="open" v-bind="props" icon flat>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-            </menu-button>
-          </v-card-actions>
-        </v-toolbar>
+  <v-card v-else width="100%" flat>
+    <padding-component :target-user-id="tier.userId">
+      <v-container fluid class="pa-0 ma-0">
+        <v-card class="block-center">
+          <v-toolbar color="secondary" dark>
+            <v-card-title>
+              Tier
+            </v-card-title>
+            <v-spacer />
+            <v-card-actions v-if="isSelf">
+              <menu-button :items="menuItems" @select="goThere" :return-object="true">
+                <template v-slot:button="{ open, props }">
+                  <v-btn @click="open" v-bind="props" icon flat>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+              </menu-button>
+            </v-card-actions>
+          </v-toolbar>
 
-        <div class="pa-1">
-          <tier-component
-            :tier="tier"
-            :point-type="pointType"
-            @update-point-type="updatePointType"
-            display-type="all"
-          />
-        </div>
-      </v-card>
-    </v-container>
-  </padding-component>
+          <div class="pa-1">
+            <tier-component
+              :tier="tier"
+              :point-type="pointType"
+              @update-point-type="updatePointType"
+              display-type="all"
+            />
+          </div>
+        </v-card>
+      </v-container>
+    </padding-component>
+  </v-card>
   <simple-dialog
     v-model="delDialog"
     title="Tierの削除"

@@ -15,54 +15,56 @@
     </v-row>
   </v-container>
 
-  <padding-component v-else :target-user-id="userId">
-    <template v-slot:left>
-      <v-container fluid class="ma-0 pl-1 pt-0 pr-0 pb-0">
-        <v-card>
-          <v-toolbar class="pl-2" color="thirdry">
-            <span class="font-weight-bold">レビュー元のTier</span>
+  <v-card v-else width="100%" flat>
+    <padding-component :target-user-id="userId">
+      <template v-slot:left>
+        <v-container fluid class="ma-0 pl-1 pt-0 pr-0 pb-0">
+          <v-card>
+            <v-toolbar class="pl-2" color="thirdry">
+              <span class="font-weight-bold">レビュー元のTier</span>
+            </v-toolbar>
+            <simple-tier :tier="tier" :this-review-id="review.reviewId"/>
+          </v-card>
+        </v-container>
+      </template>
+      <v-container class="pa-0 ma-0" fluid>
+        <v-card class="block-center">
+          <v-toolbar color="secondary" dark>
+            <v-card-title>
+              レビュー
+            </v-card-title>
+            <v-spacer />
+            <menu-button :items="menuItems" @select="goThere" :return-object="true">
+              <template v-slot:button="{ open, props }">
+                <v-btn @click="open" v-bind="props" icon flat>
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+            </menu-button>
           </v-toolbar>
-          <simple-tier :tier="tier" :this-review-id="review.reviewId"/>
+
+          <div class="pa-1">
+            <review-component
+              :review="review"
+              :review-factor-params="params"
+              :point-type="pointType"
+              @update-point-type="updatePointType"
+              display-type="all"
+              :pulling-up="tier.pullingUp"
+              :pulling-down="tier.pullingDown"
+            />
+          </div>
         </v-card>
       </v-container>
-    </template>
-    <v-container class="pa-0 ma-0" fluid>
-      <v-card class="block-center">
-        <v-toolbar color="secondary" dark>
-          <v-card-title>
-            レビュー
-          </v-card-title>
-          <v-spacer />
-          <menu-button :items="menuItems" @select="goThere" :return-object="true">
-            <template v-slot:button="{ open, props }">
-              <v-btn @click="open" v-bind="props" icon flat>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-          </menu-button>
-        </v-toolbar>
-
-        <div class="pa-1">
-          <review-component
-            :review="review"
-            :review-factor-params="params"
-            :point-type="pointType"
-            @update-point-type="updatePointType"
-            display-type="all"
-            :pulling-up="tier.pullingUp"
-            :pulling-down="tier.pullingDown"
-          />
-        </div>
-      </v-card>
-    </v-container>
-    <simple-dialog
-      v-model="delDialog"
-      title="レビューの削除"
-      text="本当にレビューを削除しますか？"
-      submit-button-text="削除"
-      @submit="deleteReview"
-    />
-  </padding-component>
+      <simple-dialog
+        v-model="delDialog"
+        title="レビューの削除"
+        text="本当にレビューを削除しますか？"
+        submit-button-text="削除"
+        @submit="deleteReview"
+      />
+    </padding-component>
+  </v-card>
 
   <!-- ユーザーロード中の時のみ表示されるコンポーネント -->
   <loading-component :is-loading="isLoading" :is-floating="true" :is-force="true" title="レビュー情報を取得中..." />

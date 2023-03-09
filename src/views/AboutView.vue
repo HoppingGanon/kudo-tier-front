@@ -16,7 +16,8 @@
     </v-row>
     <v-row>
       <v-col>
-        {{ appName }}は、開発者である<span v-text="myName"></span>が「一度はゼロからwebシステム作って運用してみたいな～」という欲求のために作成したサイトです。
+        {{ appName }}は、開発者である<span v-text="myName"></span>が
+        「一度はゼロからwebシステム作って運用してみたいな～」という欲求のために勉強もかねて作成したサイトです。
       </v-col>
     </v-row>
 
@@ -68,6 +69,7 @@
       <service-colmun
         subtitle="インフラストラクチャ"
         text="サーバー（EC2）、ストレージ（S3）、データベース（RDS）"
+        :wide="true"
       >
         <template v-slot:image>
           <a href="https://aws.amazon.com/what-is-cloud-computing"><img src="https://d0.awsstatic.com/logos/powered-by-aws.png" alt="Powered by AWS Cloud Computing"></a>
@@ -76,6 +78,7 @@
       <service-colmun
         subtitle="開発プラットフォーム"
         text="バージョン管理"
+        :wide="true"
       >
         <template v-slot:image>
           <v-img src="@/assets/external/github.png"></v-img>
