@@ -1,8 +1,14 @@
 <template>
   <v-carousel-item>
     <div :style="width" class="centering scroll">
-      <v-toolbar color="grey-darken-3">
+      <v-toolbar color="green-darken-3">
         <v-card-title v-if="title" v-text="title" />
+        <v-spacer />
+        <v-btn icon @click="$emit('close')">
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
       </v-toolbar>
       <div class="font-weight-bold ma-1 text-h6" v-if="subTitle" v-text="subTitle"></div>
       <slot>
@@ -34,6 +40,9 @@ export default defineComponent({
     subTitle: {
       type: String
     }
+  },
+  emits: {
+    close: () => true
   },
   setup () {
     const display = useDisplay()

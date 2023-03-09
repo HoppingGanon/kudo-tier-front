@@ -7,7 +7,12 @@
       <v-card-title v-else class="font-weight-bold">
         Tier編集
       </v-card-title>
-      <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
+      <div style="width: 100%;margin-right: 54px" class="d-flex justify-end">
+        <v-btn icon @click="hint = true">
+          <v-icon>
+            mdi-help-circle
+          </v-icon>
+        </v-btn>
         <v-btn icon @click="submit">
           <v-icon>
             mdi-send
@@ -46,7 +51,7 @@
           <v-col>
             <v-text-field
               label="Tier名"
-              hint="このTierを表す分かりやすい名前を設定してください。"
+              :hint="`このTierを表す分かりやすい名前を設定してください(最大${tierValidation.tierNameLenMax}文字)`"
               :model-value="modelValue.name"
               @update:model-value="$emit('updateTierName', $event)"
               :rules="[rulesFunc.required(), rulesFunc.maxLen(tierValidation.tierNameLenMax)]"
@@ -186,6 +191,13 @@
           </v-col>
         </v-row>
         <v-row>
+          <v-col class="text-end">
+            <v-icon class="mr-1 mt-1" @click="page=1;hint=true;">
+              mdi-help
+            </v-icon>
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col>
             <v-card class="pa-1" flat>
               <weight-settings
@@ -218,6 +230,7 @@
               @submit="submit"
               @preview="toggleTab"
               title="説明文の追加"
+              @open-hint="page = 2;hint = true;"
             />
           </v-col>
         </v-row>
@@ -268,6 +281,8 @@
     </v-row>
   </v-card-actions>
 
+  <tier-settings-hint v-model="hint" v-model:page="page" />
+
   <simple-dialog v-model="cautionsDialog" title="警告" @submit="upload">
     <div v-for="c, i of cautions" :key="i" class="ma-2">
       <div><span class="error-style" v-text="c"></span></div>
@@ -289,6 +304,7 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import EditorTools from '@/components/EditorTools.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import TierSettingsHint from '@/components/TierSettingsHint.vue'
 import rules from '@/common/rules'
 import { ToastProps, useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -307,7 +323,8 @@ export default defineComponent({
     SimpleDialog,
     PaddingComponent,
     EditorTools,
-    LoadingComponent
+    LoadingComponent,
+    TierSettingsHint
   },
   props: {
     modelValue: {
@@ -394,6 +411,8 @@ export default defineComponent({
     const isSubmitting = ref(false)
     /** 詳細表示 */
     const displayDeatails = ref(false)
+    const hint = ref(false)
+    const page = ref(0)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -583,6 +602,8 @@ export default defineComponent({
       rulesFunc: rules,
       tierValidation,
       displayDeatails,
+      hint,
+      page,
       tab,
       tweetdialog,
       cautionsDialog,

@@ -290,12 +290,6 @@ export default defineComponent({
           loading.value = false
           router.replace('/404')
         })
-        RestApi.getLatestPostLists(store.state.userId, 1).then((res) => {
-          if (res.data.reviews.length === 0) {
-            hint.value = true
-            page.value = 0
-          }
-        })
       } else {
         loading.value = false
         router.replace('/404')

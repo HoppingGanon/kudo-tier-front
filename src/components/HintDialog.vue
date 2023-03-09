@@ -1,22 +1,15 @@
 <template>
   <v-dialog :model-value="modelValue" @update:model-value="$emit('update:model-value', $event)" :fullscreen="true">
-    <div class="close-btn">
-      <v-btn flat color="primary mt-2 mr-5" icon @click="$emit('update:model-value', false)">
-        <v-icon>
-          mdi-close
-        </v-icon>
-      </v-btn>
-    </div>
     <v-carousel
       v-model="pageValue"
       height="100%"
       class="pa-2"
       :hide-delimiter-background="true"
-      color="grey-darken-3"
-      :interval="0"
+      color="green-darken-3"
+      :cycle="false"
       :show-arrows="$vuetify.display.mdAndUp"
     >
-      <slot></slot>
+      <slot name="default" :close="() => $emit('update:model-value', false)"></slot>
     </v-carousel>
   </v-dialog>
 </template>

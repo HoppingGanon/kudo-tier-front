@@ -63,7 +63,7 @@
                               class="mt-1"
                               :model-value="element.name"
                               @update:model-value="$emit('updateName', $event, index)"
-                              :hint="element.isPoint ? '項目名には短い名前を入力してください (例: ストーリーの評価)' : '項目名には短い名前を入力してください (例: 上映した年)'"
+                              :hint="element.isPoint ? `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)` : `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)`"
                               dense
                               :rules="rules"
                             />
@@ -79,7 +79,7 @@
                               class="mt-1"
                               :model-value="element.name"
                               @update:model-value="$emit('updateName', $event, index)"
-                              :hint="element.isPoint ? '項目名には短い名前を入力してください (例: ストーリーの評価)' : '項目名には短い名前を入力してください (例: 上映した年)'"
+                              :hint="element.isPoint ? `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)` : `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)`"
                               dense
                               :rules="rules"
                             />
@@ -153,7 +153,7 @@
         <v-btn color="primary" @click="addItemProxy">
           <v-icon>
             mdi-plus
-          </v-icon> アイテム追加
+          </v-icon>項目の追加
         </v-btn>
       </v-card>
     </v-row>
@@ -161,7 +161,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactorParam } from '@/common/review'
+import { ReviewFactorParam, tierValidation } from '@/common/review'
 import vuetify from '@/plugins/vuetify'
 import { computed, defineComponent, PropType, ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
@@ -269,6 +269,7 @@ export default defineComponent({
     }
 
     return {
+      tierValidation,
       updateWeightProxy,
       updateIsPointProxy,
       addItemProxy,
