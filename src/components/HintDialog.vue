@@ -12,8 +12,9 @@
       height="100%"
       class="pa-2"
       :hide-delimiter-background="true"
-      color="primary"
+      color="grey-darken-3"
       :interval="0"
+      :show-arrows="$vuetify.display.mdAndUp"
     >
       <slot></slot>
     </v-carousel>

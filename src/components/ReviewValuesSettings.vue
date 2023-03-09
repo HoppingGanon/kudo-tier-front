@@ -19,12 +19,16 @@
         <div class="ml-1 mr-2">
           :
         </div>
-        <div style="width: 100%" :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''">
+        <div :class="pointType === 'rank7' || pointType === 'rank14' ? 'text-h4' : ''">
           <review-value-display
             :value="ave()"
             :point-type="pointType"
             display-size="large2"
           />
+        </div>
+        <div style="width: 100%;" class="d-flex justify-end">
+          <slot name="top-right">
+          </slot>
         </div>
       </v-col>
     </v-row>
@@ -119,6 +123,7 @@
                   @update:model-value="$emit('updateInfo', $event, index)"
                   label="情報"
                   :rules="[rules.maxLen(reviewValidation.factorInfoLenMax)]"
+                  :hint="`付加したい情報を入力してください(${reviewValidation.factorInfoLenMax}文字以内)`"
                 />
               </v-col>
             </v-row>

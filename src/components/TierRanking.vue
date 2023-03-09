@@ -351,7 +351,7 @@ export default defineComponent({
       let i = 0
       const headersObj: DataTableHeader[] = [
         {
-          text: '名称',
+          text: 'レビュー名',
           value: 'name',
           sortable: true
         },

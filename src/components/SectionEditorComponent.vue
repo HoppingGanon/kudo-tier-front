@@ -1,8 +1,12 @@
 <template>
   <v-container class="ma-0 pa-0" fulid>
     <v-row>
-      <v-col>
-        <span v-if="title" class="text-title font-weight-bold" v-text="title"></span>
+      <v-col class="d-flex">
+        <span v-if="title" style="width: 100%" class="text-title font-weight-bold" v-text="title">
+        </span>
+        <div style="text-align: end;">
+          <v-icon class="mt-1 mr-1" @click="$emit('openHint')">mdi-help</v-icon>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -122,7 +126,8 @@ export default defineComponent({
       sectionIndex: number, paragIndex: number) => true,
     submit: () => true,
     preview: () => true,
-    togglePin: () => true
+    togglePin: () => true,
+    openHint: () => true
   },
   setup (props, { emit }) {
     const toast = useToast()

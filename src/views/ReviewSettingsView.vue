@@ -48,9 +48,10 @@
               <v-text-field
                 v-model="review.name"
                 label="レビュー名 (必須)"
-                hint="このレビュー対象を表す短い名前を設定してください (例: 劇場版〇〇)"
+                :hint="`このレビュー対象を表す短い名前を設定してください(${reviewValidation.nameLenMax}文字以内)`"
                 :rules="[rulesFunc.required(), rulesFunc.maxLen(reviewValidation.nameLenMax)]"
-              />
+              >
+              </v-text-field>
             </v-col>
           </v-row>
           <v-row class="mt-3 mb-3">
@@ -60,7 +61,7 @@
               <v-text-field
                 v-model="review.title"
                 label="レビュータイトル"
-                hint="レビューのタイトルを設定してください (例: 作中最高クラスの傑作映画)"
+                :hint="`レビューのタイトルを設定してください(${reviewValidation.titleLenMax}文字以内)`"
                 :rules="[rulesFunc.maxLen(reviewValidation.titleLenMax)]"
               />
             </v-col>
@@ -91,7 +92,13 @@
                 @update-info="updateInfo"
                 :pulling-up="tier.pullingUp"
                 :pulling-down="tier.pullingDown"
-              />
+              >
+                <template v-slot:top-right>
+                  <v-icon class="mr-1 mt-1" @click="page=1;hint=true;">
+                    mdi-help
+                  </v-icon>
+                </template>
+              </review-values-settings>
             </v-col>
           </v-row>
           <v-row>
@@ -114,6 +121,7 @@
                 @submit="submit"
                 @preview="toggleTab"
                 title="説明セクションの追加"
+                @open-hint="hint=true;page=2;"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -167,7 +175,7 @@
     </v-card>
   </v-container>
 
-  <review-settings-hint v-model="hint" />
+  <review-settings-hint v-model="hint" v-model:page="page" />
 
   <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
   <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="レビューを取得中..." />
@@ -190,6 +198,7 @@ import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
 import router from '@/router'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -214,6 +223,7 @@ export default defineComponent({
     const form = ref()
     const loading = ref(true)
     const hint = ref(false)
+    const page = ref(0)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -279,6 +289,12 @@ export default defineComponent({
           toast.warning('レビューを新規作成します')
           loading.value = false
           router.replace('/404')
+        })
+        RestApi.getLatestPostLists(store.state.userId, 1).then((res) => {
+          if (res.data.reviews.length === 0) {
+            hint.value = true
+            page.value = 0
+          }
         })
       } else {
         loading.value = false
@@ -464,6 +480,7 @@ export default defineComponent({
       form,
       loading,
       hint,
+      page,
       submit,
       valid,
       tier,
