@@ -34,17 +34,6 @@
         <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
           <v-row>
             <v-col>
-              <v-card-title class="font-weight-bold">
-                レビュー情報の入力
-              </v-card-title>
-              <v-card-text>
-                Tier（<span v-text="tier.name" class="font-weight-bold"></span>）に紐づくレビューを<span v-text="isNew ? '新規作成' : '編集'"></span>します。
-                このレビューの情報を入力してください。
-              </v-card-text>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
               <v-divider />
             </v-col>
           </v-row>
@@ -128,13 +117,6 @@
         </v-container>
       </v-form>
       <v-container v-show="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-        <v-row>
-          <v-col>
-            <v-card-title class="font-weight-bold">
-              プレビュー
-            </v-card-title>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col col="12" sm="12" md="12" lg="10" xl="8">
             <review-component
@@ -236,6 +218,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      loading.value = true
       if (route.params.tid && typeof route.params.tid === 'string') {
         // RouterからTierIDが指定されている場合
         RestApi.getTier(route.params.tid).then((res) => {
@@ -256,18 +239,14 @@ export default defineComponent({
             tier.value.parags[i].isChanged = false
           })
           isNew.value = true
+          loading.value = false
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
           toastError(e, toast)
-          router.push('/home')
-        }).finally(() => {
           loading.value = false
+          router.replace('/404')
         })
-      } else {
-        loading.value = false
-      }
-
-      if (route.params.rid && typeof route.params.rid === 'string') {
+      } else if (route.params.rid && typeof route.params.rid === 'string') {
         // RouterからReviewIDが指定されている場合
         RestApi.getReview(route.params.rid).then((revres) => {
           // 成功の場合
@@ -276,21 +255,23 @@ export default defineComponent({
             review.value = Parser.parseReview(revres.data.review)
             tier.value = Parser.parseTier(res.data)
             isNew.value = false
+            loading.value = false
           }).catch((e) => {
             // 失敗の場合は通知を表示して、新規作成
             toastError(e, toast)
-            toast.warning('レビューを新規作成します')
-            isNew.value = true
-          }).finally(() => {
             loading.value = false
+            router.replace('/404')
           })
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
           toastError(e, toast)
           toast.warning('レビューを新規作成します')
-          isNew.value = true
           loading.value = false
+          router.replace('/404')
         })
+      } else {
+        loading.value = false
+        router.replace('/404')
       }
     })
 

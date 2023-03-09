@@ -31,18 +31,6 @@
     <v-form ref="form">
       <v-container v-if="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
         <v-row>
-          <v-col>
-            <v-card-title class="font-weight-bold">
-              Tier情報の入力
-            </v-card-title>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-            <v-card-text>
-              このTierの情報を入力してください。
-            </v-card-text>
-          </v-col>
           <v-col class="d-flex flex-row-reverse">
             <div>
               <v-switch label="詳細設定を表示する" color="primary" v-model="displayDeatails" />
@@ -236,13 +224,6 @@
     </v-form>
 
     <v-container v-if="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-      <v-row>
-        <v-col>
-          <v-card-title class="font-weight-bold">
-            プレビュー
-          </v-card-title>
-        </v-col>
-      </v-row>
       <v-row>
         <v-col>
           <v-card>

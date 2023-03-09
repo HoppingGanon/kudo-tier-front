@@ -43,6 +43,7 @@ import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
+import router from '@/router'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -127,6 +128,7 @@ export default defineComponent({
 
     const isNew = ref(true)
     onMounted(() => {
+      loading.value = true
       if (route.params.tid && typeof route.params.tid === 'string') {
         RestApi.getTier(route.params.tid).then((res) => {
           // 成功の場合
@@ -138,11 +140,14 @@ export default defineComponent({
           toastError(e, toast)
           toast.warning('Tierを新規作成します')
           isNew.value = true
+          router.replace('/tier-settings-new')
         }).finally(() => {
           loading.value = false
         })
       } else {
+        isNew.value = true
         loading.value = false
+        router.replace('/tier-settings-new')
       }
     })
 
