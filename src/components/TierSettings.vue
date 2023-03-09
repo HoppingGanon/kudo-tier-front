@@ -73,16 +73,17 @@
           <v-col>
             <v-container fluid class="ma-0 pa-0">
               <v-row>
-                <v-col cols="12" sm="5" md="4" lg="3" xl="2">
+                <v-col cols="12" sm="12" md="4" lg="3" xl="2">
                   <point-type-selector
                     :model-value="pointType"
                     @update="$emit('updatePointType', $event)"
                     :always="true"
+                    :is-select="$vuetify.display.smAndDown"
                   />
                 </v-col>
                 <v-col style="vertical-align: top;">
                   <v-container class="ma-0 pa-0" fluid>
-                    <v-row>
+                    <v-row v-if="$vuetify.display.mdAndUp">
                       <v-col>
                         <v-card flat>
                           <span class="text-h5" v-text="modelValue.pointType" />

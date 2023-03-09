@@ -2,7 +2,9 @@
   <v-container class="pa-0 ma-0" fluid>
     <v-row dense :style="'background-color:' + bgColor">
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-icon v-if="!readonly" dense>mdi-swap-vertical</v-icon><b v-if="!readonly">移動</b>
+        <v-icon v-if="!readonly" dense>mdi-swap-vertical</v-icon>
+          <br v-if="$vuetify.display.smAndDown" />
+        <b v-if="!readonly">移動</b>
       </v-col>
       <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
         <v-container fluid class="ma-0 pa-0">
@@ -13,7 +15,7 @@
             <v-col v-else cols="12" sm="12" md="7" lg="8" xl="9">
               <b>項目名</b>
             </v-col>
-            <v-col cols="12" sm="6" md="3" lg="2" xl="2">
+            <v-col v-if="showDetails" cols="12" sm="6" md="3" lg="2" xl="2">
               <b>種類</b>
             </v-col>
             <v-col v-if="showDetails" cols="12" sm="6" md="3" lg="3" xl="3">

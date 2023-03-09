@@ -2,6 +2,7 @@
 
   <!-- セッション有効期限をチェックする -->
   <session-checker :no-session-error="true" />
+
   <v-container class="pa-0 down">
     <v-card class="ma-0">
       <v-toolbar color="secondary">
@@ -11,7 +12,12 @@
         <v-card-title v-else class="font-weight-bold">
           レビュー編集
         </v-card-title>
-        <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
+        <div style="width: 100%;margin-right: 54px" class="d-flex justify-end">
+          <v-btn icon @click="hint = true">
+            <v-icon>
+              mdi-help-circle
+            </v-icon>
+          </v-btn>
           <v-btn icon @click="submit">
             <v-icon>
               mdi-send
@@ -161,6 +167,8 @@
     </v-card>
   </v-container>
 
+  <review-settings-hint v-model="hint" />
+
   <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
   <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="レビューを取得中..." />
 </template>
@@ -174,6 +182,7 @@ import ReviewComponent from '@/components/ReviewComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import EditorTools from '@/components/EditorTools.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import ReviewSettingsHint from '@/components/ReviewSettingsHint.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import RestApi, { Parser, toastError, getImgSource } from '@/common/restapi'
@@ -191,7 +200,8 @@ export default defineComponent({
     ReviewComponent,
     SectionEditorComponent,
     EditorTools,
-    LoadingComponent
+    LoadingComponent,
+    ReviewSettingsHint
   },
   setup () {
     const route = useRoute()
@@ -203,6 +213,7 @@ export default defineComponent({
     const isSubmitting = ref(false)
     const form = ref()
     const loading = ref(true)
+    const hint = ref(false)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -452,6 +463,7 @@ export default defineComponent({
       isSubmitting,
       form,
       loading,
+      hint,
       submit,
       valid,
       tier,
