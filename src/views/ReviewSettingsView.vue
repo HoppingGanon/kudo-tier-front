@@ -198,7 +198,6 @@ import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
 import router from '@/router'
-import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettingsView',

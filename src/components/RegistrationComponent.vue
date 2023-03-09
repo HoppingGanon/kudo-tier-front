@@ -40,12 +40,26 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field :model-value="dispName" @update:model-value="$emit('update:dispName', $event)" label="表示名" :rules="[requiredValidation, nameValidation]" />
+        <v-text-field
+          :model-value="dispName"
+          @update:model-value="$emit('update:dispName', $event)"
+          label="表示名"
+          :rules="[requiredValidation, nameValidation]"
+          :hint="`ユーザーの名前を設定してください(最大${userValidation.nameLenMax}文字)`"
+        />
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-textarea :model-value="profile" @update:model-value="$emit('update:profile', $event)" label="プロフィール" multi-line height="120px" :rules="[profValidation]" />
+        <v-textarea
+          :model-value="profile"
+          @update:model-value="$emit('update:profile', $event)"
+          label="プロフィール"
+          multi-line
+          height="120px"
+          :rules="[profValidation]"
+          :hint="`自己紹介文を設定してください(最大${userValidation.profileLenMax}文字)`"
+        />
       </v-col>
     </v-row>
     <v-row v-if="isNew">
@@ -140,6 +154,7 @@ export default defineComponent({
     const imgSource = computed(() => getImgSource(props.iconUrl))
 
     return {
+      userValidation,
       imgSource,
       iniDialog,
       termDialog,
