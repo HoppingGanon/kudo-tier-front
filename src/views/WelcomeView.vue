@@ -2,53 +2,55 @@
   <!-- セッション有効期限をチェックする -->
   <session-checker />
 
-  <v-container fluid class="ma-0 pa-0">
-    <v-row>
-      <v-col>
-        <div class="d-flex align-center">
-          <div style="width: 40px;">
-            <v-img class="ml-2 mt-2" width="40px" src="@/assets/logo.png" />
+  <v-card width="100%" flat>
+    <v-container fluid class="ma-0 pa-0">
+      <v-row>
+        <v-col>
+          <div class="d-flex align-center">
+            <div style="width: 40px;">
+              <v-img class="ml-2 mt-2" width="40px" src="@/assets/logo.png" />
+            </div>
           </div>
-        </div>
-      </v-col>
-      <v-col>
-        <div v-if="hasSession" style="width: 100%;" class="d-flex justify-end">
-          <v-btn flat @click="goHome" class="ml-3">
-            ホームへ移動
-          </v-btn>
-          <v-btn flat @click="logoutDialog = true" class="ml-3">
-            ログアウト
-          </v-btn>
-        </div>
-        <div v-else style="width: 100%;" class="d-flex justify-end">
-          <v-btn flat @click="goLogin" class="ml-3">
-            ログイン/新規登録
-          </v-btn>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <welcome-carousel />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <explanation-summary :has-session="hasSession" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col class="text-center">
-        <v-btn v-if="hasSession" color="primary" class="text-no-transform" @click="goHome">{{ appName }}のホーム画面へ</v-btn>
-        <v-btn v-else color="primary" class="text-no-transform" @click="goLogin">{{ appName }}をはじめる</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div style="height: 100px"></div>
-      </v-col>
-    </v-row>
-  </v-container>
+        </v-col>
+        <v-col>
+          <div v-if="hasSession" style="width: 100%;" class="d-flex justify-end">
+            <v-btn flat @click="goHome" class="ml-3">
+              ホームへ移動
+            </v-btn>
+            <v-btn flat @click="logoutDialog = true" class="ml-3">
+              ログアウト
+            </v-btn>
+          </div>
+          <div v-else style="width: 100%;" class="d-flex justify-end">
+            <v-btn flat @click="goLogin" class="ml-3">
+              ログイン/新規登録
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <welcome-carousel />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <explanation-summary :has-session="hasSession" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="text-center">
+          <v-btn v-if="hasSession" color="primary" class="text-no-transform" @click="goHome">{{ appName }}のホーム画面へ</v-btn>
+          <v-btn v-else color="primary" class="text-no-transform" @click="goLogin">{{ appName }}をはじめる</v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <div style="height: 100px"></div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 
   <simple-dialog
     v-model="logoutDialog"

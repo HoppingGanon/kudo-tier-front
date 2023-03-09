@@ -2,6 +2,7 @@
 
   <!-- セッション有効期限をチェックする -->
   <session-checker :no-session-error="true" />
+
   <v-container class="pa-0 down">
     <v-card class="ma-0">
       <v-toolbar color="secondary">
@@ -11,7 +12,12 @@
         <v-card-title v-else class="font-weight-bold">
           レビュー編集
         </v-card-title>
-        <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
+        <div style="width: 100%;margin-right: 54px" class="d-flex justify-end">
+          <v-btn icon @click="hint = true">
+            <v-icon>
+              mdi-help-circle
+            </v-icon>
+          </v-btn>
           <v-btn icon @click="submit">
             <v-icon>
               mdi-send
@@ -34,16 +40,6 @@
         <v-container v-show="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
           <v-row>
             <v-col>
-              <v-card-title class="font-weight-bold">
-                レビュー情報の入力
-              </v-card-title>
-              <v-card-text>
-                このレビューの情報を入力してください。
-              </v-card-text>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
               <v-divider />
             </v-col>
           </v-row>
@@ -52,9 +48,10 @@
               <v-text-field
                 v-model="review.name"
                 label="レビュー名 (必須)"
-                hint="このレビュー対象を表す短い名前を設定してください (例: 劇場版〇〇)"
+                :hint="`このレビュー対象を表す短い名前を設定してください(${reviewValidation.nameLenMax}文字以内)`"
                 :rules="[rulesFunc.required(), rulesFunc.maxLen(reviewValidation.nameLenMax)]"
-              />
+              >
+              </v-text-field>
             </v-col>
           </v-row>
           <v-row class="mt-3 mb-3">
@@ -64,7 +61,7 @@
               <v-text-field
                 v-model="review.title"
                 label="レビュータイトル"
-                hint="レビューのタイトルを設定してください (例: 作中最高クラスの傑作映画)"
+                :hint="`レビューのタイトルを設定してください(${reviewValidation.titleLenMax}文字以内)`"
                 :rules="[rulesFunc.maxLen(reviewValidation.titleLenMax)]"
               />
             </v-col>
@@ -95,7 +92,13 @@
                 @update-info="updateInfo"
                 :pulling-up="tier.pullingUp"
                 :pulling-down="tier.pullingDown"
-              />
+              >
+                <template v-slot:top-right>
+                  <v-icon class="mr-1 mt-1" @click="page=1;hint=true;">
+                    mdi-help
+                  </v-icon>
+                </template>
+              </review-values-settings>
             </v-col>
           </v-row>
           <v-row>
@@ -117,7 +120,8 @@
                 @del-parag="delParag"
                 @submit="submit"
                 @preview="toggleTab"
-                title="詳しい説明分の追加"
+                title="説明セクションの追加"
+                @open-hint="hint=true;page=2;"
               />
             </v-col>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -127,13 +131,6 @@
         </v-container>
       </v-form>
       <v-container v-show="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-        <v-row>
-          <v-col>
-            <v-card-title class="font-weight-bold">
-              プレビュー
-            </v-card-title>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col col="12" sm="12" md="12" lg="10" xl="8">
             <review-component
@@ -177,6 +174,11 @@
       </v-card-actions>
     </v-card>
   </v-container>
+
+  <review-settings-hint v-model="hint" v-model:page="page" />
+
+  <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
+  <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="レビューを取得中..." />
 </template>
 
 <script lang="ts">
@@ -187,9 +189,11 @@ import ImageSelector from '@/components/ImageSelector.vue'
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import EditorTools from '@/components/EditorTools.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
+import ReviewSettingsHint from '@/components/ReviewSettingsHint.vue'
 import { ReviewParagraphType, ReviewFunc, reviewValidation, sectionValidation, ReviewSection, ReviewParagraph } from '@/common/review'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import RestApi, { ErrorResponse, Parser, toastError, getImgSource } from '@/common/restapi'
+import RestApi, { Parser, toastError, getImgSource } from '@/common/restapi'
 import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
@@ -203,7 +207,9 @@ export default defineComponent({
     ImageSelector,
     ReviewComponent,
     SectionEditorComponent,
-    EditorTools
+    EditorTools,
+    LoadingComponent,
+    ReviewSettingsHint
   },
   setup () {
     const route = useRoute()
@@ -214,6 +220,9 @@ export default defineComponent({
     const tab = ref(0)
     const isSubmitting = ref(false)
     const form = ref()
+    const loading = ref(true)
+    const hint = ref(false)
+    const page = ref(0)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -229,6 +238,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      loading.value = true
       if (route.params.tid && typeof route.params.tid === 'string') {
         // RouterからTierIDが指定されている場合
         RestApi.getTier(route.params.tid).then((res) => {
@@ -249,15 +259,14 @@ export default defineComponent({
             tier.value.parags[i].isChanged = false
           })
           isNew.value = true
+          loading.value = false
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
-          const v = e.response.data as ErrorResponse
-          toast.warning(`${v.message}(${v.code}) Tierが存在しません`)
-          isNew.value = true
+          toastError(e, toast)
+          loading.value = false
+          router.replace('/404')
         })
-      }
-
-      if (route.params.rid && typeof route.params.rid === 'string') {
+      } else if (route.params.rid && typeof route.params.rid === 'string') {
         // RouterからReviewIDが指定されている場合
         RestApi.getReview(route.params.rid).then((revres) => {
           // 成功の場合
@@ -266,23 +275,25 @@ export default defineComponent({
             review.value = Parser.parseReview(revres.data.review)
             tier.value = Parser.parseTier(res.data)
             isNew.value = false
+            loading.value = false
           }).catch((e) => {
             // 失敗の場合は通知を表示して、新規作成
             toastError(e, toast)
-            toast.warning('レビューを新規作成します')
-            isNew.value = true
+            loading.value = false
+            router.replace('/404')
           })
         }).catch((e) => {
           // 失敗の場合は通知を表示して、新規作成
           toastError(e, toast)
           toast.warning('レビューを新規作成します')
-          isNew.value = true
+          loading.value = false
+          router.replace('/404')
         })
+      } else {
+        loading.value = false
+        router.replace('/404')
       }
     })
-
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
 
     // ページを離れた時に警告する
     onBeforeRouteLeave(() => {
@@ -314,25 +325,28 @@ export default defineComponent({
         tab.value = 0
         return
       }
+      isSubmitting.value = true
       if (isNew.value) {
         // 新規作成
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.postReview(data).then((v) => {
           toast.success('レビューを作成しました')
-          isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       } else {
         // 編集
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.updateReview(review.value.reviewId, data).then((v) => {
           toast.success('レビューを更新しました')
-          isSubmitting.value = true
           router.push(`/review/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       }
     }
@@ -455,7 +469,11 @@ export default defineComponent({
       reviewValidation,
       isNew,
       tab,
+      isSubmitting,
       form,
+      loading,
+      hint,
+      page,
       submit,
       valid,
       tier,

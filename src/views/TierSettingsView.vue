@@ -28,27 +28,35 @@
       />
     </v-card>
   </v-container>
+
+  <!-- 情報の取得時のみ表示-->
+  <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="Tierを取得中..." />
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import SessionChecker from '@/components/SessionChecker.vue'
 import TierSettings from '@/components/TierSettings.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType } from '@/common/review'
 import { useRoute } from 'vue-router'
 import RestApi, { Parser, toastError } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
+import router from '@/router'
 
 export default defineComponent({
   name: 'TierSettingsView',
   components: {
     SessionChecker,
-    TierSettings
+    TierSettings,
+    LoadingComponent
   },
   setup () {
     const route = useRoute()
     const toast = useToast()
+
+    const loading = ref(true)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const orgTier = ref(ReviewFunc.cloneTier(emptyTier))
@@ -120,6 +128,7 @@ export default defineComponent({
 
     const isNew = ref(true)
     onMounted(() => {
+      loading.value = true
       if (route.params.tid && typeof route.params.tid === 'string') {
         RestApi.getTier(route.params.tid).then((res) => {
           // 成功の場合
@@ -131,7 +140,14 @@ export default defineComponent({
           toastError(e, toast)
           toast.warning('Tierを新規作成します')
           isNew.value = true
+          router.replace('/tier-settings-new')
+        }).finally(() => {
+          loading.value = false
         })
+      } else {
+        isNew.value = true
+        loading.value = false
+        router.replace('/tier-settings-new')
       }
     })
 
@@ -224,6 +240,7 @@ export default defineComponent({
     }
 
     return {
+      loading,
       tier,
       orgTier,
       isNew,

@@ -17,7 +17,6 @@
       <v-col v-else-if="parag.type === 'imageLink'" cols="8" sm="6" md="5" lg="4" xl="3">
         <image-selector
           :cropped-url="parag.body"
-          @update-file-url="$emit('updateParagBody', $event)"
           @update-cropped-url="$emit('updateParagBody', $event)"
           img-max-height="320px"
           @clear="$emit('clear')"
@@ -28,6 +27,7 @@
           :model-value="parag.body"
           @update="$emit('updateParagBody', $event)"
           @clear="$emit('clear')"
+          :rules="rules"
         />
       </v-col>
     </v-row>
@@ -35,12 +35,12 @@
 </template>
 
 <script lang="ts">
-import { ReviewParagraph } from '@/common/review'
-import { defineComponent, PropType } from 'vue'
+import { ReviewParagraph, sectionValidation } from '@/common/review'
+import { computed, defineComponent, PropType } from 'vue'
 import AutoTextArea from '@/components/AutoTextArea.vue'
 import ImageSelector from '@/components/ImageSelector.vue'
 import LinkEditor from '@/components/LinkEditor.vue'
-import rules from '@/common/rules'
+import ruleFunc from '@/common/rules'
 
 export default defineComponent({
   name: 'ParagEditorComponent',
@@ -74,7 +74,7 @@ export default defineComponent({
   },
   setup () {
     return {
-      rulesFunc: rules
+      rules: computed(() => [ruleFunc.maxLen(sectionValidation.paragLinkLenMax)])
     }
   }
 })

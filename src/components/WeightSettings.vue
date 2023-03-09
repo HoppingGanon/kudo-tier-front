@@ -2,7 +2,9 @@
   <v-container class="pa-0 ma-0" fluid>
     <v-row dense :style="'background-color:' + bgColor">
       <v-col cols="2" sm="1" md="1" lg="1" xl="1">
-        <v-icon v-if="!readonly" dense>mdi-swap-vertical</v-icon><b v-if="!readonly">移動</b>
+        <v-icon v-if="!readonly" dense>mdi-swap-vertical</v-icon>
+          <br v-if="$vuetify.display.smAndDown" />
+        <b v-if="!readonly">移動</b>
       </v-col>
       <v-col :cols="readonly ? 10 : 9" :sm="readonly ? 11 : 10" :md="readonly ? 11 : 10" :lg="readonly ? 11 : 10" :xl="readonly ? 11 : 10">
         <v-container fluid class="ma-0 pa-0">
@@ -13,7 +15,7 @@
             <v-col v-else cols="12" sm="12" md="7" lg="8" xl="9">
               <b>項目名</b>
             </v-col>
-            <v-col cols="12" sm="6" md="3" lg="2" xl="2">
+            <v-col v-if="showDetails" cols="12" sm="6" md="3" lg="2" xl="2">
               <b>種類</b>
             </v-col>
             <v-col v-if="showDetails" cols="12" sm="6" md="3" lg="3" xl="3">
@@ -61,12 +63,12 @@
                               class="mt-1"
                               :model-value="element.name"
                               @update:model-value="$emit('updateName', $event, index)"
-                              :hint="element.isPoint ? '項目名には短い名前を入力してください (例: ストーリーの評価)' : '項目名には短い名前を入力してください (例: 上映した年)'"
+                              :hint="element.isPoint ? `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)` : `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)`"
                               dense
                               :rules="rules"
                             />
                           </v-col>
-                          <v-col v-else cols="12" sm="12" md="7" lg="8" xl="9">
+                          <v-col v-else cols="12" sm="12" :md="showDetails ? 7 : 10" :lg="showDetails ? 8 : 10" :xl="showDetails ? 8 : 10">
                             <!-- ポイントの説明欄 -->
                             <div v-if="readonly" class="d-flex align-center" style="height: 100%">
                               <span v-text="element.name"></span>
@@ -77,12 +79,12 @@
                               class="mt-1"
                               :model-value="element.name"
                               @update:model-value="$emit('updateName', $event, index)"
-                              :hint="element.isPoint ? '項目名には短い名前を入力してください (例: ストーリーの評価)' : '項目名には短い名前を入力してください (例: 上映した年)'"
+                              :hint="element.isPoint ? `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)` : `項目名には短い名前を入力してください(最大${tierValidation.paramNameLenMax}文字)`"
                               dense
                               :rules="rules"
                             />
                           </v-col>
-                          <v-col cols="12" sm="6" md="3" lg="2" xl="2">
+                          <v-col cols="12" sm="6" md="3" lg="2" xl="2" v-show="showDetails">
                             <!-- ポイントの説明欄 -->
                             <div v-if="readonly" class="d-flex align-center" style="height: 100%">
                               <span v-text="element.isPoint ? 'ポイント' : '情報'"></span>
@@ -151,7 +153,7 @@
         <v-btn color="primary" @click="addItemProxy">
           <v-icon>
             mdi-plus
-          </v-icon> アイテム追加
+          </v-icon>項目の追加
         </v-btn>
       </v-card>
     </v-row>
@@ -159,7 +161,7 @@
 </template>
 
 <script lang="ts">
-import { ReviewFactorParam } from '@/common/review'
+import { ReviewFactorParam, tierValidation } from '@/common/review'
 import vuetify from '@/plugins/vuetify'
 import { computed, defineComponent, PropType, ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
@@ -267,6 +269,7 @@ export default defineComponent({
     }
 
     return {
+      tierValidation,
       updateWeightProxy,
       updateIsPointProxy,
       addItemProxy,

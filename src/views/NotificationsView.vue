@@ -11,6 +11,7 @@
       <notifications-component />
     </v-card>
   </padding-component>
+
 </template>
 
 <script lang="ts">

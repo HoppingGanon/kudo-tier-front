@@ -40,6 +40,7 @@
         @update-reviews-pair="updateReviewsPair"
         @add-reviews-pair="addReviewsPair"
         :is-loading="isReviewsLoading"
+        :exists-tier="tiers.length !== 0"
       />
     </v-card>
   </v-container>

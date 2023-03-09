@@ -58,7 +58,7 @@
             <v-list-item
               v-for="(item, i) in iconSizeList"
               :key="i"
-              @click="$emit('update:iconSize', $event)"
+              @click="$emit('update:iconSize', item.value)"
               :items="reviewPointTypeArray"
               class="cursor-pointer"
             >
@@ -135,7 +135,7 @@
     >
       <template v-slot:body="pageItems">
         <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer">
-          <td v-for="col,j,k in row.dictionary" :key="j" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" @click="goTierHash(row.reviewId)">
+          <td v-for="col,j,k in row" :key="j" v-show="('' + j) !== 'reviewId'" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" v-scroll-to="`#rev${row.reviewId}`">
             <v-card v-if="'' + j == 'name'" v-text="col" flat></v-card>
             <v-card v-else-if="'' + j == 'ave'" flat style="text-align: center;">
               <review-value-display
@@ -351,7 +351,7 @@ export default defineComponent({
       let i = 0
       const headersObj: DataTableHeader[] = [
         {
-          text: '名称',
+          text: 'レビュー名',
           value: 'name',
           sortable: true
         },
@@ -374,7 +374,7 @@ export default defineComponent({
 
     // プロパティからテーブルの表示内容を作成
     const reviewValues = computed(() => {
-      const rankingTable: { reviewId: string, dictionary:Dictionary<string | number> }[] = []
+      const rankingTable: Dictionary<string | number>[] = []
       if (props.reviews) {
         const reviews = props.reviews as Review[]
 
@@ -382,6 +382,7 @@ export default defineComponent({
         reviews.forEach((review) => {
           let i = 0
           const rankingRow: Dictionary<string | number> = {
+            reviewId: review.reviewId,
             name: review.name,
             ave: props.pointType === 'unlimited' ? ReviewFunc.calcSum(review, props.params) : ReviewFunc.calcAaverage(review, props.params, props.tier.pullingUp, props.tier.pullingDown, 0, 100)
           }
@@ -397,10 +398,7 @@ export default defineComponent({
             }
             i++
           })
-          rankingTable.push({
-            dictionary: rankingRow,
-            reviewId: review.reviewId
-          })
+          rankingTable.push(rankingRow)
         })
       }
       return rankingTable
@@ -482,13 +480,6 @@ export default defineComponent({
     const toPictureDialog = ref(false)
     const toEmbeddedDialog = ref(false)
     const toJsonDialog = ref(false)
-
-    const goTierHash = (reviewId: string) => {
-      window.location.href = `#rev${reviewId}`
-    }
-
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
 
     onBeforeRouteLeave(() => {
       if (isProcessing.value) {
@@ -635,8 +626,6 @@ export default defineComponent({
       toEmbeddedDialog,
       /** バックアップ前の選択ダイアログ */
       toJsonDialog,
-      /** Tierの指定したページへ移動する */
-      goTierHash,
       /** バックアップ処理 */
       backup,
       /** ダウンロード処理中のフラグ */

@@ -235,7 +235,6 @@ export const getImgSource = (uri: string) => {
     case 'base64':
       return uri
     case 'blob':
-      console.log('blobdayo')
       return uri
     case 'link':
       return `${process.env.VUE_APP_BACK_BASE_URI}/${uri}`

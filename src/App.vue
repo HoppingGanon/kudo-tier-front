@@ -1,103 +1,110 @@
 <template>
   <v-app id="inspire">
-
     <v-navigation-drawer
       v-model="drawer"
       temporary
     >
-      <v-container>
-        <v-row style="min-height: 64px;">
-          <v-icon color="gray darken-1" class="ml-5" @click="drawer = !drawer"> mdi-arrow-left-bold-outline </v-icon>
-        </v-row>
-        <v-row>
-          <v-divider />
-        </v-row>
-        <v-row v-if="hasSession">
-          <v-col>
-            <profile-component
-              :disp-name="userName"
-              profile=""
-              :icon-url="userIconUrl"
-              :tiers-count="tiersCount"
-              :reviews-count="reviewsCount"
-              :is-summary="true"
-              :user-id="sessionUserId || ''"
-              :is-vertical="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row v-else style="min-height: 100px;" class="ml-2">
-          <v-col>
-            <span><b>ゲスト</b></span><br />
-            <span>
-              未ログイン
-            </span>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-divider />
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-list class="ml-3 mt-3" width="100%">
-              <v-list-item v-if="hasSession" @click="goHome">
+      <v-card height="100%" flat>
+        <v-container class="pl-0 pr-0 pb-0 pt-1">
+          <v-row>
+            <v-col class="d-flex" style="min-height: 64px;">
+              <v-icon color="gray darken-1" class="ml-5" @click="drawer = !drawer"> mdi-arrow-left-bold-outline </v-icon>
+              <v-spacer />
+              <v-btn v-if="hasSession"  @click="goNotifications" flat>
+                <v-icon class="mr-3">mdi-bell-outline</v-icon>
+                <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-divider />
+          </v-row>
+          <v-row v-if="hasSession">
+            <v-col>
+              <profile-component
+                :disp-name="userName"
+                profile=""
+                :icon-url="userIconUrl"
+                :tiers-count="tiersCount"
+                :reviews-count="reviewsCount"
+                :is-summary="true"
+                :user-id="sessionUserId || ''"
+                :is-vertical="true"
+              />
+            </v-col>
+          </v-row>
+          <v-row v-else style="min-height: 100px;" class="ml-2">
+            <v-col>
+              <span><b>ゲスト</b></span><br />
+              <span>
+                未ログイン
+              </span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-divider />
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-list class="ml-3 mt-3" width="100%">
+                <v-list-item v-if="hasSession" @click="goHome">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-home-account</v-icon>
+                    ホーム
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item v-else @click="goLogin">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-login</v-icon>
+                    ログイン/登録
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="hasSession"  @click="goTierSettings">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-table-plus</v-icon>
+                    Tierの追加
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="hasSession"  @click="reviewDialog = true">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-book-plus-outline</v-icon>
+                    レビューの追加
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="hasSession" @click="goSettings">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-cog-outline</v-icon>
+                    ユーザー設定
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
+          <v-row v-if="hasSession">
+            <v-divider class="mt-2" />
+          </v-row>
+          <v-row v-if="hasSession">
+            <v-list class="ml-3 mt-2" width="100%">
+              <v-list-item @click="logoutDialog = true">
                 <v-list-item-title>
-                  <v-icon class="mr-3">mdi-home-account</v-icon>
-                  ホーム
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item v-if="hasSession" @click="goNotifications">
-                <v-list-item-title>
-                  <v-icon class="mr-3">mdi-bell-outline</v-icon>
-                  通知
-                  <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item v-else @click="goLogin">
-                <v-list-item-title>
-                  <v-icon class="mr-3">mdi-login</v-icon>
-                  ログイン/登録
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item v-if="hasSession"  @click="goTierSettings">
-                <v-list-item-title>
-                  <v-icon class="mr-3">mdi-table-plus</v-icon>
-                  Tier追加
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item v-if="hasSession" @click="goSettings">
-                <v-list-item-title>
-                  <v-icon class="mr-3">mdi-cog-outline</v-icon>
-                  ユーザー設定
+                  <v-icon class="mr-3">mdi-logout</v-icon>
+                  ログアウト
                 </v-list-item-title>
               </v-list-item>
             </v-list>
-          </v-col>
-        </v-row>
-        <v-row v-if="hasSession">
-          <v-divider class="mt-3" />
-        </v-row>
-        <v-row v-if="hasSession">
-          <v-list class="ml-3 mt-3" width="100%">
-            <v-list-item @click="logoutDialog = true">
+          </v-row>
+        </v-container>
+
+        <div style="position: absolute;bottom: 0px;">
+          <v-list class="ml-3" width="100%">
+            <v-list-item @click="goAbout">
               <v-list-item-title>
-                <v-icon class="mr-3">mdi-logout</v-icon>
-                ログアウト
+                このサイトについて
               </v-list-item-title>
             </v-list-item>
           </v-list>
-        </v-row>
-      </v-container>
-
-      <div style="position: absolute;bottom: 0px;">
-        <v-list class="ml-3 mt-3" width="100%">
-          <v-list-item @click="goAbout">
-            <v-list-item-title>
-              このサイトについて
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </div>
+        </div>
+      </v-card>
     </v-navigation-drawer>
 
     <v-app-bar v-if="!noBar" app class="pink lighten-4 anime" :style="barStyle">
@@ -138,6 +145,15 @@
       close-button-text="キャンセル"
       @submit="goLogout"
     />
+
+    <simple-dialog
+      v-model="reviewDialog"
+      title="レビューの追加"
+      text="レビューを追加したいTierを選んでください"
+      :show-submit-button="false"
+    >
+      <quick-review @close="reviewDialog = false" />
+    </simple-dialog>
   </v-app>
 </template>
 
@@ -146,6 +162,7 @@ import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import ProfileComponent from '@/components/ProfileComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import QuickReview from '@/components/QuickReview.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
@@ -157,7 +174,8 @@ export default defineComponent({
   components: {
     ProfileComponent,
     SimpleDialog,
-    FooterComponent
+    FooterComponent,
+    QuickReview
   },
   setup () {
     const route = useRoute()
@@ -165,6 +183,7 @@ export default defineComponent({
     const drawer = ref(false)
     const logoutDialog = ref(false)
     const forceDialog = ref(false)
+    const reviewDialog = ref(false)
 
     const sessionUserId = computed(() => store.state.userId)
 
@@ -291,6 +310,7 @@ export default defineComponent({
       appName,
       logoutDialog,
       forceDialog,
+      reviewDialog,
       userName,
       userProfile,
       userIconUrl,

@@ -1,5 +1,11 @@
 <template>
-  <v-col cols="6" sm="6" md="3" lg="3" xl="2">
+  <v-col
+    :cols="wide ? '12' : '6'"
+    :sm="wide ? '12' : '6'"
+    :md="wide ? '6' : '3'"
+    :lg="wide ? '6' : '3'"
+    :xl="wide ? '3' : '2'"
+  >
     <v-card flat>
       <div v-if="$slots.image != undefined" class="image-block">
         <slot name="image"></slot>
@@ -58,6 +64,10 @@ export default defineComponent({
     },
     license: {
       type: String
+    },
+    wide: {
+      type: Boolean,
+      default: false
     }
   },
   setup () {

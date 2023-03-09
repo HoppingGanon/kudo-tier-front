@@ -39,17 +39,23 @@
       </template>
     </v-expansion-panel>
   </v-expansion-panels>
+
+  <loading-component :is-loading="isloading" :is-force="true" class="mt-5" title="情報を取得しています..." />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store/index'
 import RestApi, { LoginServiceType, LoginVersionType, toastError } from '@/common/restapi'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import router from '@/router'
 import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'LoginComponent',
+  components: {
+    LoadingComponent
+  },
   props: {
     isUpdate: {
       type: Boolean,
@@ -68,8 +74,10 @@ export default defineComponent({
     const store = useStore()
     const toast = useToast()
     const retryLink = ref('')
+    const isloading = ref(false)
 
     const connectTemp = (service: LoginServiceType, version: LoginVersionType) => {
+      isloading.value = true
       if (!store.getters.isRegistered || (store.getters.isRegistered && props.isUpdate)) {
         // 未ログイン状態か、ログイン状態で連携サービスの更新をかける場合
         store.commit('setTempSessionId', '')
@@ -80,8 +88,10 @@ export default defineComponent({
           store.commit('setTempSessionId', response.data.sessionId)
           store.commit('setTempSessionService', service)
           store.commit('setTempSessionVersion', version)
+          isloading.value = false
           window.location.href = response.data.url
         }).catch((e) => {
+          isloading.value = false
           toastError(e, toast)
         })
       }
@@ -94,7 +104,8 @@ export default defineComponent({
 
     return {
       connectTemp,
-      retryLink
+      retryLink,
+      isloading
     }
   }
 })

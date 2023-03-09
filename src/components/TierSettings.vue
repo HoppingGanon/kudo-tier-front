@@ -7,7 +7,12 @@
       <v-card-title v-else class="font-weight-bold">
         Tier編集
       </v-card-title>
-      <div style="width: 100%;margin-right: 54px" class="d-flex flex-row-reverse">
+      <div style="width: 100%;margin-right: 54px" class="d-flex justify-end">
+        <v-btn icon @click="hint = true">
+          <v-icon>
+            mdi-help-circle
+          </v-icon>
+        </v-btn>
         <v-btn icon @click="submit">
           <v-icon>
             mdi-send
@@ -31,18 +36,6 @@
     <v-form ref="form">
       <v-container v-if="tab === 0" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
         <v-row>
-          <v-col>
-            <v-card-title class="font-weight-bold">
-              Tier情報の入力
-            </v-card-title>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-            <v-card-text>
-              このTierの情報を入力してください。
-            </v-card-text>
-          </v-col>
           <v-col class="d-flex flex-row-reverse">
             <div>
               <v-switch label="詳細設定を表示する" color="primary" v-model="displayDeatails" />
@@ -58,7 +51,7 @@
           <v-col>
             <v-text-field
               label="Tier名"
-              hint="このTierを表す分かりやすい名前を設定してください。"
+              :hint="`このTierを表す分かりやすい名前を設定してください(最大${tierValidation.tierNameLenMax}文字)`"
               :model-value="modelValue.name"
               @update:model-value="$emit('updateTierName', $event)"
               :rules="[rulesFunc.required(), rulesFunc.maxLen(tierValidation.tierNameLenMax)]"
@@ -85,16 +78,17 @@
           <v-col>
             <v-container fluid class="ma-0 pa-0">
               <v-row>
-                <v-col cols="12" sm="5" md="4" lg="3" xl="2">
+                <v-col cols="12" sm="12" md="4" lg="3" xl="2">
                   <point-type-selector
                     :model-value="pointType"
                     @update="$emit('updatePointType', $event)"
                     :always="true"
+                    :is-select="$vuetify.display.smAndDown"
                   />
                 </v-col>
                 <v-col style="vertical-align: top;">
                   <v-container class="ma-0 pa-0" fluid>
-                    <v-row>
+                    <v-row v-if="$vuetify.display.mdAndUp">
                       <v-col>
                         <v-card flat>
                           <span class="text-h5" v-text="modelValue.pointType" />
@@ -152,13 +146,15 @@
                         </table>
                       </v-col>
                     </v-row>
-                    <v-col>
-                      <v-divider />
-                    </v-col>
                   </v-container>
                 </v-col>
               </v-row>
             </v-container>
+          </v-col>
+        </v-row>
+        <v-row v-if="displayDeatails">
+          <v-col>
+            <v-divider />
           </v-col>
         </v-row>
         <v-row v-if="displayDeatails">
@@ -187,6 +183,18 @@
               :min="0"
               :max="40"
             />
+          </v-col>
+        </v-row>
+        <v-row v-if="displayDeatails">
+          <v-col>
+            <v-divider />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="text-end">
+            <v-icon class="mr-1 mt-1" @click="page=1;hint=true;">
+              mdi-help
+            </v-icon>
           </v-col>
         </v-row>
         <v-row>
@@ -222,6 +230,7 @@
               @submit="submit"
               @preview="toggleTab"
               title="説明文の追加"
+              @open-hint="page = 2;hint = true;"
             />
           </v-col>
         </v-row>
@@ -229,13 +238,6 @@
     </v-form>
 
     <v-container v-if="tab === 1" class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
-      <v-row>
-        <v-col>
-          <v-card-title class="font-weight-bold">
-            プレビュー
-          </v-card-title>
-        </v-col>
-      </v-row>
       <v-row>
         <v-col>
           <v-card>
@@ -279,11 +281,14 @@
     </v-row>
   </v-card-actions>
 
+  <tier-settings-hint v-model="hint" v-model:page="page" />
+
   <simple-dialog v-model="cautionsDialog" title="警告" @submit="upload">
     <div v-for="c, i of cautions" :key="i" class="ma-2">
       <div><span class="error-style" v-text="c"></span></div>
     </div>
   </simple-dialog>
+  <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="Tierを送信中..." />
 </template>
 
 <script lang="ts">
@@ -298,6 +303,8 @@ import SectionEditorComponent from '@/components/SectionEditorComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import PaddingComponent from '@/components/PaddingComponent.vue'
 import EditorTools from '@/components/EditorTools.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
+import TierSettingsHint from '@/components/TierSettingsHint.vue'
 import rules from '@/common/rules'
 import { ToastProps, useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
@@ -315,7 +322,9 @@ export default defineComponent({
     SectionEditorComponent,
     SimpleDialog,
     PaddingComponent,
-    EditorTools
+    EditorTools,
+    LoadingComponent,
+    TierSettingsHint
   },
   props: {
     modelValue: {
@@ -400,7 +409,10 @@ export default defineComponent({
     const tweetdialog = ref(false)
     const cautionsDialog = ref(false)
     const isSubmitting = ref(false)
+    /** 詳細表示 */
     const displayDeatails = ref(false)
+    const hint = ref(false)
+    const page = ref(0)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -427,11 +439,7 @@ export default defineComponent({
     }
 
     const addParagItemProxy = (type: ReviewParagraphType, index: number) => {
-      if (props.modelValue.parags.length < sectionValidation.paragsLenMax) {
-        emit('addParagItem', type, index)
-      } else {
-        toast.warning(`追加できる説明文/リンクは合計${sectionValidation.paragsLenMax}個までです`)
-      }
+      emit('addParagItem', type, index)
     }
 
     const sections: ComputedRef<ReviewSection[]> = computed(() => {
@@ -455,21 +463,24 @@ export default defineComponent({
 
     const upload = () => {
       const data = ReviewFunc.createTierRequestData(props.modelValue)
+      isSubmitting.value = true
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
-          isSubmitting.value = true
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       } else {
         RestApi.updateTier(data, props.modelValue.tierId).then((v) => {
           toast.success('Tierを更新しました')
-          isSubmitting.value = true
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
+        }).finally(() => {
+          isSubmitting.value = false
         })
       }
     }
@@ -551,9 +562,6 @@ export default defineComponent({
       }
     }
 
-    // これがないとイベントが設定できない
-    history.replaceState(null, '')
-
     // ページを離れた時に警告する
     onBeforeRouteLeave(() => {
       if (!isSubmitting.value) {
@@ -594,9 +602,12 @@ export default defineComponent({
       rulesFunc: rules,
       tierValidation,
       displayDeatails,
+      hint,
+      page,
       tab,
       tweetdialog,
       cautionsDialog,
+      isSubmitting,
       updateWeightNameProxy,
       updateWeightIsPointProxy,
       updateWeightProxy,
