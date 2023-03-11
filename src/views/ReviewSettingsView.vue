@@ -198,6 +198,7 @@ import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
 import router from '@/router'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -265,6 +266,12 @@ export default defineComponent({
           toastError(e, toast)
           loading.value = false
           router.replace('/404')
+        })
+        RestApi.getLatestPostLists(store.state.userId, 1).then((res) => {
+          if (res.data.reviews.length === 0) {
+            hint.value = true
+            page.value = 0
+          }
         })
       } else if (route.params.rid && typeof route.params.rid === 'string') {
         // RouterからReviewIDが指定されている場合

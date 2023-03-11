@@ -293,7 +293,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierValidation, sectionValidation, ReviewSection } from '@/common/review'
-import { computed, ComputedRef, defineComponent, PropType, ref } from 'vue'
+import { computed, ComputedRef, defineComponent, onMounted, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TierComponent from '@/components/TierComponent.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
@@ -310,6 +310,7 @@ import { ToastProps, useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettings',
@@ -576,6 +577,15 @@ export default defineComponent({
         }
       }
       return true
+    })
+
+    onMounted(() => {
+      RestApi.getLatestPostLists(store.state.userId, 1).then((res) => {
+        if (res.data.tiers.length === 0) {
+          hint.value = true
+          page.value = 0
+        }
+      })
     })
     const updateParams = (value: ReviewFactorParam[]) => {
       emit('updateParams', value)
