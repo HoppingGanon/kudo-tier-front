@@ -28,12 +28,11 @@
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">評価のデータ化</span>
+          <span class="text-h6 font-weight-bold">すぐ・簡単に使える</span>
         </p>
         <br />
         <p>
-          評価に具体的な数値情報をつけることで、データの有効活用ができるようになる予定です。<br/>
-          まだやっていません。明日やる。
+          TwitterやGoogleのアカウントを使用して、誰でも簡単に始めることができます。
         </p>
       </v-col>
     </v-row>
@@ -74,7 +73,7 @@
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">しっかり伝わる説明文</span>
+          <span class="text-h6 font-weight-bold">くどくど説明文</span>
         </p>
         <br />
         <p>
@@ -124,7 +123,7 @@
         </p>
         <br />
         <p>
-          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(beta版機能だけどもう推せる機能無いし、動くからヨシ!)。
+          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(まだbeta版機能だけどヨシ!)。
         </p>
       </v-col>
     </v-row>
