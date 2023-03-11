@@ -175,7 +175,7 @@
     </v-card>
   </v-container>
 
-  <review-settings-hint v-model="hint" v-model:page="page" />
+  <review-settings-hint v-model="hint" v-model:page="page" :title="isNew ? 'レビューを作成しましょう' : 'レビューを編集しましょう'" />
 
   <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
   <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="レビューを取得中..." />

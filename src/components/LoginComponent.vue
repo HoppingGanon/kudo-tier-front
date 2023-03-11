@@ -1,5 +1,7 @@
+<!-- サービス連携によるログイン画面のコンポーネント -->
+
 <template>
-  <div v-if="!disableTwitter" style="width: 100%;text-align:center;">
+  <div v-if="!disableTwitter" style="width: 100%;" class="text-center">
     <div class="ma-2" style="display: inline-block;">
       <span class="text-subtitle-2">Twitterでログイン(OAuth1.0a)</span>
     </div>
@@ -9,7 +11,7 @@
     </div>
   </div>
   <br/>
-  <div v-if="!disableGoogle" style="width: 100%;text-align:center;">
+  <div v-if="!disableGoogle" style="width: 100%;" class="text-center">
     <div class="ma-2" style="display: inline-block;">
       <span class="text-subtitle-2">Googleでログイン(OAuth2.0)</span>
     </div>
@@ -21,7 +23,7 @@
   <v-expansion-panels v-if="!disableTwitter" multiple>
     <v-expansion-panel title="敗北者認証">
       <template v-slot:text>
-        <div style="width: 100%;text-align:center;">
+        <div style="width: 100%;" class="text-center">
         <span class="text-subtitle-2">Twitterでログイン(OAuth2.0)</span><br>
         <span class="text-caption" style="color: gray;">
           こっちの方が新しい認証方法だから文献少ない中ライブラリも無しに実装したのに、
@@ -57,14 +59,17 @@ export default defineComponent({
     LoadingComponent
   },
   props: {
+    /** 既にセッションを持っていて、サービス連携をする場合 */
     isUpdate: {
       type: Boolean,
       default: false
     },
+    /** Twitterのボタンを表示しない */
     disableTwitter: {
       type: Boolean,
       default: false
     },
+    /** Googleのボタンを表示しない */
     disableGoogle: {
       type: Boolean,
       default: false

@@ -1,3 +1,5 @@
+<!-- あらかじめシェルで出力したjsonファイルを読み込んで、ライセンス一覧を表示するコンポーネント -->
+
 <template>
   <table>
     <tr :style="bgStyle">
@@ -45,7 +47,7 @@
 import vuetify from '@/plugins/vuetify'
 import { defineComponent, PropType, ref } from 'vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
-import { LicenseData } from '@/common/restapi'
+import { LicenseData } from '@/common/page'
 
 export default defineComponent({
   name: 'LicenseList',
@@ -53,12 +55,12 @@ export default defineComponent({
     SimpleDialog
   },
   props: {
+    /**  ライセンスデータ(jsonから読み込んで渡す) */
     licenses: {
       type: Array as PropType<LicenseData[]>,
       required: true
     }
   },
-  emits: {},
   setup () {
     const bgStyle = `
 background-color: ${vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry};

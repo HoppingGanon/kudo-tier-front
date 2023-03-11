@@ -6,11 +6,13 @@ export interface SelectObject <T = string | number, D = string | number> {
   icon?: string
 }
 
-export type TierSortType = 'updatedAtDesc' | 'updatedAtAsc' | 'createdAtDesc' | 'createdAtAsc'
-export type TierContentType = 'review' | 'tier'
+/** 投稿の表示ソート順 */
+export type PostSortType = 'updatedAtDesc' | 'updatedAtAsc' | 'createdAtDesc' | 'createdAtAsc'
+/** 投稿の種類 */
+export type PostContentType = 'review' | 'tier'
 
-// Tierの表示ソート順
-export const tierSortTypeList: SelectObject<TierSortType>[] = [
+/** Tierの表示ソート順 */
+export const tierSortTypeList: SelectObject<PostSortType>[] = [
   {
     value: 'updatedAtDesc',
     text: '更新が新しい順'
@@ -29,8 +31,8 @@ export const tierSortTypeList: SelectObject<TierSortType>[] = [
   }
 ]
 
-// Tierの検索対象
-export const tierContentTypeList: SelectObject<TierContentType>[] = [
+/** Tierの検索対象 */
+export const tierContentTypeList: SelectObject<PostContentType>[] = [
   {
     value: 'tier',
     text: 'Tier'
@@ -65,6 +67,7 @@ export const ImageFormatList: SelectObject<ImageFileFormat>[] = [
   }
 ]
 
+/** ピボットTierのアイコン表示サイズ */
 export const iconSizeList: SelectObject<IconSize>[] = [
   {
     text: '特大',
@@ -88,6 +91,7 @@ export const iconSizeList: SelectObject<IconSize>[] = [
   }
 ]
 
+/** ピボットTierの評点表示サイズ */
 export const textSizeList: SelectObject<PointDisplaySize>[] = [
   {
     text: '最大',
@@ -115,6 +119,7 @@ export const textSizeList: SelectObject<PointDisplaySize>[] = [
   }
 ]
 
+/** ピボットTierのテーマ */
 export const tierThemeList: SelectObject<RankingTheme>[] = [
   {
     text: 'ノーマルテーマ',
@@ -133,3 +138,15 @@ export const tierThemeList: SelectObject<RankingTheme>[] = [
     value: 'dark-reverse'
   }
 ]
+
+/** ライセンス情報のデータ */
+export interface LicenseData {
+  /** インストール済みバージョンを含めたパッケージの名称 */
+  fullName: string,
+  /** ライセンスの種類 */
+  license: string,
+  /** ライセンスファイルの名前 */
+  licenseName: string
+  /** ライセンスファイルの内容 */
+  content: string,
+}

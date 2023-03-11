@@ -1,3 +1,5 @@
+<!-- ピボットTierを表示するコンポーネント -->
+
 <template>
   <!-- スコアやランク表示 -->
   <table
@@ -86,43 +88,53 @@ export default defineComponent({
     ReviewValueDisplay
   },
   props: {
+    /** ピボット済の計算済みレビューリスト */
     tierPivotList: {
       type: Array as PropType<TierPivotInfomation[][]>,
       reuired: true,
       default: () => [] as TierPivotInfomation[][]
     },
+    /** ポイント表示タイプ */
     pointType: {
       type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     },
+    /** ピボットTierのアイコンのサイズ */
     iconSize: {
       type: String as PropType<IconSize>,
       default: '48px'
     },
+    /** ピボットTierの評点のサイズ */
     textSize: {
       type: String as PropType<PointDisplaySize>,
       default: 'large2'
     },
+    /** レビューの評価項目 */
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       reuired: true,
       default: () => [] as ReviewFactorParam[]
     },
+    /** ピボットTierのテーマ */
     theme: {
       type: String as PropType<RankingTheme>,
       default: 'light'
     },
+    /** ピボットTierの幅 */
     width: {
       type: String
     },
+    /** クリックするとレビュー単独のページに飛ぶ */
     directLink: {
       type: Boolean,
       default: false
     },
+    /** Tier調整値 */
     pullingUp: {
       type: Number,
       required: true
     },
+    /** Tier調整値 */
     pullingDown: {
       type: Number,
       required: true

@@ -1,3 +1,5 @@
+<!-- TierRankingPivotで表示するアイコンのコンポーネント -->
+
 <template>
   <v-card v-if="directLink" class="cursor-pointer" :width="size" :height="size" v-scroll-to="`#rev${infomation.review.reviewId}`">
     <v-img v-if="infomation.review.iconUrl" :src="getImgSource(infomation.review.iconUrl)" />
@@ -50,14 +52,17 @@ export default defineComponent({
     ReviewComponent
   },
   props: {
+    /** 計算済みのレビューの情報 */
     infomation: {
       type: Object as PropType<TierPivotInfomation>,
       required: true
     },
+    /** アイコンのサイズ */
     size: {
       type: String as PropType<IconSize>,
       default: '64px' as IconSize
     },
+    /** ホバーイベントで略式カードを表示するかどうか */
     noHover: {
       type: Boolean,
       default: false
@@ -67,18 +72,22 @@ export default defineComponent({
       type: String as PropType<ReviewPointType>,
       required: true
     },
+    /** レビューの評価項目 */
     reviewFactorParams: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true
     },
+    /** クリックするとページ内参照やカード表示をせず、レビュー単独のページに飛ぶ */
     directLink: {
       type: Boolean,
       default: false
     },
+    /** Tier調整値 */
     pullingUp: {
       type: Number,
       required: true
     },
+    /** Tier調整値 */
     pullingDown: {
       type: Number,
       required: true

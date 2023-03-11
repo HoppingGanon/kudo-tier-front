@@ -1,3 +1,5 @@
+<!-- ユーザーのプロフィールを表示する -->
+
 <template>
   <v-container fluid>
     <v-row>
@@ -64,61 +66,69 @@
 </template>
 
 <script lang="ts">
-import { TierContentType } from '@/common/page'
+import { PostContentType } from '@/common/page'
 import router from '@/router'
 import { getImgSource } from '@/common/restapi'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ProfileComponent',
-  components: { },
   props: {
+    /** 表示名 */
     dispName: {
       type: String,
       default: ''
     },
+    /** アイコンのURL */
     iconUrl: {
       type: String,
       default: ''
     },
+    /** プロフィール文 */
     profile: {
       type: String,
       default: ''
     },
+    /** 投稿したTierの数 */
     tiersCount: {
       type: Number,
       default: 0
     },
+    /** 投稿したレビューの数 */
     reviewsCount: {
       type: Number,
       default: 0
     },
+    /** 略式表示 */
     isSummary: {
       type: Boolean,
       default: false
     },
+    /** 幅を減らして縦長の表示をする */
     isVertical: {
       type: Boolean,
       default: false
     },
+    /** ユーザーID */
     userId: {
       type: String,
       required: true
     },
+    /** Twitterボタンを表示する（TwitterIdが未指定の場合はボタンは表示されない） */
     allowTwitterLink: {
       type: Boolean,
       default: false
     },
+    /** TwitterのID */
     twitterId: {
       type: String,
       default: ''
     }
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props) {
     return {
       imgSource: computed(() => getImgSource(props.iconUrl)),
-      goHome: (tab?: TierContentType) => {
+      goHome: (tab?: PostContentType) => {
         if (tab) {
           router.push(`/home/${props.userId}?tab=${tab}`)
         } else {

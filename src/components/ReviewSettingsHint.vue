@@ -1,7 +1,9 @@
+<!-- レビュー作成・編集のhintを表示 -->
+
 <template>
   <hint-dialog :model-value="modelValue" @update:model-value="$emit('update:model-value', $event)" :page="page" @update:page="$emit('update:page', $event)" >
     <template v-slot:default="{ close }">
-      <hint-card title="レビューを作成しましょう" sub-title="名前をつけましょう" @close="close">
+      <hint-card :title="title" sub-title="名前をつけましょう" @close="close">
         <template v-slot:image>
           <v-img src="@/assets/hint/review-settings/header.png" />
         </template>
@@ -19,7 +21,7 @@
           </div>
         </template>
       </hint-card>
-      <hint-card title="レビューを作成しましょう" sub-title="評点の設定" @close="close">
+      <hint-card :title="title" sub-title="評点の設定" @close="close">
         <template v-slot:image>
           <v-img src="@/assets/hint/review-settings/point.png" />
         </template>
@@ -33,7 +35,7 @@
           </div>
         </template>
       </hint-card>
-      <hint-card title="レビューを作成しましょう" sub-title="説明文を追加しましょう" @close="close">
+      <hint-card :title="title" sub-title="説明文を追加しましょう" @close="close">
         <template v-slot:image>
           <v-img src="@/assets/hint/review-settings/section.png" />
         </template>
@@ -59,7 +61,7 @@
           セクションは最大<span v-text="reviewValidation.sectionLenMax"></span>個まで追加できます。
         </template>
       </hint-card>
-      <hint-card title="レビューを作成しましょう" sub-title="プレビューと作成" @close="close">
+      <hint-card :title="title" sub-title="プレビューと作成" @close="close">
         <template v-slot:image>
           <v-img src="@/assets/hint/review-settings/preview.png" />
         </template>
@@ -89,19 +91,34 @@ export default defineComponent({
     HintCard
   },
   props: {
+    /** ダイアログが開いてる状態かどうか */
     modelValue: {
       type: Boolean,
       required: true
     },
+    /** ページ番号 */
     page: {
       type: Number,
       required: true
+    },
+    /** 初期ページ番号 */
+    title: {
+      type: String,
+      default: ''
     }
   },
   emits: {
+    /**
+     * ダイアログの開閉操作が行われた際のイベント
+     * @param v ダイアログの状態
+     */
     'update:model-value': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: boolean) => true,
+    /**
+     * ページが変化した際のイベント
+     * @param v ページ番号
+     */
     'update:page': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: number) => true

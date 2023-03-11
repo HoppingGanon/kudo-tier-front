@@ -1,3 +1,5 @@
+<!-- パラグラフを編集するコンポーネント -->
+
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-row>
@@ -20,6 +22,7 @@
           @update-cropped-url="$emit('updateParagBody', $event)"
           img-max-height="320px"
           @clear="$emit('clear')"
+          :show-remove-always="true"
         />
       </v-col>
       <v-col v-else-if="parag.type === 'serviceLink'">
@@ -50,22 +53,33 @@ export default defineComponent({
     LinkEditor
   },
   props: {
+    /** パラグラフ */
     parag: {
       type: Object as PropType<ReviewParagraph>,
       required: true
     },
-    /** textに渡すタイトル */
+    /** パラグラフのタイプが'text'に渡すタイトル */
     title: {
       type: String,
       default: ''
     }
   },
   emits: {
+    /**
+     * パラグラフのbodyが更新された際のイベント
+     * @param v 更新内容
+     */
     updateParagBody: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
+    /** フォーカスを取得した際のイベント */
     focusin: () => true,
+    /** フォーカスを失った際のイベント */
     focusout: () => true,
+    /**
+     * テキスト入力カーソルが移動した際のイベント
+     * @param カーソル位置
+     */
     moveCursor: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true,

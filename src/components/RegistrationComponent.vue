@@ -1,3 +1,5 @@
+<!-- ユーザー登録のコンポーネント -->
+
 <template>
   <v-container flat>
     <v-row v-show="isNew">
@@ -101,44 +103,55 @@ export default defineComponent({
     ImageSelector
   },
   props: {
+    /** ツイッター表示名 */
     twitterUserName: {
       type: String,
       default: ''
     },
+    /** Googleのメインメールアドレス */
     googleEmail: {
       type: String,
       default: ''
     },
+    /** 表示名 */
     dispName: {
       type: String,
       required: true
     },
+    /** プロフィール文 */
     profile: {
       type: String,
       required: true
     },
+    /** 規約への同意 */
     isCheckedTerms: {
       type: Boolean
     },
+    /** アイコンのURL */
     iconUrl: {
       type: String,
       required: true
     },
+    /** 新規作成かどうか */
     isNew: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /** 表示名の更新の際のイベント */
     'update:dispName': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
+    /** プロフィール文の更新の際のイベント */
     'update:profile': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
+    /** 規約への同意更新の際のイベント */
     'update:isCheckedTerms': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: boolean) => true,
+    /** アイコンURL更新の際のイベント */
     'update:iconUrl': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true

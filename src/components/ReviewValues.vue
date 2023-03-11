@@ -1,3 +1,4 @@
+<!-- ポイントを並べて表示するコンポーネント -->
 <template>
   <v-container fluid>
     <!-- レビューの評点や文字列情報を表示 -->
@@ -32,7 +33,7 @@
             class="break-word"
             v-text="factor.info"
             :class="$vuetify.display.xs ? 'text-caption' : ''"
-          />
+          ></span>
         </div>
       </v-col>
     </v-row>
@@ -50,26 +51,35 @@ export default defineComponent({
     ReviewValueDisplay
   },
   props: {
+    /** レビュー評点や情報 */
     factors: {
       type: Array as PropType<ReviewFactor[]>,
       required: true
     },
+    /** レビューの表示方法 */
     displayType: {
       type: String as PropType<ReviewDisplayType>,
       required: true
     },
+    /** ポイント表示方法 */
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
     },
+    /** レビュー評価項目 */
     reviewFactorParams: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true
     }
   },
   emits: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    updatePointType: (value: ReviewPointType) => true
+    /**
+     * ポイント表示方法の更新イベント
+     * @param value ポイント表示方法
+     */
+    updatePointType: (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      value: ReviewPointType) => true
   },
   setup () {
     const getReviewDisp = ReviewFunc.getReviewDisp

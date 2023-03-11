@@ -1,3 +1,5 @@
+<!-- ピボットTierを画像に変換するコンポーネント -->
+
 <template>
   <v-container>
     <v-row>
@@ -110,56 +112,79 @@ export default defineComponent({
     PointTypeSelector
   },
   props: {
+    /** ピボット済の計算済みレビューリスト */
     tierPivotList: {
       type: Array as PropType<TierPivotInfomation[][]>,
       reuired: true,
       default: () => [] as TierPivotInfomation[][]
     },
+    /** ポイント表示タイプ */
     pointType: {
       type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     },
+    /** レビューの評価項目 */
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       reuired: true,
       default: () => [] as ReviewFactorParam[]
     },
+    /** ピボットTierのテーマ */
     theme: {
       type: String as PropType<RankingTheme>,
       default: 'light'
     },
+    /** ピボットTierのアイコンサイズ */
     iconSize: {
       type: String,
       default: '64px'
     },
+    /** ピボットTierの評点のサイズ */
     textSize: {
       type: String as PropType<PointDisplaySize>,
       default: 'large2'
     },
+    /** Tier調整値 */
     pullingUp: {
       type: Number,
       required: true
     },
+    /** Tier調整値 */
     pullingDown: {
       type: Number,
       required: true
     }
   },
   emits: {
+    /**
+     * ピボットTierのテーマを更新する際のイベント
+     * @param value テーマ
+     */
     'update:theme': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: RankingTheme) => true,
+    /**
+     * ポイント表示タイプを更新する際のイベント
+     * @param value ポイント表示タイプ
+     */
     'update:pointType': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true,
+    /**
+     * ピボットTierのアイコンサイズを変更する際のイベント
+     * @param value アイコンサイズ
+     */
     'update:iconSize': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string) => true,
+    /**
+     * ピボットTierの評点のサイズを変更する際のイベント
+     * @param value 評点のサイズ
+     */
     'update:textSize': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string) => true
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup () {
     const save = () => {
       const tierRankingPivot = document.getElementById('tier-ranking-pivot')

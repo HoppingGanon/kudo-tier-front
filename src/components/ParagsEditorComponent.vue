@@ -1,3 +1,5 @@
+<!-- パラグラフの編集を束ねたコンポーネント -->
+
 <template>
   <v-container :class="$vuetify.display.mobile ? 'pl-3 pt-0 pb-0 pr-0 ma-0' : 'pl-5 pt-0 pb-0 pr-0 ma-0'" fulid>
     <v-row v-for="p, i of parags" :key="i">
@@ -27,30 +29,62 @@ export default defineComponent({
     ParagEditorComponent
   },
   props: {
+    /** パラグラフの配列 */
     parags: {
       type: Object as PropType<ReviewParagraph[]>,
       required: true
     }
   },
   emits: {
+    /**
+     * パラグラフの配列が更新された際のイベント
+     * @param v パラグラフの配列
+     */
     'update:parags': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: ReviewParagraph[]) => true,
+    /**
+     * パラグラフのbodyが更新された際のイベント
+     * @param v 更新内容
+     * @param paragIndex パラグラフのインデックス
+     */
     updateParagBody: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string, paragIndex: number) => true,
+    /**
+     * パラグラフを追加する際のイベント
+     * @param paragType パラグラフのタイプ
+     * @param sectionIndex セクションのインデックス
+     * @param paragIndex パラグラフのインデックス
+     */
     addParag: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       paragType: ReviewParagraphType, sectionIndex: number, paragIndex: number) => true,
+    /**
+     * パラグラフを削除する際のイベント
+     * @param paragIndex パラグラフのインデックス
+     */
     delParag: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       paragIndex: number) => true,
+    /**
+     * フォーカスを取得した際のイベント
+     * @param paragIndex パラグラフのインデックス
+     */
     focusin: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       paragIndex: number) => true,
+    /**
+     * フォーカスを失った際のイベント
+     * @param paragIndex パラグラフのインデックス
+     */
     focusout: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       paragIndex: number) => true,
+    /**
+     * テキスト入力カーソルが移動した際のイベント
+     * @param index パラグラフのインデックス
+     */
     moveCursor: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true

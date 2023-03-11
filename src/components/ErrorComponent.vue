@@ -1,3 +1,5 @@
+<!-- エラー表示のコンポーネント -->
+
 <template>
   <v-card-title>
     エラー
@@ -13,6 +15,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ErrorComponent',
   props: {
+    /** 追加で表示するコメント */
     comment: {
       type: String,
       default: ''

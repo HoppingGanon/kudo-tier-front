@@ -1,3 +1,5 @@
+<!-- 評価項目の重みや情報を設定するコンポーネント -->
+
 <template>
   <v-container class="pa-0 ma-0" fluid>
     <v-row dense :style="'background-color:' + bgColor">
@@ -173,46 +175,76 @@ export default defineComponent({
     draggable
   },
   props: {
+    /** 評価項目の配列 */
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true,
       default: () => [] as PropType<ReviewFactorParam[]>
     },
+    /** 変更不可 */
     readonly: {
       type: Boolean,
       default: false
     },
+    /** タイプが「情報」の場合に適用する入力規則 */
     rules: {
       type: Array as PropType<((v: string) => string | boolean)[]>,
       default: undefined
     },
+    /** タイプが「ポイント」の項目を一つ以上の含めることを強制する */
     requiredPoint: {
       type: Boolean,
       default: false
     },
+    /** 評価項目の合計数上限 */
     maxLen: {
       type: Number,
       default: 16
     },
+    /** 詳細を表示 */
     showDetails: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /**
+     * 評価項目の配列を更新する際のイベント
+     * @param value 評価項目の配列
+     */
     updateParams: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewFactorParam[]) => true,
+    /**
+     * 評価項目の名前を更新する際のイベント
+     * @param value 評価項目の名前
+     * @param index 評価項目のインデックス
+     */
     updateName: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string, index: number) => true,
+    /**
+     * 評価項目のタイプを更新する際のイベント
+     * @param value タイプ「ポイント」かどうか
+     * @param index 評価項目のインデックス
+     */
     updateIsPoint: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: boolean, index: number) => true,
+    /**
+     * 評価項目の重みを更新する際のイベント
+     * @param value 重み
+     * @param index 評価項目のインデックス
+     */
     updateWeight: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: number, index: number) => true,
+    /** 評価項目を追加するイベント */
     addItem: () => true,
+    /**
+     * 評価項目を削除するイベント
+     * @param index 評価項目のインデックス
+     */
     removeItem: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true
@@ -227,7 +259,6 @@ export default defineComponent({
       }
     }
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const toast = useToast()
     const bgColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.thirdry

@@ -1,3 +1,5 @@
+<!-- abooutページでサービスを列記する際に使用するコンポーネント -->
+
 <template>
   <v-col
     :cols="wide ? '12' : '6'"
@@ -50,21 +52,26 @@ export default defineComponent({
     SimpleDialog
   },
   props: {
+    /** タイトル */
     title: {
       type: String,
       default: ''
     },
+    /** サブタイトル */
     subtitle: {
       type: String,
       default: ''
     },
+    /** 説明文 */
     text: {
       type: String,
       default: ''
     },
+    /** ライセンス全文 */
     license: {
       type: String
     },
+    /** （画面がxsの際にのみ）幅いっぱいに表示する */
     wide: {
       type: Boolean,
       default: false

@@ -1,3 +1,5 @@
+<!-- 使い方を説明するhintダイアログの一ページ分のコンポーネント -->
+
 <template>
   <v-carousel-item>
     <div :style="width" class="centering scroll">
@@ -34,14 +36,17 @@ import { useDisplay } from 'vuetify/lib/framework.mjs'
 export default defineComponent({
   name: 'HintCard',
   props: {
+    /** ページタイトル */
     title: {
       type: String
     },
+    /** 内容の見出し */
     subTitle: {
       type: String
     }
   },
   emits: {
+    /** 閉じるボタンが押された際のイベント */
     close: () => true
   },
   setup () {

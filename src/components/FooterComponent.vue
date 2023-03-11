@@ -1,3 +1,5 @@
+<!-- ページの下部に必ず表示するフッターのコンポーネント -->
+
 <template>
   <v-divider class="ma-5"></v-divider>
   <v-footer

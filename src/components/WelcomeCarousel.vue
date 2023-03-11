@@ -1,3 +1,5 @@
+<!-- welcomeの上部に表示するカルーセルのコンポーネント -->
+
 <template>
   <div v-if="loading">
     <v-dialog :model-value="loading" :persistent="true" :fullscreen="true">

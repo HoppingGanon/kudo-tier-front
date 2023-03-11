@@ -1,3 +1,5 @@
+<!-- ボタンとメニューを合わせたコンポーネント -->
+
 <template>
   <v-menu v-model="menu">
     <template v-slot:activator="{ props }">
@@ -25,25 +27,34 @@ export default defineComponent({
   name: 'MenuButton',
   components: {},
   props: {
+    /** 表示するアイテム */
     items: {
       type: Array,
       default: () => []
     },
+    /** 表示名のキー名 */
     itemTitle: {
       type: String as PropType<string | number>
     },
+    /** 値のキー名 */
     itemValue: {
       type: String as PropType<string | number>
     },
+    /** アイコンのキー名 */
     itemIcon: {
       type: String as PropType<string | number>
     },
+    /** 番号ではなくオブジェクトで返す */
     returnObject: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /**
+     * 選択した際のイベント
+     * @param v 選択した番号またはオブジェクト
+     */
     select: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
       v: any) => true

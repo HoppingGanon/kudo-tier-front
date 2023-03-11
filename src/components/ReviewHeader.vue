@@ -1,3 +1,5 @@
+<!-- レビューやTierに付与するヘッダ -->
+
 <template>
   <div style="display:flex">
     <div class="avatar-space cursor-pointer" @click="goHome">
@@ -22,26 +24,28 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ReviewHeader',
-  components: {},
   props: {
+    /** 表示名 */
     dispName: {
       type: String,
       required: true
     },
+    /** ユーザーID */
     userId: {
       type: String,
       required: true
     },
+    /** 最終更新日 */
     lastWriteTime: {
       type: String,
       required: true
     },
+    /** ユーザーのアイコンURL */
     iconUrl: {
       type: String,
       required: true
     }
   },
-  emits: { },
   setup (props) {
     const goHome = () => {
       router.push(`/home/${props.userId}`)

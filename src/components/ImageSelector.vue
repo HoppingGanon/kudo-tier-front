@@ -1,3 +1,5 @@
+<!-- 画像の選択、切り取り、プレビューのコンポーネント -->
+
 <template>
   <div style="display: none;">
     <v-file-input
@@ -18,16 +20,21 @@
       </slot>
     </div>
     <div class="d-flex flex-column">
+      <!-- ファイルをクリアする -->
       <v-btn flat icon @click="clearFile" color="#FFF0">
         <v-icon>
           mdi-close
         </v-icon>
       </v-btn>
+
+      <!-- 画像を開く -->
       <v-btn flat icon @click="inputFile" color="#FFF0">
         <v-icon>
           mdi-folder-open-outline
         </v-icon>
       </v-btn>
+
+      <!-- 選択中の画像をクリップする -->
       <v-btn icon flat @click="openCropMenu" color="#FFF0">
         <v-icon>
           mdi-crop
@@ -37,7 +44,8 @@
   </div>
   <div v-else class="dahed-box pa-5">
     <div>
-      <v-btn flat icon @click="clearFile" color="#FFF0">
+      <!-- ファイルをクリアする(showRemoveAlwaysがない場合は表示しない) -->
+      <v-btn v-if="showRemoveAlways" flat icon @click="clearFile" color="#FFF0">
         <v-icon>
           mdi-close
         </v-icon>
@@ -46,6 +54,8 @@
     <div>
       <span v-text="label"></span>
     </div>
+
+    <!-- 画像を開く -->
     <v-btn @click="inputFile" color="primary">画像を開く</v-btn>
   </div>
 
@@ -57,11 +67,15 @@
           画像のクリッピング
         </v-card-title>
         <v-spacer />
+
+        <!-- クリッピングのキャンセル -->
         <v-btn icon flat @click="closeCrop">
           <v-icon>
             mdi-close
           </v-icon>
         </v-btn>
+
+        <!-- クリッピングの確定 -->
         <v-btn icon flat @click="enterCrop">
           <v-icon>
             mdi-check
@@ -72,6 +86,7 @@
         <v-row>
           <v-col class="d-flex justify-center">
             <div :style="canvasSize">
+              <!-- 画像の切り取り -->
               <vue-cropper
                 class="ba-5"
                 ref="cropper"
@@ -103,21 +118,35 @@ export default defineComponent({
     VueCropper
   },
   props: {
+    /**
+     * クリッピングのアスペクト比
+     * 0ならアスペクト比を強制しない
+     * 正の値ならその値でアスペクト比を強制する
+     * 負の値は禁止
+     */
     aspectRatio: {
       type: Number,
       default: 0
     },
+    /** 画像未選択時、枠内に表示するラベル */
     label: {
       type: String,
       default: '画像ファイルを選択してください'
     },
+    /** クロップ後のURL(URL,Data URL, Blobに対応) */
     croppedUrl: {
       type: String,
       default: ''
     },
+    /** クロップ画面における画像の高さの上限 */
     imgMaxHeight: {
       type: String,
       default: ''
+    },
+    /** 画像が未選択でもクリアボタンを表示する */
+    showRemoveAlways: {
+      type: Boolean,
+      default: false
     }
   },
   emits: {
@@ -139,9 +168,12 @@ export default defineComponent({
     const imgFiles = ref([] as File[])
     /** Inpuutをキャンセルしたときに前回分に戻すための退避 */
     const preImgFiles = ref([] as File[])
+    /** クリッピングのオブジェクト */
     const cropper = ref()
     const fileInputRef = ref()
     const fileUrl = ref('')
+
+    /** クロップ済みURL */
     const croppedUrlProxy = computed(() => {
       if (props.croppedUrl !== '') {
         return getImgSource(props.croppedUrl)
@@ -149,7 +181,9 @@ export default defineComponent({
         return ''
       }
     })
+
     const fileUrlProxy = computed(() => {
+      // ファイルのURLがあればそれを返す、無ければクロップ済みURLを返す
       if (fileUrl.value !== '') {
         return getImgSource(fileUrl.value)
       } else {
@@ -157,6 +191,7 @@ export default defineComponent({
       }
     })
 
+    /** クロップメニューを開く */
     const openCropMenu = () => {
       if (!fileUrl.value) {
         // ファイルのURLが空ならcroppedUrlを入れる
@@ -172,6 +207,7 @@ export default defineComponent({
       }
     }
 
+    /** v-file-inputに渡すファイル更新処理 */
     const updateFile = (v: File[]) => {
       if (v.length > 0) {
         preImgFiles.value.splice(0)
@@ -184,6 +220,7 @@ export default defineComponent({
       }
     }
 
+    /** ファイルをクリア */
     const clearFile = () => {
       preImgFiles.value.splice(0)
       imgFiles.value.splice(0)
@@ -193,12 +230,14 @@ export default defineComponent({
       emit('clear')
     }
 
+    /** クロップメニューをキャンセル */
     const closeCrop = () => {
       imgFiles.value = preImgFiles.value
       cropMenu.value = false
       emit('updateCroppedUrl', props.croppedUrl)
     }
 
+    /** 切り取りを完了して、クロップメニューを閉じる */
     const enterCrop = () => {
       cropMenu.value = false
       const canvas = cropper.value.getCroppedCanvas() as HTMLCanvasElement
@@ -206,6 +245,7 @@ export default defineComponent({
       emit('updateCroppedUrl', dataurl)
     }
 
+    /** クロップメニューのサイズ調整のため、ウィンドウの高さと幅どちらが大きいか返す */
     const canvasSize = computed(() => {
       if (window.innerWidth < window.innerHeight - 100) {
         return 'canvas-size-w'
@@ -236,11 +276,13 @@ export default defineComponent({
 <style scoped>
 @import url("@/style/common-style.css");
 
+/** キャンバスの幅に合わせて正方形のキャンバスを生成 */
 .canvas-size-w {
   width: 100vw;
   height: 100vw;
 }
 
+/** キャンバスの高さに合わせて正方形のキャンバスを生成 */
 .canvas-size-h {
   width: -webkit-calc(100vh - 100px);
   height: -webkit-calc(100vh - 100px);

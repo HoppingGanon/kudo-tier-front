@@ -72,7 +72,7 @@ import TierReviewSearch from '@/components/TierReviewSearch.vue'
 import { useRoute } from 'vue-router'
 import { emptyUser } from '@/common/dummy'
 import router from '@/router'
-import { TierContentType } from '@/common/page'
+import { PostContentType } from '@/common/page'
 import store from '@/store'
 
 export default defineComponent({
@@ -126,7 +126,7 @@ export default defineComponent({
       }
 
       if (route.query.tab && typeof route.query.tab === 'string') {
-        if (route.query.tab === 'tier' as TierContentType) {
+        if (route.query.tab === 'tier' as PostContentType) {
           tab.value = 0
         } else if (route.query.tab === 'review') {
           tab.value = 1

@@ -1,6 +1,7 @@
 import { UserData } from './restapi'
 import { Tier, Review } from './review'
 
+/** 空のTier（ディープコピーして使用する） */
 export const emptyTier: Tier = {
   tierId: '',
   userName: '',
@@ -18,6 +19,7 @@ export const emptyTier: Tier = {
   updatedAt: new Date()
 }
 
+/** 空のレビュー（ディープコピーして使用する） */
 export const emptyReviwew: Review = {
   reviewId: '',
   tierId: '',
@@ -33,6 +35,7 @@ export const emptyReviwew: Review = {
   updatedAt: new Date()
 }
 
+/** 空のUser（ディープコピーして使用する） */
 export const emptyUser: UserData = {
   userId: '',
   isSelf: false,

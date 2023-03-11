@@ -1,9 +1,11 @@
+<!-- welcomeページに表示する説明文のコンポーネント -->
+
 <template>
   <v-container>
     <!-- ここから概要 -->
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">独断と偏見のTierを作ろう</span>
         </p>
@@ -46,7 +48,7 @@
     </v-row>
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">マニアックなレビューを書こう</span>
         </p>
@@ -93,7 +95,7 @@
     </v-row>
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">評価をシェアしよう</span>
         </p>
@@ -137,7 +139,7 @@
     </v-row>
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">{{ appName }}をはじめよう</span>
         </p>
@@ -158,7 +160,6 @@ import { appName } from '@/common/names'
 
 export default defineComponent({
   name: 'ExplanationSummary',
-  components: {},
   setup () {
     return {
       goLogin: () => router.push('/login'),

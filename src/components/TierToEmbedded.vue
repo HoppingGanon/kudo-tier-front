@@ -1,3 +1,5 @@
+<!-- Tierを他サイトに埋め込み表示するためのコンポーネント -->
+
 <template>
   <v-container>
     <v-row>
@@ -147,15 +149,13 @@ const embeddedLenTypeList = [
 
 export default defineComponent({
   name: 'TierToEmbedded',
-  components: {},
   props: {
+    /** TierId */
     tierId: {
       type: String,
       required: true
     }
   },
-  emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props) {
     const width = ref('100')
     const embeddedWidthType = ref('auto' as EmbeddedLenType)

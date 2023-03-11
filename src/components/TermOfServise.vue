@@ -1,3 +1,5 @@
+<!-- 利用規約を表示するコンポーネント -->
+
 <template>
   <v-btn class="body-1" flat @click="() => { dialog = true }">
     利用規約を読む

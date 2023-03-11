@@ -1,3 +1,5 @@
+<!-- レーダーチャートを表示するためのコンポーネント -->
+
 <template>
   <RadarChart :chartData="chartData" :options="chartOptions" reactive style="width: 100%" />
 </template>
@@ -18,26 +20,33 @@ export default defineComponent({
     RadarChart
   },
   props: {
+    /** レーダーチャートに表示するラベルリスト */
     labels: {
       type: Array as PropType<string[]>,
       required: true
     },
+    /** レーダーチャートのデータリスト */
     dataList: {
       type: Array as PropType<RadarChartData[]>,
       required: true
     },
+    /** レーダーチャートのタイトル */
     title: {
       type: String
     },
+    /** レーダーチャートのメモリ刻み */
     step: {
       type: Number
     },
+    /** レーダーチャートの最小値 */
     min: {
       type: Number
     },
+    /** レーダーチャートの最大値 */
     max: {
       type: Number
     },
+    /** チャートの上に凡例を表示 */
     showLegend: {
       type: Boolean,
       default: true

@@ -1,3 +1,5 @@
+<!-- レビューの評点を計算した結果を大きく表示するコンポーネント -->
+
 <template>
   <table style="width: 100%">
     <tr>
@@ -37,20 +39,22 @@ export default defineComponent({
     ReviewValueDisplay
   },
   props: {
+    /** 合計値 */
     sum: {
       type: Number,
       required: true
     },
+    /** 重みを加味した合計値 */
     average: {
       type: Number,
       required: true
     },
+    /** ポイント表示方法 */
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
     }
   },
-  emits: {},
   setup (props) {
     return {
       label: computed(() => ReviewFunc.getLergeDisplayLabel(props.pointType))

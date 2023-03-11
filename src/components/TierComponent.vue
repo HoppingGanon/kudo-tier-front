@@ -1,3 +1,5 @@
+<!-- Tierを表示するコンポーネント -->
+
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-row v-if="!noHeader" class="align-center">
@@ -128,39 +130,52 @@ export default defineComponent({
     ShareButtons
   },
   props: {
+    /** Tierデータ */
     tier: {
       type: Object as PropType<Tier>,
       required: true
     },
+    /** サンプルとして表示、trueにするとイベントが発生しない */
     isSample: {
       type: Boolean,
       default: false
     },
+    /** どこをクリックしてもTierに飛ぶ */
     isLink: {
       type: Boolean,
       default: false
     },
+    /** 表示方法 */
     displayType: {
       type: String as PropType<ReviewDisplayType>,
       required: true
     },
+    /** ヘッダ部分を表示しない */
     noHeader: {
       type: Boolean,
       default: false as boolean
     },
+    /** ・・・のメニューアイコンを表示しない */
     noMenuIcon: {
       type: Boolean,
       default: false as boolean
     },
+    /** ポイント表示方法 */
     pointType: {
       type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     }
   },
   emits: {
+    /**
+     * ポイント表示方法を更新する際のイベント
+     * @param value ポイント表示方法
+     * @param index レビューのインデックス
+     */
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true,
+    /** レビューをこのコンポーネントから削除した場合などに発火する再読み込みイベント */
     reload: () => true
   },
   setup (props, { emit }) {
@@ -195,7 +210,7 @@ export default defineComponent({
     })
 
     const lastWriteTime = computed(() => {
-      return CommonApi.dateToString(props.tier.updatedAt, true)
+      return CommonApi.dateToString(props.tier.updatedAt, true, 1)
     })
     const pointTypes = computed(() => {
       const objs: ReviewPointType[] = []

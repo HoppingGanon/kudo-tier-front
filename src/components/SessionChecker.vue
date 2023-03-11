@@ -1,3 +1,5 @@
+<!-- 特に画面表示せずにセッションのチェックのみ行うコンポーネント -->
+
 <template>
   <v-card v-if="false">
   </v-card>
@@ -13,10 +15,12 @@ import { useStore } from '@/store'
 export default defineComponent({
   name: 'SessionChecker',
   props: {
+    /** セッションが無い場合はエラー表示してwelcomeページに移動する */
     noSessionError: {
       type: Boolean,
       default: false
     },
+    /** 一時セッションが無い場合はエラー表示してwelcomeページに移動する */
     noTempSessionError: {
       type: Boolean,
       default: false

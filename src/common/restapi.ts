@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import store from '@/store'
 import { Review, Tier, TierEditingData, ReviewFactor, ReviewPointType, ReviewSection, ReviewParagraph, ReviewFactorParam, ReviewEditingData, ReviewWithParams } from './review'
 import CommonApi from './commonapi'
-import { TierSortType } from './page'
+import { PostSortType } from './page'
 import { ToastPluginApi } from 'vue-toast-notification'
 import Base64Api from './base64api'
 
@@ -17,6 +17,7 @@ export interface TwitterAuthCode {
   state: string
 }
 
+/** セッションの受信データ */
 export interface Session {
   /** セッションID */
   sessionId: string
@@ -43,6 +44,7 @@ export interface Session {
 
 }
 
+/** ユーザー作成時の送信データ */
 export interface UserCreatingData {
   name: string
   profile: string
@@ -50,6 +52,7 @@ export interface UserCreatingData {
   accept: boolean
 }
 
+/** ユーザー編集時の送信データ */
 export interface UserEditingData {
   name: string
   profile: string
@@ -59,6 +62,7 @@ export interface UserEditingData {
   keepSession: number
 }
 
+/** ユーザーの受信データ */
 export interface UserData {
   /** ユーザーID */
   userId: string
@@ -89,7 +93,7 @@ export interface UserData {
   tiersCount: number
 }
 
-/** レビューをダウンロードする際の構造 */
+/** レビューの受信データ */
 export interface ReviewData {
   /** review識別ID */
   reviewId: string
@@ -120,6 +124,7 @@ export interface ReviewData {
   updatedAt: string
 }
 
+/** レビューと評価項目とTier調整値の受信データ */
 export interface ReviewDataWithParams {
   review: ReviewData
   params: ReviewFactorParam[]
@@ -127,7 +132,7 @@ export interface ReviewDataWithParams {
   pullingDown: number
 }
 
-/** Tierをダウンロードする際の構造 */
+/** Tierの受信データ */
 export interface TierData {
   /** Tier識別ID */
   tierId: string
@@ -151,7 +156,7 @@ export interface TierData {
   reviews: ReviewData[]
   /** レビューポイントの表示方法 */
   pointType: ReviewPointType
-  /** レビュー評点に対する情報 */
+  /** レビューの評価項目 */
   reviewFactorParams: ReviewFactorParam[]
 
   /** Tierを上方向に引き上げる */
@@ -163,29 +168,35 @@ export interface TierData {
   updatedAt: string
 }
 
+/** 投稿リスト一件分のデータ */
 export interface PostListItem {
   id: string
   name: string
 }
 
+/** Tier及びレビューの投稿データのリスト */
 export interface PostListsData {
   tiers: PostListItem[]
   reviews: PostListItem[]
 }
 
+/** エラー発生時にサーバーから受信するメッセージとコード */
 export interface ErrorResponse {
   code: number
   message: string
 }
 
+/** サービス連携のタイプ */
 export type LoginServiceType = 'twitter' | 'google'
 export const LoginServiceTypeNames = {
   twitter: 'Twitter',
   google: 'Google'
 }
+
+/** サービス連携のバージョン（OAuthバージョン） */
 export type LoginVersionType = '1' | '2'
 
-/** サーバーから受け取る通知データ */
+/** 通知の受信データ */
 export interface NotificationData {
   /** 通知ID */
   id: number
@@ -201,33 +212,9 @@ export interface NotificationData {
   createdAt: string
 }
 
-/** 件数カウントのみ受け取る場合に使用 */
+/** 件数カウントのみの場合の受信データ */
 export interface CountData {
   count: number
-}
-
-/** ライセンス情報 */
-export interface LicenseData {
-  /** インストール済みバージョンを含めたパッケージの名称 */
-  fullName: string,
-  /** ライセンスの種類 */
-  license: string,
-  /** ライセンスファイルの名前 */
-  licenseName: string
-  /** ライセンスファイルの内容 */
-  content: string,
-}
-export interface LicenseFrontData extends LicenseData {
-  /** パッケージの名称 */
-  name: string,
-  /** パッケージのバージョン */
-  needed: string
-}
-export interface LicenseBackData extends LicenseData {
-  /** パッケージの名称 */
-  name: string,
-  /** パッケージのバージョン */
-  version: string
 }
 
 export const getImgSource = (uri: string) => {
@@ -243,8 +230,10 @@ export const getImgSource = (uri: string) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
+/** サーバーから受信したエラーをトーストする汎用関数 */
+export const toastError = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  err: any, toast: ToastPluginApi, func?: (e: any) => void) => {
   if (err && err.response && err.response.data) {
     if (err.response.data.code) {
       const v = err.response.data
@@ -260,7 +249,9 @@ export const toastError = (err: any, toast: ToastPluginApi, func?: (e: any) => v
   }
 }
 
+/** RestAPI通信用のツールセット */
 export default class RestApi {
+  /** セッション情報を含めてベースURIに続けてGETリクエスト */
   static get <T> (uri: string) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
@@ -271,6 +262,7 @@ export default class RestApi {
     return axios.get<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
   }
 
+  /** セッション情報を含めてベースURIに続けてPATCHリクエスト */
   static update <T> (uri: string, data?: object) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
@@ -281,6 +273,7 @@ export default class RestApi {
     return axios.patch<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
   }
 
+  /** セッション情報を含めてベースURIに続けてPOSTリクエスト */
   static post <T> (uri: string, data?: object) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
@@ -291,6 +284,7 @@ export default class RestApi {
     return axios.post<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, data, config)
   }
 
+  /** セッション情報を含めてベースURIに続けてDELETEリクエスト */
   static delete <T> (uri: string) : Promise<AxiosResponse<T>> {
     const sessionId = store.state.sessionId
     const config:AxiosRequestConfig = {
@@ -301,12 +295,29 @@ export default class RestApi {
     return axios.delete<T>(`${process.env.VUE_APP_BACK_BASE_URI}${uri}`, config)
   }
 
+  /**
+   * 一時セッションを受信
+   * @param service 連携先サービスタイプ
+   * @param version OAuthバージョン
+   * @returns Promise
+   */
   static getTempSession (service: LoginServiceType, version: LoginVersionType) : Promise<AxiosResponse<TempSession>> {
     return axios.get<TempSession>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/tempsession/${service}/${version}`)
   }
 
-  // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
+  /**
+   * セッションを受信
+   * @param tempSessionId セッションID
+   * @param service 連携先サービスタイプ
+   * @param version OAuthバージョン
+   * @param authorizationCode 連携先サービスから受けとったデータ
+   * @param oAuthToken 連携先サービスから受けとったデータ
+   * @param oAuthVerifier 連携先サービスから受けとったデータ
+   * @param state 連携先サービスから受けとったデータ
+   * @returns Promise
+   */
   static postSession (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string, state: string) {
+    // セッションではなく一時セッションを用いる特殊なGETでセッションを取得する
     return axios.post<Session>(`${process.env.VUE_APP_BACK_BASE_URI}/auth/session/${service}/${version}`, {
       sessionId: tempSessionId,
       authorizationCode: authorizationCode,
@@ -316,7 +327,17 @@ export default class RestApi {
     })
   }
 
-  // ユーザー情報に連携サービスを追加する
+  /**
+   * 現在ログイン中のユーザー情報に連携サービスを追加する
+   * @param tempSessionId セッションID
+   * @param service 連携先サービスタイプ
+   * @param version OAuthバージョン
+   * @param authorizationCode 連携先サービスから受けとったデータ
+   * @param oAuthToken 連携先サービスから受けとったデータ
+   * @param oAuthVerifier 連携先サービスから受けとったデータ
+   * @param state 連携先サービスから受けとったデータ
+   * @returns Promise
+   */
   static updateService (tempSessionId: string, service: LoginServiceType, version: LoginVersionType, authorizationCode: string, oAuthToken: string, oAuthVerifier: string, state: string) {
     return this.update(`/auth/service/${service}/${version}`, {
       sessionId: tempSessionId,
@@ -327,98 +348,217 @@ export default class RestApi {
     })
   }
 
-  // ユーザー情報に連携サービスを追加する
+  /**
+   * 現在ログイン中のユーザー情報から連携サービスを削除する
+   * @param service 連携先サービスタイプ
+   * @returns Promise
+   */
   static deleteService (service: LoginServiceType) {
     return this.delete(`/auth/service/${service}`)
   }
 
+  /**
+   * ログイン中のユーザーセッションをサーバーから削除する
+   * @returns Promise
+   */
   static delSession () : Promise<AxiosResponse<Session>> {
     return this.delete('/auth/session')
   }
 
+  /**
+   * セッションがサーバーにあるか確認
+   * @returns Promise
+   */
   static getCheckSession () {
     return this.get('/auth/check-session')
   }
 
+  /**
+   * ユーザーを作成
+   * @param data ユーザーデータ
+   * @returns Promise
+   */
   static createUser (data: UserCreatingData) {
     return this.post<UserData>('/user', data)
   }
 
+  /**
+   * ユーザーデータを更新
+   * @param data ユーザーデータ
+   * @param userId ユーザーID
+   * @returns Promise
+   */
   static updateUser (data: UserEditingData, userId: string) {
     return this.update<UserData>(`/user/${userId}`, data)
   }
 
+  /**
+   * ユーザーデータを取得
+   * @param userId ユーザーID
+   * @returns Promise
+   */
   static getUserData (userId: string) {
     return this.get<UserData>(`/user/${userId}`)
   }
 
+  /**
+   * ユーザーを削除するための削除コードを取得する
+   * @param userId ユーザーID
+   * @returns Promise
+   */
   static deleteUser1 (userId: string) {
     return this.delete<string>(`/user/${userId}/try`)
   }
 
+  /**
+   * ユーザーを削除
+   * @param userId ユーザーID
+   * @param delcode 削除コード
+   * @returns Promise
+   */
   static deleteUser2 (userId: string, delcode: string) {
     return this.delete<null>(`/user/${userId}/commit?delcode=${delcode}`)
   }
 
+  /**
+   * 最近の投稿を取得
+   * @param userId ユーザーID
+   * @param length 件数
+   * @returns Promise
+   */
   static getLatestPostLists (userId: string, length: number) {
     return this.get<PostListsData>(`/latest-post-lists/${userId}?length=${length}`)
   }
 
+  /**
+   * Tierを作成
+   * @param data Tierデータ
+   * @returns Promise
+   */
   static postTier (data: TierEditingData) {
     return this.post('/tier', data)
   }
 
+  /**
+   * Tierを取得
+   * @param tierId TierID
+   * @returns Promise
+   */
   static getTier (tierId: string) {
     return this.get<TierData>(`/tier/${tierId}`)
   }
 
+  /**
+   * Tierデータを更新
+   * @param data Tierデータ
+   * @param tierId TierID
+   * @returns Proimise
+   */
   static updateTier (data: TierEditingData, tierId: string) {
     return this.update(`/tier/${tierId}`, data)
   }
 
-  static getTierList (userId: string, word: string, sortType: TierSortType, page: number) {
+  /**
+   * 条件を指定して、ヒットしたTierリストを取得
+   * @param userId ユーザーId
+   * @param word 検索ワード
+   * @param sortType ソートタイプ
+   * @param page リストのページ(1を指定すると1~n件目までを取得、2を指定するとn+1～2n件目までを取得)
+   * @returns Promise
+   */
+  static getTierList (userId: string, word: string, sortType: PostSortType, page: number) {
     return this.get<TierData[]>(encodeURI(`/tiers?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
   }
 
+  /**
+   * Tierを削除
+   * @param tierId TierID
+   * @returns Promise
+   */
   static deleteTier (tierId: string) {
     return this.delete(`/tier/${tierId}`)
   }
 
+  /**
+   * レビューを作成
+   * @param data レビューデータ
+   * @returns Promise
+   */
   static postReview (data: ReviewEditingData) {
     return this.post('/review', data)
   }
 
+  /**
+   * レビューを取得
+   * @param reviewId レビューＩＤ
+   * @returns Promise
+   */
   static getReview (reviewId: string) {
     return this.get<ReviewDataWithParams>(`/review/${reviewId}`)
   }
 
+  /**
+   * レビューを更新
+   * @param reviewId レビューID
+   * @param data レビューデータ
+   * @returns Promise
+   */
   static updateReview (reviewId: string, data: ReviewEditingData) {
     return this.update<ReviewDataWithParams>(`/review/${reviewId}`, data)
   }
 
-  static getReviewPairs (userId: string, word: string, sortType: TierSortType, page: number) {
+  /**
+   * 条件を指定して、ヒットしたレビューを取得
+   * @param userId ユーザーID
+   * @param word 検索ワード
+   * @param sortType ソートタイプ
+   * @param page リストのページ(1を指定すると1~n件目までを取得、2を指定するとn+1～2n件目までを取得)
+   * @returns Promise
+   */
+  static getReviewPairs (userId: string, word: string, sortType: PostSortType, page: number) {
     return this.get<ReviewDataWithParams[]>(encodeURI(`/review-pairs?userid=${userId}&word=${word}&sorttype=${sortType}&page=${page}`))
   }
 
+  /**
+   * レビューを削除
+   * @param reviewId レビューID
+   * @returns Promise
+   */
   static deleteReview (reviewId: string) {
     return this.delete(`/review/${reviewId}`)
   }
 
+  /**
+   * 画像をBlobで取得
+   * @param userFilePath userfileのパス
+   * @returns Promise
+   */
   static getImage (userFilePath: string) {
     return axios.get(getImgSource(userFilePath), { responseType: 'blob' })
   }
 
-  /** 通知リストを取得する */
+  /**
+   * 通知リストを取得
+   * @returns Promise
+   */
   static getNotifications () {
     return this.get<NotificationData[]>('/common/notifications')
   }
 
-  /** 通知リストを取得する */
+  /**
+   * 通知リストを取得
+   * @returns Promise
+   */
   static getNotificationsCount () {
     return this.get<CountData>('/common/notifications-count')
   }
 
-  /** 通知既読状態を更新する */
+  /**
+   * 通知既読状態を更新
+   * @param notificationId 通知ID
+   * @param isRead 既読状態
+   * @returns Promise
+   */
   static updateNotificationRead (notificationId: number, isRead: boolean) {
     return this.update(`/common/notification-read/${notificationId}`, {
       isRead: isRead
@@ -426,7 +566,9 @@ export default class RestApi {
   }
 }
 
+/** データのパースに使用 */
 export class Parser {
+  /** 通知のパース */
   static parseNotificationsStr (notifications: NotificationData[]) {
     const converted: NotificationData[] = []
     notifications.forEach((v) => {
@@ -443,6 +585,7 @@ export class Parser {
     return converted
   }
 
+  /** Tierのパース */
   static parseTier (tierData: TierData) : Tier {
     const reviews: Review[] = []
     tierData.reviews.forEach((v) => {
@@ -466,6 +609,7 @@ export class Parser {
     }
   }
 
+  /** レビューのパース */
   static parseReview (reviewData: ReviewData) : Review {
     return {
       reviewId: reviewData.reviewId,
@@ -484,6 +628,7 @@ export class Parser {
     }
   }
 
+  /** 評価項目付きレビューのパース */
   static parseReviewWithParams (pair: ReviewDataWithParams) : ReviewWithParams {
     return {
       review: Parser.parseReview(pair.review),

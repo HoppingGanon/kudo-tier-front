@@ -12,12 +12,19 @@ export type State = {
   /** 連携サービス追加のために一時セッションを要求している（普段は空文字列） */
   tempSessionAdditioning: boolean
 
+  /** セッションID */
   sessionId: string
+  /** ユーザーID */
   userId: string
+  /** ユーザー名 */
   userName: string
+  /** ユーザープロフィール文 */
   userProfile: string
+  /** ユーザーアイコンURL */
   userIconUrl: string
+  /** 投稿したTierの数 */
   tiersCount: number
+  /** 投稿したレビューの数 */
   reviewsCount: number
   /** 通知の数 */
   notificationsCount: number
@@ -40,7 +47,9 @@ export type State = {
   googleImageUrl: string
   // ======================================================================
 
+  /** セッション有効期限 */
   expiredTime: string
+  /** 新規ユーザーかどうか */
   isNew: boolean
 }
 

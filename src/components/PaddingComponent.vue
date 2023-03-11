@@ -1,3 +1,6 @@
+<!-- 余白をユーザー情報やその他の情報で埋めるコンポーネント -->
+<!-- 左側にはv-slot:leftの内容、右側にはユーザー情報を表示 -->
+<!-- 画面サイズが足りない場合は、左右のコンポーネントは下部へフローティングする -->
 <template>
   <v-container class="ma-0 pa-1" fluid>
     <v-row>
@@ -15,6 +18,8 @@
         </slot>
       </v-col>
       <v-col cols="12" sm="12" md="3" lg="3" xl="3">
+
+        <!-- ユーザー情報 -->
         <v-container v-if="targetUserId" fluid class="ma-0 pa-0">
           <v-row>
             <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -37,7 +42,7 @@
                 />
               </v-card>
             </v-col>
-            <v-col cols="6" sm="6" md="12" lg="12" xl="12">
+            <v-col cols="12" sm="6" md="12" lg="12" xl="12">
               <v-card height="100%">
                 <v-toolbar class="pl-2" color="thirdry">
                   <span class="font-weight-bold no-break-box" v-text="'最近投稿したTier'"></span>
@@ -57,7 +62,7 @@
                 </v-list>
               </v-card>
             </v-col>
-            <v-col cols="6" sm="6" md="12" lg="12" xl="12">
+            <v-col cols="12" sm="6" md="12" lg="12" xl="12">
               <v-card height="100%">
                 <v-toolbar class="pl-2" color="thirdry">
                   <span class="font-weight-bold no-break-box" v-text="'最近投稿したレビュー'"></span>
@@ -95,7 +100,7 @@ import RestApi, { toastError, PostListItem } from '@/common/restapi'
 import { useToast } from 'vue-toast-notification'
 import { emptyUser } from '@/common/dummy'
 import router from '@/router'
-import { TierContentType } from '@/common/page'
+import { PostContentType } from '@/common/page'
 
 export default defineComponent({
   name: 'PaddingComponent',
@@ -103,10 +108,12 @@ export default defineComponent({
     ProfileComponent
   },
   props: {
+    /** ユーザー情報欄に表示するタイトル */
     title: {
       type: String,
       default: 'この投稿を作成したユーザー'
     },
+    /** ターゲットにするユーザーID */
     targetUserId: {
       type: String,
       default: ''
@@ -142,7 +149,7 @@ export default defineComponent({
     })
     watch(targetUserId, download)
 
-    const goHome = (tab: TierContentType) => {
+    const goHome = (tab: PostContentType) => {
       router.push(`/home/${targetUserId.value}?tab=${tab}`)
     }
 

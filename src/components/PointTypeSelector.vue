@@ -1,3 +1,5 @@
+<!-- ポイント表示方法を切り替えるコンポーネント -->
+
 <template>
   <v-list v-if="always && !isSelect">
     <v-list-item
@@ -55,13 +57,13 @@ import vuetify from '@/plugins/vuetify'
 
 export default defineComponent({
   name: 'PointTypeSelector',
-  components: {},
   props: {
+    /** ポイント表示方法 */
     modelValue: {
       type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     },
-    /** trueを指定すると、メニュー表示ではなく常に表示する */
+    /** メニュー表示ではなく常に表示する */
     always: {
       type: Boolean,
       default: false as boolean
@@ -71,13 +73,17 @@ export default defineComponent({
       type: Boolean,
       default: false as boolean
     },
-    /** alwaysとこのプロパティを両方trueを指定すると、v-selectで表示する */
+    /** unlimitedを表示しない */
     excludeUnlimited: {
       type: Boolean,
       default: false as boolean
     }
   },
   emits: {
+    /**
+     * ポイント表示タイプの更新の際のイベント
+     * @param value ポイント表示タイプ
+     */
     update: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true
