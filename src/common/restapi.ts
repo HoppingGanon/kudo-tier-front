@@ -237,7 +237,7 @@ export const getImgSource = (uri: string) => {
     case 'blob':
       return uri
     case 'link':
-      return `${process.env.VUE_APP_BACK_BASE_URI}/${uri}`
+      return `${process.env.VUE_APP_BACK_BASE_URI}/userfile/${uri}`
     case 'empty':
       return ''
   }
