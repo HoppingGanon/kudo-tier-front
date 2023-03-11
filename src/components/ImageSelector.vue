@@ -10,20 +10,7 @@
     />
   </div>
 
-  <div v-if="!fileUrlProxy" class="dahed-box pa-5">
-    <div>
-      <v-btn flat icon @click="clearFile" color="#FFF0">
-        <v-icon>
-          mdi-close
-        </v-icon>
-      </v-btn>
-    </div>
-    <div>
-      <span v-text="label"></span>
-    </div>
-    <v-btn @click="inputFile" color="primary">画像を開く</v-btn>
-  </div>
-  <div v-else class="d-flex">
+  <div v-if="croppedUrl" class="d-flex">
     <div class="image-style" :style="imgMaxHeight ? `max-height: ${imgMaxHeight};` : ''">
       <slot name="image">
         <v-img :src="croppedUrlProxy">
@@ -36,57 +23,69 @@
           mdi-close
         </v-icon>
       </v-btn>
-      <v-dialog v-model="cropMenu" persistent :fullscreen="true">
-        <!-- 画像の切り取りダイアログ -->
-        <template v-slot:activator>
-          <v-btn icon flat @click="openCropMenu" color="#FFF0">
-            <v-icon>
-              mdi-crop
-            </v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-toolbar color="secondary" dark>
-            <v-card-title>
-              画像のクリッピング
-            </v-card-title>
-            <v-spacer />
-            <v-btn icon flat @click="closeCrop">
-              <v-icon>
-                mdi-close
-              </v-icon>
-            </v-btn>
-            <v-btn icon flat @click="enterCrop">
-              <v-icon>
-                mdi-check
-              </v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-container>
-            <v-row>
-              <v-col class="d-flex justify-center">
-                <div :style="canvasSize">
-                  <vue-cropper
-                    class="ba-5"
-                    ref="cropper"
-                    :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
-                    :src="fileUrlProxy"
-                    dragMode="move"
-                    :class="canvasSize"
-                  />
-                </div>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-dialog>
       <v-btn flat icon @click="inputFile" color="#FFF0">
         <v-icon>
           mdi-folder-open-outline
         </v-icon>
       </v-btn>
+      <v-btn icon flat @click="openCropMenu" color="#FFF0">
+        <v-icon>
+          mdi-crop
+        </v-icon>
+      </v-btn>
     </div>
   </div>
+  <div v-else class="dahed-box pa-5">
+    <div>
+      <v-btn flat icon @click="clearFile" color="#FFF0">
+        <v-icon>
+          mdi-close
+        </v-icon>
+      </v-btn>
+    </div>
+    <div>
+      <span v-text="label"></span>
+    </div>
+    <v-btn @click="inputFile" color="primary">画像を開く</v-btn>
+  </div>
+
+  <v-dialog v-model="cropMenu" persistent :fullscreen="true">
+    <!-- 画像の切り取りダイアログ -->
+    <v-card>
+      <v-toolbar color="secondary" dark>
+        <v-card-title>
+          画像のクリッピング
+        </v-card-title>
+        <v-spacer />
+        <v-btn icon flat @click="closeCrop">
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
+        <v-btn icon flat @click="enterCrop">
+          <v-icon>
+            mdi-check
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-container>
+        <v-row>
+          <v-col class="d-flex justify-center">
+            <div :style="canvasSize">
+              <vue-cropper
+                class="ba-5"
+                ref="cropper"
+                :aspect-ratio="(aspectRatio <= 0 ? NaN : aspectRatio)"
+                :src="fileUrlProxy"
+                dragMode="move"
+                :class="canvasSize"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-dialog>
 
 </template>
 
@@ -197,6 +196,7 @@ export default defineComponent({
     const closeCrop = () => {
       imgFiles.value = preImgFiles.value
       cropMenu.value = false
+      emit('updateCroppedUrl', props.croppedUrl)
     }
 
     const enterCrop = () => {
