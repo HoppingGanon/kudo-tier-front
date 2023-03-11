@@ -370,7 +370,7 @@ export default class RestApi {
    * @returns Promise
    */
   static getCheckSession () {
-    return this.get('/auth/check-session')
+    return this.get<string>('/auth/check-session')
   }
 
   /**

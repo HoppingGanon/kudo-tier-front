@@ -1,10 +1,6 @@
 <!-- Tierとレビューを検索するコンポーネント -->
 
 <template>
-
-  <!-- セッション有効期限をチェックする -->
-  <session-checker />
-
   <v-container class="pa-0 ma-0" fluid>
     <v-card class="ma-0" flat>
       <v-toolbar color="secondary" class="d-flex" dark>
@@ -50,7 +46,6 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from 'vue'
-import SessionChecker from '@/components/SessionChecker.vue'
 import TierSearch from '@/components/TierSearch.vue'
 import ReviewSearch from '@/components/ReviewSearch.vue'
 import { useRoute } from 'vue-router'
@@ -61,7 +56,6 @@ import { ReviewWithParams, Tier } from '@/common/review'
 export default defineComponent({
   name: 'TierReviewSearch',
   components: {
-    SessionChecker,
     TierSearch,
     ReviewSearch
   },

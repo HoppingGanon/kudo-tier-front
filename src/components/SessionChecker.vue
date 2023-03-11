@@ -40,7 +40,9 @@ export default defineComponent({
         if (props.noSessionError) {
           // セッション必須
           if (store.getters.isRegistered) {
-            RestApi.getCheckSession().then(() => true).catch(() => {
+            RestApi.getCheckSession().then((res) => {
+              store.commit('', res.data)
+            }).catch(() => {
               store.commit('initAllSession')
               toast.warning('セッションの有効期限が切れました。ログインしてください。')
               router.push('/')
@@ -60,13 +62,12 @@ export default defineComponent({
         } else {
           // 必須セッション無し
           if (store.getters.isRegistered) {
-            if (new Date() < new Date(store.state.expiredTime)) {
-              // セッション有効期限内
-            } else {
-              // セッション有効期限切れ
+            RestApi.getCheckSession().then((res) => {
+              store.commit('', res.data)
+            }).catch(() => {
               store.commit('initAllSession')
-              toast.warning('セッションの有効期限が切れました。再度ログインしてください。')
-            }
+              toast.warning('セッションの有効期限が切れました。ログインしてください。')
+            })
           }
         }
       } catch {
