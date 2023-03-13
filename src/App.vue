@@ -267,13 +267,13 @@ export default defineComponent({
      */
     const onChangePath = () => {
       if (store.state.hintState === 'tier') {
-        // ユーザーが作成されてすぐの場合、Tier作成のを表示
+        // ユーザーが作成されてすぐの場合、Tier作成のヒントを表示
         store.commit('setHintState', undefined)
         hint.value = true
         page.value = 0
         hintState.value = 'tier'
       } else if (store.state.hintState === 'review') {
-        // レビュー作成のヒントを表示
+        // Tierを作成してすぐの場合、レビュー作成のヒントを表示
         store.commit('setHintState', undefined)
         hint.value = true
         page.value = 0

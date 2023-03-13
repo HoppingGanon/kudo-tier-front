@@ -17,7 +17,7 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat><v-img src="@/assets/welcome/tierTable.png" max-height="480px"/></v-card>
+        <v-card class="pa-2" flat><v-img src="/img/welcome/tierTable.png" max-height="480px"/></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -61,7 +61,7 @@
     </v-row>
     <v-row class="mt-5 flex-row-reverse">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/reviewChart.png" max-height="540px" /></v-card>
+        <v-card class="pa-2" flat ><v-img src="/img/welcome/reviewChart.png" max-height="540px" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -108,7 +108,7 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/share.png" max-height="280px" class="shadow" /></v-card>
+        <v-card class="pa-2" flat ><v-img src="/img/welcome/share.png" max-height="280px" class="shadow" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
