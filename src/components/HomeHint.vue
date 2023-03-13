@@ -7,6 +7,8 @@
     :page="page"
     @update:page="$emit('update:page', $event)"
     @close="$emit('close')"
+    :enable-next="enableNext"
+    :enable-prev="enablePrev"
   >
     <template v-slot:default="{ close }">
 
@@ -35,11 +37,11 @@
       </hint-card>
 
       <!-- tier -->
-      <hint-card v-if="welcomeShow" :title="title" sub-title="Tier作成の流れ1" @close="close" :show-close="welcomeClose">
+      <hint-card v-if="welcomeShow" :title="title" sub-title="Tier作成の流れ（1/2）" @close="close" :show-close="welcomeClose">
         <v-container>
           <v-row>
             <v-col cols="12" sm="12" md="12" lg="10" xl="8">
-              <v-img src="/hint/app/relations-1.png"></v-img>
+              <v-img src="/hint/app/relations-1.jpg"></v-img>
             </v-col>
           </v-row>
           <v-row>
@@ -52,11 +54,11 @@
       </hint-card>
 
       <!-- review -->
-      <hint-card v-if="welcomeShow" :title="title" sub-title="Tier作成の流れ2" @close="close" :show-close="welcomeClose">
+      <hint-card v-if="welcomeShow" :title="title" sub-title="Tier作成の流れ（2/2）" @close="close" :show-close="welcomeClose">
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12" lg="10" xl="8">
-                <v-img src="/hint/app/relations-2.png"></v-img>
+                <v-img src="/hint/app/relations-2.jpg"></v-img>
               </v-col>
             </v-row>
             <v-row>
@@ -85,23 +87,38 @@
         </template>
       </hint-card>
 
-      <!-- goReview -->
-      <hint-card v-if="reviewShow" :title="title" sub-title="レビューを作ってみましょう" @close="close">
-        <template v-slot:image>
-          <video src="/hint/app/create-review.mp4" class="width" autoplay muted loop playsinline></video>
-        </template>
-        <template v-slot:text>
-          次にレビューを作成しましょう。<br />
-          レビューを作成するには以下の手順で操作してください。<br />
-          <br />
-          <span class="font-weight-bold">①メニューボタンを押してください</span><br />
-          <br />
-          <span class="font-weight-bold">②「レビューの追加」を押してください</span><br />
-          <br />
-          <span class="font-weight-bold">②レビューを作成したいTierを選んでください</span><br />
-          <br />
-        </template>
-      </hint-card>
+<!-- goReview -->
+<hint-card v-if="reviewShow" :title="title" sub-title="レビューを作ってみましょう" @close="close">
+  <template v-slot:image>
+    <video src="/hint/app/create-review.mp4" class="width" autoplay muted loop playsinline></video>
+  </template>
+  <template v-slot:text>
+    次にレビューを作成しましょう。<br />
+    レビューを作成するには以下の手順で操作してください。<br />
+    <br />
+    <span class="font-weight-bold">①メニューボタンを押してください</span><br />
+    <br />
+    <span class="font-weight-bold">②「レビューの追加」を押してください</span><br />
+    <br />
+    <span class="font-weight-bold">②レビューを作成したいTierを選んでください</span><br />
+    <br />
+  </template>
+</hint-card>
+
+<!-- share -->
+<hint-card v-if="shareShow" :title="title" sub-title="投稿をシェアしましょう" @close="close">
+  <template v-slot:image>
+    <v-img src="/hint/app/share.jpg" />
+  </template>
+  <template v-slot:text>
+    これにてチュートリアルは完了です。<br /><br/>
+    最後に、Tierやレビューの上部にある
+    <v-btn class="text-no-transform text-caption pa-2" color="#00acee" style="color: white;">
+      <v-icon>mdi-twitter</v-icon>ツイートする
+    </v-btn>
+    を押して投稿をシェアしてみましょう。<br />
+  </template>
+</hint-card>
 
     </template>
   </hint-dialog>
@@ -160,14 +177,29 @@ export default defineComponent({
     close: () => true
   },
   setup (props) {
+    const enablePrev = computed(() => props.page !== 0)
+    const enableNext = computed(() => {
+      if (props.forceType === 'tier') {
+        return props.page !== 3
+      } else if (props.forceType === 'review') {
+        return false
+      } else if (props.forceType === 'share') {
+        return false
+      } else {
+        return props.page !== 5
+      }
+    })
     return {
       dummyPage: ref<number | undefined>(undefined),
       sectionValidation,
       reviewValidation,
       welcomeClose: computed(() => !props.forceType),
-      welcomeShow: computed(() => props.forceType !== 'review'),
-      tierShow: computed(() => props.forceType !== 'review'),
-      reviewShow: computed(() => props.forceType !== 'tier')
+      welcomeShow: computed(() => props.forceType !== 'review' && props.forceType !== 'share'),
+      tierShow: computed(() => props.forceType !== 'review' && props.forceType !== 'share'),
+      reviewShow: computed(() => props.forceType !== 'tier' && props.forceType !== 'share'),
+      shareShow: computed(() => props.forceType !== 'review' && props.forceType !== 'tier'),
+      enablePrev,
+      enableNext
     }
   }
 })

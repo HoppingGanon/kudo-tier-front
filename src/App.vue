@@ -278,6 +278,12 @@ export default defineComponent({
         hint.value = true
         page.value = 0
         hintState.value = 'review'
+      } else if (store.state.hintState === 'share') {
+        // Tierを作成してすぐの場合、レビュー作成のヒントを表示
+        store.commit('setHintState', undefined)
+        hint.value = true
+        page.value = 0
+        hintState.value = 'share'
       }
     }
 
@@ -331,6 +337,7 @@ export default defineComponent({
     const openHint = () => {
       hint.value = true
       drawer.value = false
+      hintState.value = undefined
     }
 
     onMounted(async () => {

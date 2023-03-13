@@ -224,6 +224,7 @@ export default defineComponent({
     const loading = ref(true)
     const hint = ref(false)
     const page = ref(0)
+    const nextHint = ref(false)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -271,6 +272,7 @@ export default defineComponent({
           if (res.data.reviews.length === 0) {
             hint.value = true
             page.value = 0
+            nextHint.value = true
           }
         })
       } else if (route.params.rid && typeof route.params.rid === 'string') {
@@ -338,6 +340,10 @@ export default defineComponent({
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.postReview(data).then((v) => {
           toast.success('レビューを作成しました')
+          // 次の画面でTierのヒントを表示する
+          if (nextHint.value) {
+            store.commit('setHintState', 'share')
+          }
           router.push(`/review/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)

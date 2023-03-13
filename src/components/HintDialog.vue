@@ -12,6 +12,16 @@
       :show-arrows="$vuetify.display.mdAndUp"
     >
       <slot name="default" :close="() => $emit('update:model-value', false)"></slot>
+      <template v-slot:prev="{ props }" >
+        <v-btn :disabled="!enablePrev" icon @click="props.onClick" color="green-darken-1">
+          <v-icon> mdi-chevron-left </v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:next="{ props }" >
+        <v-btn :disabled="!enableNext" icon @click="props.onClick" color="green-darken-1">
+          <v-icon> mdi-chevron-right </v-icon>
+        </v-btn>
+      </template>
     </v-carousel>
   </v-dialog>
 </template>
@@ -52,6 +62,16 @@ export default defineComponent({
     defaultPage: {
       type: Number,
       default: 0
+    },
+    /** 戻るボタンを表示するかどうか */
+    enablePrev: {
+      type: Boolean,
+      default: true
+    },
+    /** 次へボタンを表示するかどうか */
+    enableNext: {
+      type: Boolean,
+      default: true
     }
   },
   emits: {

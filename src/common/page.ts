@@ -7,7 +7,7 @@ export interface SelectObject <T = string | number, D = string | number> {
 }
 
 /** App.vueのヒント表示状態 */
-export type HintState = 'tier' | 'review' | undefined
+export type HintState = 'tier' | 'review' | 'share' | undefined
 
 /** 投稿の表示ソート順 */
 export type PostSortType = 'updatedAtDesc' | 'updatedAtAsc' | 'createdAtDesc' | 'createdAtAsc'
