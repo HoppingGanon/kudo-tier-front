@@ -44,7 +44,7 @@ export type TierTableType = typeof TierTableTypeArray[number]
 /** レビューの表示方法 */
 export type ReviewDisplayType = 'summary' | 'list' | 'all'
 
-/** レビュー評点 */
+/** レビューの評価項目 */
 export interface ReviewFactorParam {
   /** レビュー評点の名称 */
   name: string
@@ -623,6 +623,16 @@ export class ReviewFunc {
     return data
   }
 
+  /**
+   * Tierのバックアップデータを取得する
+   * @param tier Tierデータ
+   * @param process1 レビューデータの取得中に実行する処理（falseを返すとエラー終了）
+   * @param end1 レビューデータの取得後に実行する処理（falseを返すとエラー終了）
+   * @param start2 画像取得前に実行する処理（falseを返すとエラー終了）
+   * @param process2 画像取得中に実行する処理（falseを返すとエラー終了）
+   * @param end2 画像取得後に実行する処理（falseを返すとエラー終了）
+   * @returns Promise
+   */
   static async getTierBackup (
     tier: Tier,
     process1?: (index: number, max: number) => boolean,
@@ -636,7 +646,6 @@ export class ReviewFunc {
     let reviewData: AxiosResponse<ReviewDataWithParams>
     let review: Review
     let imgres: AxiosResponse
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const images: Dictionary<Blob> = {}
 
     let i = 0
@@ -725,6 +734,11 @@ export class ReviewFunc {
     }
   }
 
+  /**
+   * ポイント表示方法に合わせた総合のラベルを取得
+   * @param potinType ポイント表示方法
+   * @returns ラベル
+   */
   static getLergeDisplayLabel (potinType: ReviewPointType) {
     switch (potinType) {
       case 'stars':

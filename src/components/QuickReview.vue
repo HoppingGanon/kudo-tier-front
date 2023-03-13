@@ -1,3 +1,5 @@
+<!-- 直近のTierから素早くレビュー作成画面に遷移するためのコンポーネント -->
+
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-row>
@@ -49,6 +51,7 @@ export default defineComponent({
     LoadingComponent
   },
   emits: {
+    /** 閉じるボタンが押された際のイベント */
     close: () => true
   },
   setup (_, { emit }) {

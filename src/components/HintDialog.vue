@@ -1,5 +1,7 @@
+<!-- 使い方を説明するhintダイアログのコンポーネント -->
+
 <template>
-  <v-dialog :model-value="modelValue" @update:model-value="$emit('update:model-value', $event)" :fullscreen="true">
+  <v-dialog :model-value="modelValue" @update:model-value="closeProxy" :fullscreen="true">
     <v-carousel
       v-model="pageValue"
       height="100%"
@@ -10,6 +12,16 @@
       :show-arrows="$vuetify.display.mdAndUp"
     >
       <slot name="default" :close="() => $emit('update:model-value', false)"></slot>
+      <template v-slot:prev="{ props }" >
+        <v-btn :disabled="!enablePrev" icon @click="props.onClick" color="green-darken-1">
+          <v-icon> mdi-chevron-left </v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:next="{ props }" >
+        <v-btn :disabled="!enableNext" icon @click="props.onClick" color="green-darken-1">
+          <v-icon> mdi-chevron-right </v-icon>
+        </v-btn>
+      </template>
     </v-carousel>
   </v-dialog>
 </template>
@@ -19,7 +31,6 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'HintDialog',
-  components: {},
   computed: {
     pageValue: {
       set (v: number) {
@@ -38,29 +49,56 @@ export default defineComponent({
     }
   },
   props: {
+    /** ダイアログが開いてる状態かどうか */
     modelValue: {
       type: Boolean,
       default: false
     },
+    /** ページ番号 */
     page: {
       type: Number
     },
+    /** 初期ページ番号 */
     defaultPage: {
       type: Number,
       default: 0
+    },
+    /** 戻るボタンを表示するかどうか */
+    enablePrev: {
+      type: Boolean,
+      default: true
+    },
+    /** 次へボタンを表示するかどうか */
+    enableNext: {
+      type: Boolean,
+      default: true
     }
   },
   emits: {
+    /**
+     * ダイアログの開閉操作が行われた際のイベント
+     * @param v ダイアログの状態
+     */
     'update:model-value': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: boolean) => true,
+    /**
+     * ページが変化した際のイベント
+     * @param v ページ番号
+     */
     'update:page': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: number) => true
+      v: number) => true,
+    /** 閉じるボタンを押した際のイベント */
+    close: () => true
   },
-  setup () {
+  setup (_, { emit }) {
     return {
-      dummyPage: ref<number | undefined>(undefined)
+      dummyPage: ref<number | undefined>(undefined),
+      closeProxy: () => {
+        emit('update:model-value', false)
+        emit('close')
+      }
     }
   }
 })

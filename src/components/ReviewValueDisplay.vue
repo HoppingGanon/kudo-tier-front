@@ -1,3 +1,5 @@
+<!-- レビューの評点を立地に表示するコンポーネント -->
+
 <template>
 
   <!-- starsの評価表示 -->
@@ -30,6 +32,11 @@
 import { ReviewPointType, ReviewFunc, PointDisplaySize } from '@/common/review'
 import { defineComponent, PropType, computed } from 'vue'
 
+/**
+ * 適用すべき色のスタイルクラスを計算する関数
+ * @param pointType ポイント表示方法
+ * @param point 評点
+ */
 export const calcColor = (pointType: ReviewPointType, point: number) => {
   let classText = ''
   if (pointType === 'rank14') {
@@ -142,6 +149,12 @@ export const calcColor = (pointType: ReviewPointType, point: number) => {
   return classText
 }
 
+/**
+ *  * 適用すべき色のスタイルクラスを計算する関数
+ * @param pointType ポイント表示方法
+ * @param point 評点
+ * @param reverse 色を反転
+ */
 export const calcClass = (pointType: ReviewPointType, point: number, reverse: boolean) => {
   if (reverse) {
     return 'font-weight-bold reverse'
@@ -153,7 +166,7 @@ export const calcClass = (pointType: ReviewPointType, point: number, reverse: bo
  * ポイントから平文を出力する
  * @param pointType ポイント表示方法
  * @param point 集計済みポイント
- * @param multiByte 'stars'表示の際にASCIIコード以外の文字を使用する
+ * @param multiByte 'stars'表示の際にリッチに表示する
  */
 export const calcPointPlainText = (pointType: ReviewPointType, point: number, multiByte?: boolean) => {
   if (pointType === 'rank14') {
@@ -258,22 +271,23 @@ export default defineComponent({
       type: Number,
       required: true
     },
+    /** ポイント表示タイプ */
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
     },
+    /** ランク表示の際の表示サイズ */
     displaySize: {
-      /// ランク表示の際の表示サイズを変更
       type: String as PropType<PointDisplaySize>,
       default: 'normal' as PointDisplaySize
     },
+    /** ランク表示をコンパクトに表示する */
     compact: {
-      /// ランク表示をコンパクトに表示する
       type: Boolean,
       default: false as boolean
     },
+    /** ランクの表示色を反転する */
     reverse: {
-      /// ランクの表示色を反転する
       type: Boolean,
       default: false
     }

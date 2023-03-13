@@ -1,3 +1,5 @@
+<!-- 入力時に自動で大きさが変化するテキストアリアのコンポーネント -->
+
 <template>
   <textarea
     v-model="content"
@@ -19,7 +21,6 @@ import { computed, defineComponent, ref, toRefs, watch, nextTick, onMounted } fr
 
 export default defineComponent({
   name: 'AutoTextArea',
-  components: {},
   computed: {
     content: {
       set (v: string) : void {
@@ -35,41 +36,58 @@ export default defineComponent({
     }
   },
   props: {
+    /** 入力文字列 */
     modelValue: {
       type: String,
       default: ''
     },
+    /** テキストエリアに表示するタイトル */
     title: {
       type: String,
       default: ''
     },
+    /** テキストエリアに渡すクラス */
     class: {
       type: String,
       default: ''
     },
+    /** テキストエリアに渡すスタイル */
     style: {
       type: String,
       default: ''
     },
+    /** 複数行の入力が可能になる */
     multiLines: {
       type: Boolean,
       default: false
     },
+    /** アウトライン無し */
     noOutline: {
       type: Boolean,
       default: false
     },
+    /** 背景色無し */
     noFill: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /**
+     * テキストの変更イベント
+     * @param テキスト
+     * */
     'update:model-value': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
+    /** フォーカスを取得した際のイベント */
     focusin: () => true,
+    /** フォーカスを失った際のイベント */
     focusout: () => true,
+    /**
+     * テキスト入力カーソルが移動した際のイベント
+     * @param カーソル位置
+     */
     moveCursor: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true

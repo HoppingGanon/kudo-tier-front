@@ -1,3 +1,5 @@
+<!-- Tierやレビューが未作成の状態で、リストを開いた際に表示するメッセージのコンポーネント -->
+
 <template>
   <div v-if="type === 'tier'" class="empty text-center">
     Tierはまだ作成されていません。<br />
@@ -39,12 +41,14 @@ export default defineComponent({
     QuickReview
   },
   props: {
+    /**
+     * 表示したいタイプ（
+     * tier Tierが空の場合にTierに表示する
+     * review Reviewが空の場合にReviewに表示する
+     * reviewAndTier Tierが空の場合にReviewに表示する
+     * ）
+    */
     type: {
-      /**
-        Tierが空の場合にTierに表示する
-        Reviewが空の場合にReviewに表示する
-        Tierが空の場合にReviewに表示する
-      */
       type: String as PropType<'tier' | 'review' | 'reviewAndTier'>,
       default: 'tier'
     }

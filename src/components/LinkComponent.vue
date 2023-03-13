@@ -1,10 +1,16 @@
+<!-- Twitter,Youtube,内部リンク,外部リンクを表示するコンポーネント -->
+
 <template>
   <div>
+
+    <!-- Twitter -->
     <Tweet
       v-if="isTw"
       :tweet-url="link"
       @tweet-load-error="errorTw"
     />
+
+    <!-- Youtubbe -->
     <div
       v-else-if="isYt"
       style="width: 100%; height: 360px;"
@@ -17,6 +23,8 @@
       >
       </Youtube>
     </div>
+
+    <!-- 内部リンク -->
     <a v-else-if="isInLink" :href="link" style="text-decoration: none;">
       <v-card height="96px" class="pa-3 ma-1">
         <span v-text="appName"></span>
@@ -25,12 +33,16 @@
         </div>
       </v-card>
     </a>
+
+    <!-- 外部リンク -->
     <v-card v-else-if="isExLink" @click="dialog = true" height="96px" class="pa-3 ma-1 cursor-pointer">
       <span>外部リンク</span>
       <div class="no-break-box-2">
         <span v-text="link" class="text-caption" />
       </div>
     </v-card>
+
+    <!-- 不正な文字列 -->
     <v-card v-else class="dotted-border d-flex justify-center align-center" min-height="50px" flat>
       <div>
         <v-icon>
@@ -41,6 +53,7 @@
     </v-card>
   </div>
 
+  <!-- 外部リンクへの警告 -->
   <simple-dialog v-model="dialog"
     title="外部リンクへのアクセス"
     :prepend-text="`${appName}のサイト外へ移動しようとしています。`"
@@ -65,6 +78,7 @@ import Youtube from 'vue3-youtube'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import { appName } from '@/common/names'
 
+// 正規表現でリンクの振り分けを行う
 export const linkReg = /^((http)|(https)):\/\/.*/
 export const twitterReg = /^https:\/\/twitter\.com\/.*/
 export const youtubeReg = /^https:\/\/www\.youtube\.com\/watch\?v=.*/
@@ -78,10 +92,15 @@ export default defineComponent({
     SimpleDialog
   },
   props: {
+    /** リンクの文字列 */
     link: {
       type: String,
       required: true
     },
+    /**
+     * リンクテキストが動的に変化する場合は、変化する文字列を
+     * 頻繁に変化する文字列をこちらに指定する
+     */
     preLink: {
       type: String
     }

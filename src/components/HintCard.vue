@@ -1,10 +1,12 @@
+<!-- 使い方を説明するhintダイアログの一ページ分のコンポーネント -->
+
 <template>
   <v-carousel-item>
     <div :style="width" class="centering scroll">
       <v-toolbar color="green-darken-3">
         <v-card-title v-if="title" v-text="title" />
         <v-spacer />
-        <v-btn icon @click="$emit('close')">
+        <v-btn v-if="showClose" icon @click="$emit('close')">
           <v-icon>
             mdi-close
           </v-icon>
@@ -34,14 +36,22 @@ import { useDisplay } from 'vuetify/lib/framework.mjs'
 export default defineComponent({
   name: 'HintCard',
   props: {
+    /** ページタイトル */
     title: {
       type: String
     },
+    /** 内容の見出し */
     subTitle: {
       type: String
+    },
+    /** 閉じるボタンを表示 */
+    showClose: {
+      type: Boolean,
+      default: true
     }
   },
   emits: {
+    /** 閉じるボタンが押された際のイベント */
     close: () => true
   },
   setup () {

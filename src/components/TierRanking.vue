@@ -1,3 +1,5 @@
+<!-- Tierのランキングやピボット表示をするコンポーネント-->
+
 <template>
   <v-card flat>
     <v-toolbar
@@ -137,7 +139,7 @@
         <tr v-for="row,i in pageItems" :key="i" class="text-caption cursor-pointer">
           <td v-for="col,j,k in row" :key="j" v-show="('' + j) !== 'reviewId'" :class="k === (Object.keys(row).length - 1) ? '': 'b-right'" v-scroll-to="`#rev${row.reviewId}`">
             <v-card v-if="'' + j == 'name'" v-text="col" flat></v-card>
-            <v-card v-else-if="'' + j == 'ave'" flat style="text-align: center;">
+            <v-card v-else-if="'' + j == 'ave'" flat class="text-center">
               <review-value-display
                 :compact="true"
                 :point-type="pointType"
@@ -145,7 +147,7 @@
                 display-size="normal"
               />
             </v-card>
-            <v-card v-else-if="propsDic['' + j]" style="text-align: center;" flat>
+            <v-card v-else-if="propsDic['' + j]" class="text-center" flat>
               <v-card v-if="propsDic['' + j].isPoint" flat>
                 <review-value-display
                   :compact="true"
@@ -286,59 +288,85 @@ export default defineComponent({
     TierToEmbedded
   },
   props: {
+    /** Tierデータ */
     tier: {
       type: Object as PropType<Tier>,
       required: true
     },
+    /** レビューデータの配列 */
     reviews: {
       type: Array as PropType<Review[]>,
       required: true,
       default: () => [] as PropType<Review[]>
     },
+    /** レビューの評価項目 */
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true,
       default: () => [] as ReviewFactorParam[]
     },
+    /** ポイント表示方法 */
     pointType: {
       type: String as PropType<ReviewPointType>,
       default: 'point' as ReviewPointType
     },
+    /** ・・・のメニューアイコンを表示しない */
     noMenuIcon: {
       type: Boolean,
       default: false
     },
+    /** ピボットTierのテーマ */
     theme: {
       type: String as PropType<RankingTheme>,
       default: 'light'
     },
+    /** ツールバーを隠す */
     hideBar: {
       type: Boolean,
       default: false
     },
+    /** クリックするとレビュー単独のページに飛ぶ */
     directLink: {
       type: Boolean,
       default: false
     },
+    /** ピボットTierのアイコンのサイズ */
     iconSize: {
       type: String as PropType<IconSize>,
       default: '48px' as IconSize
     },
+    /** ピボットTierの評点のサイズ */
     textSize: {
       type: String as PropType<PointDisplaySize>,
       default: 'large2' as PointDisplaySize
     }
   },
   emits: {
+    /**
+     * ポイント表示方法を更新する際のイベント
+     * @param value ポイント表示方法
+     */
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true,
+    /**
+     * ピボットTierのテーマを更新するイベント
+     * @param value テーマ
+     */
     'update:theme': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: RankingTheme) => true,
+    /**
+     * ピボットTierのアイコンサイズを更新するイベント
+     * @param value アイコンサイズ
+     */
     'update:iconSize': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: IconSize) => true,
+    /**
+     * ピボットTierのテキストサイズを更新するイベント
+     * @param value テキストサイズ
+     */
     'update:textSize': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: PointDisplaySize) => true

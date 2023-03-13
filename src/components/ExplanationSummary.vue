@@ -1,9 +1,11 @@
+<!-- welcomeページに表示する説明文のコンポーネント -->
+
 <template>
   <v-container>
     <!-- ここから概要 -->
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">独断と偏見のTierを作ろう</span>
         </p>
@@ -15,7 +17,7 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat><v-img src="@/assets/welcome/tierTable.png" max-height="480px"/></v-card>
+        <v-card class="pa-2" flat><v-img src="/img/welcome/tierTable.png" max-height="480px"/></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -28,12 +30,11 @@
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">評価のデータ化</span>
+          <span class="text-h6 font-weight-bold">すぐ・簡単に使える</span>
         </p>
         <br />
         <p>
-          評価に具体的な数値情報をつけることで、データの有効活用ができるようになる予定です。<br/>
-          まだやっていません。明日やる。
+          TwitterやGoogleのアカウントを使用して、誰でも簡単に始めることができます。
         </p>
       </v-col>
     </v-row>
@@ -47,7 +48,7 @@
     </v-row>
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">マニアックなレビューを書こう</span>
         </p>
@@ -60,7 +61,7 @@
     </v-row>
     <v-row class="mt-5 flex-row-reverse">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/reviewChart.png" max-height="540px" /></v-card>
+        <v-card class="pa-2" flat ><v-img src="/img/welcome/reviewChart.png" max-height="540px" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -74,7 +75,7 @@
         <br />
         <br />
         <p>
-          <span class="text-h6 font-weight-bold">しっかり伝わる説明文</span>
+          <span class="text-h6 font-weight-bold">くどくど説明文</span>
         </p>
         <br />
         <p>
@@ -94,7 +95,7 @@
     </v-row>
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">評価をシェアしよう</span>
         </p>
@@ -107,7 +108,7 @@
     </v-row>
     <v-row class="mt-5">
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-        <v-card class="pa-2" flat ><v-img src="@/assets/welcome/share.png" max-height="280px" class="shadow" /></v-card>
+        <v-card class="pa-2" flat ><v-img src="/img/welcome/share.png" max-height="280px" class="shadow" /></v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6">
         <p>
@@ -124,7 +125,7 @@
         </p>
         <br />
         <p>
-          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(beta版機能だけどもう推せる機能無いし、動くからヨシ!)。
+          ホームページやブログ向けに、HTML埋め込みタグや画像を生成できます(まだbeta版機能だけどヨシ!)。
         </p>
       </v-col>
     </v-row>
@@ -138,7 +139,7 @@
     </v-row>
 
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col class="text-center">
         <p>
           <span class="text-h5 font-weight-bold">{{ appName }}をはじめよう</span>
         </p>
@@ -159,7 +160,6 @@ import { appName } from '@/common/names'
 
 export default defineComponent({
   name: 'ExplanationSummary',
-  components: {},
   setup () {
     return {
       goLogin: () => router.push('/login'),

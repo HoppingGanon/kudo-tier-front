@@ -1,3 +1,5 @@
+<!-- レビューを検索するコンポーネント -->
+
 <template>
   <v-container class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
     <v-row>
@@ -44,7 +46,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
 import { ReviewWithParams } from '@/common/review'
-import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
+import { tierSortTypeList, tierContentTypeList, PostSortType, SelectObject } from '@/common/page'
 import SearchComponent from '@/components/SearchComponent.vue'
 import ReviewList from '@/components/ReviewList.vue'
 import EmptyComponent from '@/components/EmptyComponent.vue'
@@ -61,34 +63,45 @@ export default defineComponent({
     EmptyComponent
   },
   props: {
+    /** レビューと評点情報のペアの配列 */
     pairs: {
       type: Array as PropType<ReviewWithParams[]>,
       required: true
     },
+    /** ユーザーID */
     userId: {
       type: String,
       required: true
     },
+    /** 読み込み中の表示をする */
     isLoading: {
       type: Boolean,
       default: false
     },
-    /** Tierもレビューもない場合に特殊なボタンを生成するため、必要 */
+    /** ユーザーがTierを作成したことがあるか Tierもレビューもない場合に特殊なボタンを生成するため使用 */
     existsTier: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /** レビューペアの配列をすべてクリアするイベント */
     clearReviewsPair: () => true,
+    /**
+     * レビューペアの配列を追加するイベント
+     * @param pairs レビューと評点情報のペアの配列
+     */
     addReviewsPair: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       pairs :ReviewWithParams[]) => true,
+    /**
+     * レビューペアの配列を更新するイベント
+     * @param pairs レビューと評点情報のペアの配列
+     */
     updateReviewsPair: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       pairs :ReviewWithParams[]) => true
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const text = ref('')
     const sortItem = ref(tierSortTypeList[0])
@@ -192,7 +205,7 @@ export default defineComponent({
       }, 2000)
     }
 
-    const updateSortItem = (v: SelectObject<TierSortType>) => {
+    const updateSortItem = (v: SelectObject<PostSortType>) => {
       sortItem.value = v
       update(false)
     }

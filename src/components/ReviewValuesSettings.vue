@@ -1,3 +1,5 @@
+<!-- レビュー評点の編集・作成するコンポーネント -->
+
 <template>
   <v-container class="ma-0 pa-0">
     <v-row class="mb-3">
@@ -147,31 +149,46 @@ export default defineComponent({
     ReviewValueDisplay
   },
   props: {
+    /** レビューデータ */
     review: {
       type: Object as PropType<Review>,
       required: true
     },
+    /** レビューの評価項目 */
     params: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true
     },
+    /** レビューポイントの表現方法 */
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
     },
+    /** Tier調整値 */
     pullingUp: {
       type: Number,
       required: true
     },
+    /** Tier調整値 */
     pullingDown: {
       type: Number,
       required: true
     }
   },
   emits: {
+    /**
+     * レビュー評点の更新イベント
+     * @param v レビュー評点
+     * @param i レビュー評点のインデックス
+     */
     updatePoint: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: number, i: number) => true,
+    /**
+     * レビュー情報の更新イベント
+     * @param v レビュー情報
+     * @param i レビュー情報のインデックス
+     */
     updateInfo: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string, i: number) => true

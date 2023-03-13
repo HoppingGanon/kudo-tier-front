@@ -1,3 +1,5 @@
+<!-- レビューを表示するコンポーネント -->
+
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-row v-if="!noHeader" class="align-center">
@@ -194,38 +196,47 @@ export default defineComponent({
     ShareButtons
   },
   props: {
+    /** レビューデータ */
     review: {
       type: Object as PropType<Review>,
       required: true
     },
+    /** レビューの評価項目の情報 */
     reviewFactorParams: {
       type: Array as PropType<ReviewFactorParam[]>,
       required: true
     },
+    /** レビューの表示方法 */
     displayType: {
       type: String as PropType<ReviewDisplayType>,
       required: true
     },
+    /** サンプルとして表示、trueにするとイベントが発生しない */
     isSample: {
       type: Boolean,
       default: false
     },
+    /** どこをクリックしてもレビューに飛ぶ */
     isLink: {
       type: Boolean,
       default: false
     },
+    /** ヘッダ部分を表示しない */
     noHeader: {
       type: Boolean,
       default: false as boolean
     },
+    /** ポイント表示方法を固定 */
     noChangePoint: {
       type: Boolean,
       default: false as boolean
     },
+    /** 幅 */
     width: {
       type: String,
       default: '100%'
     },
+    /** 最小幅 */
     minHeight: {
       type: String,
       default: '100%'
@@ -234,26 +245,34 @@ export default defineComponent({
     pointType: {
       type: String as PropType<ReviewPointType>
     },
+    /** Tier調整値 */
     pullingUp: {
       type: Number,
       required: true
     },
+    /** Tier調整値 */
     pullingDown: {
       type: Number,
       required: true
     }
   },
   emits: {
+    /**
+     * ポイント表示方法を更新する際のイベント
+     * @param value ポイント表示方法
+     * @param index レビューのインデックス
+     */
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true,
+    /** レビューをこのコンポーネントから削除した場合などに発火する再読み込みイベント */
     reload: () => true
   },
   setup (props, { emit }) {
     const toast = useToast()
     const primaryColor = vuetify.theme.themes._rawValue.myCustomLightTheme.colors.primary
     const lastWriteTime = computed(() => {
-      return CommonApi.dateToString(props.review.updatedAt, true)
+      return CommonApi.dateToString(props.review.updatedAt, true, 1)
     })
 
     const average = computed(() => {

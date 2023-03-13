@@ -1,3 +1,5 @@
+<!-- セクションを編集するエディタコンポーネント -->
+
 <template>
   <v-container class="ma-0 pa-0" fulid>
     <v-row>
@@ -80,53 +82,110 @@ export default defineComponent({
     EditorTools
   },
   props: {
+    /** セクション配列 */
     sections: {
       type: Object as PropType<ReviewSection[]>,
       required: true
     },
+    /** パラグラフのみ編集可能にし、セクションの新規追加を禁止 */
     noSection: {
       type: Boolean,
       default: false
     },
+    /** エディタに表示するタイトル */
     title: {
       type: String,
       default: ''
     }
   },
   emits: {
+    /**
+     * セクションを更新するイベント
+     * @param v セクション
+     * @param sectionIndex セクションのインデックス
+     */
     updateSection: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: ReviewSection, sectionIndex: number) => true,
+    /**
+     * セクションのタイトルを更新するイベント
+     * @param v タイトル
+     * @param sectionIndex セクションのインデックス
+     */
     updateSectionTitle: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string, sectionIndex: number) => true,
+    /**
+     * パラグラフの配列が更新された際のイベント
+     * @param v パラグラフの配列
+     * @param sectionIndex セクションのインデックス
+     */
     'update:parags': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: ReviewParagraph[], sectionIndex: number) => true,
+    /**
+     * パラグラフのbodyが更新された際のイベント
+     * @param v 更新内容
+     * @param sectionIndex セクションのインデックス
+     * @param paragIndex パラグラフのインデックス
+     */
     updateParagBody: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string, sectionIndex: number, paragIndex: number) => true,
+    /**
+     * セクションを追加する際のイベント
+     * @param sectionIndex セクションのインデックス
+     */
     addSection: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sectionIndex: number) => true, //, paragIndex: number
+    /**
+     * パラグラフを追加する際のイベント
+     * @param paragType パラグラフのタイプ
+     * @param sectionIndex セクションのインデックス
+     * @param paragIndex パラグラフのインデックス
+     */
     addParag: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       paragType: ReviewParagraphType, sectionIndex: number, paragIndex: number) => true,
+    /**
+     * パラグラフを削除する際のイベント
+     * @param sectionIndex セクションのインデックス
+     * @param paragIndex パラグラフのインデックス
+     */
     delParag: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sectionIndex: number, paragIndex: number) => true,
+    /**
+     * セクションが削除された際のイベント
+     * @param sectionIndex セクションのインデックス
+     */
     delSection: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sectionIndex: number) => true,
+    /**
+     * フォーカスを取得した際のイベント
+     * @param sectionIndex セクションのインデックス
+     * @param paragIndex パラグラフのインデックス
+     */
     focusin: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sectionIndex: number, paragIndex: number) => true,
+    /**
+     * フォーカスを取得した際のイベント
+     * @param sectionIndex セクションのインデックス
+     * @param paragIndex パラグラフのインデックス
+     */
     focusout: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sectionIndex: number, paragIndex: number) => true,
+    /** 送信ボタンが押された際のイベント */
     submit: () => true,
+    /** プレビュー切り替えボタンが押された際のイベント */
     preview: () => true,
+    /** ピンボタン(floatingStyleの切り替えボタン)が押された際のイベント */
     togglePin: () => true,
+    /** ヒントボタンが押された際のイベント */
     openHint: () => true
   },
   setup (props, { emit }) {

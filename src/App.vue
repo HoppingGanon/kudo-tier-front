@@ -10,9 +10,8 @@
             <v-col class="d-flex" style="min-height: 64px;">
               <v-icon color="gray darken-1" class="ml-5" @click="drawer = !drawer"> mdi-arrow-left-bold-outline </v-icon>
               <v-spacer />
-              <v-btn v-if="hasSession"  @click="goNotifications" flat>
-                <v-icon class="mr-3">mdi-bell-outline</v-icon>
-                <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
+              <v-btn v-if="hasSession" @click="openHint" flat icon class="mr-3">
+                <v-icon>mdi-help-circle</v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -46,7 +45,7 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-list class="ml-3 mt-3" width="100%">
+              <v-list class="ml-3 mt-0" width="100%">
                 <v-list-item v-if="hasSession" @click="goHome">
                   <v-list-item-title>
                     <v-icon class="mr-3">mdi-home-account</v-icon>
@@ -71,6 +70,13 @@
                     レビューの追加
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item v-if="hasSession" @click="goNotifications">
+                  <v-list-item-title>
+                    <v-icon class="mr-3">mdi-bell-outline</v-icon>
+                    通知
+                    <v-chip v-if="notificationsCount" v-text="notificationsCount" color="primary" variant="elevated" size="x-small"></v-chip>
+                  </v-list-item-title>
+                </v-list-item>
                 <v-list-item v-if="hasSession" @click="goSettings">
                   <v-list-item-title>
                     <v-icon class="mr-3">mdi-cog-outline</v-icon>
@@ -81,7 +87,7 @@
             </v-col>
           </v-row>
           <v-row v-if="hasSession">
-            <v-divider class="mt-2" />
+            <v-divider class="mt-0" />
           </v-row>
           <v-row v-if="hasSession">
             <v-list class="ml-3 mt-2" width="100%">
@@ -155,6 +161,8 @@
       <quick-review @close="reviewDialog = false" />
     </simple-dialog>
   </v-app>
+
+  <home-hint v-model="hint" v-model:page="page" :force-type="hintState" />
 </template>
 
 <script lang="ts">
@@ -163,11 +171,13 @@ import ProfileComponent from '@/components/ProfileComponent.vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import QuickReview from '@/components/QuickReview.vue'
+import HomeHint from '@/components/HomeHint.vue'
 import router from '@/router'
 import store from '@/store'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
 import RestApi from '@/common/restapi'
 import { appName } from '@/common/names'
+import { HintState } from './common/page'
 
 export default defineComponent({
   name: 'App',
@@ -175,7 +185,8 @@ export default defineComponent({
     ProfileComponent,
     SimpleDialog,
     FooterComponent,
-    QuickReview
+    QuickReview,
+    HomeHint
   },
   setup () {
     const route = useRoute()
@@ -197,6 +208,10 @@ export default defineComponent({
     const barStyle = computed(() => barIsVisible.value ? 'height:60px;' : 'height: 0px;')
     const hasSession = computed(() => store.getters.isRegistered)
     const isNew = computed(() => store.state.isNew)
+
+    const hint = ref(false)
+    const page = ref(0)
+    const hintState = ref<HintState>(undefined)
 
     const goLogout = () => {
       logoutDialog.value = false
@@ -248,6 +263,31 @@ export default defineComponent({
     })
 
     /**
+     * URLが変化したら発生するイベント
+     */
+    const onChangePath = () => {
+      if (store.state.hintState === 'tier') {
+        // ユーザーが作成されてすぐの場合、Tier作成のヒントを表示
+        store.commit('setHintState', undefined)
+        hint.value = true
+        page.value = 0
+        hintState.value = 'tier'
+      } else if (store.state.hintState === 'review') {
+        // Tierを作成してすぐの場合、レビュー作成のヒントを表示
+        store.commit('setHintState', undefined)
+        hint.value = true
+        page.value = 0
+        hintState.value = 'review'
+      } else if (store.state.hintState === 'share') {
+        // Tierを作成してすぐの場合、レビュー作成のヒントを表示
+        store.commit('setHintState', undefined)
+        hint.value = true
+        page.value = 0
+        hintState.value = 'share'
+      }
+    }
+
+    /**
      * routerがページ内リンクによる変化には反応しないように制御
      * URI変更 → 更新
      * ID変更 → 更新しない
@@ -270,6 +310,8 @@ export default defineComponent({
         path = route.fullPath.substring(0, idStart) + route.fullPath.substring(paramStart, len)
       }
 
+      onChangePath()
+
       return path
     }
 
@@ -290,6 +332,12 @@ export default defineComponent({
     const checkRouterOnMounted = async () => {
       await router.isReady()
       checkRouter()
+    }
+
+    const openHint = () => {
+      hint.value = true
+      drawer.value = false
+      hintState.value = undefined
     }
 
     onMounted(async () => {
@@ -324,6 +372,9 @@ export default defineComponent({
       barStyle,
       hasSession,
       isNew,
+      hint,
+      page,
+      hintState,
       clickHideBarIcon,
       goHome,
       goNotifications,
@@ -333,7 +384,8 @@ export default defineComponent({
       goSettings,
       goWelcome,
       goAbout,
-      routeWatcher
+      routeWatcher,
+      openHint
     }
   }
 })

@@ -1,3 +1,5 @@
+<!-- シェアボタンのコンポーネント -->
+
 <template>
   <a :href="twitterUrl" rel="nofollow" class="no-link ml-1" target="_blank">
     <v-btn class="text-no-transform text-caption pa-2" color="#00acee" style="color: white;">
@@ -14,13 +16,16 @@ export default defineComponent({
   name: 'ShareButtons',
   components: {},
   props: {
+    /** シェアするリンク */
     link: {
       type: String,
       required: true
     },
+    /** シェアする本文 */
     body: {
       type: String
     },
+    /** 追加するハッシュタグの配列 */
     hashTags: {
       type: Array as PropType<string[]>
     }

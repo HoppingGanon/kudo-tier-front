@@ -1,3 +1,5 @@
+<!-- タイトル付きのダイアログカードが表示ができるコンポーネント -->
+
 <template>
   <v-dialog :persistent="persistent" :model-value="modelValue" @update:model-value="setValue" :fullscreen="fullscreen">
     <v-container :fluid="fullscreen" :class="fullscreen ? 'ma-0 pa-0' : ''">
@@ -41,66 +43,88 @@ export default defineComponent({
   name: 'SimpleDialog',
   components: { },
   props: {
+    /** ダイアログの表示状態 */
     modelValue: {
       type: Boolean,
       required: true
     },
+    /** カードのタイトル */
     title: {
       type: String
     },
+    /** カードの幅 */
     width: {
       type: String
     },
+    /** カードの高さ */
     height: {
       type: String
     },
+    /** 本文の前に付加するテキスト */
     prependText: {
       type: String
     },
+    /** 本文の前に付加する画像 */
     prependImageSrc: {
       type: String
     },
+    /** 本文 */
     text: {
       type: String
     },
+    /** 画像 */
     appendImageSrc: {
       type: String
     },
+    /** 本文の後に付加するテキスト */
     appendText: {
       type: String
     },
+    /** ダイアログの外側をクリックしてもダイアログがとじないようにする */
     persistent: {
       type: Boolean,
       default: false
     },
+    /** フルスクリーン表示する */
     fullscreen: {
       type: Boolean,
       default: false
     },
+    /** 上部に閉じるボタンを表示する */
     showTopCloseButton: {
       type: Boolean,
       default: true
     },
+    /** 下部に閉じるボタンを表示する */
     showCloseButton: {
       type: Boolean,
       default: true
     },
+    /** 下部にOKボタンを表示する */
     showSubmitButton: {
       type: Boolean,
       default: true
     },
+    /** 閉じるボタンのテキスト */
     closeButtonText: {
       type: String,
       default: '閉じる'
     },
+    /** OKボタンのテキスト */
     submitButtonText: {
       type: String,
       default: 'OK'
     }
   },
   emits: {
+    /** 閉じるボタンを押したときのイベント */
     colse: () => true,
+    /** OKボタンを押したときのイベント */
     submit: () => true,
+    /**
+     * ダイアログの開閉操作が行われた際のイベント
+     * @param v ダイアログの状態
+     */
     'update:modelValue': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: boolean) => true

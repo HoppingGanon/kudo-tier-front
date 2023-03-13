@@ -231,7 +231,7 @@ import licensesFront from '@/assets/licenses-front.json'
 import licensesFrontDev from '@/assets/licenses-front-dev.json'
 import licensesBack from '@/assets/licenses-back.json'
 import licensesFramework from '@/assets/licenses-framework.json'
-import { LicenseData } from '@/common/restapi'
+import { LicenseData } from '@/common/page'
 
 export default defineComponent({
   name: 'AboutView',

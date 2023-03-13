@@ -1,3 +1,5 @@
+<!-- Tier配列を縦に並べて表示するコンポーネント -->
+
 <template>
   <v-container class="pa-0 ma-0" fluid>
     <v-row v-for="tier,index in tiers" :key="index">
@@ -37,23 +39,32 @@ export default defineComponent({
     LoadingComponent
   },
   props: {
+    /** Tier配列 */
     tiers: {
       type: Array as PropType<Tier[]>,
       required: true
     },
+    /** Tierをクリックすると単独のTierページに飛ぶ */
     isLink: {
       type: Boolean,
       default: false
     },
+    /** 読み込み中の表示をする */
     isLoading: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /**
+     * ポイント表示方法を更新する際のイベント
+     * @param value ポイント表示方法
+     * @param index レビューのインデックス
+     */
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType, index: number) => true,
+    /** 再読み込みイベント */
     reload: () => true
   },
   setup (props, { emit }) {

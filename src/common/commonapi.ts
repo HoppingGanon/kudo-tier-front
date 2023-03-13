@@ -9,6 +9,7 @@ export default class CommonApi {
    * 日付型を文字列に変換する
    * @param date 日付
    * @param isDetail 時分秒を含むかどうか
+   * @param shortenDays 「n分前」のような短縮表示を行う最大日数（省略すると短縮表示無し）
    * @returns 日付の文字列
    */
   static dateToString (date: Date, isDetail?: boolean, shortenDays?: number) : string {
@@ -24,6 +25,13 @@ export default class CommonApi {
     return isDetail ? dateStr + ` ${CommonApi.padZero(date.getHours(), 2)}:${CommonApi.padZero(date.getMinutes(), 2)}:${CommonApi.padZero(date.getSeconds(), 2)}` : dateStr
   }
 
+  /**
+   * 短縮表示した文字列を返す関数
+   * @param nowDate 現在時刻
+   * @param date 対象の時刻
+   * @param shortenDays 短縮表示を行う最大日数
+   * @returns 短縮表示を適用した文字列、最大日数を超過している場合はundefined
+   */
   static shortenDate (nowDate: Date, date: Date, shortenDays: number) : string | undefined {
     const now = nowDate.getTime()
     const at = date.getTime()

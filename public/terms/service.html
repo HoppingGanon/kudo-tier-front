@@ -1,113 +1,473 @@
-<h1 id="利用規約">利用規約</h1>
-<p>この利用規約（以下，「本規約」といいます。）は，ほっぴんぐがのん（以下，「開発者」といいます。）がこのウェブサイト上で提供するサービス（以下，「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下，「ユーザー」といいます。）には，本規約に従って，本サービスをご利用いただきます。</p>
-<h2 id="第1条適用">第1条（適用）</h2>
-<ol type="1">
-<li>本規約は，ユーザーと開発者との間の本サービスの利用に関わる一切の関係に適用されるものとします。</li>
-<li>開発者は本サービスに関し，本規約のほか，ご利用にあたってのルール等，各種の定め（以下，「個別規定」といいます。）をすることがあります。これら個別規定はその名称のいかんに関わらず，本規約の一部を構成するものとします。</li>
-<li>本規約の規定が前条の個別規定の規定と矛盾する場合には，個別規定において特段の定めなき限り，個別規定の規定が優先されるものとします。</li>
+<!DOCTYPE html>
+<html>
+<head>
+<title>service.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84">利用規約</h1>
+<p>この利用規約（以下、「本規約」といいます。）は、Tanaka（以下、「開発者」といいます。）がこのウェブサイト上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。</p>
+<h2 id="%E7%AC%AC1%E6%9D%A1%E9%81%A9%E7%94%A8">第1条（適用）</h2>
+<ol>
+<li>本規約は、ユーザーと開発者との間の本サービスの利用に関わる一切の関係に適用されるものとします。</li>
+<li>開発者は本サービスに関し、本規約のほか、ご利用にあたってのルール等、各種の定め（以下、「個別規定」といいます。）をすることがあります。これら個別規定はその名称のいかんに関わらず、本規約の一部を構成するものとします。</li>
+<li>本規約の規定が前条の個別規定の規定と矛盾する場合には、個別規定において特段の定めなき限り、個別規定の規定が優先されるものとします。</li>
 </ol>
-<h2 id="第2条利用登録">第2条（利用登録）</h2>
-<ol type="1">
-<li>本サービスにおいては，登録希望者が本規約に同意の上，開発者の定める方法によって利用登録を申請し，開発者がこれを承認することによって，利用登録が完了するものとします。</li>
-<li>開発者は，利用登録の申請者に以下の事由があると判断した場合，利用登録の申請を承認しないことがあり，その理由については一切の開示義務を負わないものとします。
-<ol type="1">
+<h2 id="%E7%AC%AC2%E6%9D%A1%E5%88%A9%E7%94%A8%E7%99%BB%E9%8C%B2">第2条（利用登録）</h2>
+<ol>
+<li>本サービスにおいては、登録希望者が本規約に同意の上、開発者の定める方法によって利用登録を申請し、開発者がこれを承認することによって、利用登録が完了するものとします。</li>
+<li>開発者は、利用登録の申請者に以下の事由があると判断した場合、利用登録の申請を承認しないことがあり、その理由については一切の開示義務を負わないものとします。
+<ol>
 <li>利用登録の申請に際して虚偽の事項を届け出た場合</li>
 <li>本規約に違反したことがある者からの申請である場合</li>
-<li>その他，開発者が利用登録を相当でないと判断した場合</li>
-</ol></li>
+<li>その他、開発者が利用登録を相当でないと判断した場合</li>
 </ol>
-<h2 id="第3条アカウントの管理">第3条（アカウントの管理）</h2>
-<ol type="1">
-<li>ユーザーは,
-ソーシャルネットワーキングサービスのアカウント連携機能（以下,
-アカウント連携）を用いてログインします。</li>
-<li>ユーザーは，自己の責任において，アカウント連携に必要な情報を適切に管理するものとします。</li>
-<li>アカウントが第三者によって使用されたことによって生じた損害は，開発者に故意又は重大な過失がある場合を除き，開発者は一切の責任を負わないものとします。</li>
+</li>
 </ol>
-<h2 id="第4条利用料金">第4条（利用料金）</h2>
-<ol type="1">
-<li>本サービスの全ての機能は, ユーザーに対して無償で提供されます。</li>
+<h2 id="%E7%AC%AC3%E6%9D%A1%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%AE%E7%AE%A1%E7%90%86">第3条（アカウントの管理）</h2>
+<ol>
+<li>ユーザーは、  ソーシャルネットワーキングサービスのアカウント連携機能（以下、  アカウント連携）を用いてログインします。</li>
+<li>ユーザーは、自己の責任において、アカウント連携に必要な情報を適切に管理するものとします。</li>
+<li>アカウントが第三者によって使用されたことによって生じた損害は、開発者に故意又は重大な過失がある場合を除き、開発者は一切の責任を負わないものとします。</li>
 </ol>
-<h2 id="第5条禁止事項">第5条（禁止事項）</h2>
-<p>ユーザーは，本サービスの利用にあたり，以下の行為をしてはなりません。</p>
-<ol type="1">
+<h2 id="%E7%AC%AC4%E6%9D%A1%E5%88%A9%E7%94%A8%E6%96%99%E9%87%91">第4条（利用料金）</h2>
+<ol>
+<li>本サービスの全ての機能は、  ユーザーに対して無償で提供されます。</li>
+</ol>
+<h2 id="%E7%AC%AC5%E6%9D%A1%E7%A6%81%E6%AD%A2%E4%BA%8B%E9%A0%85">第5条（禁止事項）</h2>
+<p>ユーザーは、本サービスの利用にあたり、以下の行為をしてはなりません。</p>
+<ol>
 <li>法令または公序良俗に違反する行為</li>
 <li>犯罪行為に関連する行為</li>
-<li>本サービスの内容等，本サービスに含まれる著作権，商標権ほか知的財産権を侵害する行為</li>
-<li>開発者，ほかのユーザー，またはその他第三者のサーバーまたはネットワークの機能を破壊したり，妨害したりする行為</li>
+<li>本サービスの内容等、本サービスに含まれる著作権、商標権ほか知的財産権を侵害する行為</li>
+<li>開発者、ほかのユーザー、またはその他第三者のサーバーまたはネットワークの機能を破壊したり、妨害したりする行為</li>
 <li>本サービスによって得られた情報を商業的に利用する行為</li>
 <li>開発者のサービスの運営を妨害するおそれのある行為</li>
-<li>不正アクセスをし，またはこれを試みる行為</li>
+<li>不正アクセスをし、またはこれを試みる行為</li>
 <li>他のユーザーに関する個人情報等を収集または蓄積する行為</li>
 <li>不正な目的を持って本サービスを利用する行為</li>
-<li>本サービスの他のユーザーまたはその他の第三者に不利益，損害，不快感を与える行為</li>
+<li>本サービスの他のユーザーまたはその他の第三者に不利益、損害、不快感を与える行為</li>
 <li>他のユーザーに成りすます行為</li>
-<li>開発者が許諾しない本サービス上での宣伝，広告，勧誘，または営業行為</li>
+<li>開発者が許諾しない本サービス上での宣伝、広告、勧誘、または営業行為</li>
 <li>面識のない異性との出会いを目的とした行為</li>
-<li>開発者のサービスに関連して，反社会的勢力に対して直接または間接に利益を供与する行為</li>
-<li>その他，開発者が不適切と判断する行為</li>
+<li>開発者のサービスに関連して、反社会的勢力に対して直接または間接に利益を供与する行為</li>
+<li>その他、開発者が不適切と判断する行為</li>
 </ol>
-<h2
-id="第6条本サービスの提供の停止等">第6条（本サービスの提供の停止等）</h2>
-<ol type="1">
-<li>開発者は，ユーザーに事前に通知することなく本サービスの全部または一部の提供を停止または中断することができるものとします。</li>
-<li>開発者は，本サービスの提供の停止または中断により，ユーザーまたは第三者が被ったいかなる不利益または損害についても，一切の責任を負わないものとします。</li>
+<h2 id="%E7%AC%AC6%E6%9D%A1%E6%9C%AC%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E6%8F%90%E4%BE%9B%E3%81%AE%E5%81%9C%E6%AD%A2%E7%AD%89">第6条（本サービスの提供の停止等）</h2>
+<ol>
+<li>開発者は、ユーザーに事前に通知することなく本サービスの全部または一部の提供を停止または中断することができるものとします。</li>
+<li>開発者は、本サービスの提供の停止または中断により、ユーザーまたは第三者が被ったいかなる不利益または損害についても、一切の責任を負わないものとします。</li>
 </ol>
-<h2
-id="第7条利用制限および登録抹消">第7条（利用制限および登録抹消）</h2>
-<ol type="1">
-<li>開発者は，ユーザーが以下のいずれかに該当する場合には，事前の通知なく，ユーザーに対して，本サービスの全部もしくは一部の利用を制限し，またはユーザーとしての登録を抹消することができるものとします。
-<ol type="1">
+<h2 id="%E7%AC%AC7%E6%9D%A1%E5%88%A9%E7%94%A8%E5%88%B6%E9%99%90%E3%81%8A%E3%82%88%E3%81%B3%E7%99%BB%E9%8C%B2%E6%8A%B9%E6%B6%88">第7条（利用制限および登録抹消）</h2>
+<ol>
+<li>開発者は、ユーザーが以下のいずれかに該当する場合には、事前の通知なく、ユーザーに対して本サービスの全部もしくは一部の利用を制限し、またはユーザーとしての登録を抹消することができるものとします。
+<ol>
 <li>本規約のいずれかの条項に違反した場合</li>
 <li>登録事項に虚偽の事実があることが判明した場合</li>
 <li>料金等の支払債務の不履行があった場合</li>
-<li>開発者からの連絡に対し，一定期間返答がない場合</li>
-<li>本サービスについて，最終の利用から一定期間利用がない場合</li>
-<li>その他，開発者が本サービスの利用を適当でないと判断した場合</li>
-</ol></li>
-<li>開発者は，本条に基づき開発者が行った行為によりユーザーに生じた損害について，一切の責任を負いません。</li>
+<li>開発者からの連絡に対し、一定期間返答がない場合</li>
+<li>本サービスについて、最終の利用から一定期間利用がない場合</li>
+<li>その他、開発者が本サービスの利用を適当でないと判断した場合</li>
 </ol>
-<h2 id="第8条退会">第8条（退会）</h2>
-<p>ユーザーは，開発者の定める退会手続により，本サービスから退会できるものとします。</p>
-<h2
-id="第9条保証の否認および免責事項">第9条（保証の否認および免責事項）</h2>
-<ol type="1">
-<li>開発者は，本サービスに事実上または法律上の瑕疵（安全性，信頼性，正確性，完全性，有効性，特定の目的への適合性，セキュリティなどに関する欠陥，エラーやバグ，権利侵害などを含みます。）がないことを明示的にも黙示的にも保証しておりません。</li>
-<li>開発者は，本サービスに起因してユーザーに生じたあらゆる損害について,
-開発者の故意又は重過失による場合を除き,
-一切の責任を負いません。ただし，本サービスに関する開発者とユーザーとの間の契約（本規約を含みます。）が消費者契約法に定める消費者契約となる場合，この免責規定は適用されません。</li>
-<li>前項ただし書に定める場合であっても，開発者は，開発者の過失（重過失を除きます。）による債務不履行または不法行為によりユーザーに生じた損害のうち特別な事情から生じた損害（開発者またはユーザーが損害発生につき予見し，または予見し得た場合を含みます。）について一切の責任を負いません。また，開発者の過失（重過失を除きます。）による債務不履行または不法行為によりユーザーに生じた損害の賠償は，ユーザーから当該損害が発生した月に受領した利用料の額を上限とします。</li>
-<li>開発者は，本サービスに関して，ユーザーと他のユーザーまたは第三者との間において生じた取引，連絡または紛争等について一切責任を負いません。</li>
+</li>
+<li>開発者は、本条に基づき開発者が行った行為によりユーザーに生じた損害について、一切の責任を負いません。</li>
 </ol>
-<h2 id="第10条サービス内容の変更等">第10条（サービス内容の変更等）</h2>
-<p>開発者は，ユーザーへの事前の告知をもって, 本サービスの内容を変更,
-追加または廃止することがあり, ユーザーはこれを承諾するものとします。</p>
-<h2 id="第11条利用規約の変更">第11条（利用規約の変更）</h2>
-<ol type="1">
-<li>開発者は以下の場合には, ユーザーの個別の同意を要せず,
-本規約を変更することができるものとします。
-<ol type="1">
+<h2 id="%E7%AC%AC8%E6%9D%A1%E9%80%80%E4%BC%9A">第8条（退会）</h2>
+<p>ユーザーは、開発者の定める退会手続により、本サービスから退会できるものとします。</p>
+<h2 id="%E7%AC%AC9%E6%9D%A1%E4%BF%9D%E8%A8%BC%E3%81%AE%E5%90%A6%E8%AA%8D%E3%81%8A%E3%82%88%E3%81%B3%E5%85%8D%E8%B2%AC%E4%BA%8B%E9%A0%85">第9条（保証の否認および免責事項）</h2>
+<ol>
+<li>開発者は、本サービスに事実上または法律上の瑕疵（安全性、信頼性、正確性、完全性、有効性、特定の目的への適合性、セキュリティなどに関する欠陥、エラーやバグ、権利侵害などを含みます。）がないことを明示的にも黙示的にも保証しておりません。</li>
+<li>開発者は、本サービスに起因してユーザーに生じたあらゆる損害について、  開発者の故意又は重過失による場合を除き、  一切の責任を負いません。ただし、本サービスに関する開発者とユーザーとの間の契約（本規約を含みます。）が消費者契約法に定める消費者契約となる場合、この免責規定は適用されません。</li>
+<li>前項ただし書に定める場合であっても、開発者は、開発者の過失（重過失を除きます。）による債務不履行または不法行為によりユーザーに生じた損害のうち特別な事情から生じた損害（開発者またはユーザーが損害発生につき予見し、または予見し得た場合を含みます。）について一切の責任を負いません。また、開発者の過失（重過失を除きます。）による債務不履行または不法行為によりユーザーに生じた損害の賠償は、ユーザーから当該損害が発生した月に受領した利用料の額を上限とします。</li>
+<li>開発者は、本サービスに関して、ユーザーと他のユーザーまたは第三者との間において生じた取引、連絡または紛争等について一切責任を負いません。</li>
+</ol>
+<h2 id="%E7%AC%AC10%E6%9D%A1%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E5%86%85%E5%AE%B9%E3%81%AE%E5%A4%89%E6%9B%B4%E7%AD%89">第10条（サービス内容の変更等）</h2>
+<p>開発者は、ユーザーへの事前の告知をもって、  本サービスの内容を変更、  追加または廃止することがあり、  ユーザーはこれを承諾するものとします。</p>
+<h2 id="%E7%AC%AC11%E6%9D%A1%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84%E3%81%AE%E5%A4%89%E6%9B%B4">第11条（利用規約の変更）</h2>
+<ol>
+<li>開発者は以下の場合には、  ユーザーの個別の同意を要せず、  本規約を変更することができるものとします。
+<ol>
 <li>本規約の変更がユーザーの一般の利益に適合するとき。</li>
-<li>本規約の変更が本サービス利用契約の目的に反せず, かつ, 変更の必要性,
-変更後の内容の相当性その他の変更に係る事情に照らして合理的なものであるとき。</li>
-</ol></li>
-<li>開発者はユーザーに対し, 前項による本規約の変更にあたり, 事前に,
-本規約を変更する旨及び変更後の本規約の内容並びにその効力発生時期を通知します。</li>
+<li>本規約の変更が本サービス利用契約の目的に反せず、  かつ、  変更の必要性、  変更後の内容の相当性その他の変更に係る事情に照らして合理的なものであるとき。</li>
 </ol>
-<h2 id="第12条個人情報の取扱い">第12条（個人情報の取扱い）</h2>
-<ol type="1">
-<li>開発者は，本サービスの利用によって取得する氏名，生年月日，住所，電話番号，連絡先その他の記述等により特定の個人を識別できる情報及び容貌，指紋，声紋にかかるデータ，及び健康保険証の保険者番号などの当該情報単体から特定の個人を識別できる情報（以下、個人情報）について,
-可能な限り厳格な管理のも保管しますが，その一切において責任を負いません。</li>
-<li>開発者は取得した個人情報の提供や開示要求に対し,
-応答する義務が無いものとします。</li>
+</li>
+<li>開発者はユーザーに対し、  前項による本規約の変更にあたり、  事前に、  本規約を変更する旨及び変更後の本規約の内容並びにその効力発生時期を通知します。</li>
 </ol>
-<h2 id="第13条通知または連絡">第13条（通知または連絡）</h2>
-<p>ユーザーと開発者との間の通知または連絡は，開発者の定める方法によって行うものとします。</p>
-<h2 id="第14条権利義務の譲渡の禁止">第14条（権利義務の譲渡の禁止）</h2>
-<p>ユーザーは，開発者の書面による事前の承諾なく，利用契約上の地位または本規約に基づく権利もしくは義務を第三者に譲渡し，または担保に供することはできません。</p>
-<h2 id="第15条準拠法裁判管轄">第15条（準拠法・裁判管轄）</h2>
-<ol type="1">
-<li>本規約の解釈にあたっては，日本法を準拠法とします。</li>
-<li>本サービスに関して紛争が生じた場合には，開発者の本店所在地を管轄する裁判所を専属的合意管轄とします。</li>
+<h2 id="%E7%AC%AC12%E6%9D%A1%E5%80%8B%E4%BA%BA%E6%83%85%E5%A0%B1%E3%81%AE%E5%8F%96%E6%89%B1%E3%81%84">第12条（個人情報の取扱い）</h2>
+<ol>
+<li>開発者は、本サービスの利用によって取得する氏名、生年月日、住所、電話番号、連絡先その他の記述等により特定の個人を識別できる情報及び容貌、指紋、声紋にかかるデータ、及び健康保険証の保険者番号などの当該情報単体から特定の個人を識別できる情報（以下、個人情報）について、  可能な限り厳格な管理のもとに保管しますが、その一切において責任を負いません。</li>
+<li>開発者は取得した個人情報の提供や開示要求に対し、  応答する義務が無いものとします。</li>
+</ol>
+<h2 id="%E7%AC%AC13%E6%9D%A1%E9%80%9A%E7%9F%A5%E3%81%BE%E3%81%9F%E3%81%AF%E9%80%A3%E7%B5%A1">第13条（通知または連絡）</h2>
+<p>ユーザーと開発者との間の通知または連絡は、開発者の定める方法によって行うものとします。</p>
+<h2 id="%E7%AC%AC14%E6%9D%A1%E6%A8%A9%E5%88%A9%E7%BE%A9%E5%8B%99%E3%81%AE%E8%AD%B2%E6%B8%A1%E3%81%AE%E7%A6%81%E6%AD%A2">第14条（権利義務の譲渡の禁止）</h2>
+<p>ユーザーは、開発者の書面による事前の承諾なく、利用契約上の地位または本規約に基づく権利もしくは義務を第三者に譲渡し、または担保に供することはできません。</p>
+<h2 id="%E7%AC%AC15%E6%9D%A1%E6%BA%96%E6%8B%A0%E6%B3%95%E3%83%BB%E8%A3%81%E5%88%A4%E7%AE%A1%E8%BD%84">第15条（準拠法・裁判管轄）</h2>
+<ol>
+<li>本規約の解釈にあたっては、日本法を準拠法とします。</li>
+<li>本サービスに関して紛争が生じた場合には、開発者の本店所在地を管轄する裁判所を専属的合意管轄とします。</li>
 </ol>
 <p>以上</p>
+
+</body>
+</html>

@@ -1,3 +1,5 @@
+<!-- セクションを表示するコンポーネント-->
+
 <template>
   <v-card v-if="displayType === 'list' || displayType === 'all'" flat>
     <span v-if="section.title" class="break-word text-subtitle-1 font-weight-bold" v-text="section.title">
@@ -48,14 +50,17 @@ export default defineComponent({
     LinkComponent
   },
   props: {
+    /** セクション */
     section: {
       type: Object as PropType<ReviewSection>,
       required: true
     },
+    /** 表示方法 */
     displayType: {
       type: String as PropType<ReviewDisplayType>,
       default: 'all'
     },
+    /** セクションのタイトルを表示しない */
     hideSectionTitle: {
       type: Boolean,
       dafault: false

@@ -1,9 +1,11 @@
+<!-- Twitter,Youtube,内部リンク,外部リンクを編集するコンポーネント -->
+
 <template>
   <v-container class="ma-0 pa-0" fluid>
     <v-row>
       <v-col cols="12" sm="7" md="6" lg="5" xl="5">
         <link-component
-          :link="twitterLink"
+          :link="link"
           :pre-link="modelValue"
         />
       </v-col>
@@ -14,9 +16,13 @@
           :model-value="modelValue"
           @update:model-value="updateProxy"
           :rules="customRules"
-          :clearable="true"
-          @click:clear="$emit('clear')"
-        />
+        >
+          <template v-slot:append-inner>
+            <v-btn size="xsmall" icon color="error" flat @click="$emit('clear')">
+              <v-icon size="small">mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-text-field>
       </v-col>
     </v-row>
   </v-container>
@@ -32,32 +38,36 @@ export default defineComponent({
     LinkComponent
   },
   props: {
+    /** リンク文字列 */
     modelValue: {
       type: String,
       default: ''
     },
+    /** 入力規則 */
     rules: {
       type: Array as PropType<((v: string) => string | boolean)[]>,
       default: undefined
     }
   },
   emits: {
+    /** リンクの文字列が更新される際のイベント */
     update: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string) => true,
+    /** リンクをクリアする際のイベント */
     clear: () => true
   },
   setup (props, { emit }) {
-    const twitterLink = ref(props.modelValue)
+    const link = ref(props.modelValue)
 
     /*
-     * リンクを更新した際、2秒間入力がなかった場合にのみ、Twitterに対してGetを行うように調整
+     * リンクを更新した際、2秒間入力がなかった場合にのみ、Getを行うように調整
      */
     const updateProxy = (value: string) => {
       const preLink = value
       setTimeout(() => {
         if (preLink === props.modelValue) {
-          twitterLink.value = props.modelValue
+          link.value = props.modelValue
         }
       }, 2000)
       emit('update', value)
@@ -70,7 +80,7 @@ export default defineComponent({
     const customRules = computed(() => props.rules ? props.rules.concat(linkrule) : linkrule)
 
     return {
-      twitterLink,
+      link,
       updateProxy,
       linkrule,
       customRules

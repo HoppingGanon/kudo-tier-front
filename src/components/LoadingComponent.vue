@@ -1,3 +1,5 @@
+<!-- ロード状態を画面に表示するコンポーネント -->
+
 <template>
   <v-dialog v-if="isLoading && isForce" :persistent="true" :model-value="isLoading" class="d-flex justify-center">
     <div>
@@ -54,7 +56,6 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoadingComponent',
-  components: {},
   props: {
     /** ロード中かどうか */
     isLoading: {
@@ -71,21 +72,21 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    /** タイトル */
     title: {
       type: String
     },
+    /** 進捗サークルの大きさ */
     size: {
       type: String,
       default: '64'
     },
+    /** 進捗サークルの太さ */
     width: {
       type: String,
       default: '8'
     }
-  },
-  emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () { }
+  }
 })
 </script>
 

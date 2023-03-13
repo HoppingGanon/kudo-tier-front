@@ -1,3 +1,5 @@
+<!-- welcomeの上部に表示するカルーセルのコンポーネント -->
+
 <template>
   <div v-if="loading">
     <v-dialog :model-value="loading" :persistent="true" :fullscreen="true">
@@ -8,12 +10,12 @@
       </v-card>
     </v-dialog>
     <!-- 先に読み込んでキャッシュさせるという超ゴリ押しムーブを実行-->
-    <v-img src="@/assets/welcome/mobile.png" @load="onLoad('mobile')" style="opacity: 0;"></v-img>
-    <v-img src="@/assets/welcome/tierBg.png" @load="onLoad('tierBg')" style="opacity: 0;"></v-img>
-    <v-img src="@/assets/welcome/pc.png" @load="onLoad('pc')" style="opacity: 0;"></v-img>
-    <v-img src="@/assets/welcome/reviewBg.png" @load="onLoad('reviewBg')" style="opacity: 0;"></v-img>
-    <v-img src="@/assets/welcome/share.png" @load="onLoad('share')" style="opacity: 0;"></v-img>
-    <v-img src="@/assets/welcome/shareBg.jpg" @load="onLoad('shareBg')" style="opacity: 0;"></v-img>
+    <v-img src="/img/welcome/mobile.png" @load="onLoad('mobile')" style="opacity: 0;"></v-img>
+    <v-img src="/img/welcome/tierBg.png" @load="onLoad('tierBg')" style="opacity: 0;"></v-img>
+    <v-img src="/img/welcome/pc.png" @load="onLoad('pc')" style="opacity: 0;"></v-img>
+    <v-img src="/img/welcome/reviewBg.png" @load="onLoad('reviewBg')" style="opacity: 0;"></v-img>
+    <v-img src="/img/welcome/share.png" @load="onLoad('share')" style="opacity: 0;"></v-img>
+    <v-img src="/img/welcome/shareBg.jpg" @load="onLoad('shareBg')" style="opacity: 0;"></v-img>
   </div>
   <v-carousel
     :height="carouselHeight"
@@ -24,10 +26,10 @@
     :interval="10000"
   >
     <v-carousel-item>
-      <div class="carousel-item-1-frame">
+      <div class="carousel-item-1-frame" :style="carouselBg1">
         <div class="carousel-item-1-image" :style="carouselImage1Width">
           <v-img
-            src="@/assets/welcome/mobile.png"
+            src="/img/welcome/mobile.png"
             height="100%"
           ></v-img>
         </div>
@@ -53,10 +55,10 @@
       </div>
     </v-carousel-item>
     <v-carousel-item>
-      <div class="carousel-item-2-frame">
+      <div class="carousel-item-2-frame" :style="carouselBg2">
         <div class="carousel-item-2-image pc" :style="carouselImage2Width">
           <v-img
-            src="@/assets/welcome/pc.png"
+            src="/img/welcome/pc.png"
           ></v-img>
         </div>
         <div class="carousel-item-2-text d-flex justify-end">
@@ -81,10 +83,10 @@
       </div>
     </v-carousel-item>
     <v-carousel-item>
-      <div class="carousel-item-3-frame">
+      <div class="carousel-item-3-frame" :style="carouselBg3">
         <div class="carousel-item-3-image" :style="carouselImage3Width">
           <v-img
-            src="@/assets/welcome/share.png"
+            src="/img/welcome/share.png"
           ></v-img>
         </div>
         <div class="carousel-item-3-text">
@@ -173,6 +175,11 @@ export default defineComponent({
       return height
     })
 
+    /** publicから画像を呼び出す */
+    const carouselBg1 = `background-image: url("${process.env.VUE_APP_BASE_URI}/img/welcome/tierBg.png");`
+    const carouselBg2 = `background-image: url("${process.env.VUE_APP_BASE_URI}/img/welcome/reviewBg.png");`
+    const carouselBg3 = `background-image: url("${process.env.VUE_APP_BASE_URI}/img/welcome/shareBg.jpg");`
+
     return {
       appName,
       primaryStyle,
@@ -186,7 +193,10 @@ export default defineComponent({
       carouselImage2Width: computed(() => `width: ${carouselHeight.value * 1.2}px`),
       carouselImage3Width: computed(() => `width: ${carouselHeight.value * 0.8}px`),
       titleClass: computed(() => (display.smAndDown.value ? 'text-h6' : display.md.value ? 'text-h5' : 'text-h4') + ' white--text'),
-      textClass: computed(() => (display.smAndDown.value ? 'text-subtitle-2' : display.md.value ? 'text-subtitle-1' : 'text-h6') + ' white--text')
+      textClass: computed(() => (display.smAndDown.value ? 'text-subtitle-2' : display.md.value ? 'text-subtitle-1' : 'text-h6') + ' white--text'),
+      carouselBg1,
+      carouselBg2,
+      carouselBg3
     }
   }
 })
@@ -211,7 +221,6 @@ export default defineComponent({
 }
 
 .carousel-item-1-frame {
-  background-image: url("@/assets/welcome/tierBg.png");
   background-size: cover;
   overflow: hidden;
   backdrop-filter: blur(5px);
@@ -311,7 +320,6 @@ export default defineComponent({
 }
 
 .carousel-item-2-frame {
-  background-image: url("@/assets/welcome/reviewBg.png");
   background-size: cover;
   overflow: hidden;
   backdrop-filter: blur(5px);
@@ -410,7 +418,6 @@ export default defineComponent({
 }
 
 .carousel-item-3-frame {
-  background-image: url("@/assets/welcome/shareBg.jpg");
   background-size: cover;
   overflow: hidden;
   backdrop-filter: blur(5px);

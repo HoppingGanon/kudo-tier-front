@@ -1,3 +1,4 @@
+import { HintState } from '@/common/page'
 import RestApi, { LoginServiceType, LoginVersionType } from '@/common/restapi'
 import { createStore, useStore as baseUseStore } from 'vuex'
 import persist from 'vuex-persistedstate'
@@ -12,15 +13,24 @@ export type State = {
   /** 連携サービス追加のために一時セッションを要求している（普段は空文字列） */
   tempSessionAdditioning: boolean
 
+  /** セッションID */
   sessionId: string
+  /** ユーザーID */
   userId: string
+  /** ユーザー名 */
   userName: string
+  /** ユーザープロフィール文 */
   userProfile: string
+  /** ユーザーアイコンURL */
   userIconUrl: string
+  /** 投稿したTierの数 */
   tiersCount: number
+  /** 投稿したレビューの数 */
   reviewsCount: number
   /** 通知の数 */
   notificationsCount: number
+  /** ユーザー登録してすぐの状態（ようこそ画面を開いてない状態） */
+  hintState: HintState
 
   // ======================================================================
   // ログイン時にのみ更新、現状は/settingsでのサービス連携解除時とログアウト時に削除
@@ -40,7 +50,9 @@ export type State = {
   googleImageUrl: string
   // ======================================================================
 
+  /** セッション有効期限 */
   expiredTime: string
+  /** 新規ユーザーかどうか */
   isNew: boolean
 }
 
@@ -58,6 +70,7 @@ export default createStore<State>({
     tiersCount: 0,
     reviewsCount: 0,
     notificationsCount: 0,
+    hintState: undefined,
     twitterName: '',
     twitterUserName: '',
     twitterIconUrl: '',
@@ -113,6 +126,9 @@ export default createStore<State>({
     setNotificationsCount (state, val: number) {
       state.notificationsCount = val
     },
+    setHintState (state, val: HintState) {
+      state.hintState = val
+    },
     setTwitterName (state, val: string) {
       state.twitterName = val
     },
@@ -142,6 +158,7 @@ export default createStore<State>({
       state.sessionId = ''
       state.twitterName = ''
       state.userId = ''
+      state.hintState = undefined
       state.twitterUserName = ''
       state.twitterIconUrl = ''
       state.googleEmail = ''

@@ -175,7 +175,7 @@
     </v-card>
   </v-container>
 
-  <review-settings-hint v-model="hint" v-model:page="page" />
+  <review-settings-hint v-model="hint" v-model:page="page" :title="isNew ? 'レビューを作成しましょう' : 'レビューを編集しましょう'" />
 
   <loading-component :is-loading="isSubmitting" :is-force="true" class="mt-5" title="レビューを送信中..." />
   <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="レビューを取得中..." />
@@ -198,6 +198,7 @@ import { ToastProps, useToast } from 'vue-toast-notification'
 import { emptyReviwew, emptyTier } from '@/common/dummy'
 import rules from '@/common/rules'
 import router from '@/router'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettingsView',
@@ -223,6 +224,7 @@ export default defineComponent({
     const loading = ref(true)
     const hint = ref(false)
     const page = ref(0)
+    const nextHint = ref(false)
 
     const tier = ref(ReviewFunc.cloneTier(emptyTier))
     const review = ref(ReviewFunc.cloneReview(emptyReviwew))
@@ -265,6 +267,13 @@ export default defineComponent({
           toastError(e, toast)
           loading.value = false
           router.replace('/404')
+        })
+        RestApi.getLatestPostLists(store.state.userId, 1).then((res) => {
+          if (res.data.reviews.length === 0) {
+            hint.value = true
+            page.value = 0
+            nextHint.value = true
+          }
         })
       } else if (route.params.rid && typeof route.params.rid === 'string') {
         // RouterからReviewIDが指定されている場合
@@ -331,6 +340,10 @@ export default defineComponent({
         const data = ReviewFunc.createReviewRequestData(review.value, tier.value.tierId)
         RestApi.postReview(data).then((v) => {
           toast.success('レビューを作成しました')
+          // 次の画面でTierのヒントを表示する
+          if (nextHint.value) {
+            store.commit('setHintState', 'share')
+          }
           router.push(`/review/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)

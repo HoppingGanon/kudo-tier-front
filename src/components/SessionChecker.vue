@@ -1,3 +1,5 @@
+<!-- 特に画面表示せずにセッションのチェックのみ行うコンポーネント -->
+
 <template>
   <v-card v-if="false">
   </v-card>
@@ -13,10 +15,12 @@ import { useStore } from '@/store'
 export default defineComponent({
   name: 'SessionChecker',
   props: {
+    /** セッションが無い場合はエラー表示してwelcomeページに移動する */
     noSessionError: {
       type: Boolean,
       default: false
     },
+    /** 一時セッションが無い場合はエラー表示してwelcomeページに移動する */
     noTempSessionError: {
       type: Boolean,
       default: false
@@ -36,7 +40,9 @@ export default defineComponent({
         if (props.noSessionError) {
           // セッション必須
           if (store.getters.isRegistered) {
-            RestApi.getCheckSession().then(() => true).catch(() => {
+            RestApi.getCheckSession().then((res) => {
+              store.commit('setExpiredTime', res.data)
+            }).catch(() => {
               store.commit('initAllSession')
               toast.warning('セッションの有効期限が切れました。ログインしてください。')
               router.push('/')
@@ -56,13 +62,12 @@ export default defineComponent({
         } else {
           // 必須セッション無し
           if (store.getters.isRegistered) {
-            if (new Date() < new Date(store.state.expiredTime)) {
-              // セッション有効期限内
-            } else {
-              // セッション有効期限切れ
+            RestApi.getCheckSession().then((res) => {
+              store.commit('setExpiredTime', res.data)
+            }).catch(() => {
               store.commit('initAllSession')
-              toast.warning('セッションの有効期限が切れました。再度ログインしてください。')
-            }
+              toast.warning('セッションの有効期限が切れました。ログインしてください。')
+            })
           }
         }
       } catch {

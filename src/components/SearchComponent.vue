@@ -1,3 +1,5 @@
+<!-- 検索ヘッダのコンポーネント -->
+
 <template>
   <v-container class="ma-0 pa-0" fluid>
     <v-row>
@@ -27,35 +29,37 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { SelectObject, TierSortType } from '@/common/page'
+import { SelectObject, PostSortType } from '@/common/page'
 
 export default defineComponent({
   name: 'SearchComponent',
-  components: {},
   props: {
+    /** 検索文字列 */
     modelValue: {
       type: String,
       required: true
     },
+    /** ソート順の選択肢 */
     sortItems: {
       type: Array as PropType<SelectObject[]>,
       required: true
     },
+    /** 指定したソート順 */
     sortItem: {
       type: Object as PropType<SelectObject>,
       required: true
     }
   },
   emits: {
+    /** 検索文字列の更新イベント */
     update: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       v: string) => true,
+    /** ソート順の更新イベント */
     updateSortItem: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: SelectObject<TierSortType>) => true
-  },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () { }
+      v: SelectObject<PostSortType>) => true
+  }
 })
 </script>
 

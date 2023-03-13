@@ -1,3 +1,5 @@
+<!-- コンパクトにTierを表示するコンポーネント -->
+
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-row class="cursor-pointer" @click="goTier">
@@ -21,7 +23,10 @@
     <v-row v-else>
       <v-col class="d-flex">
         <v-list width="100%">
-          <v-list-item v-for="review, index in tier.reviews" :key="index" class="cursor-pointer" @click="goReview(review.reviewId)">
+          <v-list-item v-for="review, index in tier.reviews"
+            :key="index" class="cursor-pointer"
+            :class="review.reviewId === thisReviewId ? 'selected' : ''"
+            @click="goReview(review.reviewId)">
             <table style="width: 100%">
               <tr>
                 <td width="48px">
@@ -52,19 +57,18 @@ import { computed, defineComponent, PropType } from 'vue'
 
 export default defineComponent({
   name: 'SimpleTier',
-  components: {},
   props: {
+    /** Tierデータ */
     tier: {
       type: Object as PropType<Tier>,
       required: true
     },
+    /** 現在表示中のレビューID */
     thisReviewId: {
       type: String,
       default: ''
     }
   },
-  emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props) {
     const goTier = () => {
       router.push(`/tier/${props.tier.tierId}`)
@@ -87,4 +91,8 @@ export default defineComponent({
 
 <style scoped>
 @import url("@/style/common-style.css");
+
+.selected {
+  background-color: #F0F0F0;
+}
 </style>

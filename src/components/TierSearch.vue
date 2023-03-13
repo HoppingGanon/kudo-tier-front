@@ -1,3 +1,5 @@
+<!-- Tierを検索するコンポーネント -->
+
 <template>
   <v-container class="mt-3 ml-0 mb-0 mr-0 pa-1" fluid>
     <v-row>
@@ -22,7 +24,7 @@
           <empty-component type="tier" />
         </v-card>
         <v-card flat v-else>
-          レビューが存在しません
+          Tierが存在しません
         </v-card>
       </v-col>
     </v-row>
@@ -37,7 +39,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
 import { Tier } from '@/common/review'
-import { tierSortTypeList, tierContentTypeList, TierSortType, SelectObject } from '@/common/page'
+import { tierSortTypeList, tierContentTypeList, PostSortType, SelectObject } from '@/common/page'
 import TierList from '@/components/TierList.vue'
 import SearchComponent from '@/components/SearchComponent.vue'
 import EmptyComponent from '@/components/EmptyComponent.vue'
@@ -54,29 +56,40 @@ export default defineComponent({
     EmptyComponent
   },
   props: {
+    /** Tierデータの配列 */
     tiers: {
       type: Array as PropType<Tier[]>,
       required: true
     },
+    /** ユーザーID */
     userId: {
       type: String,
       required: true
     },
+    /** 読み込み中の表示をする */
     isLoading: {
       type: Boolean,
       default: false
     }
   },
   emits: {
+    /** Tierデータの配列をすべてクリアするイベント */
     clearTiers: () => true,
+    /**
+     * Tierデータの配列を追加するイベント
+     * @param pairs Tierデータの配列
+     */
     addTiers: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       tiers: Tier[]) => true,
+    /**
+     * Tierデータの配列を更新するイベント
+     * @param pairs Tierデータの配列
+     */
     updateTiers: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       tiers: Tier[]) => true
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
     const text = ref('')
     const sortItem = ref(tierSortTypeList[0])
@@ -188,7 +201,7 @@ export default defineComponent({
       }, 2000)
     }
 
-    const updateSortItem = (v: SelectObject<TierSortType>) => {
+    const updateSortItem = (v: SelectObject<PostSortType>) => {
       sortItem.value = v
       update(false)
     }

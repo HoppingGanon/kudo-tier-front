@@ -281,7 +281,7 @@
     </v-row>
   </v-card-actions>
 
-  <tier-settings-hint v-model="hint" v-model:page="page" />
+  <tier-settings-hint v-model="hint" v-model:page="page" :title="isNew ? 'Tierを作成しましょう' : 'Tierを編集しましょう'" />
 
   <simple-dialog v-model="cautionsDialog" title="警告" @submit="upload">
     <div v-for="c, i of cautions" :key="i" class="ma-2">
@@ -293,7 +293,7 @@
 
 <script lang="ts">
 import { ReviewFactorParam, ReviewFunc, ReviewParagraphType, ReviewPointType, Tier, tierValidation, sectionValidation, ReviewSection } from '@/common/review'
-import { computed, ComputedRef, defineComponent, PropType, ref } from 'vue'
+import { computed, ComputedRef, defineComponent, onMounted, PropType, ref } from 'vue'
 import WeightSettings from '@/components/WeightSettings.vue'
 import TierComponent from '@/components/TierComponent.vue'
 import PointTypeSelector from '@/components/PointTypeSelector.vue'
@@ -310,6 +310,7 @@ import { ToastProps, useToast } from 'vue-toast-notification'
 import RestApi, { getImgSource, toastError } from '@/common/restapi'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
+import store from '@/store'
 
 export default defineComponent({
   name: 'TierSettings',
@@ -327,79 +328,131 @@ export default defineComponent({
     TierSettingsHint
   },
   props: {
+    /** Tierデータ */
     modelValue: {
       type: Object as PropType<Tier>,
       required: true
     },
+    /** もとのTierデータ */
     orgTier: {
       type: Object as PropType<Tier>,
       required: true
     },
+    /** ポイント表示方法 */
     pointType: {
       type: String as PropType<ReviewPointType>,
       required: true
     },
+    /** 新規作成 */
     isNew: {
       type: Boolean,
       default: false
     }
   },
   emits: {
-    /** Tier名の変更 */
+    /**
+     * Tier名を更新する際のイベント
+     * @param value Tier名
+     */
     updateTierName: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string) => true,
-    /** Tierのカバー画像を変更 */
+    /** Tierのカバー画像を更新する際のイベント */
     updateImageUrl: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string) => true,
-    /** レビューポイント表示方法の変更 */
+    /**
+     * ポイント表示方法を更新する際のイベント
+     * @param value ポイント表示方法
+     */
     updatePointType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewPointType) => true,
-    /** 重みや情報の項目名称の変更 */
+    /**
+     * 評価項目の名前を更新する際のイベント
+     * @param value 名前
+     * @param index 評価項目のインデックス
+     */
     updateWeightName: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string, index: number) => true,
-    /** 重みか情報かの変更 */
+    /**
+     * 評価項目の種類を更新する際のイベント
+     * @param value true ポイント、false 情報
+     * @param index 評価項目のインデックス
+     */
     updateWeightIsPoint: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: boolean, index: number) => true,
-    /** 重み値の変更 */
+    /**
+     * 評価項目の重みを更新する際のイベント
+     * @param value 重み
+     * @param index 評価項目のインデックス
+     */
     updateWeight: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: number, index: number) => true,
-    /** 項目の追加 */
+    /** 項目の追加イベント */
     addWeightItem: () => true,
-    /** 項目の削除 */
+    /**
+     * 項目の削除イベント
+     * @param index 評価項目のインデックス
+     */
     removeWeightItem: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true,
-    /** 本文の追加 */
+    /**
+     * パラグラフの追加イベント
+     * @param type パラグラフタイプ
+     * @param index パラグラフのインデックス
+     */
     addParagItem: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       type: ReviewParagraphType | 'section', index: number) => true,
-    /** 本文の削除 */
+    /**
+     * パラグラフの削除イベント
+     * @param index パラグラフのインデックス
+     */
     removeParagItem: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       index: number) => true,
-    /** 本文の更新 */
+    /**
+     * パラグラフのタイプを削除する際のイベント
+     * @param value パラグラフのタイプ
+     * @param index パラグラフのインデックス
+     */
     updateParagType: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewParagraphType, index: number) => true,
-    /** Tier説明文の変更 */
+    /**
+     * パラグラフの説明文を更新する際のイベント
+     * @param value 説明文
+     * @param index パラグラフのインデックス
+     */
     updateParagBody: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: string, index: number) => true,
+    /**
+     * 評価項目配列の更新イベント
+     * @param value 評価項目配列
+     */
     updateParams: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       value: ReviewFactorParam[]) => true,
+    /**
+     * Tier調整値更新イベント(値を上げるとレビューが全体的に下位に位置しやすくなる)
+     * @param v Tier調整値
+     */
     updatePullingUp: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      index: number) => true,
+      v: number) => true,
+    /**
+     * Tier調整値更新イベント(値を上げるとレビューが全体的に上位に位置しやすくなる)
+     * @param v Tier調整値
+     */
     updatePullingDown: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      index: number) => true
+      v: number) => true
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup (props, { emit }) {
@@ -413,6 +466,8 @@ export default defineComponent({
     const displayDeatails = ref(false)
     const hint = ref(false)
     const page = ref(0)
+    // Tier作成後に次のヒントを表示する
+    const nextHint = ref(false)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -467,6 +522,10 @@ export default defineComponent({
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
+          // 次の画面でreviewのヒントを表示する
+          if (nextHint.value) {
+            store.commit('setHintState', 'review')
+          }
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
@@ -576,6 +635,16 @@ export default defineComponent({
         }
       }
       return true
+    })
+
+    onMounted(() => {
+      RestApi.getLatestPostLists(store.state.userId, 1).then((res) => {
+        if (res.data.tiers.length === 0) {
+          hint.value = true
+          page.value = 0
+          nextHint.value = true
+        }
+      })
     })
     const updateParams = (value: ReviewFactorParam[]) => {
       emit('updateParams', value)
