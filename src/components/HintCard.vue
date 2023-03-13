@@ -6,7 +6,7 @@
       <v-toolbar color="green-darken-3">
         <v-card-title v-if="title" v-text="title" />
         <v-spacer />
-        <v-btn icon @click="$emit('close')">
+        <v-btn v-if="showClose" icon @click="$emit('close')">
           <v-icon>
             mdi-close
           </v-icon>
@@ -43,6 +43,11 @@ export default defineComponent({
     /** 内容の見出し */
     subTitle: {
       type: String
+    },
+    /** 閉じるボタンを表示 */
+    showClose: {
+      type: Boolean,
+      default: true
     }
   },
   emits: {

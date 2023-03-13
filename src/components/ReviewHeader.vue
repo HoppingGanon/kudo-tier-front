@@ -11,7 +11,7 @@
     <v-card flat height="100%">
       <p class="no-break cursor-pointer mt-1 ml-3"  @click="goHome">
         <span v-text="dispName"></span><br />
-        <span v-text="lastWriteTime"></span>に更新
+        <span v-text="lastWriteTime" class="text-body-2"></span><span class="text-body-2">に更新</span>
       </p>
     </v-card>
   </div>

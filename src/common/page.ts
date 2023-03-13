@@ -6,6 +6,9 @@ export interface SelectObject <T = string | number, D = string | number> {
   icon?: string
 }
 
+/** App.vueのヒント表示状態 */
+export type HintState = 'tier' | 'review' | undefined
+
 /** 投稿の表示ソート順 */
 export type PostSortType = 'updatedAtDesc' | 'updatedAtAsc' | 'createdAtDesc' | 'createdAtAsc'
 /** 投稿の種類 */

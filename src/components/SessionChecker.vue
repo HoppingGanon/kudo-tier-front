@@ -41,7 +41,7 @@ export default defineComponent({
           // セッション必須
           if (store.getters.isRegistered) {
             RestApi.getCheckSession().then((res) => {
-              store.commit('', res.data)
+              store.commit('setExpiredTime', res.data)
             }).catch(() => {
               store.commit('initAllSession')
               toast.warning('セッションの有効期限が切れました。ログインしてください。')
@@ -63,7 +63,7 @@ export default defineComponent({
           // 必須セッション無し
           if (store.getters.isRegistered) {
             RestApi.getCheckSession().then((res) => {
-              store.commit('', res.data)
+              store.commit('setExpiredTime', res.data)
             }).catch(() => {
               store.commit('initAllSession')
               toast.warning('セッションの有効期限が切れました。ログインしてください。')

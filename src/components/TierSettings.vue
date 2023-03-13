@@ -466,6 +466,8 @@ export default defineComponent({
     const displayDeatails = ref(false)
     const hint = ref(false)
     const page = ref(0)
+    // Tier作成後に次のヒントを表示する
+    const nextHint = ref(false)
 
     const updateWeightNameProxy = (value: string, index: number) => {
       emit('updateWeightName', value, index)
@@ -520,6 +522,10 @@ export default defineComponent({
       if (props.isNew) {
         RestApi.postTier(data).then((v) => {
           toast.success('Tierを作成しました')
+          // 次の画面でreviewのヒントを表示する
+          if (nextHint.value) {
+            store.commit('setHintState', 'review')
+          }
           router.push(`/tier/${v.data}`)
         }).catch((e) => {
           toastError(e, toast)
@@ -636,6 +642,7 @@ export default defineComponent({
         if (res.data.tiers.length === 0) {
           hint.value = true
           page.value = 0
+          nextHint.value = true
         }
       })
     })

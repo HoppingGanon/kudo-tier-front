@@ -1,3 +1,4 @@
+import { HintState } from '@/common/page'
 import RestApi, { LoginServiceType, LoginVersionType } from '@/common/restapi'
 import { createStore, useStore as baseUseStore } from 'vuex'
 import persist from 'vuex-persistedstate'
@@ -28,6 +29,8 @@ export type State = {
   reviewsCount: number
   /** 通知の数 */
   notificationsCount: number
+  /** ユーザー登録してすぐの状態（ようこそ画面を開いてない状態） */
+  hintState: HintState
 
   // ======================================================================
   // ログイン時にのみ更新、現状は/settingsでのサービス連携解除時とログアウト時に削除
@@ -67,6 +70,7 @@ export default createStore<State>({
     tiersCount: 0,
     reviewsCount: 0,
     notificationsCount: 0,
+    hintState: undefined,
     twitterName: '',
     twitterUserName: '',
     twitterIconUrl: '',
@@ -122,6 +126,9 @@ export default createStore<State>({
     setNotificationsCount (state, val: number) {
       state.notificationsCount = val
     },
+    setHintState (state, val: HintState) {
+      state.hintState = val
+    },
     setTwitterName (state, val: string) {
       state.twitterName = val
     },
@@ -151,6 +158,7 @@ export default createStore<State>({
       state.sessionId = ''
       state.twitterName = ''
       state.userId = ''
+      state.hintState = undefined
       state.twitterUserName = ''
       state.twitterIconUrl = ''
       state.googleEmail = ''

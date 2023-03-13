@@ -83,6 +83,7 @@ export default defineComponent({
         }).then((res) => {
           toast.success('登録しました')
           store.commit('setUserId', res.data.userId)
+          store.commit('setHintState', 'tier')
           router.push(`/home/${res.data.userId}`)
         }).catch((err) => {
           toastError(err, toast)

@@ -1,7 +1,7 @@
 <!-- 使い方を説明するhintダイアログのコンポーネント -->
 
 <template>
-  <v-dialog :model-value="modelValue" @update:model-value="$emit('update:model-value', $event)" :fullscreen="true">
+  <v-dialog :model-value="modelValue" @update:model-value="closeProxy" :fullscreen="true">
     <v-carousel
       v-model="pageValue"
       height="100%"
@@ -68,11 +68,17 @@ export default defineComponent({
      */
     'update:page': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      v: number) => true
+      v: number) => true,
+    /** 閉じるボタンを押した際のイベント */
+    close: () => true
   },
-  setup () {
+  setup (_, { emit }) {
     return {
-      dummyPage: ref<number | undefined>(undefined)
+      dummyPage: ref<number | undefined>(undefined),
+      closeProxy: () => {
+        emit('update:model-value', false)
+        emit('close')
+      }
     }
   }
 })

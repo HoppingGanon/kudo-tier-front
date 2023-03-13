@@ -21,6 +21,7 @@ function saveSession (data: Session, store: Store<any>) {
   store.commit('setUserId', data.userId)
   store.commit('setExpiredTime', data.expiredTime)
   store.commit('setIsNew', data.isNew)
+  store.commit('setHintState', undefined)
 }
 
 /**
