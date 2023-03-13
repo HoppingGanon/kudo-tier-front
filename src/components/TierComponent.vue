@@ -85,6 +85,7 @@
             :no-change-point="true"
             :point-types="pointTypes"
             display-type="list"
+            @reload="$emit('reload')"
           />
         </v-col>
       </v-row>

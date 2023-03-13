@@ -45,6 +45,7 @@
               :point-type="pointType"
               @update-point-type="updatePointType"
               display-type="all"
+              @reload="loadTier"
             />
           </div>
         </v-card>
@@ -104,8 +105,7 @@ export default defineComponent({
       pointType.value = v
     }
 
-    // tierの初期値を設定
-    onMounted(() => {
+    const loadTier = () => {
       if (route.params.tid && typeof route.params.tid === 'string') {
         // URIにIDが含まれている場合
         RestApi.getTier(route.params.tid).then((res) => {
@@ -124,6 +124,11 @@ export default defineComponent({
           toastError(e, toast)
         }).finally(() => { isLoading.value = false })
       }
+    }
+
+    // tierの初期値を設定
+    onMounted(() => {
+      loadTier()
     })
 
     const edit = () => {
@@ -190,6 +195,7 @@ export default defineComponent({
     return {
       tier,
       pointType,
+      loadTier,
       isNotFound,
       isSelf,
       isLoading,
