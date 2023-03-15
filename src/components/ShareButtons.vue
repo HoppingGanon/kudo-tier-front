@@ -33,7 +33,7 @@ export default defineComponent({
   emits: {},
   setup (props) {
     const twitterUrl = computed(() => {
-      const url = 'http://twitter.com/share'
+      const url = 'https://twitter.com/intent/tweet'
       const list: string[] = []
       if (props.body) {
         list.push(`text=${encodeURIComponent(props.body)}`)
