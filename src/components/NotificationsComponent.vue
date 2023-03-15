@@ -18,7 +18,10 @@
         class="anime"
         :class="`${notification.isRead ? '' : 'font-weight-bold '} ${sel === i ? 'text-subtitle-1 select' : 'no-break-box not-select'}`"
       >
-        <span v-text="notification.content"></span>
+        <span v-text="notification.content"></span><br />
+        <div v-show="sel === i && notification.url" :style="sel === i ? '' : 'height: 0px;opacity: 0;'">
+          <link-component :link="notification.url" class="text-body-2 anime" />
+        </div>
       </div>
       <div
         class="anime"
@@ -55,13 +58,15 @@
 import { defineComponent, onMounted, Ref, ref } from 'vue'
 import RestApi, { NotificationData, toastError, Parser } from '@/common/restapi'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import LinkComponent from '@/components/LinkComponent.vue'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'NotificationsComponent',
   components: {
-    LoadingComponent
+    LoadingComponent,
+    LinkComponent
   },
   setup () {
     const toast = useToast()
