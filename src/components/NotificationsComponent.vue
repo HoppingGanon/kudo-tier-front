@@ -20,7 +20,7 @@
       >
         <span v-text="notification.content"></span><br />
         <div v-show="sel === i && notification.url" :style="sel === i ? '' : 'height: 0px;opacity: 0;'">
-          <link-component :link="notification.url" class="text-body-2 anime" />
+          <link-component :link="notification.url" class="text-body-2 anime" :safe="true" />
         </div>
       </div>
       <div

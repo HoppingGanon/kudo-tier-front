@@ -35,7 +35,7 @@
     </a>
 
     <!-- 外部リンク -->
-    <v-card v-else-if="isExLink" @click="dialog = true" height="96px" class="pa-3 ma-1 cursor-pointer">
+    <v-card v-else-if="isExLink" @click="openOther" height="96px" class="pa-3 ma-1 cursor-pointer">
       <span>外部リンク</span>
       <div class="no-break-box-2">
         <span v-text="link" class="text-caption" />
@@ -103,6 +103,10 @@ export default defineComponent({
      */
     preLink: {
       type: String
+    },
+    safe: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -145,6 +149,14 @@ export default defineComponent({
       window.open(props.link, '_blank')
     }
 
+    const openOther = () => {
+      if (props.safe) {
+        goOther()
+      } else {
+        dialog.value = true
+      }
+    }
+
     return {
       appName,
       isInLink,
@@ -155,7 +167,8 @@ export default defineComponent({
       isYt,
       errorYt,
       errorTw,
-      goOther
+      goOther,
+      openOther
     }
   }
 })
