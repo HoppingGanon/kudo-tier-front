@@ -37,7 +37,7 @@
       </hint-card>
 
       <!-- tier -->
-      <hint-card v-if="welcomeShow" :title="title" sub-title="Tier作成の流れ（1/2）" @close="close" :show-close="welcomeClose">
+      <hint-card v-if="systemShow" :title="title" sub-title="Tier作成の流れ（1/2）" @close="close" :show-close="systemClose">
         <v-container>
           <v-row>
             <v-col cols="12" sm="12" md="12" lg="10" xl="8">
@@ -54,7 +54,7 @@
       </hint-card>
 
       <!-- review -->
-      <hint-card v-if="welcomeShow" :title="title" sub-title="Tier作成の流れ（2/2）" @close="close" :show-close="welcomeClose">
+      <hint-card v-if="systemShow" :title="title" sub-title="Tier作成の流れ（2/2）" @close="close" :show-close="systemClose">
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12" lg="10" xl="8">
@@ -180,7 +180,7 @@ export default defineComponent({
     const enablePrev = computed(() => props.page !== 0)
     const enableNext = computed(() => {
       if (props.forceType === 'tier') {
-        return props.page !== 3
+        return props.page !== 1
       } else if (props.forceType === 'review') {
         return false
       } else if (props.forceType === 'share') {
@@ -193,8 +193,10 @@ export default defineComponent({
       dummyPage: ref<number | undefined>(undefined),
       sectionValidation,
       reviewValidation,
-      welcomeClose: computed(() => !props.forceType),
+      welcomeClose: computed(() => true),
       welcomeShow: computed(() => props.forceType !== 'review' && props.forceType !== 'share'),
+      systemClose: computed(() => true),
+      systemShow: computed(() => !props.forceType),
       tierShow: computed(() => props.forceType !== 'review' && props.forceType !== 'share'),
       reviewShow: computed(() => props.forceType !== 'tier' && props.forceType !== 'share'),
       shareShow: computed(() => props.forceType !== 'review' && props.forceType !== 'tier'),

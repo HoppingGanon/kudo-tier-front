@@ -335,6 +335,7 @@ export default defineComponent({
     }
 
     const openHint = () => {
+      page.value = 0
       hint.value = true
       drawer.value = false
       hintState.value = undefined
