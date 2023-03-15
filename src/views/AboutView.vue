@@ -153,6 +153,11 @@
         text="バックエンドアプリケーションのデータベース操作"
       />
       <service-colmun
+        title="PostgreSQL"
+        subtitle="データベース"
+        text="情報を管理するリレーショナルデータベース"
+      />
+      <service-colmun
         title="Git"
         subtitle="バージョン管理システム"
         text="ソースコードのバージョン管理"
