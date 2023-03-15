@@ -26,11 +26,7 @@
         <div style="width: 100%;" class="text-center">
         <span class="text-subtitle-2">Twitterでログイン(OAuth2.0)</span><br>
         <span class="text-caption" style="color: gray;">
-          こっちの方が新しい認証方法だから文献少ない中ライブラリも無しに実装したのに、
-          なんとモバイルブラウザででこのボタンを押すとTwitterアプリにリダイレクトして認証してくれないことがあるのです。
-          （調べたところ他の開発者もみんな悩んでる様子）
-          そもそもTwitterAPIが有償化するとかいってたけど本当にこれ大丈夫なんか？
-          ってことで新時代の敗北者じゃけぇ
+          モバイルだと正常にログインできない場合があります
         </span>
         </div>
         <div class="d-flex justify-center" style="width: 100%;">
