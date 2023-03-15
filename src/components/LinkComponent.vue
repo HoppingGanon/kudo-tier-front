@@ -35,7 +35,7 @@
     </a>
 
     <!-- 外部リンク -->
-    <v-card v-else-if="isExLink" @click="dialog = true" height="96px" class="pa-3 ma-1 cursor-pointer">
+    <v-card v-else-if="isExLink" @click="openOther" height="96px" class="pa-3 ma-1 cursor-pointer">
       <span>外部リンク</span>
       <div class="no-break-box-2">
         <span v-text="link" class="text-caption" />
@@ -79,7 +79,7 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 import { appName } from '@/common/names'
 
 // 正規表現でリンクの振り分けを行う
-export const linkReg = /^((http)|(https)):\/\/.*/
+export const linkReg = /^((http)|(https)):\/\/[^<>"]+$/
 export const twitterReg = /^https:\/\/twitter\.com\/.*/
 export const youtubeReg = /^https:\/\/www\.youtube\.com\/watch\?v=.*/
 export const internalLink = new RegExp(`^${process.env.VUE_APP_BASE_URI}(/.*|$)`)
@@ -103,6 +103,10 @@ export default defineComponent({
      */
     preLink: {
       type: String
+    },
+    safe: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -145,6 +149,14 @@ export default defineComponent({
       window.open(props.link, '_blank')
     }
 
+    const openOther = () => {
+      if (props.safe) {
+        goOther()
+      } else {
+        dialog.value = true
+      }
+    }
+
     return {
       appName,
       isInLink,
@@ -155,7 +167,8 @@ export default defineComponent({
       isYt,
       errorYt,
       errorTw,
-      goOther
+      goOther,
+      openOther
     }
   }
 })

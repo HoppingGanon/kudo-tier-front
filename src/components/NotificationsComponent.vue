@@ -1,7 +1,7 @@
 <!-- 通知を一覧表示するコンポーネント 独立して使用できるコンポーネントにするため、propsやemitを持たない -->
 
 <template>
-  <v-list>
+  <v-list v-if="notifications && notifications.length > 0">
     <v-list-item
       v-for="notification, i of notifications"
       :key="i"
@@ -18,7 +18,10 @@
         class="anime"
         :class="`${notification.isRead ? '' : 'font-weight-bold '} ${sel === i ? 'text-subtitle-1 select' : 'no-break-box not-select'}`"
       >
-        <span v-text="notification.content"></span>
+        <span v-text="notification.content"></span><br />
+        <div v-show="sel === i && notification.url" :style="sel === i ? '' : 'height: 0px;opacity: 0;'">
+          <link-component :link="notification.url" class="text-body-2 anime" :safe="true" />
+        </div>
       </div>
       <div
         class="anime"
@@ -46,6 +49,11 @@
       </div>
     </v-list-item>
   </v-list>
+  <v-card v-else flat>
+    <v-card-title>
+      通知はありません
+    </v-card-title>
+  </v-card>
 
   <!-- 待機 -->
   <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="通知を取得中..." />
@@ -55,13 +63,15 @@
 import { defineComponent, onMounted, Ref, ref } from 'vue'
 import RestApi, { NotificationData, toastError, Parser } from '@/common/restapi'
 import LoadingComponent from '@/components/LoadingComponent.vue'
+import LinkComponent from '@/components/LinkComponent.vue'
 import store from '@/store'
 import { useToast } from 'vue-toast-notification'
 
 export default defineComponent({
   name: 'NotificationsComponent',
   components: {
-    LoadingComponent
+    LoadingComponent,
+    LinkComponent
   },
   setup () {
     const toast = useToast()
