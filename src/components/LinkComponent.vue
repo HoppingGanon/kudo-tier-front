@@ -79,7 +79,7 @@ import SimpleDialog from '@/components/SimpleDialog.vue'
 import { appName } from '@/common/names'
 
 // 正規表現でリンクの振り分けを行う
-export const linkReg = /^((http)|(https)):\/\/.*/
+export const linkReg = /^((http)|(https)):\/\/[^<>"]+$/
 export const twitterReg = /^https:\/\/twitter\.com\/.*/
 export const youtubeReg = /^https:\/\/www\.youtube\.com\/watch\?v=.*/
 export const internalLink = new RegExp(`^${process.env.VUE_APP_BASE_URI}(/.*|$)`)
