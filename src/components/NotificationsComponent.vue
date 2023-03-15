@@ -1,7 +1,7 @@
 <!-- 通知を一覧表示するコンポーネント 独立して使用できるコンポーネントにするため、propsやemitを持たない -->
 
 <template>
-  <v-list>
+  <v-list v-if="notifications && notifications.length > 0">
     <v-list-item
       v-for="notification, i of notifications"
       :key="i"
@@ -49,6 +49,11 @@
       </div>
     </v-list-item>
   </v-list>
+  <v-card v-else flat>
+    <v-card-title>
+      通知はありません
+    </v-card-title>
+  </v-card>
 
   <!-- 待機 -->
   <loading-component :is-loading="loading" :is-force="true" class="mt-5" title="通知を取得中..." />
