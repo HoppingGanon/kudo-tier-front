@@ -24,3 +24,4 @@ pnpm-debug.log*
 /serve-local.cmd
 /develop-script
 /custom-build.cmd
+/release
