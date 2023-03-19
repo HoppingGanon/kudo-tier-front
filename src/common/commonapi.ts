@@ -35,15 +35,15 @@ export default class CommonApi {
   static shortenDate (nowDate: Date, date: Date, shortenDays: number) : string | undefined {
     const now = nowDate.getTime()
     const at = date.getTime()
-    const distDay = (Math.floor((now - at) / CommonApi.day))
+    const distDay = Math.max(Math.floor((now - at) / CommonApi.day), 0)
 
     if (distDay === 0) {
-      const distHour = (Math.floor((now - at) / CommonApi.hour))
+      const distHour = Math.max(Math.floor((now - at) / CommonApi.hour), 0)
       if (distHour === 0) {
-        const distMinute = (Math.floor((now - at) / CommonApi.minute))
+        const distMinute = Math.max(Math.floor((now - at) / CommonApi.minute), 0)
         if (distMinute === 0) {
           // 1分以内なら秒表示
-          const distSecond = (Math.floor((now - at) / CommonApi.second))
+          const distSecond = Math.max(Math.floor((now - at) / CommonApi.second), 0)
           return `${distSecond}秒前`
         } else {
           // 1時間以内なら分表示

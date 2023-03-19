@@ -9,5 +9,5 @@ test('ReviewFunc.cloneTier', () => {
 
 // 文字列"あいうえお"で比較
 test('base64Api.dataURLToBase64', () => {
-  expect('44GC44GE44GG44GI44GK').toEqual(base64Api.dataURLToBase64('data:text/plain;base64,44GC44GE44GG44GI44GK'))
+  expect({ base64: '44GC44GE44GG44GI44GK', isChanged: true }).toEqual(base64Api.dataURLToBase64('data:text/plain;base64,44GC44GE44GG44GI44GK'))
 })
