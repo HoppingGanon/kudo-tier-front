@@ -1,3 +1,6 @@
+
+<!-- ユーザー登録のためのページ -->
+
 <template>
   <v-container>
     <v-card>

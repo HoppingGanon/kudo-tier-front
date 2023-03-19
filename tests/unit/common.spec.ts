@@ -33,6 +33,7 @@ test('CommonApi.dateToString', () => {
 })
 
 test('CommonApi.shortenDate', () => {
+  expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() + 1 * CommonApi.second), 1)).toEqual('0秒前')
   expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.second), 1)).toEqual('10秒前')
   expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.minute), 1)).toEqual('10分前')
   expect(CommonApi.shortenDate(new Date(), new Date(new Date().getTime() - 10 * CommonApi.hour), 1)).toEqual('10時間前')

@@ -1,3 +1,6 @@
+
+<!-- 通知情報を一覧できるページ -->
+
 <template>
   <session-checker :no-session-error="true" />
 

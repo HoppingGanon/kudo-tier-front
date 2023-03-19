@@ -1,14 +1,31 @@
 # kudo-tier-front （くどくどTierフロントエンド）
 <a href="https://kd-tier.hopgn.com">
-  <img src="public/img/icons/android-chrome-512x512.png" width="20%"></img>
+  <img src="doc/img/logo.png" width="20%"></img>
 </a>
 
 このリポジトリは、WEBサイト[くどくどTier](https://kd-tier.hopgn.com)のフロントエンドのソースコードを公開するリポジトリです。
 
 くどくどTierは、以下のような細かいレビューを交えたグラフィカルなTierを作成・管理・配信できるWEBアプリです。
 
-<img src="public/hint/app/pivot-tier.png" width="40%" style="display: inline-block;"></img>
-<img src="public/hint/app/review-card.png" width="40%" style="display: inline-block;"></img>
+くどくどTierバックエンドについては、[kudo-tier-front](https://github.com/HoppingGanon/kudo-tier-front)を参照してください。
+
+<img src="doc/img/pivot-tier.png" width="40%" style="display: inline-block;"></img>
+<img src="doc/img/review-card.png" width="40%" style="display: inline-block;"></img>
+
+## 目次
+- [kudo-tier-front （くどくどTierフロントエンド）](#kudo-tier-front-くどくどtierフロントエンド)
+  - [目次](#目次)
+  - [プロジェクト構成](#プロジェクト構成)
+    - [ネットワーク図](#ネットワーク図)
+    - [開発環境](#開発環境)
+    - [その他のサービス](#その他のサービス)
+    - [WebHookを利用したデプロイ](#webhookを利用したデプロイ)
+    - [certbotによる証明書の更新](#certbotによる証明書の更新)
+    - [データベースバックアップ](#データベースバックアップ)
+  - [このプロジェクトの目的と要件](#このプロジェクトの目的と要件)
+  - [設計書について](#設計書について)
+    - [ルーティング設計](#ルーティング設計)
+    - [コンポーネント設計](#コンポーネント設計)
 
 ## プロジェクト構成
 くどくどTierプロジェクトの主な構成です。
@@ -96,5 +113,25 @@ GitHubの`tier-reviews`リポジトリにてpush（とプルリクエストに�
 * 毎日3:00（UTC 18:00）
 
 ### データベースバックアップ
-AmazonRDSによりAmazon S3へ自動バックアップ（14日間保持）
+AmazonRDSにより自動バックアップ（14日間保持）
 * 毎日04:00 (UTC 19:00)
+
+また、定期的にAmazon S3へスナップショットをエクスポートする。
+
+## このプロジェクトの目的と要件
+詳しくは以下のページを参照してください。
+
+> [このプロジェクトの目的と要件](doc/about/about.md)
+
+## 設計書について
+### ルーティング設計
+詳しくは以下のページを参照してください。
+
+> [くどくどTier フロントエンド ルーティング設計書](doc/route/route.md)
+
+### コンポーネント設計
+詳しくは以下のページを参照してください。
+
+> [くどくどTier フロントエンド コンポーネント設計書](https://hoppingganon.github.io/kudo-tier-front/components/index.html)
+
+
