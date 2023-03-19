@@ -20,7 +20,7 @@
         class="mx-4"
         icon="mdi-github"
         variant="text"
-        href="https://github.com/HoppingGanon"
+        href="https://github.com/HoppingGanon/kudo-tier-front"
       ></v-btn>
     </div>
     <div class="d-flex">
