@@ -17,6 +17,6 @@
 |/review/:rid|-|ReviewView|-|レビューを表示するページ|
 |/review-settings-new/:tid|-|ReviewSettingsView|〇|レビューを新規作成するページ|
 |/review-settings/:rid|-|ReviewSettingsView|〇|レビューを編集するページ|
-|/tier-embedded/:tid|-|TierEmbeddedView|-|外部のサイトから埋め込みタグでTierを表示するためのページ|
-|/settings|-|SettingsView|〇|ユーザー設定|
+|/tier-embedded/:tid|iconsize, textsize, theme, |TierEmbeddedView|-|外部のサイトから埋め込みタグでTierを表示するためのページ|
+|/settings|tab|SettingsView|〇|ユーザー設定|
 |該当なし|-|SampleViNotFoundViewew|-|Not Foundを表示|
