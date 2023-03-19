@@ -7,7 +7,7 @@
 
 くどくどTierは、以下のような細かいレビューを交えたグラフィカルなTierを作成・管理・配信できるWEBアプリです。
 
-くどくどTierバックエンドについては、[kudo-tier-front](https://github.com/HoppingGanon/kudo-tier-front)を参照してください。
+くどくどTierバックエンドについては、[kudo-tier-back](https://github.com/HoppingGanon/kudo-tier-back)を参照してください。
 
 <img src="doc/img/pivot-tier.png" width="40%" style="display: inline-block;"></img>
 <img src="doc/img/review-card.png" width="40%" style="display: inline-block;"></img>
