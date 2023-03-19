@@ -75,7 +75,7 @@ export default defineComponent({
   emits: {
     /**
      * テキストの変更イベント
-     * @param テキスト
+     * @param v テキスト
      * */
     'update:model-value': (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,7 +86,7 @@ export default defineComponent({
     focusout: () => true,
     /**
      * テキスト入力カーソルが移動した際のイベント
-     * @param カーソル位置
+     * @param index カーソル位置
      */
     moveCursor: (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

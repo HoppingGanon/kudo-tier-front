@@ -45,31 +45,37 @@
         "emits":  [
                       {
                           "params":  [
-
+                                         {
+                                             "Name":  "v",
+                                             "Comment":  "テキスト"
+                                         }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:model-value"
+                          "comment":  "テキストの変更イベント",
+                          "name":  "update:model-value"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "フォーカスを取得した際のイベント",
-                          "name":  "\rfocusin"
+                          "name":  "focusin"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "フォーカスを失った際のイベント",
-                          "name":  "\rfocusout"
+                          "name":  "focusout"
                       },
                       {
                           "params":  [
-
+                                         {
+                                             "Name":  "index",
+                                             "Comment":  "カーソル位置"
+                                         }
                                      ],
-                          "comment":  "",
-                          "name":  "\rmoveCursor"
+                          "comment":  "テキスト入力カーソルが移動した際のイベント",
+                          "name":  "moveCursor"
                       }
                   ],
         "FileName":  "AutoTextArea.vue"
@@ -110,8 +116,8 @@
                   ],
         "description":  "Tierやレビューが未作成の状態で、リストを開いた際に表示するメッセージのコンポーネント",
         "components":  [
-                           "\rSimpleDialog",
-                           "\rQuickReview\r"
+                           "SimpleDialog",
+                           "QuickReview"
                        ],
         "emits":  [
 
@@ -150,7 +156,7 @@
                   ],
         "description":  "ページの下部に必ず表示するフッターのコンポーネント",
         "components":  [
-                           "\rTermOfServise\r"
+                           "TermOfServise"
                        ],
         "emits":  [
 
@@ -182,7 +188,7 @@
 
                                      ],
                           "comment":  "閉じるボタンが押された際のイベント",
-                          "name":  "\rclose"
+                          "name":  "close"
                       }
                   ],
         "FileName":  "HintCard.vue"
@@ -223,28 +229,28 @@
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ダイアログの状態\r"
+                                             "Comment":  "ダイアログの状態"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:model-value"
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ページ番号\r"
+                                             "Comment":  "ページ番号"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:page"
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "閉じるボタンを押した際のイベント",
-                          "name":  "\rclose"
+                          "name":  "close"
                       }
                   ],
         "FileName":  "HintDialog.vue"
@@ -272,36 +278,36 @@
                   ],
         "description":  "レビュー作成・編集のhintを表示",
         "components":  [
-                           "\rHintDialog",
-                           "\rHintCard\r"
+                           "HintDialog",
+                           "HintCard"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ダイアログの状態\r"
+                                             "Comment":  "ダイアログの状態"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:model-value"
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ページ番号\r"
+                                             "Comment":  "ページ番号"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:page"
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "閉じるボタンを押した際のイベント",
-                          "name":  "\rclose"
+                          "name":  "close"
                       }
                   ],
         "FileName":  "HomeHint.vue"
@@ -335,7 +341,7 @@
                   ],
         "description":  "画像の選択、切り取り、プレビューのコンポーネント",
         "components":  [
-                           "\rVueCropper\r"
+                           "VueCropper"
                        ],
         "emits":  [
                       {
@@ -343,21 +349,21 @@
 
                                      ],
                           "comment":  "クロップ前のURL",
-                          "name":  "\rupdateFileUrl"
+                          "name":  "updateFileUrl"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "クロップ後のURL",
-                          "name":  "\rupdateCroppedUrl"
+                          "name":  "updateCroppedUrl"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "画像のクリア後に呼ばれる処理",
-                          "name":  "\rclear"
+                          "name":  "clear"
                       }
                   ],
         "FileName":  "ImageSelector.vue"
@@ -368,7 +374,7 @@
                   ],
         "description":  "あらかじめシェルで出力したjsonファイルを読み込んで、ライセンス一覧を表示するコンポーネント",
         "components":  [
-                           "\rSimpleDialog\r"
+                           "SimpleDialog"
                        ],
         "emits":  [
 
@@ -392,9 +398,9 @@
                   ],
         "description":  "Twitter,Youtube,内部リンク,外部リンクを表示するコンポーネント",
         "components":  [
-                           "\rTweet",
-                           "\rYoutube",
-                           "\rSimpleDialog\r"
+                           "Tweet",
+                           "Youtube",
+                           "SimpleDialog"
                        ],
         "emits":  [
 
@@ -412,7 +418,7 @@
                   ],
         "description":  "Twitter,Youtube,内部リンク,外部リンクを編集するコンポーネント",
         "components":  [
-                           "\rLinkComponent\r"
+                           "LinkComponent"
                        ],
         "emits":  [
                       {
@@ -420,14 +426,14 @@
 
                                      ],
                           "comment":  "リンクの文字列が更新される際のイベント",
-                          "name":  "\rupdate"
+                          "name":  "update"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "リンクをクリアする際のイベント",
-                          "name":  "\rclear"
+                          "name":  "clear"
                       }
                   ],
         "FileName":  "LinkEditor.vue"
@@ -462,7 +468,7 @@
                   ],
         "description":  "サービス連携によるログイン画面のコンポーネント",
         "components":  [
-                           "\rLoadingComponent\r"
+                           "LoadingComponent"
                        ],
         "emits":  [
 
@@ -505,11 +511,11 @@
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " 選択した番号またはオブジェクト\r"
+                                             "Comment":  "選択した番号またはオブジェクト"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rselect"
+                          "comment":  "選択した際のイベント",
+                          "name":  "select"
                       }
                   ],
         "FileName":  "MenuButton.vue"
@@ -520,8 +526,8 @@
                   ],
         "description":  "通知を一覧表示するコンポーネント 独立して使用できるコンポーネントにするため、propsやemitを持たない",
         "components":  [
-                           "\rLoadingComponent",
-                           "\rLinkComponent\r"
+                           "LoadingComponent",
+                           "LinkComponent"
                        ],
         "emits":  [
 
@@ -539,7 +545,7 @@
                   ],
         "description":  "余白をユーザー情報やその他の情報で埋めるコンポーネント",
         "components":  [
-                           "\rProfileComponent\r"
+                           "ProfileComponent"
                        ],
         "emits":  [
 
@@ -557,48 +563,51 @@
                   ],
         "description":  "パラグラフを編集するコンポーネント",
         "components":  [
-                           "\rAutoTextArea",
-                           "\rImageSelector",
-                           "\rLinkEditor\r"
+                           "AutoTextArea",
+                           "ImageSelector",
+                           "LinkEditor"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " 更新内容\r"
+                                             "Comment":  "更新内容"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParagBody"
+                          "comment":  "パラグラフのbodyが更新された際のイベント",
+                          "name":  "updateParagBody"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "フォーカスを取得した際のイベント",
-                          "name":  "\rfocusin"
+                          "name":  "focusin"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "フォーカスを失った際のイベント",
-                          "name":  "\rfocusout"
+                          "name":  "focusout"
                       },
                       {
                           "params":  [
-
+                                         {
+                                             "Name":  "index",
+                                             "Comment":  "カーソル位置"
+                                         }
                                      ],
-                          "comment":  "",
-                          "name":  "\rmoveCursor"
+                          "comment":  "テキスト入力カーソルが移動した際のイベント",
+                          "name":  "moveCursor"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "クリア後に呼ばれる処理",
-                          "name":  "\rclear"
+                          "name":  "clear"
                       }
                   ],
         "FileName":  "ParagEditorComponent.vue"
@@ -609,90 +618,90 @@
                   ],
         "description":  "パラグラフの編集を束ねたコンポーネント",
         "components":  [
-                           "\rParagEditorComponent\r"
+                           "ParagEditorComponent"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " パラグラフの配列\r"
+                                             "Comment":  "パラグラフの配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:parags"
+                          "comment":  "パラグラフの配列が更新された際のイベント",
+                          "name":  "update:parags"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " 更新内容\r"
+                                             "Comment":  "更新内容"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParagBody"
+                          "comment":  "パラグラフのbodyが更新された際のイベント",
+                          "name":  "updateParagBody"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "paragType",
-                                             "Comment":  " パラグラフのタイプ\r"
+                                             "Comment":  "パラグラフのタイプ"
                                          },
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\raddParag"
+                          "comment":  "パラグラフを追加する際のイベント",
+                          "name":  "addParag"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rdelParag"
+                          "comment":  "パラグラフを削除する際のイベント",
+                          "name":  "delParag"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rfocusin"
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusin"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rfocusout"
+                          "comment":  "フォーカスを失った際のイベント",
+                          "name":  "focusout"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "index",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rmoveCursor"
+                          "comment":  "テキスト入力カーソルが移動した際のイベント",
+                          "name":  "moveCursor"
                       }
                   ],
         "FileName":  "ParagsEditorComponent.vue"
@@ -744,7 +753,7 @@
                   ],
         "description":  "TierRankingPivotで表示するアイコンのコンポーネント",
         "components":  [
-                           "\rReviewComponent\r"
+                           "ReviewComponent"
                        ],
         "emits":  [
 
@@ -781,11 +790,11 @@
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示タイプ\r"
+                                             "Comment":  "ポイント表示タイプ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate"
+                          "comment":  "ポイント表示タイプの更新の際のイベント",
+                          "name":  "update"
                       }
                   ],
         "FileName":  "PointTypeSelector.vue"
@@ -862,7 +871,7 @@
                   ],
         "description":  "直近のTierから素早くレビュー作成画面に遷移するためのコンポーネント",
         "components":  [
-                           "\rLoadingComponent\r"
+                           "LoadingComponent"
                        ],
         "emits":  [
                       {
@@ -870,7 +879,7 @@
 
                                      ],
                           "comment":  "閉じるボタンが押された際のイベント",
-                          "name":  "\rclose"
+                          "name":  "close"
                       }
                   ],
         "FileName":  "QuickReview.vue"
@@ -916,7 +925,7 @@
                   ],
         "description":  "レーダーチャートを表示するためのコンポーネント",
         "components":  [
-                           "\rRadarChart\r"
+                           "RadarChart"
                        ],
         "emits":  [
 
@@ -964,9 +973,9 @@
                   ],
         "description":  "ユーザー登録のコンポーネント",
         "components":  [
-                           "\rSimpleDialog",
-                           "\rTermOfServise",
-                           "\rImageSelector\r"
+                           "SimpleDialog",
+                           "TermOfServise",
+                           "ImageSelector"
                        ],
         "emits":  [
                       {
@@ -974,28 +983,28 @@
 
                                      ],
                           "comment":  "表示名の更新の際のイベント",
-                          "name":  "\rupdate:dispName"
+                          "name":  "update:dispName"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "プロフィール文の更新の際のイベント",
-                          "name":  "\rupdate:profile"
+                          "name":  "update:profile"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "規約への同意更新の際のイベント",
-                          "name":  "\rupdate:isCheckedTerms"
+                          "name":  "update:isCheckedTerms"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "アイコンURL更新の際のイベント",
-                          "name":  "\rupdate:iconUrl"
+                          "name":  "update:iconUrl"
                       }
                   ],
         "FileName":  "RegistrationComponent.vue"
@@ -1071,37 +1080,37 @@
                   ],
         "description":  "レビューを表示するコンポーネント",
         "components":  [
-                           "\rSectionComponent",
-                           "\rReviewHeader",
-                           "\rReviewValues",
-                           "\rPointTypeSelector",
-                           "\rRadarChart",
-                           "\rReviewLargeValue",
-                           "\rMenuButton",
-                           "\rSimpleDialog",
-                           "\rShareButtons\r"
+                           "SectionComponent",
+                           "ReviewHeader",
+                           "ReviewValues",
+                           "PointTypeSelector",
+                           "RadarChart",
+                           "ReviewLargeValue",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "ShareButtons"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " レビューのインデックス\r"
+                                             "Comment":  "レビューのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "レビューをこのコンポーネントから削除した場合などに発火する再読み込みイベント",
-                          "name":  "\rreload"
+                          "name":  "reload"
                       }
                   ],
         "FileName":  "ReviewComponent.vue"
@@ -1153,7 +1162,7 @@
                   ],
         "description":  "レビューの評点を計算した結果を大きく表示するコンポーネント",
         "components":  [
-                           "\rReviewValueDisplay\r"
+                           "ReviewValueDisplay"
                        ],
         "emits":  [
 
@@ -1207,30 +1216,30 @@
                   ],
         "description":  "レビュー配列を縦に並べて表示するコンポーネント",
         "components":  [
-                           "\rReviewComponent",
-                           "\rLoadingComponent\r"
+                           "ReviewComponent",
+                           "LoadingComponent"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " レビューのインデックス\r"
+                                             "Comment":  "レビューのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "再読み込みイベント",
-                          "name":  "\rreload"
+                          "name":  "reload"
                       }
                   ],
         "FileName":  "ReviewList.vue"
@@ -1258,9 +1267,9 @@
                   ],
         "description":  "レビューを検索するコンポーネント",
         "components":  [
-                           "\rSearchComponent",
-                           "\rReviewList",
-                           "\rEmptyComponent\r"
+                           "SearchComponent",
+                           "ReviewList",
+                           "EmptyComponent"
                        ],
         "emits":  [
                       {
@@ -1268,27 +1277,27 @@
 
                                      ],
                           "comment":  "レビューペアの配列をすべてクリアするイベント",
-                          "name":  "\rclearReviewsPair"
+                          "name":  "clearReviewsPair"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "pairs",
-                                             "Comment":  " レビューと評点情報のペアの配列\r"
+                                             "Comment":  "レビューと評点情報のペアの配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\raddReviewsPair"
+                          "comment":  "レビューペアの配列を追加するイベント",
+                          "name":  "addReviewsPair"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "pairs",
-                                             "Comment":  " レビューと評点情報のペアの配列\r"
+                                             "Comment":  "レビューと評点情報のペアの配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateReviewsPair"
+                          "comment":  "レビューペアの配列を更新するイベント",
+                          "name":  "updateReviewsPair"
                       }
                   ],
         "FileName":  "ReviewSearch.vue"
@@ -1310,29 +1319,29 @@
                   ],
         "description":  "レビュー作成・編集のhintを表示",
         "components":  [
-                           "\rHintDialog",
-                           "\rHintCard\r"
+                           "HintDialog",
+                           "HintCard"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ダイアログの状態\r"
+                                             "Comment":  "ダイアログの状態"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:model-value"
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ページ番号\r"
+                                             "Comment":  "ページ番号"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:page"
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
                       }
                   ],
         "FileName":  "ReviewSettingsHint.vue"
@@ -1396,18 +1405,18 @@
                   ],
         "description":  "ポイントを並べて表示するコンポーネント",
         "components":  [
-                           "\rReviewValueDisplay\r"
+                           "ReviewValueDisplay"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法の更新イベント",
+                          "name":  "updatePointType"
                       }
                   ],
         "FileName":  "ReviewValues.vue"
@@ -1441,36 +1450,36 @@
                   ],
         "description":  "レビュー評点の編集・作成するコンポーネント",
         "components":  [
-                           "\rReviewValueDisplay\r"
+                           "ReviewValueDisplay"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " レビュー評点\r"
+                                             "Comment":  "レビュー評点"
                                          },
                                          {
                                              "Name":  "i",
-                                             "Comment":  " レビュー評点のインデックス\r"
+                                             "Comment":  "レビュー評点のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePoint"
+                          "comment":  "レビュー評点の更新イベント",
+                          "name":  "updatePoint"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " レビュー情報\r"
+                                             "Comment":  "レビュー情報"
                                          },
                                          {
                                              "Name":  "i",
-                                             "Comment":  " レビュー情報のインデックス\r"
+                                             "Comment":  "レビュー情報のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateInfo"
+                          "comment":  "レビュー情報の更新イベント",
+                          "name":  "updateInfo"
                       }
                   ],
         "FileName":  "ReviewValuesSettings.vue"
@@ -1516,7 +1525,7 @@
                   ],
         "description":  "セクションを表示するコンポーネント",
         "components":  [
-                           "\rLinkComponent\r"
+                           "LinkComponent"
                        ],
         "emits":  [
 
@@ -1540,178 +1549,178 @@
                   ],
         "description":  "セクションを編集するエディタコンポーネント",
         "components":  [
-                           "\rParagsEditorComponent",
-                           "\rAutoTextArea",
-                           "\rEditorTools\r"
+                           "ParagsEditorComponent",
+                           "AutoTextArea",
+                           "EditorTools"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " セクション\r"
+                                             "Comment":  "セクション"
                                          },
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateSection"
+                          "comment":  "セクションを更新するイベント",
+                          "name":  "updateSection"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " タイトル\r"
+                                             "Comment":  "タイトル"
                                          },
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateSectionTitle"
+                          "comment":  "セクションのタイトルを更新するイベント",
+                          "name":  "updateSectionTitle"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " パラグラフの配列\r"
+                                             "Comment":  "パラグラフの配列"
                                          },
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:parags"
+                          "comment":  "パラグラフの配列が更新された際のイベント",
+                          "name":  "update:parags"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " 更新内容\r"
+                                             "Comment":  "更新内容"
                                          },
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParagBody"
+                          "comment":  "パラグラフのbodyが更新された際のイベント",
+                          "name":  "updateParagBody"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\raddSection"
+                          "comment":  "セクションを追加する際のイベント",
+                          "name":  "addSection"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "paragType",
-                                             "Comment":  " パラグラフのタイプ\r"
+                                             "Comment":  "パラグラフのタイプ"
                                          },
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\raddParag"
+                          "comment":  "パラグラフを追加する際のイベント",
+                          "name":  "addParag"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rdelParag"
+                          "comment":  "パラグラフを削除する際のイベント",
+                          "name":  "delParag"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rdelSection"
+                          "comment":  "セクションが削除された際のイベント",
+                          "name":  "delSection"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rfocusin"
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusin"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "sectionIndex",
-                                             "Comment":  " セクションのインデックス\r"
+                                             "Comment":  "セクションのインデックス"
                                          },
                                          {
                                              "Name":  "paragIndex",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rfocusout"
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusout"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "送信ボタンが押された際のイベント",
-                          "name":  "\rsubmit"
+                          "name":  "submit"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "プレビュー切り替えボタンが押された際のイベント",
-                          "name":  "\rpreview"
+                          "name":  "preview"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "ピンボタン(floatingStyleの切り替えボタン)が押された際のイベント",
-                          "name":  "\rtogglePin"
+                          "name":  "togglePin"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "ヒントボタンが押された際のイベント",
-                          "name":  "\ropenHint"
+                          "name":  "openHint"
                       }
                   ],
         "FileName":  "SectionEditorComponent.vue"
@@ -1745,7 +1754,7 @@
                   ],
         "description":  "abooutページでサービスを列記する際に使用するコンポーネント",
         "components":  [
-                           "\rSimpleDialog\r"
+                           "SimpleDialog"
                        ],
         "emits":  [
 
@@ -1897,24 +1906,24 @@
 
                                      ],
                           "comment":  "閉じるボタンを押したときのイベント",
-                          "name":  "\rcolse"
+                          "name":  "colse"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "OKボタンを押したときのイベント",
-                          "name":  "\rsubmit"
+                          "name":  "submit"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ダイアログの状態\r"
+                                             "Comment":  "ダイアログの状態"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:modelValue"
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:modelValue"
                       }
                   ],
         "FileName":  "SimpleDialog.vue"
@@ -1956,7 +1965,7 @@
                   ],
         "description":  "利用規約を表示するコンポーネント",
         "components":  [
-                           "\rSimpleDialog\r"
+                           "SimpleDialog"
                        ],
         "emits":  [
 
@@ -2004,35 +2013,35 @@
                   ],
         "description":  "Tierを表示するコンポーネント",
         "components":  [
-                           "\rReviewHeader",
-                           "\rReviewList",
-                           "\rTierRanking",
-                           "\rSectionComponent",
-                           "\rMenuButton",
-                           "\rSimpleDialog",
-                           "\rShareButtons\r"
+                           "ReviewHeader",
+                           "ReviewList",
+                           "TierRanking",
+                           "SectionComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "ShareButtons"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " レビューのインデックス\r"
+                                             "Comment":  "レビューのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "レビューをこのコンポーネントから削除した場合などに発火する再読み込みイベント",
-                          "name":  "\rreload"
+                          "name":  "reload"
                       }
                   ],
         "FileName":  "TierComponent.vue"
@@ -2054,30 +2063,30 @@
                   ],
         "description":  "Tier配列を縦に並べて表示するコンポーネント",
         "components":  [
-                           "\rTierComponent",
-                           "\rLoadingComponent\r"
+                           "TierComponent",
+                           "LoadingComponent"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " レビューのインデックス\r"
+                                             "Comment":  "レビューのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "再読み込みイベント",
-                          "name":  "\rreload"
+                          "name":  "reload"
                       }
                   ],
         "FileName":  "TierList.vue"
@@ -2141,56 +2150,56 @@
                   ],
         "description":  "Tierのランキングやピボット表示をするコンポーネント",
         "components":  [
-                           "\rReviewValueDisplay",
-                           "\rWeightSettings",
-                           "\rPointTypeSelector",
-                           "\rMenuButton",
-                           "\rTierRankingPivot",
-                           "\rSimpleDialog",
-                           "\rLoadingComponent",
-                           "\rTierToPicture",
-                           "\rTierToEmbedded\r"
+                           "ReviewValueDisplay",
+                           "WeightSettings",
+                           "PointTypeSelector",
+                           "MenuButton",
+                           "TierRankingPivot",
+                           "SimpleDialog",
+                           "LoadingComponent",
+                           "TierToPicture",
+                           "TierToEmbedded"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " テーマ\r"
+                                             "Comment":  "テーマ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:theme"
+                          "comment":  "ピボットTierのテーマを更新するイベント",
+                          "name":  "update:theme"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " アイコンサイズ\r"
+                                             "Comment":  "アイコンサイズ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:iconSize"
+                          "comment":  "ピボットTierのアイコンサイズを更新するイベント",
+                          "name":  "update:iconSize"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " テキストサイズ\r"
+                                             "Comment":  "テキストサイズ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:textSize"
+                          "comment":  "ピボットTierのテキストサイズを更新するイベント",
+                          "name":  "update:textSize"
                       }
                   ],
         "FileName":  "TierRanking.vue"
@@ -2254,8 +2263,8 @@
                   ],
         "description":  "ピボットTierを表示するコンポーネント",
         "components":  [
-                           "\rPivotIcon",
-                           "\rReviewValueDisplay\r"
+                           "PivotIcon",
+                           "ReviewValueDisplay"
                        ],
         "emits":  [
 
@@ -2268,8 +2277,8 @@
                   ],
         "description":  "Tierとレビューを検索するコンポーネント",
         "components":  [
-                           "\rTierSearch",
-                           "\rReviewSearch\r"
+                           "TierSearch",
+                           "ReviewSearch"
                        ],
         "emits":  [
 
@@ -2293,9 +2302,9 @@
                   ],
         "description":  "Tierを検索するコンポーネント",
         "components":  [
-                           "\rSearchComponent",
-                           "\rTierList",
-                           "\rEmptyComponent\r"
+                           "SearchComponent",
+                           "TierList",
+                           "EmptyComponent"
                        ],
         "emits":  [
                       {
@@ -2303,27 +2312,27 @@
 
                                      ],
                           "comment":  "Tierデータの配列をすべてクリアするイベント",
-                          "name":  "\rclearTiers"
+                          "name":  "clearTiers"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "pairs",
-                                             "Comment":  " Tierデータの配列\r"
+                                             "Comment":  "Tierデータの配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\raddTiers"
+                          "comment":  "Tierデータの配列を追加するイベント",
+                          "name":  "addTiers"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "pairs",
-                                             "Comment":  " Tierデータの配列\r"
+                                             "Comment":  "Tierデータの配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateTiers"
+                          "comment":  "Tierデータの配列を更新するイベント",
+                          "name":  "updateTiers"
                       }
                   ],
         "FileName":  "TierSearch.vue"
@@ -2351,186 +2360,186 @@
                   ],
         "description":  "",
         "components":  [
-                           "\rWeightSettings",
-                           "\rTierComponent",
-                           "\rPointTypeSelector",
-                           "\rReviewValueDisplay",
-                           "\rImageSelector",
-                           "\rSectionEditorComponent",
-                           "\rSimpleDialog",
-                           "\rPaddingComponent",
-                           "\rEditorTools",
-                           "\rLoadingComponent",
-                           "\rTierSettingsHint\r"
+                           "WeightSettings",
+                           "TierComponent",
+                           "PointTypeSelector",
+                           "ReviewValueDisplay",
+                           "ImageSelector",
+                           "SectionEditorComponent",
+                           "SimpleDialog",
+                           "PaddingComponent",
+                           "EditorTools",
+                           "LoadingComponent",
+                           "TierSettingsHint"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " Tier名\r"
+                                             "Comment":  "Tier名"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateTierName"
+                          "comment":  "Tier名を更新する際のイベント",
+                          "name":  "updateTierName"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "Tierのカバー画像を更新する際のイベント",
-                          "name":  "\rupdateImageUrl"
+                          "name":  "updateImageUrl"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示方法\r"
+                                             "Comment":  "ポイント表示方法"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePointType"
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 名前\r"
+                                             "Comment":  "名前"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateWeightName"
+                          "comment":  "評価項目の名前を更新する際のイベント",
+                          "name":  "updateWeightName"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " true ポイント、false 情報\r"
+                                             "Comment":  "true ポイント、false 情報"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateWeightIsPoint"
+                          "comment":  "評価項目の種類を更新する際のイベント",
+                          "name":  "updateWeightIsPoint"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 重み\r"
+                                             "Comment":  "重み"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateWeight"
+                          "comment":  "評価項目の重みを更新する際のイベント",
+                          "name":  "updateWeight"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "項目の追加イベント",
-                          "name":  "\raddWeightItem"
+                          "name":  "addWeightItem"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rremoveWeightItem"
+                          "comment":  "項目の削除イベント",
+                          "name":  "removeWeightItem"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "type",
-                                             "Comment":  " パラグラフタイプ\r"
+                                             "Comment":  "パラグラフタイプ"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\raddParagItem"
+                          "comment":  "パラグラフの追加イベント",
+                          "name":  "addParagItem"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "index",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rremoveParagItem"
+                          "comment":  "パラグラフの削除イベント",
+                          "name":  "removeParagItem"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " パラグラフのタイプ\r"
+                                             "Comment":  "パラグラフのタイプ"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParagType"
+                          "comment":  "パラグラフのタイプを削除する際のイベント",
+                          "name":  "updateParagType"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 説明文\r"
+                                             "Comment":  "説明文"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " パラグラフのインデックス\r"
+                                             "Comment":  "パラグラフのインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParagBody"
+                          "comment":  "パラグラフの説明文を更新する際のイベント",
+                          "name":  "updateParagBody"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 評価項目配列\r"
+                                             "Comment":  "評価項目配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParams"
+                          "comment":  "評価項目配列の更新イベント",
+                          "name":  "updateParams"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " Tier調整値\r"
+                                             "Comment":  "Tier調整値"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePullingUp"
+                          "comment":  "Tier調整値更新イベント(値を上げるとレビューが全体的に下位に位置しやすくなる)",
+                          "name":  "updatePullingUp"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " Tier調整値\r"
+                                             "Comment":  "Tier調整値"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdatePullingDown"
+                          "comment":  "Tier調整値更新イベント(値を上げるとレビューが全体的に上位に位置しやすくなる)",
+                          "name":  "updatePullingDown"
                       }
                   ],
         "FileName":  "TierSettings.vue"
@@ -2552,29 +2561,29 @@
                   ],
         "description":  "Tier作成・編集のhintを表示",
         "components":  [
-                           "\rHintDialog",
-                           "\rHintCard\r"
+                           "HintDialog",
+                           "HintCard"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ダイアログの状態\r"
+                                             "Comment":  "ダイアログの状態"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:model-value"
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "v",
-                                             "Comment":  " ページ番号\r"
+                                             "Comment":  "ページ番号"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:page"
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
                       }
                   ],
         "FileName":  "TierSettingsHint.vue"
@@ -2639,49 +2648,49 @@
                   ],
         "description":  "ピボットTierを画像に変換するコンポーネント",
         "components":  [
-                           "\rTierRankingPivot",
-                           "\rPointTypeSelector\r"
+                           "TierRankingPivot",
+                           "PointTypeSelector"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " テーマ\r"
+                                             "Comment":  "テーマ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:theme"
+                          "comment":  "ピボットTierのテーマを更新する際のイベント",
+                          "name":  "update:theme"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " ポイント表示タイプ\r"
+                                             "Comment":  "ポイント表示タイプ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:pointType"
+                          "comment":  "ポイント表示タイプを更新する際のイベント",
+                          "name":  "update:pointType"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " アイコンサイズ\r"
+                                             "Comment":  "アイコンサイズ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:iconSize"
+                          "comment":  "ピボットTierのアイコンサイズを変更する際のイベント",
+                          "name":  "update:iconSize"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 評点のサイズ\r"
+                                             "Comment":  "評点のサイズ"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdate:textSize"
+                          "comment":  "ピボットTierの評点のサイズを変更する際のイベント",
+                          "name":  "update:textSize"
                       }
                   ],
         "FileName":  "TierToPicture.vue"
@@ -2721,77 +2730,77 @@
                   ],
         "description":  "評価項目の重みや情報を設定するコンポーネント",
         "components":  [
-                           "\rdraggable\r"
+                           "draggable"
                        ],
         "emits":  [
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 評価項目の配列\r"
+                                             "Comment":  "評価項目の配列"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateParams"
+                          "comment":  "評価項目の配列を更新する際のイベント",
+                          "name":  "updateParams"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 評価項目の名前\r"
+                                             "Comment":  "評価項目の名前"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateName"
+                          "comment":  "評価項目の名前を更新する際のイベント",
+                          "name":  "updateName"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " タイプ「ポイント」かどうか\r"
+                                             "Comment":  "タイプ「ポイント」かどうか"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateIsPoint"
+                          "comment":  "評価項目のタイプを更新する際のイベント",
+                          "name":  "updateIsPoint"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "value",
-                                             "Comment":  " 重み\r"
+                                             "Comment":  "重み"
                                          },
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rupdateWeight"
+                          "comment":  "評価項目の重みを更新する際のイベント",
+                          "name":  "updateWeight"
                       },
                       {
                           "params":  [
 
                                      ],
                           "comment":  "評価項目を追加するイベント",
-                          "name":  "\raddItem"
+                          "name":  "addItem"
                       },
                       {
                           "params":  [
                                          {
                                              "Name":  "index",
-                                             "Comment":  " 評価項目のインデックス\r"
+                                             "Comment":  "評価項目のインデックス"
                                          }
                                      ],
-                          "comment":  "",
-                          "name":  "\rremoveItem"
+                          "comment":  "評価項目を削除するイベント",
+                          "name":  "removeItem"
                       }
                   ],
         "FileName":  "WeightSettings.vue"
@@ -2813,10 +2822,10 @@
         "props":  [
 
                   ],
-        "description":  "AWS",
+        "description":  "このサイトの技術について紹介するページ",
         "components":  [
-                           "\rLicenseList",
-                           "\rServiceColmun\r"
+                           "LicenseList",
+                           "ServiceColmun"
                        ],
         "emits":  [
 
@@ -2827,7 +2836,7 @@
         "props":  [
 
                   ],
-        "description":  "",
+        "description":  "サービス連携の際、リダイレクト先に指定するページ",
         "components":  [
 
                        ],
@@ -2840,14 +2849,14 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "ユーザーのホーム画面",
         "components":  [
-                           "\rProfileComponent",
-                           "\rSessionChecker",
-                           "\rErrorComponent",
-                           "\rPaddingComponent",
-                           "\rLoadingComponent",
-                           "\rTierReviewSearch\r"
+                           "ProfileComponent",
+                           "SessionChecker",
+                           "ErrorComponent",
+                           "PaddingComponent",
+                           "LoadingComponent",
+                           "TierReviewSearch"
                        ],
         "emits":  [
                       {
@@ -2855,7 +2864,7 @@
 
                                      ],
                           "comment":  "",
-                          "name":  "\rreload"
+                          "name":  "reload"
                       }
                   ],
         "FileName":  "HomeView.vue"
@@ -2864,10 +2873,10 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "来訪するとログアウト処理が走るページ",
         "components":  [
-                           "\rSessionChecker",
-                           "\rLoginComponent\r"
+                           "SessionChecker",
+                           "LoginComponent"
                        ],
         "emits":  [
 
@@ -2878,7 +2887,7 @@
         "props":  [
 
                   ],
-        "description":  "",
+        "description":  "ログアウト時に使用するページ",
         "components":  [
 
                        ],
@@ -2891,10 +2900,10 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "Not Foundを表示",
         "components":  [
-                           "\rErrorComponent",
-                           "\rSessionChecker\r"
+                           "ErrorComponent",
+                           "SessionChecker"
                        ],
         "emits":  [
 
@@ -2905,11 +2914,11 @@
         "props":  [
 
                   ],
-        "description":  "",
+        "description":  "通知情報を一覧できるページ",
         "components":  [
-                           "\rPaddingComponent",
-                           "\rSessionChecker",
-                           "\rNotificationsComponent\r"
+                           "PaddingComponent",
+                           "SessionChecker",
+                           "NotificationsComponent"
                        ],
         "emits":  [
 
@@ -2920,11 +2929,11 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "ユーザー登録のためのページ",
         "components":  [
-                           "\rSessionChecker",
-                           "\rRegistrationComponent",
-                           "\rLoadingComponent\r"
+                           "SessionChecker",
+                           "RegistrationComponent",
+                           "LoadingComponent"
                        ],
         "emits":  [
 
@@ -2935,16 +2944,16 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "レビューを新規作成/編集するページ",
         "components":  [
-                           "\rSessionChecker",
-                           "\rReviewValuesSettings",
-                           "\rImageSelector",
-                           "\rReviewComponent",
-                           "\rSectionEditorComponent",
-                           "\rEditorTools",
-                           "\rLoadingComponent",
-                           "\rReviewSettingsHint\r"
+                           "SessionChecker",
+                           "ReviewValuesSettings",
+                           "ImageSelector",
+                           "ReviewComponent",
+                           "SectionEditorComponent",
+                           "EditorTools",
+                           "LoadingComponent",
+                           "ReviewSettingsHint"
                        ],
         "emits":  [
 
@@ -2955,16 +2964,16 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "レビューを表示するページ",
         "components":  [
-                           "\rReviewComponent",
-                           "\rSimpleTier",
-                           "\rErrorComponent",
-                           "\rSessionChecker",
-                           "\rPaddingComponent",
-                           "\rMenuButton",
-                           "\rSimpleDialog",
-                           "\rLoadingComponent\r"
+                           "ReviewComponent",
+                           "SimpleTier",
+                           "ErrorComponent",
+                           "SessionChecker",
+                           "PaddingComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "LoadingComponent"
                        ],
         "emits":  [
 
@@ -2975,13 +2984,13 @@
         "props":  [
 
                   ],
-        "description":  "",
+        "description":  "ユーザー設定",
         "components":  [
-                           "\rSessionChecker",
-                           "\rRegistrationComponent",
-                           "\rSimpleDialog",
-                           "\rLoginComponent",
-                           "\rLoadingComponent\r"
+                           "SessionChecker",
+                           "RegistrationComponent",
+                           "SimpleDialog",
+                           "LoginComponent",
+                           "LoadingComponent"
                        ],
         "emits":  [
 
@@ -2992,11 +3001,11 @@
         "props":  [
 
                   ],
-        "description":  "ユーザーロード中の時のみ表示されるコンポーネント",
+        "description":  "外部のサイトから埋め込みタグでTierを表示するためのページ",
         "components":  [
-                           "\rErrorComponent",
-                           "\rLoadingComponent",
-                           "\rTierRanking\r"
+                           "ErrorComponent",
+                           "LoadingComponent",
+                           "TierRanking"
                        ],
         "emits":  [
 
@@ -3007,11 +3016,11 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "Tierを新規作成/編集するページ",
         "components":  [
-                           "\rSessionChecker",
-                           "\rTierSettings",
-                           "\rLoadingComponent\r"
+                           "SessionChecker",
+                           "TierSettings",
+                           "LoadingComponent"
                        ],
         "emits":  [
 
@@ -3022,15 +3031,15 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "Tierを表示するページ",
         "components":  [
-                           "\rTierComponent",
-                           "\rErrorComponent",
-                           "\rSessionChecker",
-                           "\rPaddingComponent",
-                           "\rMenuButton",
-                           "\rSimpleDialog",
-                           "\rLoadingComponent\r"
+                           "TierComponent",
+                           "ErrorComponent",
+                           "SessionChecker",
+                           "PaddingComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "LoadingComponent"
                        ],
         "emits":  [
 
@@ -3041,12 +3050,12 @@
         "props":  [
 
                   ],
-        "description":  "セッション有効期限をチェックする",
+        "description":  "このシステムについて説明するページ",
         "components":  [
-                           "\rWelcomeCarousel",
-                           "\rExplanationSummary",
-                           "\rSimpleDialog",
-                           "\rSessionChecker\r"
+                           "WelcomeCarousel",
+                           "ExplanationSummary",
+                           "SimpleDialog",
+                           "SessionChecker"
                        ],
         "emits":  [
 

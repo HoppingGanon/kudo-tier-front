@@ -16,7 +16,7 @@ function VueDoc-GetWord ([String]$Source, [String]$StartToken, [String]$EndToken
 
 function VueDoc-ProcessFile ([String]$Source) {
     $MainDescription = (VueDoc-GetWord $Source '<!--' '-->').Str.Trim(' ')
-    $Components = (VueDoc-GetWord $Source 'components: {' '}').Str.Replace(' ', '').Replace("`n", '').Split(',')
+    $Components = (VueDoc-GetWord $Source 'components: {' '}').Str.Replace(' ', '').Replace("`n", '').Replace("`r", '').Split(',')
     if ($Components[0] -eq '') {
         $Components = @()
     }
@@ -41,6 +41,7 @@ function VueDoc-ProcessFile ([String]$Source) {
         
         $i = 0
         $paramsList = New-Object Collections.ArrayList
+        $emitComment = ''
         $Comments | %{
             $comment = $_.Trim(' ')
             if ($comment.Length -gt 0 -and $comment[0] -eq '*') {
@@ -51,12 +52,12 @@ function VueDoc-ProcessFile ([String]$Source) {
                 $commentParamDiv = $comment.SubString(7).IndexOf(' ')
                 if ($commentParamDiv -ne -1) {
                     $paramsList.Add((New-Object PSCustomObject -Property @{
-                        Name=$comment.SubString(7).SubString(0, $commentParamDiv)
-                        Comment=$comment.SubString(7).SubString($commentParamDiv)
+                        Name=$comment.SubString(7).SubString(0, $commentParamDiv).Replace("`r", '')
+                        Comment=$comment.SubString(7).SubString($commentParamDiv).Replace("`r", '').Trim(' ')
                     })) | Out-Null
                 }
             } else {
-                $emitComment = $comment
+                $emitComment += $comment
             }
             $i++
         }
@@ -69,8 +70,8 @@ function VueDoc-ProcessFile ([String]$Source) {
         
         if ($Name -ne '') {
             $emits.Add((New-Object PSCustomObject -Property @{
-                name = $Name
-                comment = $emitComment
+                name = $Name.Replace("`r", '')
+                comment = $emitComment.Replace("`r", '')
                 params = $paramsList
             })) | Out-Null
         }
@@ -100,10 +101,10 @@ function VueDoc-ProcessFile ([String]$Source) {
 
         if ($Name -ne '') {
             $props.Add((New-Object PSCustomObject -Property @{
-                name = $Name
-                type = $Type
-                default = $Default
-                required = $Required
+                name = $Name.Replace("`r", '')
+                type = $Type.Replace("`r", '')
+                default = $Default.Replace("`r", '')
+                required = $Required.Replace("`r", '')
             })) | Out-Null
         }
 
@@ -111,7 +112,7 @@ function VueDoc-ProcessFile ([String]$Source) {
     }
 
     return New-Object PSCustomObject -Property @{
-        description = $MainDescription
+        description = $MainDescription.Replace("`r", '')
         components = $Components
         props = $props
         emits = $emits

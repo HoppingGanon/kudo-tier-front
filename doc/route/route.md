@@ -2,11 +2,12 @@
 
 |パス|クエリパラメータ|オブジェクト|セッション必須|説明|
 |:-|:-|:-|:-|:-|
-|/|-|WelcomeView|-|いい感じのデザインを心がけ、サイトを紹介する。また、ログイン・ログアウト時にもここを通るように設計し、このサイトの印象を知ってもらいやすくする。|
+|/|-|WelcomeView|-|このシステムについて説明するページ|
 |/home|tab|HomeView|-|ユーザーのホーム画面|
 |/home/:id|tab|HomeView|-|ユーザーのホーム画面|
 |/about|-|AboutView|-|このサイトの技術について紹介するページ|
 |/login|-|LoginView|-|ログイン時に使用するページ|
+|/logout|-|LogoutView|-|来訪するとログアウト処理が走るページ|
 |/auth|（連携対象のサービス側が指定）|SampleView|-|サービス連携の際、リダイレクト先に指定するページ|
 |/regist|-|RegistrationView|〇|ユーザー登録のためのページ|
 |/notifications|-|NotificationsView|〇|通知情報を一覧できるページ|
