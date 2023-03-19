@@ -1,14 +1,14 @@
 <!-- レーダーチャートを表示するためのコンポーネント -->
 
 <template>
-  <RadarChart :chartData="chartData" :options="chartOptions" reactive style="width: 100%" />
+  <VueChart3Radar :chartData="chartData" :options="chartOptions" reactive style="width: 100%" />
 </template>
 
 <script lang="ts">
 import vuetify from '@/plugins/vuetify'
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js'
 import { computed, defineComponent, PropType } from 'vue'
-import { RadarChart } from 'vue-chart-3'
+import { RadarChart as VueChart3Radar } from 'vue-chart-3'
 
 export interface RadarChartData {
   name: string
@@ -17,7 +17,7 @@ export interface RadarChartData {
 
 export default defineComponent({
   components: {
-    RadarChart
+    VueChart3Radar
   },
   props: {
     /** レーダーチャートに表示するラベルリスト */

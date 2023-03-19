@@ -13,7 +13,7 @@ export const appName = 'くどくどTier'
 /** 開発者 */
 export const myName = 'Tanaka'
 /** バージョン */
-export const version = '0.5.0-beta'
+export const version = '0.5.1-beta'
 /** ビルド年 */
 export const buildDate = '2023'
 

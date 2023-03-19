@@ -1,0 +1,3242 @@
+﻿[
+    {
+        "props":  [
+
+                  ],
+        "description":  "このサイトの技術について紹介するページ",
+        "components":  [
+                           "LicenseList",
+                           "ServiceColmun"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "AboutView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "サービス連携の際、リダイレクト先に指定するページ",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "AuthView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ユーザーのホーム画面",
+        "components":  [
+                           "ProfileComponent",
+                           "SessionChecker",
+                           "ErrorComponent",
+                           "PaddingComponent",
+                           "LoadingComponent",
+                           "TierReviewSearch"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "",
+                          "name":  "reload"
+                      }
+                  ],
+        "name":  "HomeView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "来訪するとログアウト処理が走るページ",
+        "components":  [
+                           "SessionChecker",
+                           "LoginComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LoginView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ログアウト時に使用するページ",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LogoutView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Not Foundを表示",
+        "components":  [
+                           "ErrorComponent",
+                           "SessionChecker"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "NotFoundView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "通知情報を一覧できるページ",
+        "components":  [
+                           "PaddingComponent",
+                           "SessionChecker",
+                           "NotificationsComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "NotificationsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ユーザー登録のためのページ",
+        "components":  [
+                           "SessionChecker",
+                           "RegistrationComponent",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "RegistrationView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "レビューを新規作成/編集するページ",
+        "components":  [
+                           "SessionChecker",
+                           "ReviewValuesSettings",
+                           "ImageSelector",
+                           "ReviewComponent",
+                           "SectionEditorComponent",
+                           "EditorTools",
+                           "LoadingComponent",
+                           "ReviewSettingsHint"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewSettingsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "レビューを表示するページ",
+        "components":  [
+                           "ReviewComponent",
+                           "SimpleTier",
+                           "ErrorComponent",
+                           "SessionChecker",
+                           "PaddingComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ユーザー設定",
+        "components":  [
+                           "SessionChecker",
+                           "RegistrationComponent",
+                           "SimpleDialog",
+                           "LoginComponent",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "SettingsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "外部のサイトから埋め込みタグでTierを表示するためのページ",
+        "components":  [
+                           "ErrorComponent",
+                           "LoadingComponent",
+                           "TierRanking"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierEmbeddedView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierを新規作成/編集するページ",
+        "components":  [
+                           "SessionChecker",
+                           "TierSettings",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierSettingsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierを表示するページ",
+        "components":  [
+                           "TierComponent",
+                           "ErrorComponent",
+                           "SessionChecker",
+                           "PaddingComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "このシステムについて説明するページ",
+        "components":  [
+                           "WelcomeCarousel",
+                           "ExplanationSummary",
+                           "SimpleDialog",
+                           "SessionChecker"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "WelcomeView"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "入力文字列 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "modelValue",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "テキストエリアに表示するタイトル ",
+                          "default":  "\u0027\u0027",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "テキストエリアに渡すクラス ",
+                          "default":  "\u0027\u0027",
+                          "name":  "class",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "テキストエリアに渡すスタイル ",
+                          "default":  "\u0027\u0027",
+                          "name":  "style",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "複数行の入力が可能になる ",
+                          "default":  "false",
+                          "name":  "multiLines",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "アウトライン無し ",
+                          "default":  "false",
+                          "name":  "noOutline",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "入力時に自動で大きさが変化するテキストアリアのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "テキスト"
+                                         }
+                                     ],
+                          "comment":  "テキストの変更イベント",
+                          "name":  "update:model-value"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusin"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "フォーカスを失った際のイベント",
+                          "name":  "focusout"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "index",
+                                             "comment":  "カーソル位置"
+                                         }
+                                     ],
+                          "comment":  "テキスト入力カーソルが移動した際のイベント",
+                          "name":  "moveCursor"
+                      }
+                  ],
+        "name":  "AutoTextArea"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "絶対位置で画面上部に配置される ",
+                          "default":  "false",
+                          "name":  "floatingStyle",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "セクションのツールを隠す ",
+                          "default":  "false",
+                          "name":  "hideSection",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "パラグラフのツールを隠す ",
+                          "default":  "false",
+                          "name":  "hideParag",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "セクションやパラグラフの編集に使用するツールバーのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "EditorTools"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierやレビューが未作成の状態で、リストを開いた際に表示するメッセージのコンポーネント",
+        "components":  [
+                           "SimpleDialog",
+                           "QuickReview"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "EmptyComponent"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "エラー表示のコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ErrorComponent"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "welcomeページに表示する説明文のコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ExplanationSummary"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ページの下部に必ず表示するフッターのコンポーネント",
+        "components":  [
+                           "TermOfServise"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "FooterComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ページタイトル ",
+                          "default":  "",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "内容の見出し ",
+                          "default":  "",
+                          "name":  "subTitle",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "使い方を説明するhintダイアログの一ページ分のコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "閉じるボタンが押された際のイベント",
+                          "name":  "close"
+                      }
+                  ],
+        "name":  "HintCard"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
+                          "default":  "false",
+                          "name":  "modelValue",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ページ番号 ",
+                          "default":  "",
+                          "name":  "page",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "初期ページ番号 ",
+                          "default":  "0",
+                          "name":  "defaultPage",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "戻るボタンを表示するかどうか ",
+                          "default":  "true",
+                          "name":  "enablePrev",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "使い方を説明するhintダイアログのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
+                                         }
+                                     ],
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
+                                         }
+                                     ],
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "閉じるボタンを押した際のイベント",
+                          "name":  "close"
+                      }
+                  ],
+        "name":  "HintDialog"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
+                          "default":  "",
+                          "name":  "modelValue",
+                          "type":  "Boolean",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ページ番号 ",
+                          "default":  "",
+                          "name":  "page",
+                          "type":  "Number",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "初期ページ番号 ",
+                          "default":  "\u0027くどくどTierの使い方\u0027",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "レビュー作成・編集のhintを表示",
+        "components":  [
+                           "HintDialog",
+                           "HintCard"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
+                                         }
+                                     ],
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
+                                         }
+                                     ],
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "閉じるボタンを押した際のイベント",
+                          "name":  "close"
+                      }
+                  ],
+        "name":  "HomeHint"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  " クリッピングのアスペクト比 0ならアスペクト比を強制しない 正の値ならその値でアスペクト比を強制する 負の値は禁止  ",
+                          "default":  "0",
+                          "name":  "aspectRatio",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "画像未選択時、枠内に表示するラベル ",
+                          "default":  "\u0027画像ファイルを選択してください\u0027",
+                          "name":  "label",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "クロップ後のURL(URL,Data URL, Blobに対応) ",
+                          "default":  "\u0027\u0027",
+                          "name":  "croppedUrl",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "クロップ画面における画像の高さの上限 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "imgMaxHeight",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "画像の選択、切り取り、プレビューのコンポーネント",
+        "components":  [
+                           "VueCropper"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "クロップ前のURL",
+                          "name":  "updateFileUrl"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "クロップ後のURL",
+                          "name":  "updateCroppedUrl"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "画像のクリア後に呼ばれる処理",
+                          "name":  "clear"
+                      }
+                  ],
+        "name":  "ImageSelector"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "あらかじめシェルで出力したjsonファイルを読み込んで、ライセンス一覧を表示するコンポーネント",
+        "components":  [
+                           "SimpleDialog"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LicenseList"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "リンクの文字列 ",
+                          "default":  "",
+                          "name":  "link",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  " リンクテキストが動的に変化する場合は、変化する文字列を 頻繁に変化する文字列をこちらに指定する  ",
+                          "default":  "",
+                          "name":  "preLink",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "Twitter,Youtube,内部リンク,外部リンクを表示するコンポーネント",
+        "components":  [
+                           "Tweet",
+                           "Youtube",
+                           "SimpleDialog"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LinkComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "リンク文字列 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "modelValue",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "Twitter,Youtube,内部リンク,外部リンクを編集するコンポーネント",
+        "components":  [
+                           "LinkComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "リンクの文字列が更新される際のイベント",
+                          "name":  "update"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "リンクをクリアする際のイベント",
+                          "name":  "clear"
+                      }
+                  ],
+        "name":  "LinkEditor"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ロード状態を画面に表示するコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LoadingComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "既にセッションを持っていて、サービス連携をする場合 ",
+                          "default":  "false",
+                          "name":  "isUpdate",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "Twitterのボタンを表示しない ",
+                          "default":  "false",
+                          "name":  "disableTwitter",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "サービス連携によるログイン画面のコンポーネント",
+        "components":  [
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LoginComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "表示するアイテム ",
+                          "default":  "() =\u003e []",
+                          "name":  "items",
+                          "type":  "Array",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "表示名のキー名 ",
+                          "default":  "",
+                          "name":  "itemTitle",
+                          "type":  "String as PropType\u003cstring | number\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "値のキー名 ",
+                          "default":  "",
+                          "name":  "itemValue",
+                          "type":  "String as PropType\u003cstring | number\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "アイコンのキー名 ",
+                          "default":  "",
+                          "name":  "itemIcon",
+                          "type":  "String as PropType\u003cstring | number\u003e",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "ボタンとメニューを合わせたコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "選択した番号またはオブジェクト"
+                                         }
+                                     ],
+                          "comment":  "選択した際のイベント",
+                          "name":  "select"
+                      }
+                  ],
+        "name":  "MenuButton"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "通知を一覧表示するコンポーネント 独立して使用できるコンポーネントにするため、propsやemitを持たない",
+        "components":  [
+                           "LoadingComponent",
+                           "LinkComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "NotificationsComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ユーザー情報欄に表示するタイトル ",
+                          "default":  "\u0027この投稿を作成したユーザー\u0027",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "余白をユーザー情報やその他の情報で埋めるコンポーネント",
+        "components":  [
+                           "ProfileComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "PaddingComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "パラグラフ ",
+                          "default":  "",
+                          "name":  "parag",
+                          "type":  "Object as PropType\u003cReviewParagraph\u003e",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "パラグラフを編集するコンポーネント",
+        "components":  [
+                           "AutoTextArea",
+                           "ImageSelector",
+                           "LinkEditor"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "更新内容"
+                                         }
+                                     ],
+                          "comment":  "パラグラフのbodyが更新された際のイベント",
+                          "name":  "updateParagBody"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusin"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "フォーカスを失った際のイベント",
+                          "name":  "focusout"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "index",
+                                             "comment":  "カーソル位置"
+                                         }
+                                     ],
+                          "comment":  "テキスト入力カーソルが移動した際のイベント",
+                          "name":  "moveCursor"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "クリア後に呼ばれる処理",
+                          "name":  "clear"
+                      }
+                  ],
+        "name":  "ParagEditorComponent"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "パラグラフの編集を束ねたコンポーネント",
+        "components":  [
+                           "ParagEditorComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "パラグラフの配列"
+                                         }
+                                     ],
+                          "comment":  "パラグラフの配列が更新された際のイベント",
+                          "name":  "update:parags"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "更新内容"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフのbodyが更新された際のイベント",
+                          "name":  "updateParagBody"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "paragType",
+                                             "comment":  "パラグラフのタイプ"
+                                         },
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフを追加する際のイベント",
+                          "name":  "addParag"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフを削除する際のイベント",
+                          "name":  "delParag"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusin"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "フォーカスを失った際のイベント",
+                          "name":  "focusout"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "テキスト入力カーソルが移動した際のイベント",
+                          "name":  "moveCursor"
+                      }
+                  ],
+        "name":  "ParagsEditorComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "計算済みのレビューの情報 ",
+                          "default":  "",
+                          "name":  "infomation",
+                          "type":  "Object as PropType\u003cTierPivotInfomation\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "アイコンのサイズ ",
+                          "default":  "\u002764px\u0027 as IconSize",
+                          "name":  "size",
+                          "type":  "String as PropType\u003cIconSize\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ホバーイベントで略式カードを表示するかどうか ",
+                          "default":  "false",
+                          "name":  "noHover",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ポイント表示方法を上書きする場合はこのpropを指定する ",
+                          "default":  "",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューの評価項目 ",
+                          "default":  "",
+                          "name":  "reviewFactorParams",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "クリックするとページ内参照やカード表示をせず、レビュー単独のページに飛ぶ ",
+                          "default":  "false",
+                          "name":  "directLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "Tier調整値 ",
+                          "default":  "",
+                          "name":  "pullingUp",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "TierRankingPivotで表示するアイコンのコンポーネント",
+        "components":  [
+                           "ReviewComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "PivotIcon"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ポイント表示方法 ",
+                          "default":  "\u0027point\u0027 as ReviewPointType",
+                          "name":  "modelValue",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "メニュー表示ではなく常に表示する ",
+                          "default":  "false as boolean",
+                          "name":  "always",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "alwaysとこのプロパティを両方trueを指定すると、v-selectで表示する ",
+                          "default":  "false as boolean",
+                          "name":  "isSelect",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "ポイント表示方法を切り替えるコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示タイプ"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示タイプの更新の際のイベント",
+                          "name":  "update"
+                      }
+                  ],
+        "name":  "PointTypeSelector"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "表示名 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "dispName",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "アイコンのURL ",
+                          "default":  "\u0027\u0027",
+                          "name":  "iconUrl",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "プロフィール文 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "profile",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "投稿したTierの数 ",
+                          "default":  "0",
+                          "name":  "tiersCount",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "投稿したレビューの数 ",
+                          "default":  "0",
+                          "name":  "reviewsCount",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "略式表示 ",
+                          "default":  "false",
+                          "name":  "isSummary",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "幅を減らして縦長の表示をする ",
+                          "default":  "false",
+                          "name":  "isVertical",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ユーザーID ",
+                          "default":  "",
+                          "name":  "userId",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "Twitterボタンを表示する（TwitterIdが未指定の場合はボタンは表示されない） ",
+                          "default":  "false",
+                          "name":  "allowTwitterLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "ユーザーのプロフィールを表示する",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ProfileComponent"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "直近のTierから素早くレビュー作成画面に遷移するためのコンポーネント",
+        "components":  [
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "閉じるボタンが押された際のイベント",
+                          "name":  "close"
+                      }
+                  ],
+        "name":  "QuickReview"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "レーダーチャートに表示するラベルリスト ",
+                          "default":  "",
+                          "name":  "labels",
+                          "type":  "Array as PropType\u003cstring[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レーダーチャートのデータリスト ",
+                          "default":  "",
+                          "name":  "dataList",
+                          "type":  "Array as PropType\u003cRadarChartData[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レーダーチャートのタイトル ",
+                          "default":  "",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レーダーチャートのメモリ刻み ",
+                          "default":  "",
+                          "name":  "step",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レーダーチャートの最小値 ",
+                          "default":  "",
+                          "name":  "min",
+                          "type":  "Number",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レーダーチャートの最大値 ",
+                          "default":  "",
+                          "name":  "max",
+                          "type":  "Number",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "レーダーチャートを表示するためのコンポーネント",
+        "components":  [
+                           "VueChart3Radar"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "RadarChart"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ツイッター表示名 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "twitterUserName",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "Googleのメインメールアドレス ",
+                          "default":  "\u0027\u0027",
+                          "name":  "googleEmail",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "表示名 ",
+                          "default":  "",
+                          "name":  "dispName",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "プロフィール文 ",
+                          "default":  "",
+                          "name":  "profile",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "規約への同意 ",
+                          "default":  "",
+                          "name":  "isCheckedTerms",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "アイコンのURL ",
+                          "default":  "",
+                          "name":  "iconUrl",
+                          "type":  "String",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "ユーザー登録のコンポーネント",
+        "components":  [
+                           "SimpleDialog",
+                           "TermOfServise",
+                           "ImageSelector"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "表示名の更新の際のイベント",
+                          "name":  "update:dispName"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "プロフィール文の更新の際のイベント",
+                          "name":  "update:profile"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "規約への同意更新の際のイベント",
+                          "name":  "update:isCheckedTerms"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "アイコンURL更新の際のイベント",
+                          "name":  "update:iconUrl"
+                      }
+                  ],
+        "name":  "RegistrationComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "レビューデータ ",
+                          "default":  "",
+                          "name":  "review",
+                          "type":  "Object as PropType\u003cReview\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューの評価項目の情報 ",
+                          "default":  "",
+                          "name":  "reviewFactorParams",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューの表示方法 ",
+                          "default":  "",
+                          "name":  "displayType",
+                          "type":  "String as PropType\u003cReviewDisplayType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "サンプルとして表示、trueにするとイベントが発生しない ",
+                          "default":  "false",
+                          "name":  "isSample",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "どこをクリックしてもレビューに飛ぶ ",
+                          "default":  "false",
+                          "name":  "isLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ヘッダ部分を表示しない ",
+                          "default":  "false as boolean",
+                          "name":  "noHeader",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ポイント表示方法を固定 ",
+                          "default":  "false as boolean",
+                          "name":  "noChangePoint",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "幅 ",
+                          "default":  "\u0027100%\u0027",
+                          "name":  "width",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "最小幅 ",
+                          "default":  "\u0027100%\u0027",
+                          "name":  "minHeight",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ポイント表示方法を上書きする場合はこのpropを指定する ",
+                          "default":  "",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "Tier調整値 ",
+                          "default":  "",
+                          "name":  "pullingUp",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "レビューを表示するコンポーネント",
+        "components":  [
+                           "SectionComponent",
+                           "ReviewHeader",
+                           "ReviewValues",
+                           "PointTypeSelector",
+                           "RadarChart",
+                           "ReviewLargeValue",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "ShareButtons"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "レビューをこのコンポーネントから削除した場合などに発火する再読み込みイベント",
+                          "name":  "reload"
+                      }
+                  ],
+        "name":  "ReviewComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "表示名 ",
+                          "default":  "",
+                          "name":  "dispName",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ユーザーID ",
+                          "default":  "",
+                          "name":  "userId",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "最終更新日 ",
+                          "default":  "",
+                          "name":  "lastWriteTime",
+                          "type":  "String",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "レビューやTierに付与するヘッダ",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewHeader"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "合計値 ",
+                          "default":  "",
+                          "name":  "sum",
+                          "type":  "Number",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "重みを加味した合計値 ",
+                          "default":  "",
+                          "name":  "average",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "レビューの評点を計算した結果を大きく表示するコンポーネント",
+        "components":  [
+                           "ReviewValueDisplay"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewLargeValue"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "レビューと評点情報のペア ",
+                          "default":  "",
+                          "name":  "pairs",
+                          "type":  "Array as PropType\u003cReviewWithParams[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ヘッダ部分を表示しない ",
+                          "default":  "false as boolean",
+                          "name":  "noHeader",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ポイント表示方法を固定 ",
+                          "default":  "false as boolean",
+                          "name":  "noChangePoint",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "サンプルとして表示、trueにするとイベントが発生しない ",
+                          "default":  "false",
+                          "name":  "isSample",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レビューをクリックすると単独のレビューページに飛ぶ ",
+                          "default":  "false",
+                          "name":  "isLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レビューの表示方法 ",
+                          "default":  "",
+                          "name":  "displayType",
+                          "type":  "String as PropType\u003cReviewDisplayType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ポイント表示方法を上書きする場合はこのpropを指定する ",
+                          "default":  "",
+                          "name":  "pointTypes",
+                          "type":  "Array as PropType\u003cReviewPointType[]\u003e",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "レビュー配列を縦に並べて表示するコンポーネント",
+        "components":  [
+                           "ReviewComponent",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "再読み込みイベント",
+                          "name":  "reload"
+                      }
+                  ],
+        "name":  "ReviewList"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "レビューと評点情報のペアの配列 ",
+                          "default":  "",
+                          "name":  "pairs",
+                          "type":  "Array as PropType\u003cReviewWithParams[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ユーザーID ",
+                          "default":  "",
+                          "name":  "userId",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "読み込み中の表示をする ",
+                          "default":  "false",
+                          "name":  "isLoading",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "レビューを検索するコンポーネント",
+        "components":  [
+                           "SearchComponent",
+                           "ReviewList",
+                           "EmptyComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "レビューペアの配列をすべてクリアするイベント",
+                          "name":  "clearReviewsPair"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "pairs",
+                                             "comment":  "レビューと評点情報のペアの配列"
+                                         }
+                                     ],
+                          "comment":  "レビューペアの配列を追加するイベント",
+                          "name":  "addReviewsPair"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "pairs",
+                                             "comment":  "レビューと評点情報のペアの配列"
+                                         }
+                                     ],
+                          "comment":  "レビューペアの配列を更新するイベント",
+                          "name":  "updateReviewsPair"
+                      }
+                  ],
+        "name":  "ReviewSearch"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
+                          "default":  "",
+                          "name":  "modelValue",
+                          "type":  "Boolean",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ページ番号 ",
+                          "default":  "",
+                          "name":  "page",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "レビュー作成・編集のhintを表示",
+        "components":  [
+                           "HintDialog",
+                           "HintCard"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
+                                         }
+                                     ],
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
+                                         }
+                                     ],
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
+                      }
+                  ],
+        "name":  "ReviewSettingsHint"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "評価ポイントを指定する(元の数値) ",
+                          "default":  "",
+                          "name":  "value",
+                          "type":  "Number",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ポイント表示タイプ ",
+                          "default":  "",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ランク表示の際の表示サイズ ",
+                          "default":  "\u0027normal\u0027 as PointDisplaySize",
+                          "name":  "displaySize",
+                          "type":  "String as PropType\u003cPointDisplaySize\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ランク表示をコンパクトに表示する ",
+                          "default":  "false as boolean",
+                          "name":  "compact",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "レビューの評点を立地に表示するコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewValueDisplay"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "レビュー評点や情報 ",
+                          "default":  "",
+                          "name":  "factors",
+                          "type":  "Array as PropType\u003cReviewFactor[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューの表示方法 ",
+                          "default":  "",
+                          "name":  "displayType",
+                          "type":  "String as PropType\u003cReviewDisplayType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ポイント表示方法 ",
+                          "default":  "",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "ポイントを並べて表示するコンポーネント",
+        "components":  [
+                           "ReviewValueDisplay"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法の更新イベント",
+                          "name":  "updatePointType"
+                      }
+                  ],
+        "name":  "ReviewValues"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "レビューデータ ",
+                          "default":  "",
+                          "name":  "review",
+                          "type":  "Object as PropType\u003cReview\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューの評価項目 ",
+                          "default":  "",
+                          "name":  "params",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューポイントの表現方法 ",
+                          "default":  "",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "Tier調整値 ",
+                          "default":  "",
+                          "name":  "pullingUp",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "レビュー評点の編集・作成するコンポーネント",
+        "components":  [
+                           "ReviewValueDisplay"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "レビュー評点"
+                                         },
+                                         {
+                                             "name":  "i",
+                                             "comment":  "レビュー評点のインデックス"
+                                         }
+                                     ],
+                          "comment":  "レビュー評点の更新イベント",
+                          "name":  "updatePoint"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "レビュー情報"
+                                         },
+                                         {
+                                             "name":  "i",
+                                             "comment":  "レビュー情報のインデックス"
+                                         }
+                                     ],
+                          "comment":  "レビュー情報の更新イベント",
+                          "name":  "updateInfo"
+                      }
+                  ],
+        "name":  "ReviewValuesSettings"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "検索文字列 ",
+                          "default":  "",
+                          "name":  "modelValue",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ソート順の選択肢 ",
+                          "default":  "",
+                          "name":  "sortItems",
+                          "type":  "Array as PropType\u003cSelectObject[]\u003e",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "検索ヘッダのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "SearchComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "セクション ",
+                          "default":  "",
+                          "name":  "section",
+                          "type":  "Object as PropType\u003cReviewSection\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "表示方法 ",
+                          "default":  "\u0027all\u0027",
+                          "name":  "displayType",
+                          "type":  "String as PropType\u003cReviewDisplayType\u003e",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "セクションを表示するコンポーネント",
+        "components":  [
+                           "LinkComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "SectionComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "セクション配列 ",
+                          "default":  "",
+                          "name":  "sections",
+                          "type":  "Object as PropType\u003cReviewSection[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "パラグラフのみ編集可能にし、セクションの新規追加を禁止 ",
+                          "default":  "false",
+                          "name":  "noSection",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "セクションを編集するエディタコンポーネント",
+        "components":  [
+                           "ParagsEditorComponent",
+                           "AutoTextArea",
+                           "EditorTools"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "セクション"
+                                         },
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         }
+                                     ],
+                          "comment":  "セクションを更新するイベント",
+                          "name":  "updateSection"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "タイトル"
+                                         },
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         }
+                                     ],
+                          "comment":  "セクションのタイトルを更新するイベント",
+                          "name":  "updateSectionTitle"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "パラグラフの配列"
+                                         },
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフの配列が更新された際のイベント",
+                          "name":  "update:parags"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "更新内容"
+                                         },
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフのbodyが更新された際のイベント",
+                          "name":  "updateParagBody"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         }
+                                     ],
+                          "comment":  "セクションを追加する際のイベント",
+                          "name":  "addSection"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "paragType",
+                                             "comment":  "パラグラフのタイプ"
+                                         },
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフを追加する際のイベント",
+                          "name":  "addParag"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフを削除する際のイベント",
+                          "name":  "delParag"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         }
+                                     ],
+                          "comment":  "セクションが削除された際のイベント",
+                          "name":  "delSection"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusin"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
+                                         },
+                                         {
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "フォーカスを取得した際のイベント",
+                          "name":  "focusout"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "送信ボタンが押された際のイベント",
+                          "name":  "submit"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "プレビュー切り替えボタンが押された際のイベント",
+                          "name":  "preview"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "ピンボタン(floatingStyleの切り替えボタン)が押された際のイベント",
+                          "name":  "togglePin"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "ヒントボタンが押された際のイベント",
+                          "name":  "openHint"
+                      }
+                  ],
+        "name":  "SectionEditorComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "タイトル ",
+                          "default":  "\u0027\u0027",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "サブタイトル ",
+                          "default":  "\u0027\u0027",
+                          "name":  "subtitle",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "説明文 ",
+                          "default":  "\u0027\u0027",
+                          "name":  "text",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ライセンス全文 ",
+                          "default":  "",
+                          "name":  "license",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "abooutページでサービスを列記する際に使用するコンポーネント",
+        "components":  [
+                           "SimpleDialog"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ServiceColmun"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "セッションが無い場合はエラー表示してwelcomeページに移動する ",
+                          "default":  "false",
+                          "name":  "noSessionError",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "特に画面表示せずにセッションのチェックのみ行うコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "SessionChecker"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "シェアするリンク ",
+                          "default":  "",
+                          "name":  "link",
+                          "type":  "String",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "シェアする本文 ",
+                          "default":  "",
+                          "name":  "body",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "シェアボタンのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ShareButtons"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ダイアログの表示状態 ",
+                          "default":  "",
+                          "name":  "modelValue",
+                          "type":  "Boolean",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "カードのタイトル ",
+                          "default":  "",
+                          "name":  "title",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "カードの幅 ",
+                          "default":  "",
+                          "name":  "width",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "カードの高さ ",
+                          "default":  "",
+                          "name":  "height",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "本文の前に付加するテキスト ",
+                          "default":  "",
+                          "name":  "prependText",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "本文の前に付加する画像 ",
+                          "default":  "",
+                          "name":  "prependImageSrc",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "本文 ",
+                          "default":  "",
+                          "name":  "text",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "画像 ",
+                          "default":  "",
+                          "name":  "appendImageSrc",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "本文の後に付加するテキスト ",
+                          "default":  "",
+                          "name":  "appendText",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ダイアログの外側をクリックしてもダイアログがとじないようにする ",
+                          "default":  "false",
+                          "name":  "persistent",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "フルスクリーン表示する ",
+                          "default":  "false",
+                          "name":  "fullscreen",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "上部に閉じるボタンを表示する ",
+                          "default":  "true",
+                          "name":  "showTopCloseButton",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "下部に閉じるボタンを表示する ",
+                          "default":  "true",
+                          "name":  "showCloseButton",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "下部にOKボタンを表示する ",
+                          "default":  "true",
+                          "name":  "showSubmitButton",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "閉じるボタンのテキスト ",
+                          "default":  "\u0027閉じる\u0027",
+                          "name":  "closeButtonText",
+                          "type":  "String",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "タイトル付きのダイアログカードが表示ができるコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "閉じるボタンを押したときのイベント",
+                          "name":  "colse"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "OKボタンを押したときのイベント",
+                          "name":  "submit"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
+                                         }
+                                     ],
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:modelValue"
+                      }
+                  ],
+        "name":  "SimpleDialog"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "Tierデータ ",
+                          "default":  "",
+                          "name":  "tier",
+                          "type":  "Object as PropType\u003cTier\u003e",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "コンパクトにTierを表示するコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "SimpleTier"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "新規にコンポーネントを追加する際のテンプレート",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "Template"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "利用規約を表示するコンポーネント",
+        "components":  [
+                           "SimpleDialog"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TermOfServise"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "Tierデータ ",
+                          "default":  "",
+                          "name":  "tier",
+                          "type":  "Object as PropType\u003cTier\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "サンプルとして表示、trueにするとイベントが発生しない ",
+                          "default":  "false",
+                          "name":  "isSample",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "どこをクリックしてもTierに飛ぶ ",
+                          "default":  "false",
+                          "name":  "isLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "表示方法 ",
+                          "default":  "",
+                          "name":  "displayType",
+                          "type":  "String as PropType\u003cReviewDisplayType\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ヘッダ部分を表示しない ",
+                          "default":  "false as boolean",
+                          "name":  "noHeader",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "・・・のメニューアイコンを表示しない ",
+                          "default":  "false as boolean",
+                          "name":  "noMenuIcon",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "Tierを表示するコンポーネント",
+        "components":  [
+                           "ReviewHeader",
+                           "ReviewList",
+                           "TierRanking",
+                           "SectionComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "ShareButtons"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "レビューをこのコンポーネントから削除した場合などに発火する再読み込みイベント",
+                          "name":  "reload"
+                      }
+                  ],
+        "name":  "TierComponent"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "Tier配列 ",
+                          "default":  "",
+                          "name":  "tiers",
+                          "type":  "Array as PropType\u003cTier[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "Tierをクリックすると単独のTierページに飛ぶ ",
+                          "default":  "false",
+                          "name":  "isLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "Tier配列を縦に並べて表示するコンポーネント",
+        "components":  [
+                           "TierComponent",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "再読み込みイベント",
+                          "name":  "reload"
+                      }
+                  ],
+        "name":  "TierList"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "Tierデータ ",
+                          "default":  "",
+                          "name":  "tier",
+                          "type":  "Object as PropType\u003cTier\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューデータの配列 ",
+                          "default":  "() =\u003e [] as PropType\u003cReview[]\u003e",
+                          "name":  "reviews",
+                          "type":  "Array as PropType\u003cReview[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "レビューの評価項目 ",
+                          "default":  "() =\u003e [] as ReviewFactorParam[]",
+                          "name":  "params",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ポイント表示方法 ",
+                          "default":  "\u0027point\u0027 as ReviewPointType",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "・・・のメニューアイコンを表示しない ",
+                          "default":  "false",
+                          "name":  "noMenuIcon",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierのテーマ ",
+                          "default":  "\u0027light\u0027",
+                          "name":  "theme",
+                          "type":  "String as PropType\u003cRankingTheme\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ツールバーを隠す ",
+                          "default":  "false",
+                          "name":  "hideBar",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "クリックするとレビュー単独のページに飛ぶ ",
+                          "default":  "false",
+                          "name":  "directLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierのアイコンのサイズ ",
+                          "default":  "\u002748px\u0027 as IconSize",
+                          "name":  "iconSize",
+                          "type":  "String as PropType\u003cIconSize\u003e",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "Tierのランキングやピボット表示をするコンポーネント",
+        "components":  [
+                           "ReviewValueDisplay",
+                           "WeightSettings",
+                           "PointTypeSelector",
+                           "MenuButton",
+                           "TierRankingPivot",
+                           "SimpleDialog",
+                           "LoadingComponent",
+                           "TierToPicture",
+                           "TierToEmbedded"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "テーマ"
+                                         }
+                                     ],
+                          "comment":  "ピボットTierのテーマを更新するイベント",
+                          "name":  "update:theme"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "アイコンサイズ"
+                                         }
+                                     ],
+                          "comment":  "ピボットTierのアイコンサイズを更新するイベント",
+                          "name":  "update:iconSize"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "テキストサイズ"
+                                         }
+                                     ],
+                          "comment":  "ピボットTierのテキストサイズを更新するイベント",
+                          "name":  "update:textSize"
+                      }
+                  ],
+        "name":  "TierRanking"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ピボット済の計算済みレビューリスト ",
+                          "default":  "() =\u003e [] as TierPivotInfomation[][]",
+                          "name":  "tierPivotList",
+                          "type":  "Array as PropType\u003cTierPivotInfomation[][]\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ポイント表示タイプ ",
+                          "default":  "\u0027point\u0027 as ReviewPointType",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierのアイコンのサイズ ",
+                          "default":  "\u002748px\u0027",
+                          "name":  "iconSize",
+                          "type":  "String as PropType\u003cIconSize\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierの評点のサイズ ",
+                          "default":  "\u0027large2\u0027",
+                          "name":  "textSize",
+                          "type":  "String as PropType\u003cPointDisplaySize\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レビューの評価項目 ",
+                          "default":  "() =\u003e [] as ReviewFactorParam[]",
+                          "name":  "params",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierのテーマ ",
+                          "default":  "\u0027light\u0027",
+                          "name":  "theme",
+                          "type":  "String as PropType\u003cRankingTheme\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierの幅 ",
+                          "default":  "",
+                          "name":  "width",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "クリックするとレビュー単独のページに飛ぶ ",
+                          "default":  "false",
+                          "name":  "directLink",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "Tier調整値 ",
+                          "default":  "",
+                          "name":  "pullingUp",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "ピボットTierを表示するコンポーネント",
+        "components":  [
+                           "PivotIcon",
+                           "ReviewValueDisplay"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierRankingPivot"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierとレビューを検索するコンポーネント",
+        "components":  [
+                           "TierSearch",
+                           "ReviewSearch"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierReviewSearch"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "Tierデータの配列 ",
+                          "default":  "",
+                          "name":  "tiers",
+                          "type":  "Array as PropType\u003cTier[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ユーザーID ",
+                          "default":  "",
+                          "name":  "userId",
+                          "type":  "String",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "Tierを検索するコンポーネント",
+        "components":  [
+                           "SearchComponent",
+                           "TierList",
+                           "EmptyComponent"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "Tierデータの配列をすべてクリアするイベント",
+                          "name":  "clearTiers"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "pairs",
+                                             "comment":  "Tierデータの配列"
+                                         }
+                                     ],
+                          "comment":  "Tierデータの配列を追加するイベント",
+                          "name":  "addTiers"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "pairs",
+                                             "comment":  "Tierデータの配列"
+                                         }
+                                     ],
+                          "comment":  "Tierデータの配列を更新するイベント",
+                          "name":  "updateTiers"
+                      }
+                  ],
+        "name":  "TierSearch"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "Tierデータ ",
+                          "default":  "",
+                          "name":  "modelValue",
+                          "type":  "Object as PropType\u003cTier\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "もとのTierデータ ",
+                          "default":  "",
+                          "name":  "orgTier",
+                          "type":  "Object as PropType\u003cTier\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ポイント表示方法 ",
+                          "default":  "",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "",
+        "components":  [
+                           "WeightSettings",
+                           "TierComponent",
+                           "PointTypeSelector",
+                           "ReviewValueDisplay",
+                           "ImageSelector",
+                           "SectionEditorComponent",
+                           "SimpleDialog",
+                           "PaddingComponent",
+                           "EditorTools",
+                           "LoadingComponent",
+                           "TierSettingsHint"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "Tier名"
+                                         }
+                                     ],
+                          "comment":  "Tier名を更新する際のイベント",
+                          "name":  "updateTierName"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "Tierのカバー画像を更新する際のイベント",
+                          "name":  "updateImageUrl"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示方法を更新する際のイベント",
+                          "name":  "updatePointType"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "名前"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目の名前を更新する際のイベント",
+                          "name":  "updateWeightName"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "true ポイント、false 情報"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目の種類を更新する際のイベント",
+                          "name":  "updateWeightIsPoint"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "重み"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目の重みを更新する際のイベント",
+                          "name":  "updateWeight"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "項目の追加イベント",
+                          "name":  "addWeightItem"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "項目の削除イベント",
+                          "name":  "removeWeightItem"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "type",
+                                             "comment":  "パラグラフタイプ"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフの追加イベント",
+                          "name":  "addParagItem"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフの削除イベント",
+                          "name":  "removeParagItem"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "パラグラフのタイプ"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフのタイプを削除する際のイベント",
+                          "name":  "updateParagType"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "説明文"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
+                                         }
+                                     ],
+                          "comment":  "パラグラフの説明文を更新する際のイベント",
+                          "name":  "updateParagBody"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "評価項目配列"
+                                         }
+                                     ],
+                          "comment":  "評価項目配列の更新イベント",
+                          "name":  "updateParams"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "Tier調整値"
+                                         }
+                                     ],
+                          "comment":  "Tier調整値更新イベント(値を上げるとレビューが全体的に下位に位置しやすくなる)",
+                          "name":  "updatePullingUp"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "Tier調整値"
+                                         }
+                                     ],
+                          "comment":  "Tier調整値更新イベント(値を上げるとレビューが全体的に上位に位置しやすくなる)",
+                          "name":  "updatePullingDown"
+                      }
+                  ],
+        "name":  "TierSettings"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
+                          "default":  "",
+                          "name":  "modelValue",
+                          "type":  "Boolean",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "ページ番号 ",
+                          "default":  "",
+                          "name":  "page",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "Tier作成・編集のhintを表示",
+        "components":  [
+                           "HintDialog",
+                           "HintCard"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
+                                         }
+                                     ],
+                          "comment":  "ダイアログの開閉操作が行われた際のイベント",
+                          "name":  "update:model-value"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
+                                         }
+                                     ],
+                          "comment":  "ページが変化した際のイベント",
+                          "name":  "update:page"
+                      }
+                  ],
+        "name":  "TierSettingsHint"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierを他サイトに埋め込み表示するためのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierToEmbedded"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "ピボット済の計算済みレビューリスト ",
+                          "default":  "() =\u003e [] as TierPivotInfomation[][]",
+                          "name":  "tierPivotList",
+                          "type":  "Array as PropType\u003cTierPivotInfomation[][]\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ポイント表示タイプ ",
+                          "default":  "\u0027point\u0027 as ReviewPointType",
+                          "name":  "pointType",
+                          "type":  "String as PropType\u003cReviewPointType\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "レビューの評価項目 ",
+                          "default":  "() =\u003e [] as ReviewFactorParam[]",
+                          "name":  "params",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierのテーマ ",
+                          "default":  "\u0027light\u0027",
+                          "name":  "theme",
+                          "type":  "String as PropType\u003cRankingTheme\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierのアイコンサイズ ",
+                          "default":  "\u002764px\u0027",
+                          "name":  "iconSize",
+                          "type":  "String",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "ピボットTierの評点のサイズ ",
+                          "default":  "\u0027large2\u0027",
+                          "name":  "textSize",
+                          "type":  "String as PropType\u003cPointDisplaySize\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "Tier調整値 ",
+                          "default":  "",
+                          "name":  "pullingUp",
+                          "type":  "Number",
+                          "required":  "true"
+                      }
+                  ],
+        "description":  "ピボットTierを画像に変換するコンポーネント",
+        "components":  [
+                           "TierRankingPivot",
+                           "PointTypeSelector"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "テーマ"
+                                         }
+                                     ],
+                          "comment":  "ピボットTierのテーマを更新する際のイベント",
+                          "name":  "update:theme"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "ポイント表示タイプ"
+                                         }
+                                     ],
+                          "comment":  "ポイント表示タイプを更新する際のイベント",
+                          "name":  "update:pointType"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "アイコンサイズ"
+                                         }
+                                     ],
+                          "comment":  "ピボットTierのアイコンサイズを変更する際のイベント",
+                          "name":  "update:iconSize"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "評点のサイズ"
+                                         }
+                                     ],
+                          "comment":  "ピボットTierの評点のサイズを変更する際のイベント",
+                          "name":  "update:textSize"
+                      }
+                  ],
+        "name":  "TierToPicture"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "評価項目の配列 ",
+                          "default":  "() =\u003e [] as PropType\u003cReviewFactorParam[]\u003e",
+                          "name":  "params",
+                          "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
+                          "required":  "true"
+                      },
+                      {
+                          "comment":  "変更不可 ",
+                          "default":  "false",
+                          "name":  "readonly",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "タイプが「情報」の場合に適用する入力規則 ",
+                          "default":  "undefined",
+                          "name":  "rules",
+                          "type":  "Array as PropType\u003c((v: string) =\u003e string | boolean)[]\u003e",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "タイプが「ポイント」の項目を一つ以上の含めることを強制する ",
+                          "default":  "false",
+                          "name":  "requiredPoint",
+                          "type":  "Boolean",
+                          "required":  ""
+                      },
+                      {
+                          "comment":  "評価項目の合計数上限 ",
+                          "default":  "16",
+                          "name":  "maxLen",
+                          "type":  "Number",
+                          "required":  ""
+                      }
+                  ],
+        "description":  "評価項目の重みや情報を設定するコンポーネント",
+        "components":  [
+                           "draggable"
+                       ],
+        "emits":  [
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "評価項目の配列"
+                                         }
+                                     ],
+                          "comment":  "評価項目の配列を更新する際のイベント",
+                          "name":  "updateParams"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "評価項目の名前"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目の名前を更新する際のイベント",
+                          "name":  "updateName"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "タイプ「ポイント」かどうか"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目のタイプを更新する際のイベント",
+                          "name":  "updateIsPoint"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "value",
+                                             "comment":  "重み"
+                                         },
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目の重みを更新する際のイベント",
+                          "name":  "updateWeight"
+                      },
+                      {
+                          "params":  [
+
+                                     ],
+                          "comment":  "評価項目を追加するイベント",
+                          "name":  "addItem"
+                      },
+                      {
+                          "params":  [
+                                         {
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
+                                         }
+                                     ],
+                          "comment":  "評価項目を削除するイベント",
+                          "name":  "removeItem"
+                      }
+                  ],
+        "name":  "WeightSettings"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "welcomeの上部に表示するカルーセルのコンポーネント",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "WelcomeCarousel"
+    }
+]

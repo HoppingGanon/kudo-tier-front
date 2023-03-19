@@ -1,3 +1,6 @@
+
+<!-- Tierを表示するページ -->
+
 <template>
 
   <!-- セッション有効期限をチェックする -->
@@ -116,7 +119,8 @@ export default defineComponent({
           isSelf.value = tier.value.userId === store.state.userId
           // 重みを考慮した合計点を算出する
           tier.value.reviews.sort((review1, review2) => {
-            return ReviewFunc.calcSum(review2, tier.value.reviewFactorParams) - ReviewFunc.calcSum(review1, tier.value.reviewFactorParams)
+            return ReviewFunc.calcAaverage(review2, tier.value.reviewFactorParams, tier.value.pullingUp, tier.value.pullingDown, 0, 100) -
+              ReviewFunc.calcAaverage(review1, tier.value.reviewFactorParams, tier.value.pullingUp, tier.value.pullingDown, 0, 100)
           })
         }).catch((e) => {
           isNotFound.value = true

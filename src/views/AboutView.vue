@@ -1,3 +1,6 @@
+
+<!-- このサイトの技術について紹介するページ -->
+
 <template>
   <v-container class="centering-x">
 
