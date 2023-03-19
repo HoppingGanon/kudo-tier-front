@@ -1,37 +1,287 @@
 ﻿[
     {
         "props":  [
+
+                  ],
+        "description":  "このサイトの技術について紹介するページ",
+        "components":  [
+                           "LicenseList",
+                           "ServiceColmun"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "AboutView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "サービス連携の際、リダイレクト先に指定するページ",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "AuthView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ユーザーのホーム画面",
+        "components":  [
+                           "ProfileComponent",
+                           "SessionChecker",
+                           "ErrorComponent",
+                           "PaddingComponent",
+                           "LoadingComponent",
+                           "TierReviewSearch"
+                       ],
+        "emits":  [
                       {
+                          "params":  [
+
+                                     ],
+                          "comment":  "",
+                          "name":  "reload"
+                      }
+                  ],
+        "name":  "HomeView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "来訪するとログアウト処理が走るページ",
+        "components":  [
+                           "SessionChecker",
+                           "LoginComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LoginView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ログアウト時に使用するページ",
+        "components":  [
+
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "LogoutView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Not Foundを表示",
+        "components":  [
+                           "ErrorComponent",
+                           "SessionChecker"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "NotFoundView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "通知情報を一覧できるページ",
+        "components":  [
+                           "PaddingComponent",
+                           "SessionChecker",
+                           "NotificationsComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "NotificationsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ユーザー登録のためのページ",
+        "components":  [
+                           "SessionChecker",
+                           "RegistrationComponent",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "RegistrationView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "レビューを新規作成/編集するページ",
+        "components":  [
+                           "SessionChecker",
+                           "ReviewValuesSettings",
+                           "ImageSelector",
+                           "ReviewComponent",
+                           "SectionEditorComponent",
+                           "EditorTools",
+                           "LoadingComponent",
+                           "ReviewSettingsHint"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewSettingsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "レビューを表示するページ",
+        "components":  [
+                           "ReviewComponent",
+                           "SimpleTier",
+                           "ErrorComponent",
+                           "SessionChecker",
+                           "PaddingComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "ReviewView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "ユーザー設定",
+        "components":  [
+                           "SessionChecker",
+                           "RegistrationComponent",
+                           "SimpleDialog",
+                           "LoginComponent",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "SettingsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "外部のサイトから埋め込みタグでTierを表示するためのページ",
+        "components":  [
+                           "ErrorComponent",
+                           "LoadingComponent",
+                           "TierRanking"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierEmbeddedView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierを新規作成/編集するページ",
+        "components":  [
+                           "SessionChecker",
+                           "TierSettings",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierSettingsView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "Tierを表示するページ",
+        "components":  [
+                           "TierComponent",
+                           "ErrorComponent",
+                           "SessionChecker",
+                           "PaddingComponent",
+                           "MenuButton",
+                           "SimpleDialog",
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TierView"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "このシステムについて説明するページ",
+        "components":  [
+                           "WelcomeCarousel",
+                           "ExplanationSummary",
+                           "SimpleDialog",
+                           "SessionChecker"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "WelcomeView"
+    },
+    {
+        "props":  [
+                      {
+                          "comment":  "入力文字列 ",
                           "default":  "\u0027\u0027",
                           "name":  "modelValue",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "テキストエリアに表示するタイトル ",
                           "default":  "\u0027\u0027",
                           "name":  "title",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "テキストエリアに渡すクラス ",
                           "default":  "\u0027\u0027",
                           "name":  "class",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "テキストエリアに渡すスタイル ",
                           "default":  "\u0027\u0027",
                           "name":  "style",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "複数行の入力が可能になる ",
                           "default":  "false",
                           "name":  "multiLines",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "アウトライン無し ",
                           "default":  "false",
                           "name":  "noOutline",
                           "type":  "Boolean",
@@ -46,8 +296,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "テキスト"
+                                             "name":  "v",
+                                             "comment":  "テキスト"
                                          }
                                      ],
                           "comment":  "テキストの変更イベント",
@@ -70,31 +320,34 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "カーソル位置"
+                                             "name":  "index",
+                                             "comment":  "カーソル位置"
                                          }
                                      ],
                           "comment":  "テキスト入力カーソルが移動した際のイベント",
                           "name":  "moveCursor"
                       }
                   ],
-        "FileName":  "AutoTextArea.vue"
+        "name":  "AutoTextArea"
     },
     {
         "props":  [
                       {
+                          "comment":  "絶対位置で画面上部に配置される ",
                           "default":  "false",
                           "name":  "floatingStyle",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "セクションのツールを隠す ",
                           "default":  "false",
                           "name":  "hideSection",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "パラグラフのツールを隠す ",
                           "default":  "false",
                           "name":  "hideParag",
                           "type":  "Boolean",
@@ -108,7 +361,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "EditorTools.vue"
+        "name":  "EditorTools"
     },
     {
         "props":  [
@@ -122,7 +375,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "EmptyComponent.vue"
+        "name":  "EmptyComponent"
     },
     {
         "props":  [
@@ -135,7 +388,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "ErrorComponent.vue"
+        "name":  "ErrorComponent"
     },
     {
         "props":  [
@@ -148,7 +401,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "ExplanationSummary.vue"
+        "name":  "ExplanationSummary"
     },
     {
         "props":  [
@@ -161,17 +414,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "FooterComponent.vue"
+        "name":  "FooterComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "ページタイトル ",
                           "default":  "",
                           "name":  "title",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "内容の見出し ",
                           "default":  "",
                           "name":  "subTitle",
                           "type":  "String",
@@ -191,29 +446,33 @@
                           "name":  "close"
                       }
                   ],
-        "FileName":  "HintCard.vue"
+        "name":  "HintCard"
     },
     {
         "props":  [
                       {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
                           "default":  "false",
                           "name":  "modelValue",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ページ番号 ",
                           "default":  "",
                           "name":  "page",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "初期ページ番号 ",
                           "default":  "0",
                           "name":  "defaultPage",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "戻るボタンを表示するかどうか ",
                           "default":  "true",
                           "name":  "enablePrev",
                           "type":  "Boolean",
@@ -228,8 +487,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ダイアログの状態"
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
                                          }
                                      ],
                           "comment":  "ダイアログの開閉操作が行われた際のイベント",
@@ -238,8 +497,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ページ番号"
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
                                          }
                                      ],
                           "comment":  "ページが変化した際のイベント",
@@ -253,23 +512,26 @@
                           "name":  "close"
                       }
                   ],
-        "FileName":  "HintDialog.vue"
+        "name":  "HintDialog"
     },
     {
         "props":  [
                       {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
                           "default":  "",
                           "name":  "modelValue",
                           "type":  "Boolean",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ページ番号 ",
                           "default":  "",
                           "name":  "page",
                           "type":  "Number",
                           "required":  "true"
                       },
                       {
+                          "comment":  "初期ページ番号 ",
                           "default":  "\u0027くどくどTierの使い方\u0027",
                           "name":  "title",
                           "type":  "String",
@@ -285,8 +547,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ダイアログの状態"
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
                                          }
                                      ],
                           "comment":  "ダイアログの開閉操作が行われた際のイベント",
@@ -295,8 +557,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ページ番号"
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
                                          }
                                      ],
                           "comment":  "ページが変化した際のイベント",
@@ -310,29 +572,33 @@
                           "name":  "close"
                       }
                   ],
-        "FileName":  "HomeHint.vue"
+        "name":  "HomeHint"
     },
     {
         "props":  [
                       {
+                          "comment":  " クリッピングのアスペクト比 0ならアスペクト比を強制しない 正の値ならその値でアスペクト比を強制する 負の値は禁止  ",
                           "default":  "0",
                           "name":  "aspectRatio",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "画像未選択時、枠内に表示するラベル ",
                           "default":  "\u0027画像ファイルを選択してください\u0027",
                           "name":  "label",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "クロップ後のURL(URL,Data URL, Blobに対応) ",
                           "default":  "\u0027\u0027",
                           "name":  "croppedUrl",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "クロップ画面における画像の高さの上限 ",
                           "default":  "\u0027\u0027",
                           "name":  "imgMaxHeight",
                           "type":  "String",
@@ -366,7 +632,7 @@
                           "name":  "clear"
                       }
                   ],
-        "FileName":  "ImageSelector.vue"
+        "name":  "ImageSelector"
     },
     {
         "props":  [
@@ -379,17 +645,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "LicenseList.vue"
+        "name":  "LicenseList"
     },
     {
         "props":  [
                       {
+                          "comment":  "リンクの文字列 ",
                           "default":  "",
                           "name":  "link",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  " リンクテキストが動的に変化する場合は、変化する文字列を 頻繁に変化する文字列をこちらに指定する  ",
                           "default":  "",
                           "name":  "preLink",
                           "type":  "String",
@@ -405,11 +673,12 @@
         "emits":  [
 
                   ],
-        "FileName":  "LinkComponent.vue"
+        "name":  "LinkComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "リンク文字列 ",
                           "default":  "\u0027\u0027",
                           "name":  "modelValue",
                           "type":  "String",
@@ -436,7 +705,7 @@
                           "name":  "clear"
                       }
                   ],
-        "FileName":  "LinkEditor.vue"
+        "name":  "LinkEditor"
     },
     {
         "props":  [
@@ -449,17 +718,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "LoadingComponent.vue"
+        "name":  "LoadingComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "既にセッションを持っていて、サービス連携をする場合 ",
                           "default":  "false",
                           "name":  "isUpdate",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "Twitterのボタンを表示しない ",
                           "default":  "false",
                           "name":  "disableTwitter",
                           "type":  "Boolean",
@@ -473,29 +744,33 @@
         "emits":  [
 
                   ],
-        "FileName":  "LoginComponent.vue"
+        "name":  "LoginComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "表示するアイテム ",
                           "default":  "() =\u003e []",
                           "name":  "items",
                           "type":  "Array",
                           "required":  ""
                       },
                       {
+                          "comment":  "表示名のキー名 ",
                           "default":  "",
                           "name":  "itemTitle",
                           "type":  "String as PropType\u003cstring | number\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "値のキー名 ",
                           "default":  "",
                           "name":  "itemValue",
                           "type":  "String as PropType\u003cstring | number\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "アイコンのキー名 ",
                           "default":  "",
                           "name":  "itemIcon",
                           "type":  "String as PropType\u003cstring | number\u003e",
@@ -510,15 +785,15 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "選択した番号またはオブジェクト"
+                                             "name":  "v",
+                                             "comment":  "選択した番号またはオブジェクト"
                                          }
                                      ],
                           "comment":  "選択した際のイベント",
                           "name":  "select"
                       }
                   ],
-        "FileName":  "MenuButton.vue"
+        "name":  "MenuButton"
     },
     {
         "props":  [
@@ -532,11 +807,12 @@
         "emits":  [
 
                   ],
-        "FileName":  "NotificationsComponent.vue"
+        "name":  "NotificationsComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "ユーザー情報欄に表示するタイトル ",
                           "default":  "\u0027この投稿を作成したユーザー\u0027",
                           "name":  "title",
                           "type":  "String",
@@ -550,11 +826,12 @@
         "emits":  [
 
                   ],
-        "FileName":  "PaddingComponent.vue"
+        "name":  "PaddingComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "パラグラフ ",
                           "default":  "",
                           "name":  "parag",
                           "type":  "Object as PropType\u003cReviewParagraph\u003e",
@@ -571,8 +848,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "更新内容"
+                                             "name":  "v",
+                                             "comment":  "更新内容"
                                          }
                                      ],
                           "comment":  "パラグラフのbodyが更新された際のイベント",
@@ -595,8 +872,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "カーソル位置"
+                                             "name":  "index",
+                                             "comment":  "カーソル位置"
                                          }
                                      ],
                           "comment":  "テキスト入力カーソルが移動した際のイベント",
@@ -610,7 +887,7 @@
                           "name":  "clear"
                       }
                   ],
-        "FileName":  "ParagEditorComponent.vue"
+        "name":  "ParagEditorComponent"
     },
     {
         "props":  [
@@ -624,8 +901,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "パラグラフの配列"
+                                             "name":  "v",
+                                             "comment":  "パラグラフの配列"
                                          }
                                      ],
                           "comment":  "パラグラフの配列が更新された際のイベント",
@@ -634,12 +911,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "更新内容"
+                                             "name":  "v",
+                                             "comment":  "更新内容"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフのbodyが更新された際のイベント",
@@ -648,16 +925,16 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "paragType",
-                                             "Comment":  "パラグラフのタイプ"
+                                             "name":  "paragType",
+                                             "comment":  "パラグラフのタイプ"
                                          },
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフを追加する際のイベント",
@@ -666,8 +943,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフを削除する際のイベント",
@@ -676,8 +953,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "フォーカスを取得した際のイベント",
@@ -686,8 +963,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "フォーカスを失った際のイベント",
@@ -696,55 +973,62 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "テキスト入力カーソルが移動した際のイベント",
                           "name":  "moveCursor"
                       }
                   ],
-        "FileName":  "ParagsEditorComponent.vue"
+        "name":  "ParagsEditorComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "計算済みのレビューの情報 ",
                           "default":  "",
                           "name":  "infomation",
                           "type":  "Object as PropType\u003cTierPivotInfomation\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "アイコンのサイズ ",
                           "default":  "\u002764px\u0027 as IconSize",
                           "name":  "size",
                           "type":  "String as PropType\u003cIconSize\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ホバーイベントで略式カードを表示するかどうか ",
                           "default":  "false",
                           "name":  "noHover",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ポイント表示方法を上書きする場合はこのpropを指定する ",
                           "default":  "",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューの評価項目 ",
                           "default":  "",
                           "name":  "reviewFactorParams",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "クリックするとページ内参照やカード表示をせず、レビュー単独のページに飛ぶ ",
                           "default":  "false",
                           "name":  "directLink",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "Tier調整値 ",
                           "default":  "",
                           "name":  "pullingUp",
                           "type":  "Number",
@@ -758,23 +1042,26 @@
         "emits":  [
 
                   ],
-        "FileName":  "PivotIcon.vue"
+        "name":  "PivotIcon"
     },
     {
         "props":  [
                       {
+                          "comment":  "ポイント表示方法 ",
                           "default":  "\u0027point\u0027 as ReviewPointType",
                           "name":  "modelValue",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "メニュー表示ではなく常に表示する ",
                           "default":  "false as boolean",
                           "name":  "always",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "alwaysとこのプロパティを両方trueを指定すると、v-selectで表示する ",
                           "default":  "false as boolean",
                           "name":  "isSelect",
                           "type":  "Boolean",
@@ -789,67 +1076,76 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示タイプ"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示タイプ"
                                          }
                                      ],
                           "comment":  "ポイント表示タイプの更新の際のイベント",
                           "name":  "update"
                       }
                   ],
-        "FileName":  "PointTypeSelector.vue"
+        "name":  "PointTypeSelector"
     },
     {
         "props":  [
                       {
+                          "comment":  "表示名 ",
                           "default":  "\u0027\u0027",
                           "name":  "dispName",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "アイコンのURL ",
                           "default":  "\u0027\u0027",
                           "name":  "iconUrl",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "プロフィール文 ",
                           "default":  "\u0027\u0027",
                           "name":  "profile",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "投稿したTierの数 ",
                           "default":  "0",
                           "name":  "tiersCount",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "投稿したレビューの数 ",
                           "default":  "0",
                           "name":  "reviewsCount",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "略式表示 ",
                           "default":  "false",
                           "name":  "isSummary",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "幅を減らして縦長の表示をする ",
                           "default":  "false",
                           "name":  "isVertical",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ユーザーID ",
                           "default":  "",
                           "name":  "userId",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "Twitterボタンを表示する（TwitterIdが未指定の場合はボタンは表示されない） ",
                           "default":  "false",
                           "name":  "allowTwitterLink",
                           "type":  "Boolean",
@@ -863,7 +1159,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "ProfileComponent.vue"
+        "name":  "ProfileComponent"
     },
     {
         "props":  [
@@ -882,41 +1178,47 @@
                           "name":  "close"
                       }
                   ],
-        "FileName":  "QuickReview.vue"
+        "name":  "QuickReview"
     },
     {
         "props":  [
                       {
+                          "comment":  "レーダーチャートに表示するラベルリスト ",
                           "default":  "",
                           "name":  "labels",
                           "type":  "Array as PropType\u003cstring[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レーダーチャートのデータリスト ",
                           "default":  "",
                           "name":  "dataList",
                           "type":  "Array as PropType\u003cRadarChartData[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レーダーチャートのタイトル ",
                           "default":  "",
                           "name":  "title",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "レーダーチャートのメモリ刻み ",
                           "default":  "",
                           "name":  "step",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "レーダーチャートの最小値 ",
                           "default":  "",
                           "name":  "min",
                           "type":  "Number",
                           "required":  ""
                       },
                       {
+                          "comment":  "レーダーチャートの最大値 ",
                           "default":  "",
                           "name":  "max",
                           "type":  "Number",
@@ -925,46 +1227,52 @@
                   ],
         "description":  "レーダーチャートを表示するためのコンポーネント",
         "components":  [
-                           "RadarChart"
+                           "VueChart3Radar"
                        ],
         "emits":  [
 
                   ],
-        "FileName":  "RadarChart.vue"
+        "name":  "RadarChart"
     },
     {
         "props":  [
                       {
+                          "comment":  "ツイッター表示名 ",
                           "default":  "\u0027\u0027",
                           "name":  "twitterUserName",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "Googleのメインメールアドレス ",
                           "default":  "\u0027\u0027",
                           "name":  "googleEmail",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "表示名 ",
                           "default":  "",
                           "name":  "dispName",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "プロフィール文 ",
                           "default":  "",
                           "name":  "profile",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "規約への同意 ",
                           "default":  "",
                           "name":  "isCheckedTerms",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "アイコンのURL ",
                           "default":  "",
                           "name":  "iconUrl",
                           "type":  "String",
@@ -1007,71 +1315,82 @@
                           "name":  "update:iconUrl"
                       }
                   ],
-        "FileName":  "RegistrationComponent.vue"
+        "name":  "RegistrationComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "レビューデータ ",
                           "default":  "",
                           "name":  "review",
                           "type":  "Object as PropType\u003cReview\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューの評価項目の情報 ",
                           "default":  "",
                           "name":  "reviewFactorParams",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューの表示方法 ",
                           "default":  "",
                           "name":  "displayType",
                           "type":  "String as PropType\u003cReviewDisplayType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "サンプルとして表示、trueにするとイベントが発生しない ",
                           "default":  "false",
                           "name":  "isSample",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "どこをクリックしてもレビューに飛ぶ ",
                           "default":  "false",
                           "name":  "isLink",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ヘッダ部分を表示しない ",
                           "default":  "false as boolean",
                           "name":  "noHeader",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ポイント表示方法を固定 ",
                           "default":  "false as boolean",
                           "name":  "noChangePoint",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "幅 ",
                           "default":  "\u0027100%\u0027",
                           "name":  "width",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "最小幅 ",
                           "default":  "\u0027100%\u0027",
                           "name":  "minHeight",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "ポイント表示方法を上書きする場合はこのpropを指定する ",
                           "default":  "",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "Tier調整値 ",
                           "default":  "",
                           "name":  "pullingUp",
                           "type":  "Number",
@@ -1094,12 +1413,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "レビューのインデックス"
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
                                          }
                                      ],
                           "comment":  "ポイント表示方法を更新する際のイベント",
@@ -1113,23 +1432,26 @@
                           "name":  "reload"
                       }
                   ],
-        "FileName":  "ReviewComponent.vue"
+        "name":  "ReviewComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "表示名 ",
                           "default":  "",
                           "name":  "dispName",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ユーザーID ",
                           "default":  "",
                           "name":  "userId",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "最終更新日 ",
                           "default":  "",
                           "name":  "lastWriteTime",
                           "type":  "String",
@@ -1143,17 +1465,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "ReviewHeader.vue"
+        "name":  "ReviewHeader"
     },
     {
         "props":  [
                       {
+                          "comment":  "合計値 ",
                           "default":  "",
                           "name":  "sum",
                           "type":  "Number",
                           "required":  "true"
                       },
                       {
+                          "comment":  "重みを加味した合計値 ",
                           "default":  "",
                           "name":  "average",
                           "type":  "Number",
@@ -1167,47 +1491,54 @@
         "emits":  [
 
                   ],
-        "FileName":  "ReviewLargeValue.vue"
+        "name":  "ReviewLargeValue"
     },
     {
         "props":  [
                       {
+                          "comment":  "レビューと評点情報のペア ",
                           "default":  "",
                           "name":  "pairs",
                           "type":  "Array as PropType\u003cReviewWithParams[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ヘッダ部分を表示しない ",
                           "default":  "false as boolean",
                           "name":  "noHeader",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ポイント表示方法を固定 ",
                           "default":  "false as boolean",
                           "name":  "noChangePoint",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "サンプルとして表示、trueにするとイベントが発生しない ",
                           "default":  "false",
                           "name":  "isSample",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "レビューをクリックすると単独のレビューページに飛ぶ ",
                           "default":  "false",
                           "name":  "isLink",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "レビューの表示方法 ",
                           "default":  "",
                           "name":  "displayType",
                           "type":  "String as PropType\u003cReviewDisplayType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ポイント表示方法を上書きする場合はこのpropを指定する ",
                           "default":  "",
                           "name":  "pointTypes",
                           "type":  "Array as PropType\u003cReviewPointType[]\u003e",
@@ -1223,12 +1554,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "レビューのインデックス"
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
                                          }
                                      ],
                           "comment":  "ポイント表示方法を更新する際のイベント",
@@ -1242,23 +1573,26 @@
                           "name":  "reload"
                       }
                   ],
-        "FileName":  "ReviewList.vue"
+        "name":  "ReviewList"
     },
     {
         "props":  [
                       {
+                          "comment":  "レビューと評点情報のペアの配列 ",
                           "default":  "",
                           "name":  "pairs",
                           "type":  "Array as PropType\u003cReviewWithParams[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ユーザーID ",
                           "default":  "",
                           "name":  "userId",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "読み込み中の表示をする ",
                           "default":  "false",
                           "name":  "isLoading",
                           "type":  "Boolean",
@@ -1282,8 +1616,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "pairs",
-                                             "Comment":  "レビューと評点情報のペアの配列"
+                                             "name":  "pairs",
+                                             "comment":  "レビューと評点情報のペアの配列"
                                          }
                                      ],
                           "comment":  "レビューペアの配列を追加するイベント",
@@ -1292,25 +1626,27 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "pairs",
-                                             "Comment":  "レビューと評点情報のペアの配列"
+                                             "name":  "pairs",
+                                             "comment":  "レビューと評点情報のペアの配列"
                                          }
                                      ],
                           "comment":  "レビューペアの配列を更新するイベント",
                           "name":  "updateReviewsPair"
                       }
                   ],
-        "FileName":  "ReviewSearch.vue"
+        "name":  "ReviewSearch"
     },
     {
         "props":  [
                       {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
                           "default":  "",
                           "name":  "modelValue",
                           "type":  "Boolean",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ページ番号 ",
                           "default":  "",
                           "name":  "page",
                           "type":  "Number",
@@ -1326,8 +1662,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ダイアログの状態"
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
                                          }
                                      ],
                           "comment":  "ダイアログの開閉操作が行われた際のイベント",
@@ -1336,37 +1672,41 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ページ番号"
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
                                          }
                                      ],
                           "comment":  "ページが変化した際のイベント",
                           "name":  "update:page"
                       }
                   ],
-        "FileName":  "ReviewSettingsHint.vue"
+        "name":  "ReviewSettingsHint"
     },
     {
         "props":  [
                       {
+                          "comment":  "評価ポイントを指定する(元の数値) ",
                           "default":  "",
                           "name":  "value",
                           "type":  "Number",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ポイント表示タイプ ",
                           "default":  "",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ランク表示の際の表示サイズ ",
                           "default":  "\u0027normal\u0027 as PointDisplaySize",
                           "name":  "displaySize",
                           "type":  "String as PropType\u003cPointDisplaySize\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ランク表示をコンパクトに表示する ",
                           "default":  "false as boolean",
                           "name":  "compact",
                           "type":  "Boolean",
@@ -1380,23 +1720,26 @@
         "emits":  [
 
                   ],
-        "FileName":  "ReviewValueDisplay.vue"
+        "name":  "ReviewValueDisplay"
     },
     {
         "props":  [
                       {
+                          "comment":  "レビュー評点や情報 ",
                           "default":  "",
                           "name":  "factors",
                           "type":  "Array as PropType\u003cReviewFactor[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューの表示方法 ",
                           "default":  "",
                           "name":  "displayType",
                           "type":  "String as PropType\u003cReviewDisplayType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ポイント表示方法 ",
                           "default":  "",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
@@ -1411,37 +1754,41 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          }
                                      ],
                           "comment":  "ポイント表示方法の更新イベント",
                           "name":  "updatePointType"
                       }
                   ],
-        "FileName":  "ReviewValues.vue"
+        "name":  "ReviewValues"
     },
     {
         "props":  [
                       {
+                          "comment":  "レビューデータ ",
                           "default":  "",
                           "name":  "review",
                           "type":  "Object as PropType\u003cReview\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューの評価項目 ",
                           "default":  "",
                           "name":  "params",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューポイントの表現方法 ",
                           "default":  "",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "Tier調整値 ",
                           "default":  "",
                           "name":  "pullingUp",
                           "type":  "Number",
@@ -1456,12 +1803,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "レビュー評点"
+                                             "name":  "v",
+                                             "comment":  "レビュー評点"
                                          },
                                          {
-                                             "Name":  "i",
-                                             "Comment":  "レビュー評点のインデックス"
+                                             "name":  "i",
+                                             "comment":  "レビュー評点のインデックス"
                                          }
                                      ],
                           "comment":  "レビュー評点の更新イベント",
@@ -1470,29 +1817,31 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "レビュー情報"
+                                             "name":  "v",
+                                             "comment":  "レビュー情報"
                                          },
                                          {
-                                             "Name":  "i",
-                                             "Comment":  "レビュー情報のインデックス"
+                                             "name":  "i",
+                                             "comment":  "レビュー情報のインデックス"
                                          }
                                      ],
                           "comment":  "レビュー情報の更新イベント",
                           "name":  "updateInfo"
                       }
                   ],
-        "FileName":  "ReviewValuesSettings.vue"
+        "name":  "ReviewValuesSettings"
     },
     {
         "props":  [
                       {
+                          "comment":  "検索文字列 ",
                           "default":  "",
                           "name":  "modelValue",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ソート順の選択肢 ",
                           "default":  "",
                           "name":  "sortItems",
                           "type":  "Array as PropType\u003cSelectObject[]\u003e",
@@ -1506,17 +1855,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "SearchComponent.vue"
+        "name":  "SearchComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "セクション ",
                           "default":  "",
                           "name":  "section",
                           "type":  "Object as PropType\u003cReviewSection\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "表示方法 ",
                           "default":  "\u0027all\u0027",
                           "name":  "displayType",
                           "type":  "String as PropType\u003cReviewDisplayType\u003e",
@@ -1530,17 +1881,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "SectionComponent.vue"
+        "name":  "SectionComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "セクション配列 ",
                           "default":  "",
                           "name":  "sections",
                           "type":  "Object as PropType\u003cReviewSection[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "パラグラフのみ編集可能にし、セクションの新規追加を禁止 ",
                           "default":  "false",
                           "name":  "noSection",
                           "type":  "Boolean",
@@ -1557,12 +1910,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "セクション"
+                                             "name":  "v",
+                                             "comment":  "セクション"
                                          },
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          }
                                      ],
                           "comment":  "セクションを更新するイベント",
@@ -1571,12 +1924,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "タイトル"
+                                             "name":  "v",
+                                             "comment":  "タイトル"
                                          },
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          }
                                      ],
                           "comment":  "セクションのタイトルを更新するイベント",
@@ -1585,12 +1938,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "パラグラフの配列"
+                                             "name":  "v",
+                                             "comment":  "パラグラフの配列"
                                          },
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフの配列が更新された際のイベント",
@@ -1599,16 +1952,16 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "更新内容"
+                                             "name":  "v",
+                                             "comment":  "更新内容"
                                          },
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフのbodyが更新された際のイベント",
@@ -1617,8 +1970,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          }
                                      ],
                           "comment":  "セクションを追加する際のイベント",
@@ -1627,16 +1980,16 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "paragType",
-                                             "Comment":  "パラグラフのタイプ"
+                                             "name":  "paragType",
+                                             "comment":  "パラグラフのタイプ"
                                          },
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフを追加する際のイベント",
@@ -1645,12 +1998,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフを削除する際のイベント",
@@ -1659,8 +2012,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          }
                                      ],
                           "comment":  "セクションが削除された際のイベント",
@@ -1669,12 +2022,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "フォーカスを取得した際のイベント",
@@ -1683,12 +2036,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "sectionIndex",
-                                             "Comment":  "セクションのインデックス"
+                                             "name":  "sectionIndex",
+                                             "comment":  "セクションのインデックス"
                                          },
                                          {
-                                             "Name":  "paragIndex",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "paragIndex",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "フォーカスを取得した際のイベント",
@@ -1723,29 +2076,33 @@
                           "name":  "openHint"
                       }
                   ],
-        "FileName":  "SectionEditorComponent.vue"
+        "name":  "SectionEditorComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "タイトル ",
                           "default":  "\u0027\u0027",
                           "name":  "title",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "サブタイトル ",
                           "default":  "\u0027\u0027",
                           "name":  "subtitle",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "説明文 ",
                           "default":  "\u0027\u0027",
                           "name":  "text",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "ライセンス全文 ",
                           "default":  "",
                           "name":  "license",
                           "type":  "String",
@@ -1759,11 +2116,12 @@
         "emits":  [
 
                   ],
-        "FileName":  "ServiceColmun.vue"
+        "name":  "ServiceColmun"
     },
     {
         "props":  [
                       {
+                          "comment":  "セッションが無い場合はエラー表示してwelcomeページに移動する ",
                           "default":  "false",
                           "name":  "noSessionError",
                           "type":  "Boolean",
@@ -1777,17 +2135,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "SessionChecker.vue"
+        "name":  "SessionChecker"
     },
     {
         "props":  [
                       {
+                          "comment":  "シェアするリンク ",
                           "default":  "",
                           "name":  "link",
                           "type":  "String",
                           "required":  "true"
                       },
                       {
+                          "comment":  "シェアする本文 ",
                           "default":  "",
                           "name":  "body",
                           "type":  "String",
@@ -1801,95 +2161,110 @@
         "emits":  [
 
                   ],
-        "FileName":  "ShareButtons.vue"
+        "name":  "ShareButtons"
     },
     {
         "props":  [
                       {
+                          "comment":  "ダイアログの表示状態 ",
                           "default":  "",
                           "name":  "modelValue",
                           "type":  "Boolean",
                           "required":  "true"
                       },
                       {
+                          "comment":  "カードのタイトル ",
                           "default":  "",
                           "name":  "title",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "カードの幅 ",
                           "default":  "",
                           "name":  "width",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "カードの高さ ",
                           "default":  "",
                           "name":  "height",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "本文の前に付加するテキスト ",
                           "default":  "",
                           "name":  "prependText",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "本文の前に付加する画像 ",
                           "default":  "",
                           "name":  "prependImageSrc",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "本文 ",
                           "default":  "",
                           "name":  "text",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "画像 ",
                           "default":  "",
                           "name":  "appendImageSrc",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "本文の後に付加するテキスト ",
                           "default":  "",
                           "name":  "appendText",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "ダイアログの外側をクリックしてもダイアログがとじないようにする ",
                           "default":  "false",
                           "name":  "persistent",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "フルスクリーン表示する ",
                           "default":  "false",
                           "name":  "fullscreen",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "上部に閉じるボタンを表示する ",
                           "default":  "true",
                           "name":  "showTopCloseButton",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "下部に閉じるボタンを表示する ",
                           "default":  "true",
                           "name":  "showCloseButton",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "下部にOKボタンを表示する ",
                           "default":  "true",
                           "name":  "showSubmitButton",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "閉じるボタンのテキスト ",
                           "default":  "\u0027閉じる\u0027",
                           "name":  "closeButtonText",
                           "type":  "String",
@@ -1918,19 +2293,20 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ダイアログの状態"
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
                                          }
                                      ],
                           "comment":  "ダイアログの開閉操作が行われた際のイベント",
                           "name":  "update:modelValue"
                       }
                   ],
-        "FileName":  "SimpleDialog.vue"
+        "name":  "SimpleDialog"
     },
     {
         "props":  [
                       {
+                          "comment":  "Tierデータ ",
                           "default":  "",
                           "name":  "tier",
                           "type":  "Object as PropType\u003cTier\u003e",
@@ -1944,7 +2320,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "SimpleTier.vue"
+        "name":  "SimpleTier"
     },
     {
         "props":  [
@@ -1957,7 +2333,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "Template.vue"
+        "name":  "Template"
     },
     {
         "props":  [
@@ -1970,41 +2346,47 @@
         "emits":  [
 
                   ],
-        "FileName":  "TermOfServise.vue"
+        "name":  "TermOfServise"
     },
     {
         "props":  [
                       {
+                          "comment":  "Tierデータ ",
                           "default":  "",
                           "name":  "tier",
                           "type":  "Object as PropType\u003cTier\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "サンプルとして表示、trueにするとイベントが発生しない ",
                           "default":  "false",
                           "name":  "isSample",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "どこをクリックしてもTierに飛ぶ ",
                           "default":  "false",
                           "name":  "isLink",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "表示方法 ",
                           "default":  "",
                           "name":  "displayType",
                           "type":  "String as PropType\u003cReviewDisplayType\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ヘッダ部分を表示しない ",
                           "default":  "false as boolean",
                           "name":  "noHeader",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "・・・のメニューアイコンを表示しない ",
                           "default":  "false as boolean",
                           "name":  "noMenuIcon",
                           "type":  "Boolean",
@@ -2025,12 +2407,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "レビューのインデックス"
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
                                          }
                                      ],
                           "comment":  "ポイント表示方法を更新する際のイベント",
@@ -2044,17 +2426,19 @@
                           "name":  "reload"
                       }
                   ],
-        "FileName":  "TierComponent.vue"
+        "name":  "TierComponent"
     },
     {
         "props":  [
                       {
+                          "comment":  "Tier配列 ",
                           "default":  "",
                           "name":  "tiers",
                           "type":  "Array as PropType\u003cTier[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "Tierをクリックすると単独のTierページに飛ぶ ",
                           "default":  "false",
                           "name":  "isLink",
                           "type":  "Boolean",
@@ -2070,12 +2454,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "レビューのインデックス"
+                                             "name":  "index",
+                                             "comment":  "レビューのインデックス"
                                          }
                                      ],
                           "comment":  "ポイント表示方法を更新する際のイベント",
@@ -2089,59 +2473,68 @@
                           "name":  "reload"
                       }
                   ],
-        "FileName":  "TierList.vue"
+        "name":  "TierList"
     },
     {
         "props":  [
                       {
+                          "comment":  "Tierデータ ",
                           "default":  "",
                           "name":  "tier",
                           "type":  "Object as PropType\u003cTier\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューデータの配列 ",
                           "default":  "() =\u003e [] as PropType\u003cReview[]\u003e",
                           "name":  "reviews",
                           "type":  "Array as PropType\u003cReview[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "レビューの評価項目 ",
                           "default":  "() =\u003e [] as ReviewFactorParam[]",
                           "name":  "params",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ポイント表示方法 ",
                           "default":  "\u0027point\u0027 as ReviewPointType",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "・・・のメニューアイコンを表示しない ",
                           "default":  "false",
                           "name":  "noMenuIcon",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierのテーマ ",
                           "default":  "\u0027light\u0027",
                           "name":  "theme",
                           "type":  "String as PropType\u003cRankingTheme\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ツールバーを隠す ",
                           "default":  "false",
                           "name":  "hideBar",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "クリックするとレビュー単独のページに飛ぶ ",
                           "default":  "false",
                           "name":  "directLink",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierのアイコンのサイズ ",
                           "default":  "\u002748px\u0027 as IconSize",
                           "name":  "iconSize",
                           "type":  "String as PropType\u003cIconSize\u003e",
@@ -2164,8 +2557,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          }
                                      ],
                           "comment":  "ポイント表示方法を更新する際のイベント",
@@ -2174,8 +2567,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "テーマ"
+                                             "name":  "value",
+                                             "comment":  "テーマ"
                                          }
                                      ],
                           "comment":  "ピボットTierのテーマを更新するイベント",
@@ -2184,8 +2577,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "アイコンサイズ"
+                                             "name":  "value",
+                                             "comment":  "アイコンサイズ"
                                          }
                                      ],
                           "comment":  "ピボットTierのアイコンサイズを更新するイベント",
@@ -2194,67 +2587,76 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "テキストサイズ"
+                                             "name":  "value",
+                                             "comment":  "テキストサイズ"
                                          }
                                      ],
                           "comment":  "ピボットTierのテキストサイズを更新するイベント",
                           "name":  "update:textSize"
                       }
                   ],
-        "FileName":  "TierRanking.vue"
+        "name":  "TierRanking"
     },
     {
         "props":  [
                       {
+                          "comment":  "ピボット済の計算済みレビューリスト ",
                           "default":  "() =\u003e [] as TierPivotInfomation[][]",
                           "name":  "tierPivotList",
                           "type":  "Array as PropType\u003cTierPivotInfomation[][]\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ポイント表示タイプ ",
                           "default":  "\u0027point\u0027 as ReviewPointType",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierのアイコンのサイズ ",
                           "default":  "\u002748px\u0027",
                           "name":  "iconSize",
                           "type":  "String as PropType\u003cIconSize\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierの評点のサイズ ",
                           "default":  "\u0027large2\u0027",
                           "name":  "textSize",
                           "type":  "String as PropType\u003cPointDisplaySize\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "レビューの評価項目 ",
                           "default":  "() =\u003e [] as ReviewFactorParam[]",
                           "name":  "params",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierのテーマ ",
                           "default":  "\u0027light\u0027",
                           "name":  "theme",
                           "type":  "String as PropType\u003cRankingTheme\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierの幅 ",
                           "default":  "",
                           "name":  "width",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "クリックするとレビュー単独のページに飛ぶ ",
                           "default":  "false",
                           "name":  "directLink",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "Tier調整値 ",
                           "default":  "",
                           "name":  "pullingUp",
                           "type":  "Number",
@@ -2269,7 +2671,7 @@
         "emits":  [
 
                   ],
-        "FileName":  "TierRankingPivot.vue"
+        "name":  "TierRankingPivot"
     },
     {
         "props":  [
@@ -2283,17 +2685,19 @@
         "emits":  [
 
                   ],
-        "FileName":  "TierReviewSearch.vue"
+        "name":  "TierReviewSearch"
     },
     {
         "props":  [
                       {
+                          "comment":  "Tierデータの配列 ",
                           "default":  "",
                           "name":  "tiers",
                           "type":  "Array as PropType\u003cTier[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ユーザーID ",
                           "default":  "",
                           "name":  "userId",
                           "type":  "String",
@@ -2317,8 +2721,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "pairs",
-                                             "Comment":  "Tierデータの配列"
+                                             "name":  "pairs",
+                                             "comment":  "Tierデータの配列"
                                          }
                                      ],
                           "comment":  "Tierデータの配列を追加するイベント",
@@ -2327,31 +2731,34 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "pairs",
-                                             "Comment":  "Tierデータの配列"
+                                             "name":  "pairs",
+                                             "comment":  "Tierデータの配列"
                                          }
                                      ],
                           "comment":  "Tierデータの配列を更新するイベント",
                           "name":  "updateTiers"
                       }
                   ],
-        "FileName":  "TierSearch.vue"
+        "name":  "TierSearch"
     },
     {
         "props":  [
                       {
+                          "comment":  "Tierデータ ",
                           "default":  "",
                           "name":  "modelValue",
                           "type":  "Object as PropType\u003cTier\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "もとのTierデータ ",
                           "default":  "",
                           "name":  "orgTier",
                           "type":  "Object as PropType\u003cTier\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ポイント表示方法 ",
                           "default":  "",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
@@ -2376,8 +2783,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "Tier名"
+                                             "name":  "value",
+                                             "comment":  "Tier名"
                                          }
                                      ],
                           "comment":  "Tier名を更新する際のイベント",
@@ -2393,8 +2800,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示方法"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示方法"
                                          }
                                      ],
                           "comment":  "ポイント表示方法を更新する際のイベント",
@@ -2403,12 +2810,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "名前"
+                                             "name":  "value",
+                                             "comment":  "名前"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目の名前を更新する際のイベント",
@@ -2417,12 +2824,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "true ポイント、false 情報"
+                                             "name":  "value",
+                                             "comment":  "true ポイント、false 情報"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目の種類を更新する際のイベント",
@@ -2431,12 +2838,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "重み"
+                                             "name":  "value",
+                                             "comment":  "重み"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目の重みを更新する際のイベント",
@@ -2452,8 +2859,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "項目の削除イベント",
@@ -2462,12 +2869,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "type",
-                                             "Comment":  "パラグラフタイプ"
+                                             "name":  "type",
+                                             "comment":  "パラグラフタイプ"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフの追加イベント",
@@ -2476,8 +2883,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフの削除イベント",
@@ -2486,12 +2893,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "パラグラフのタイプ"
+                                             "name":  "value",
+                                             "comment":  "パラグラフのタイプ"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフのタイプを削除する際のイベント",
@@ -2500,12 +2907,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "説明文"
+                                             "name":  "value",
+                                             "comment":  "説明文"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "パラグラフのインデックス"
+                                             "name":  "index",
+                                             "comment":  "パラグラフのインデックス"
                                          }
                                      ],
                           "comment":  "パラグラフの説明文を更新する際のイベント",
@@ -2514,8 +2921,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "評価項目配列"
+                                             "name":  "value",
+                                             "comment":  "評価項目配列"
                                          }
                                      ],
                           "comment":  "評価項目配列の更新イベント",
@@ -2524,8 +2931,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "Tier調整値"
+                                             "name":  "v",
+                                             "comment":  "Tier調整値"
                                          }
                                      ],
                           "comment":  "Tier調整値更新イベント(値を上げるとレビューが全体的に下位に位置しやすくなる)",
@@ -2534,25 +2941,27 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "Tier調整値"
+                                             "name":  "v",
+                                             "comment":  "Tier調整値"
                                          }
                                      ],
                           "comment":  "Tier調整値更新イベント(値を上げるとレビューが全体的に上位に位置しやすくなる)",
                           "name":  "updatePullingDown"
                       }
                   ],
-        "FileName":  "TierSettings.vue"
+        "name":  "TierSettings"
     },
     {
         "props":  [
                       {
+                          "comment":  "ダイアログが開いてる状態かどうか ",
                           "default":  "",
                           "name":  "modelValue",
                           "type":  "Boolean",
                           "required":  "true"
                       },
                       {
+                          "comment":  "ページ番号 ",
                           "default":  "",
                           "name":  "page",
                           "type":  "Number",
@@ -2568,8 +2977,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ダイアログの状態"
+                                             "name":  "v",
+                                             "comment":  "ダイアログの状態"
                                          }
                                      ],
                           "comment":  "ダイアログの開閉操作が行われた際のイベント",
@@ -2578,15 +2987,15 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "v",
-                                             "Comment":  "ページ番号"
+                                             "name":  "v",
+                                             "comment":  "ページ番号"
                                          }
                                      ],
                           "comment":  "ページが変化した際のイベント",
                           "name":  "update:page"
                       }
                   ],
-        "FileName":  "TierSettingsHint.vue"
+        "name":  "TierSettingsHint"
     },
     {
         "props":  [
@@ -2599,47 +3008,54 @@
         "emits":  [
 
                   ],
-        "FileName":  "TierToEmbedded.vue"
+        "name":  "TierToEmbedded"
     },
     {
         "props":  [
                       {
+                          "comment":  "ピボット済の計算済みレビューリスト ",
                           "default":  "() =\u003e [] as TierPivotInfomation[][]",
                           "name":  "tierPivotList",
                           "type":  "Array as PropType\u003cTierPivotInfomation[][]\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ポイント表示タイプ ",
                           "default":  "\u0027point\u0027 as ReviewPointType",
                           "name":  "pointType",
                           "type":  "String as PropType\u003cReviewPointType\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "レビューの評価項目 ",
                           "default":  "() =\u003e [] as ReviewFactorParam[]",
                           "name":  "params",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierのテーマ ",
                           "default":  "\u0027light\u0027",
                           "name":  "theme",
                           "type":  "String as PropType\u003cRankingTheme\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierのアイコンサイズ ",
                           "default":  "\u002764px\u0027",
                           "name":  "iconSize",
                           "type":  "String",
                           "required":  ""
                       },
                       {
+                          "comment":  "ピボットTierの評点のサイズ ",
                           "default":  "\u0027large2\u0027",
                           "name":  "textSize",
                           "type":  "String as PropType\u003cPointDisplaySize\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "Tier調整値 ",
                           "default":  "",
                           "name":  "pullingUp",
                           "type":  "Number",
@@ -2655,8 +3071,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "テーマ"
+                                             "name":  "value",
+                                             "comment":  "テーマ"
                                          }
                                      ],
                           "comment":  "ピボットTierのテーマを更新する際のイベント",
@@ -2665,8 +3081,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "ポイント表示タイプ"
+                                             "name":  "value",
+                                             "comment":  "ポイント表示タイプ"
                                          }
                                      ],
                           "comment":  "ポイント表示タイプを更新する際のイベント",
@@ -2675,8 +3091,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "アイコンサイズ"
+                                             "name":  "value",
+                                             "comment":  "アイコンサイズ"
                                          }
                                      ],
                           "comment":  "ピボットTierのアイコンサイズを変更する際のイベント",
@@ -2685,43 +3101,48 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "評点のサイズ"
+                                             "name":  "value",
+                                             "comment":  "評点のサイズ"
                                          }
                                      ],
                           "comment":  "ピボットTierの評点のサイズを変更する際のイベント",
                           "name":  "update:textSize"
                       }
                   ],
-        "FileName":  "TierToPicture.vue"
+        "name":  "TierToPicture"
     },
     {
         "props":  [
                       {
+                          "comment":  "評価項目の配列 ",
                           "default":  "() =\u003e [] as PropType\u003cReviewFactorParam[]\u003e",
                           "name":  "params",
                           "type":  "Array as PropType\u003cReviewFactorParam[]\u003e",
                           "required":  "true"
                       },
                       {
+                          "comment":  "変更不可 ",
                           "default":  "false",
                           "name":  "readonly",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "タイプが「情報」の場合に適用する入力規則 ",
                           "default":  "undefined",
                           "name":  "rules",
                           "type":  "Array as PropType\u003c((v: string) =\u003e string | boolean)[]\u003e",
                           "required":  ""
                       },
                       {
+                          "comment":  "タイプが「ポイント」の項目を一つ以上の含めることを強制する ",
                           "default":  "false",
                           "name":  "requiredPoint",
                           "type":  "Boolean",
                           "required":  ""
                       },
                       {
+                          "comment":  "評価項目の合計数上限 ",
                           "default":  "16",
                           "name":  "maxLen",
                           "type":  "Number",
@@ -2736,8 +3157,8 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "評価項目の配列"
+                                             "name":  "value",
+                                             "comment":  "評価項目の配列"
                                          }
                                      ],
                           "comment":  "評価項目の配列を更新する際のイベント",
@@ -2746,12 +3167,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "評価項目の名前"
+                                             "name":  "value",
+                                             "comment":  "評価項目の名前"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目の名前を更新する際のイベント",
@@ -2760,12 +3181,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "タイプ「ポイント」かどうか"
+                                             "name":  "value",
+                                             "comment":  "タイプ「ポイント」かどうか"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目のタイプを更新する際のイベント",
@@ -2774,12 +3195,12 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "value",
-                                             "Comment":  "重み"
+                                             "name":  "value",
+                                             "comment":  "重み"
                                          },
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目の重みを更新する際のイベント",
@@ -2795,15 +3216,15 @@
                       {
                           "params":  [
                                          {
-                                             "Name":  "index",
-                                             "Comment":  "評価項目のインデックス"
+                                             "name":  "index",
+                                             "comment":  "評価項目のインデックス"
                                          }
                                      ],
                           "comment":  "評価項目を削除するイベント",
                           "name":  "removeItem"
                       }
                   ],
-        "FileName":  "WeightSettings.vue"
+        "name":  "WeightSettings"
     },
     {
         "props":  [
@@ -2816,250 +3237,6 @@
         "emits":  [
 
                   ],
-        "FileName":  "WelcomeCarousel.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "このサイトの技術について紹介するページ",
-        "components":  [
-                           "LicenseList",
-                           "ServiceColmun"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "AboutView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "サービス連携の際、リダイレクト先に指定するページ",
-        "components":  [
-
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "AuthView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "ユーザーのホーム画面",
-        "components":  [
-                           "ProfileComponent",
-                           "SessionChecker",
-                           "ErrorComponent",
-                           "PaddingComponent",
-                           "LoadingComponent",
-                           "TierReviewSearch"
-                       ],
-        "emits":  [
-                      {
-                          "params":  [
-
-                                     ],
-                          "comment":  "",
-                          "name":  "reload"
-                      }
-                  ],
-        "FileName":  "HomeView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "来訪するとログアウト処理が走るページ",
-        "components":  [
-                           "SessionChecker",
-                           "LoginComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "LoginView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "ログアウト時に使用するページ",
-        "components":  [
-
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "LogoutView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "Not Foundを表示",
-        "components":  [
-                           "ErrorComponent",
-                           "SessionChecker"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "NotFoundView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "通知情報を一覧できるページ",
-        "components":  [
-                           "PaddingComponent",
-                           "SessionChecker",
-                           "NotificationsComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "NotificationsView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "ユーザー登録のためのページ",
-        "components":  [
-                           "SessionChecker",
-                           "RegistrationComponent",
-                           "LoadingComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "RegistrationView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "レビューを新規作成/編集するページ",
-        "components":  [
-                           "SessionChecker",
-                           "ReviewValuesSettings",
-                           "ImageSelector",
-                           "ReviewComponent",
-                           "SectionEditorComponent",
-                           "EditorTools",
-                           "LoadingComponent",
-                           "ReviewSettingsHint"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "ReviewSettingsView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "レビューを表示するページ",
-        "components":  [
-                           "ReviewComponent",
-                           "SimpleTier",
-                           "ErrorComponent",
-                           "SessionChecker",
-                           "PaddingComponent",
-                           "MenuButton",
-                           "SimpleDialog",
-                           "LoadingComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "ReviewView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "ユーザー設定",
-        "components":  [
-                           "SessionChecker",
-                           "RegistrationComponent",
-                           "SimpleDialog",
-                           "LoginComponent",
-                           "LoadingComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "SettingsView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "外部のサイトから埋め込みタグでTierを表示するためのページ",
-        "components":  [
-                           "ErrorComponent",
-                           "LoadingComponent",
-                           "TierRanking"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "TierEmbeddedView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "Tierを新規作成/編集するページ",
-        "components":  [
-                           "SessionChecker",
-                           "TierSettings",
-                           "LoadingComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "TierSettingsView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "Tierを表示するページ",
-        "components":  [
-                           "TierComponent",
-                           "ErrorComponent",
-                           "SessionChecker",
-                           "PaddingComponent",
-                           "MenuButton",
-                           "SimpleDialog",
-                           "LoadingComponent"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "TierView.vue"
-    },
-    {
-        "props":  [
-
-                  ],
-        "description":  "このシステムについて説明するページ",
-        "components":  [
-                           "WelcomeCarousel",
-                           "ExplanationSummary",
-                           "SimpleDialog",
-                           "SessionChecker"
-                       ],
-        "emits":  [
-
-                  ],
-        "FileName":  "WelcomeView.vue"
+        "name":  "WelcomeCarousel"
     }
 ]

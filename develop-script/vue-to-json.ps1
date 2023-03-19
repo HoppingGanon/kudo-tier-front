@@ -1,3 +1,3 @@
 . "${PSScriptRoot}\vuedoc\vuedoc.ps1"
 
-VueDoc-ToJson -Path "${PSScriptRoot}\.." -OutputPath "${PSScriptRoot}\..\doc\components\index.json"
+VueDoc-ToJson -Path "${PSScriptRoot}\..\src" -OutputPath "${PSScriptRoot}\json-diagram\src\assets\components-list.json"

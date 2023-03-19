@@ -52,8 +52,8 @@ function VueDoc-ProcessFile ([String]$Source) {
                 $commentParamDiv = $comment.SubString(7).IndexOf(' ')
                 if ($commentParamDiv -ne -1) {
                     $paramsList.Add((New-Object PSCustomObject -Property @{
-                        Name=$comment.SubString(7).SubString(0, $commentParamDiv).Replace("`r", '')
-                        Comment=$comment.SubString(7).SubString($commentParamDiv).Replace("`r", '').Trim(' ')
+                        name=$comment.SubString(7).SubString(0, $commentParamDiv).Replace("`r", '')
+                        comment=$comment.SubString(7).SubString($commentParamDiv).Replace("`r", '').Trim(' ')
                     })) | Out-Null
                 }
             } else {
@@ -86,7 +86,12 @@ function VueDoc-ProcessFile ([String]$Source) {
         $obj = VueDoc-GetWord $PropsRaw.Substring($num) " " "`n    },"
         
         $CommentObj = (VueDoc-GetWord $obj.Str "/**" "*/")
-        $Comment = $CommentObj.Str.Trim(' ')
+
+        $Comment = ''
+        $CommentObj.Str.Split("`n") | %{
+            $Comment += $_.Trim(' ').Trim('*').Trim(' ')
+            $Comment += ' '
+        }
 
         if ($CommentObj.Num -eq -1) {
             $NameBlock = $obj.Str
@@ -105,6 +110,7 @@ function VueDoc-ProcessFile ([String]$Source) {
                 type = $Type.Replace("`r", '')
                 default = $Default.Replace("`r", '')
                 required = $Required.Replace("`r", '')
+                comment = $Comment.Replace("`r", '')
             })) | Out-Null
         }
 
@@ -129,11 +135,81 @@ function VueDoc-ToJson ($Path = '', $OutputPath = '') {
     }
 
     $ary = New-Object Collections.ArrayList
-    ls $Path -Recurse | ?{$_.FullName -notmatch 'node_modules'} | ?{$_.Extension -eq  '.vue' -and ($_.FullName -match '.*\\views\\.*\.vue$' -or $_.FullName -match '.*\\components\\.*\.vue$')} | %{
+    #  -or '
+    ls "${Path}\views" | ?{$_.FullName -notmatch 'node_modules'} | ?{$_.Extension -eq  '.vue'} | %{
         $f = VueDoc-ProcessFile (Get-Content $_.FullName -Raw -Encoding UTF8)
-        $f | Add-Member 'FileName' $_.Name
+        $f | Add-Member 'name' $_.BaseName
+        $ary.Add($f) | Out-Null
+    }
+    ls "${Path}\components" | ?{$_.FullName -notmatch 'node_modules'} | ?{$_.Extension -eq  '.vue'} | %{
+        $f = VueDoc-ProcessFile (Get-Content $_.FullName -Raw -Encoding UTF8)
+        $f | Add-Member 'name' $_.BaseName
         $ary.Add($f) | Out-Null
     }
     $ary | ConvertTo-Json -Depth 10 | Out-File -Encoding utf8 $OutputPath
+}
+
+function VueDoc-ToNoml ($Path = '', $OutputPath = '') {
+    if ($Path -eq '') {
+        $Path = "$((pwd).Path)\vuedoc.json"
+    }
+    if ($OutputPath -eq '') {
+        $OutputPath = "$((pwd).Path)\vuedoc.noml"
+    }
+
+    $sb = New-Object Text.StringBuilder
+
+    $list = Get-Content $Path -Raw | ConvertFrom-Json
+    $list | %{
+        if ($_.Name -match '.*View') {
+            $sb.Append("[<view> $($_.Name)") | Out-Null
+        } else {
+            $sb.Append("[<component> $($_.Name)") | Out-Null
+        }
+        
+        
+        $sb.Append("|$($_.description)") | Out-Null
+
+        if ($_.props.Length -ne 0) {
+            $sb.Append('|ypropsz;') | Out-Null
+            $i = 0
+            $props = $_.props
+            $_.props | %{
+                $sb.Append($_.Name) | Out-Null
+                if ($i -lt ($props.Length - 1)) {
+                    $sb.Append(';') | Out-Null
+                }
+                $i++
+            }
+        }
+        
+        if ($_.emits.Length -ne 0) {
+            $sb.Append('|yemitsz;') | Out-Null
+            $i = 0
+            $emits = $_.emits
+            $_.emits | %{
+                $sb.Append($_.Name) | Out-Null
+                if ($i -lt ($emits.Length - 1)) {
+                    $sb.Append(';') | Out-Null
+                }
+                $i++
+            }
+        }
+        
+        $sb.Append("]`n") | Out-Null
+    }
+    $list | %{
+        $to = $_.Name
+        $_.components | %{
+            $from = $_
+            $sb.Append("[${from}]->[${to}]`n") | Out-Null
+        }
+    }
+    
+    $sb.Append("#.view: fill=#3D3`n") | Out-Null
+    $sb.Append("#.component: fill=#DD3`n") | Out-Null
+    $sb.Append("#background: transparent`n") | Out-Null
+
+    $sb.ToString() | Out-File -Encoding utf8 $OutputPath
 }
 
