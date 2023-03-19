@@ -315,12 +315,18 @@ export class ReviewFunc {
    * @returns 調整後のポイント
    */
   static ajustPoint (point: number, pullingUp: number, pullingDown: number, orgMin: number, orgMax: number) {
-    const min = orgMin + pullingDown
     const max = orgMax - pullingUp
-    const size = max - min
-    const blank = orgMax - min
-    const result = Math.min((Math.max(point, min) - min) * (blank / size) + min, max)
-    return result
+    const min = orgMin + pullingDown
+    const result = point - pullingUp + pullingDown
+
+    // 複雑にならないよう、あえてMathクラスは使用しない
+    if (result < min) {
+      return min
+    } else if (result > max) {
+      return max
+    } else {
+      return result
+    }
   }
 
   /** 重みを考慮した評点の総合評価を算出する */
@@ -384,7 +390,7 @@ export class ReviewFunc {
         point: ReviewFunc.calcAaverage(review, reviewFactorParams, pullingUp, pullingDown, orgMin, orgMax)
       })
     })
-    return list.sort((a, b) => a.point - b.point)
+    return list
   }
 
   /**
@@ -401,6 +407,7 @@ export class ReviewFunc {
   static makeTierPivot (pivotInfoList: TierPivotInfomation[], pointType: ReviewPointType) {
     const len = pointTypeTierCountDic[pointType] as number | undefined
     const list: TierPivotInfomation[][] = []
+    const sortedlist: TierPivotInfomation[][] = []
     if (len) {
       // 器を用意する
       const step = 100 / (len - 1)
@@ -418,7 +425,10 @@ export class ReviewFunc {
         }
       })
     }
-    return list
+    list.forEach((v, i) => {
+      sortedlist[i] = v.sort((a, b) => b.point - a.point)
+    })
+    return sortedlist
   }
 
   /**
