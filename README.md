@@ -9,9 +9,6 @@
 
 くどくどTierバックエンドについては、[kudo-tier-back](https://github.com/HoppingGanon/kudo-tier-back)を参照してください。
 
-<img src="doc/img/pivot-tier.png" width="40%" style="display: inline-block;"></img>
-<img src="doc/img/review-card.png" width="40%" style="display: inline-block;"></img>
-
 ## くどくどTier紹介
 [![Youtube くどくどTier紹介](doc/img/video.jpg)](https://www.youtube.com/watch?v=Ov0G86XN-tc)
 
