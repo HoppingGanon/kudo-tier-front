@@ -396,7 +396,7 @@
                   ],
         "description":  "welcomeページに表示する説明文のコンポーネント",
         "components":  [
-
+                           "Youtube"
                        ],
         "emits":  [
 

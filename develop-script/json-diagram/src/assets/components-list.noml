@@ -128,6 +128,7 @@
 [SessionChecker]->[WelcomeView]
 [SimpleDialog]->[EmptyComponent]
 [QuickReview]->[EmptyComponent]
+[Youtube]->[ExplanationSummary]
 [TermOfServise]->[FooterComponent]
 [HintDialog]->[HomeHint]
 [HintCard]->[HomeHint]

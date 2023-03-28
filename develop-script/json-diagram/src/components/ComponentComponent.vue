@@ -96,7 +96,7 @@
         <v-card flat color="secondary" height="100%">子コンポーネント無し</v-card>
       </v-col>
     </v-row>
-    </div>
+  </div>
 </template>
 
 <script lang="ts">
