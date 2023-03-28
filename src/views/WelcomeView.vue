@@ -38,13 +38,10 @@
       </v-row>
       <v-row>
         <v-col>
-          <explanation-summary :has-session="hasSession" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="text-center">
+          <explanation-summary :has-session="hasSession">
           <v-btn v-if="hasSession" color="primary" class="text-no-transform" @click="goHome">{{ appName }}のホーム画面へ</v-btn>
           <v-btn v-else color="primary" class="text-no-transform" @click="goLogin">{{ appName }}をはじめる</v-btn>
+          </explanation-summary>
         </v-col>
       </v-row>
       <v-row>

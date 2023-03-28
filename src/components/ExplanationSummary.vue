@@ -130,6 +130,32 @@
       </v-col>
     </v-row>
 
+    <!-- 動画 -->
+
+    <v-row>
+      <v-col>
+        <v-divider class="mt-5 mb-5" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="text-center">
+        <p>
+          <span class="text-h5 font-weight-bold">1分でわかる{{ appName }}紹介</span>
+        </p>
+        <br />
+        <p>
+          {{ appName }}について、1分程度にまとめた動画を用意しました。
+        </p>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="d-flex justify-center">
+        <div>
+          <youtube src="https://www.youtube.com/watch?v=Ov0G86XN-tc" :width="videoWidth" />
+        </div>
+      </v-col>
+    </v-row>
+
     <!-- ここからはじめよう -->
 
     <v-row>
@@ -150,20 +176,40 @@
         </p>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col class="text-center">
+        <slot></slot>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
 <script lang="ts">
 import router from '@/router'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { appName } from '@/common/names'
+import Youtube from 'vue3-youtube'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 export default defineComponent({
   name: 'ExplanationSummary',
+  components: {
+    Youtube
+  },
   setup () {
+    const display = useDisplay()
+    const videoWidth = computed(() => {
+      if (display.xs.value) {
+        return `${display.width.value * 0.95 - 50}px`
+      } else {
+        return undefined
+      }
+    })
     return {
       goLogin: () => router.push('/login'),
-      appName
+      appName,
+      videoWidth
     }
   }
 })

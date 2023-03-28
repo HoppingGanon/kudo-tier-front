@@ -7,7 +7,7 @@
     </v-card-title>
 
     <div class="text-end">
-      最終更新: v0.5.1-beta 時点
+      最終更新: v0.5.4-beta 時点
     </div>
 
     <v-tabs v-model="tab" fixed-tabs bg-color="secondary">
@@ -32,23 +32,25 @@
             </v-window-item>
             
             <v-window-item>
-              <div class="d-flex parent" :style="detailStyle">
-                <div class="left">
+
+              <component-picker>
+                <template v-slot:left="{ props }">
                   <v-list>
-                    <v-list-item v-for="item,i in list" :key="i" class="text-start" @click="selectComponent(i)">
+                    <v-list-item v-for="item,i in list" :key="i" class="text-start" @click="selectComponent(i);props.openDrawer()">
                       <v-list-item-title v-text="item.name" :class="selectedComponent === i ? 'font-weight-bold' : ''"></v-list-item-title>
                     </v-list-item>
                   </v-list>
-                </div>
-                <div class="right pa-1">
+                </template>
+                <template v-slot:right="{ props }">
                   <div class="mt-5 text-h5 font-weight-bold" style="height:40px;">コンポーネント一覧表</div>
                   <div>
                     くどくどTierを構成するコンポーネントの設計一覧です<br />
                   </div>
                   <v-divider class="my-2" />
-                  <component-component v-if="selectedComponent < list.length" :item="list[selectedComponent]" @mounted="calcHeight" @go-component="goComponent" />
-                </div>
-              </div>
+                  <component-component v-if="selectedComponent < list.length" :item="list[selectedComponent]" @mounted="props.calcHeight" @go-component="goComponent" />
+                </template>
+              </component-picker>
+              
             </v-window-item>
 
             <v-window-item>
@@ -94,29 +96,19 @@ import { defineComponent, ref } from 'vue'
 import list from '@/assets/components-list.json'
 import licenses from '@/assets/licenses-diagram.json'
 import RelationComponent from '@/components/RelationComponent.vue'
+import ComponentPicker from '@/components/ComponentPicker.vue'
 import ComponentComponent from '@/components/ComponentComponent.vue'
 
 export default defineComponent({
   name: 'IndexView',
   components: {
     RelationComponent,
+    ComponentPicker,
     ComponentComponent
   },
   setup () {
     const tab = ref(0)
     const selectedComponent = ref(0)
-
-    const detailStyle = ref('')
-
-    const calcHeight = () =>{
-      const header = document.getElementById("header")
-      if (header) {
-        const height =  document.documentElement.clientHeight - (header.offsetTop + header.offsetHeight) - 30
-        detailStyle.value =  `height: ${height}px;`
-      } else {
-        detailStyle.value =  'height: 100%'
-      }
-    }
 
     const selectComponent = (index: number) => {
       selectedComponent.value = index
@@ -136,40 +128,14 @@ export default defineComponent({
       selectedComponent.value = hit
     }
 
-    window.onresize = calcHeight
-
     return {
       list,
       licenses,
       tab,
       selectedComponent,
-      detailStyle,
-      calcHeight,
       goComponent,
       selectComponent
     }
   }
 })
 </script>
-
-<style scoped>
-div.parent {
-  overflow-y: hidden;
-}
-div.left {
-  top: 0px;
-  z-index: 1;
-  width:250px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-div.right {
-  right: 0px;
-  width: 100%;
-  bottom: 0px;
-  z-index: 1;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-</style>
