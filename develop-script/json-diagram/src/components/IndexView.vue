@@ -7,7 +7,7 @@
     </v-card-title>
 
     <div class="text-end">
-      最終更新: v0.5.4-beta 時点
+      最終更新: v0.5.5-beta 時点
     </div>
 
     <v-tabs v-model="tab" fixed-tabs bg-color="secondary">
