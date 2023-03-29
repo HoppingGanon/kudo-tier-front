@@ -9,26 +9,27 @@
     v-model="dialog"
     title="利用規約"
     :show-submit-button="false"
-    :fullscreen="$vuetify.display.smAndDown"
+    :fullscreen="true"
     width="100%"
   >
-    <iframe :src="url" style="width: 100%; height: 60vh"></iframe>
+    <term-of-servise-content />
   </simple-dialog>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import SimpleDialog from '@/components/SimpleDialog.vue'
+import TermOfServiseContent from '@/components/TermOfServiseContent.vue'
 
 export default defineComponent({
   name: 'TermOfServise',
   components: {
-    SimpleDialog
+    SimpleDialog,
+    TermOfServiseContent
   },
   setup () {
     return {
-      dialog: ref(false),
-      url: `${process.env.VUE_APP_BASE_URI}/terms/service.html`
+      dialog: ref(false)
     }
   }
 })
