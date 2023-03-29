@@ -2341,12 +2341,26 @@
                   ],
         "description":  "利用規約を表示するコンポーネント",
         "components":  [
-                           "SimpleDialog"
+                           "SimpleDialog",
+                           "TermOfServiseContent"
                        ],
         "emits":  [
 
                   ],
         "name":  "TermOfServise"
+    },
+    {
+        "props":  [
+
+                  ],
+        "description":  "利用規約の本文を表示するコンポーネント",
+        "components":  [
+                           "LoadingComponent"
+                       ],
+        "emits":  [
+
+                  ],
+        "name":  "TermOfServiseContent"
     },
     {
         "props":  [

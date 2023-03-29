@@ -7,7 +7,7 @@
     </v-card-title>
 
     <div class="text-end">
-      最終更新: v0.5.4-beta 時点
+      最終更新: v0.5.5-beta 時点
     </div>
 
     <v-tabs v-model="tab" fixed-tabs bg-color="secondary">
@@ -36,7 +36,7 @@
               <component-picker>
                 <template v-slot:left="{ props }">
                   <v-list>
-                    <v-list-item v-for="item,i in list" :key="i" class="text-start" @click="selectComponent(i);props.openDrawer()">
+                    <v-list-item v-for="item,i in list" :key="i" class="text-start" @click="selectComponent(i);props && props.openDrawer && props.openDrawer()">
                       <v-list-item-title v-text="item.name" :class="selectedComponent === i ? 'font-weight-bold' : ''"></v-list-item-title>
                     </v-list-item>
                   </v-list>
