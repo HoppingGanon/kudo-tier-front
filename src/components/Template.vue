@@ -13,8 +13,9 @@ export default defineComponent({
   components: {},
   props: {},
   emits: {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setup () { }
+  setup () {
+    return {}
+  }
 })
 </script>
 
