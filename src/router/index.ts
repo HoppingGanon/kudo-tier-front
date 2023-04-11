@@ -89,6 +89,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/SettingsView.vue')
   },
   {
+    path: '/matchings/:mid',
+    name: 'settings',
+    component: () => import('../views/MatchingsView.vue')
+  },
+  {
     path: '/:catchAll(.*)',
     name: 'not-found',
     component: () => import('../views/NotFoundView.vue')
